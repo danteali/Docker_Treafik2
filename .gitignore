@@ -1,0 +1,42 @@
+# Basically ignores everything except *.start
+# A * ensures that everything will be ignored.
+*
+*.conf
+#-----------------------------
+
+# You can whitelist files/folders with !, these will NOT be ignored.
+!.gitignore
+#-----------------------------
+
+
+# Need to again specify any ignores which would otherwise fall inside the whitelists above
+
+# Explicit Ignore - folders
+_archive
+_secrets/*
+grafana_exports
+#-----------------------------
+
+# Explicit Ignore - files
+*.conf
+*.zip
+*.ipcheck
+temp.sh
+#----------
+macvlan_docker.sh
+vm_macvlan_docker.sh
+#----------
+crontab_monitor.alerts
+crontab_monitor.history
+crontab_monitor.warn
+crontab_monitor.watchlist
+#----------
+tmp_exporter.sh
+#----------
+traefik.toml
+api.toml
+defaultauth.toml
+external_services.toml
+tls.toml
+#-----------------------------
+
