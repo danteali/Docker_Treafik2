@@ -18,6 +18,7 @@ grafana_exports
 #-----------------------------
 
 # Explicit Ignore - files
+.env
 *.conf
 *.zip
 *.ipcheck
