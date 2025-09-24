@@ -1,5 +1,6 @@
 # Docker Stack
-This is my Docker stack on my main server.
+This is my Docker stack on my main server, using Trefik v3 as a reverse proxy and PiHole to resolve DNS for our services so that the FQDNs work internally.
+(This repo is named due to Traefik having a major update going from v1 to v2 so we re-factored our docker stack at that point).
 
 There are some additional services running in virtual machines but those files have not (yet) been included here.
 
