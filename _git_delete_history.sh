@@ -18,6 +18,6 @@ FILE=$1
 
 cp $1 /tmp/$FILE
 
-git filter-branch --force --index-filter "git rm --cached --ignore-unmatch $FILE" --prune-empty --tag-name-filter cat -- --all
+FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --force --index-filter "git rm --cached --ignore-unmatch $FILE" --prune-empty --tag-name-filter cat -- --all
 git push origin --force --all
 mv /tmp/$FILE $1
