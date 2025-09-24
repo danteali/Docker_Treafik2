@@ -1,0 +1,690 @@
+20220119
+Didn't work on 20220119 since string usually grepped for din't have 'path' in it (maybe too long and got cut off in log???)
+Possibly use the line before the current one???
+
+ts=2022-01-19T20:13:25.319935Z lvl=info msg="Compacting file" log_id=0Z8~P3m0000 engine=tsm1 tsm1_level=1 tsm1_strategy=level trace_id=0Z8~PZml000 op_name=tsm1_compact_group db_shard_id=2474 tsm1_index=7 tsm1_file=/var/lib/influxdb/data/telegraf/autogen/2474/000000183-000000001.tsm
+ts=2022-01-19T20:13:25.669137Z lvl=info msg="TSM compaction (end)" log_id=0Z8~P3m0000 engine=tsm1 tsm1_level=1 tsm1_strategy=level trace_id=0Z8~PZml000 op_name=tsm1_compact_group db_shard_id=2474 op_event=end op_elapsed=349.279ms
+panic: keys must be added in sorted order: docker_container_mem,build_version=Linuxserver.io\ version:-\ 2.1.2-ls79\ Build-date:-\ 2021-12-17T10:39:35+01:00,com.docker.compose.config-hash=0e3a330d881a16c1939e0ee6e22b8025e11a676271cc5cb5796952d42baf32d5,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,com.docker.compose.project=docker,com.docker.compose.project.config_files=/home/ryan/scripts/docker/docker-compose.yml,com.docker.compose.project.working_dir=/home/ryan/scripts/docker,com.docker.compose.service=ubooquity,com.docker.compose.version=1.29.2,container_image=lscr.io/linuxserver/ubo...
+
+The issue was with: 
+/storage/Docker/influxdb/data/data/data/telegraf/autogen/2474
+
+
+20220125
+Same as above. Grepping string didn't have path. 
+Could use line before currently grepped one, or the 'compacting file' line a 3 above ...
+
+ts=2022-01-25T09:05:45.153970Z lvl=info msg="Compacting file" log_id=0ZG7_a~G000 engine=tsm1 tsm1_level=1 tsm1_strategy=level trace_id=0ZG7a6lG000 op_name=tsm1_compact_group db_shard_id=2653 tsm1_index=7 tsm1_file=/var/lib/influxdb/data/telegraf/autogen/2653/000000070-000000001.tsm
+[httpd] 192.168.0.28 - - [25/Jan/2022:09:05:45 +0000] "POST /write?db=telegraf HTTP/1.1 " 204 0 "-" "Telegraf/1.10.2" fb0ad921-7dbd-11ec-8001-0242c0a85a12 60144
+ts=2022-01-25T09:05:45.696120Z lvl=info msg="TSM compaction (end)" log_id=0ZG7_a~G000 engine=tsm1 tsm1_level=1 tsm1_strategy=level trace_id=0ZG7a6lG000 op_name=tsm1_compact_group db_shard_id=2653 op_event=end op_elapsed=542.278ms
+panic: keys must be added in sorted order: docker_container_net,com.centurylinklabs.watchtower.monitor-only=true,com.docker.compose.config-hash=49030b7dea078d7e0ec225161cdc04cefb0ea2aa4971e5ab8c8ca254eb2aced2,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,com.docker.compose.project=docker,com.docker.compose.project.config_files=/home/ryan/scripts/docker/monitoring.yml,com.docker.compose.project.working_dir=/homd/ryan/scripts/docker,com.docker.compose.service=prometheus,com.docker.compose.version=1.29.2,container_image=prom/prometheus,container_name=prometheus,container_status=running,container_version=v2.32.1,engine_host=crush,host=crush,maintainer=The\ Prometheus\ Authors\ <prometheus-developers@googlegroups.com>,network=total,org.label-schema.group=monitoring,server_version=20.10.7,traefik.enable=true,traefik.http.routers.prometheus-rtr.entrypoints=https,traefik.http.routers.prometheus-rtr.middlewares=chain-authelia@file,traefik.http.routers.prometheus-rtr.rule=Host(`prometheus.mc-guinness.co.uk`),traefik.http.routers.prometheus-rtr.service=prometheus-svc,traefik.http.services.prometheus-svc.loadbalancer.server.port=9090#!~#rx_errors < docker_container_net,com.centurylinklabs.watchtower.monitor-only=true,com.docker.compose.config-hash=49030b7dea078d7e0ec225161cdc04cefb0ea2aa4971e5ab8c8ca254eb2aced2,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,com.docker.compose.project=docker,com.docker.compose.project.config_files=/home/ryan/scripts/docker/monitoring.yml,com.docker.compose.project.working_dir=/home/ryan/scripts/docker,com.docker.compose.service=prometheus,com.docker.compose.version=1.29.2,container_image=prom/prometheus,container_name=prometheus,container_status=running,container_version=v2.32.1,engine_host=crush,host=crush,maintainer=The\ Prometheus\ Authors\ <prometheus-developers@googlegroups.com>,network=total,org.label-schema.group=monitoring,server_version=20.10.7,traefik.enable=true,traefik.http.routers.prometheus-rtr.entrypoints=https,traefik.http.routers.prometheus-rtr.middlewares=chain-authelia@file,traefik.http.routers.prometheus-rtr.rule=Host(`prometheus.mc-guinness.co.uk`),traefik.http.routers.prometheus-rtr.service=prometheus-svc,traefik.http.services.prometheus-svc.loadbalancer.server.port=9090#!~#rx_dropped
+
+The issue was with: 
+/storage/Docker/influxdb/data/data/data/telegraf/autogen/2653
+
+
+20220130
+Same as  above
+
+ts=2022-01-30T12:41:57.641320Z lvl=info msg="Compacting file" log_id=0ZMkwZtW000 engine=tsm1 tsm1_level=1 tsm1_strategy=level trace_id=0ZMkx4YG000 op_name=tsm1_compact_group db_shard_id=2653 tsm1_index=7 tsm1_file=/var/lib/influxdb/data/telegraf/autogen/2653/000000326-000000001.tsm
+ts=2022-01-30T12:41:58.079915Z lvl=info msg="TSM compaction (end)" log_id=0ZMkwZtW000 engine=tsm1 tsm1_level=1 tsm1_strategy=level trace_id=0ZMkx4YG000 op_name=tsm1_compact_group db_shard_id=2653 op_event=end op_elapsed=438.786ms
+panic: keys must be added in sorted order: docker_container_mem,com.centurylinklabs.watchtower.monitor-only=true,com.docker.compose.config-hash=0cec8d798c27cd762137ab8469fd7de07449A213de48572fe663bc029aa7a455,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,com.docker.compose.project=docker,com.docker.compose.project.config_files=/home/ryan/scripts/docker/home-auto.yml,com.docker.compose.project.working_dir=/home/ryan/scripts/docker,com.docker.compose.service=home-assistant,com.docker.compose.version=1.29.2,container_image=ghcr.io/home-assistant/home-assistant,container_name=home-assistant,container_status=running,container_version=2021.10.4,engine_host=crush,host=crush,io.hass.arch=amd64,io.hass.base.arch=amd64,io.hass.base.image=homeassistant/amd64-base:3.14,io.hass.base.name=python,io.hass.base.version=2021.09.1,io.hass.type=core,io.hass.version=2021.10.4,org.label-schema.group="home-auto",org.opencontainers.image.authors=The\ Home\ Assistant\ Authors,org.opencontainers.image.created=2021-10-12\ 06:50:36+00:00,org.opencontainers.image.description=Open-source\ home\ automation\ platform\ running\ on\ Python\ 3,org.opencontainers.image.documentation=https://www.home-assistant.io/docs/,org.opencontainers.image.licenses=Apache\ License\ 2.0,org.opencontainers.image.source=https://github.com/home-assistant/core,org.opencontainers.image.title=Home\ Assistant,org.opencontainers.image.url=https://www.home-assistant.io/,org.opencontainers.image.version=2021.10.4,server_version=20.10.7,traefik.enable=true,traefik.http.routers.home-assistant-rtr.entrypoints=https,traefik.http.routers.home-assistant-rtr.middlewares=chain-authelia@file,traefik.http.routers.home-assistant-rtr.priority=99,traefik.http.routers.home-assistant-rtr.rule=Host(`ha.mc-guinness.co.uk`),traefik.http.routers.home-assistant-rtr.service=home-assistant-svc,traefik.http.routers.home-assistant-rtr.tls=true,traefik.http.routers.home-assistant-webhook-rtr.entrypoints=https,traefik.http.routers.home-assistant-webhook-rtr.middlewares=chain-no-auth@file,traefik.http.routers.home-assistant-webhook-rtr.priority=100,traefik.http.routers.home-assistant-webhook-rtr.rule=Host(`ha.mc-guinness.co.uk`)\ &&\ PathPrefix(`/api/webhook`),traefik.http.routers.home-assistant-webhook-rtr.service=home-assistant-svc,traefik.http.routers.home-assistant-webhook-rtr.tls=true,traefik.http.services.home-assistant-svc.loadbalancer.server.port=8123#!~#total_inactive_file < docker_container_mem,com.centurylinklabs.watchtower.monitor-only=true,com.docker.compose.config-hash=0cec8d798c27cd762137ab8469fd7de07449a213de48572fe663bc029aa7a455,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,com.docker.compose.project=docker,com.docker.compose.project.config_files=/home/ryan/scripts/docker/home-auto.yml,com.docker.compose.project.working_dir=/home/ryan/scripts/docker,com.docker.compose.service=home-assistant,com.docker.compose.version=1.29.2,container_image=ghcr.io/home-assistant/home-assistant,container_name=home-assistant,container_status=running,container_version=2021.10.4,engine_host=crush,host=crush,io.hass.arch=amd64,io.hass.base.arch=amd64,io.hass.base.image=homeassistant/amd64-base:3.14,io.hass.base.name=python,io.hass.base.version=2021.09.1,io.hass.type=core,io.hass.version=2021.10.4,org.label-schema.group="home-auto",org.opencontainers.image.authors=The\ Home\ Assistant\ Authors,org.opencontainers.image.created=2021-10-12\ 06:50:36+00:00,org.opencontainers.image.description=Open-source\ home\ automation\ platform\ running\ on\ Python\ 3,org.opencontainers.image.documentation=https://www.home-assistant.io/docs/,org.opencontainers.image.licenses=Apache\ License\ 2.0,org.opencontainers.image.source=https://github.com/home-assistant/core,org.opencontainers.image.title=Home\ Assistant,org.opencontainers.image.url=https://www.home-assistant.io/,org.opencontainers.image.version=2021.10.4,server_version=20.10.7,traefik.enable=true,traefik.http.routers.home-assistant-rtr.entrypoints=https,traefik.http.routers.home-assistant-rtr.middlewares=chain-authelia@file,traefik.http.routers.home-assistant-rtr.priority=99,traefik.http.routers.home-assistant-rtr.rule=Host(`ha.mc-guinness.co.uk`),traefik.http.routers.home-assistant-rtr.service=home-assistant-svc,traefik.http.routers.home-assistant-rtr.tls=true,traefik.http.routers.home-assistant-webhook-rtr.entrypoints=https,traefik.http.routers.home-assistant-webhook-rtr.middlewares=chain-no-auth@file,traefik.http.routers.home-assistant-webhook-rtr.priority=100,traefik.http.routers.home-assistant-webhook-rtr.rule=Host(`ha.mc-guinness.co.uk`)\ &&\ PathPrefix(`/api/webhook`),traefik.http.routers.home-assistant-webhook-rtr.service=home-assistant-svc,traefik.http.routers.home-assistant-webhook-rtr.tls=true,traefik.http.services.home-assistant-svc.loadbalancer.server.port=8123#!~#total_inactive_anon
+
+
+Possible script solution:
+Grep text and  lines before (-B X):
+> ERROR=$(sudo cat "$(docker inspect --format='{{.LogPath}}' influxdb)" | grep -B4 -m 1 "panic: keys must be added in sorted order")
+
+Find last ocurance of:
+    tsm1_file=/var/lib/influxdb/data/telegraf/autogen/2653/000000326-000000001.tsm\n"
+> cat $ERROR | grep "tsm1_file" | tail -1
+
+Parse to extract:
+    data/telegraf/autogen/2653
+Remove start of string:
+    >  | sed 's/.*tsm1_file=//'
+Remove end of string:
+    > ??????
+Remove start of path we don't need:
+    >  | sed 's/.*\/var\/lib\/influxdb//'
+
+
+[20220105-120914] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\\ 30d-1h/1755
+[20220108-144819] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2168
+[20220109-144701] Error in: /storage/Docker/influxdb/data/data/data/octopus/autogen/340
+[20220109-220402] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2240
+[20220110-131801] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2160
+[20220113-021101] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2143
+[20220114-145201] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2057
+[20220115-172201] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2352
+[20220116-222801] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/1761
+[20220118-185403] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2039
+[20220118-195600] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2433
+[20220119-194901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-195001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-195101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-195201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-195301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-195401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-195501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-195601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-195701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-195801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-195901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-200001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220119-200101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220120-030401] Error in: /storage/Docker/influxdb/data/data/data/nodered/autogen/1953
+[20220120-040402] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2457
+[20220120-050601] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2038
+[20220122-182301] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2342
+[20220123-162001] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/1942
+[20220123-232901] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/1987
+[20220125-022202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-022302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-022402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-022502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-022602] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-022702] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-022802] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-022901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-023001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-023101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-023201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-023301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-023401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-023501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-023601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-023701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-023801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-023901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-024001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-024101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-024201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-024301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-024401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-024501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-024602] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-024702] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-024802] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-024902] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-025002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-025102] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-025202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-025302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-025402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-025502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-025601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-025701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-025801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-025901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-030001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-030101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-030201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-030301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-030401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-030501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-030602] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-030701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-030801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-030901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-031001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-031101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-031201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-031301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-031401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-031501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-031601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-031701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-031801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-031901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-032002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-032101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-032201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-032302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-032401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-032502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-032602] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-032702] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-032802] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-032902] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-033002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-033102] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-033202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-033302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-033401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-033501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-033601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-033701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-033801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-033901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-034001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-034101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-034201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-034301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-034401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-034501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-034601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-034701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-034801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-034901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-035001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-035101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-035201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-035301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-035401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-035502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-035601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-035701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-035801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-035901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-040002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-040102] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-040202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-040302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-040402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-040501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-040601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-040701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-040801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-040901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-041001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-041101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-041201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-041301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-041401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-041501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-041601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-041701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-041801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-041901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-042001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-042102] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-042202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-042302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-042402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-042502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-042602] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-042702] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-042802] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-042902] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-043002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-043101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-043201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-043301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-043401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-043501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-043601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-043703] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-043801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-043902] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-044002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-044101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-044201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-044301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-044401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-044501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-044601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-044701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-044801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-044901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-045001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-045101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-045201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-045301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-045401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-045501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-045601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-045701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-045801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-045901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-050001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-050101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-050201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-050301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-050401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-050501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-050601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-050701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-050801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-050901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-051001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-051101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-051201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-051301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-051401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-051501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-051601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-051701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-051801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-051901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-052001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-052101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-052201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-052302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-052401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-052501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-052601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-052701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-052801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-052902] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-053002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-053102] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-053202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-053302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-053402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-053502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-053602] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-053702] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-053802] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-053901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-054001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-054101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-054201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-054301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-054401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-054501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-054602] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-054702] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-054802] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-054902] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-055002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-055102] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-055202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-055302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-055401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-055501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-055601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-055701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-055801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-055901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-060001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-060101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-060201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-060301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-060401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-060501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-060601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-060701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-060801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-060901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-061001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-061101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-061201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-061301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-061401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-061501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-061601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-061701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-061801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-061901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-062001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-062101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-062201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-062301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-062401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-062501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-062601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-062701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-062801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-062901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-063001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-063101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-063201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-063301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-063401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-063501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-063601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-063701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-063801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-063901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-064001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-064101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-064201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-064301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-064401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-064502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-064601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-064701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-064801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-064901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-065002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-065100] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-065201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-065301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-065401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-065501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-065601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-065701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-065801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-065901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-070001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-070101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-070202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-070302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-070402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-070502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-070601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-070701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-070801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-070901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-071001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-071101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-071201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-071301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-071401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-071502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-071601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-071701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-071801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-071901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-072001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-072101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-072201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-072301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-072401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-072501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-072601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-072701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-072801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-072901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-073001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-073102] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-073201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-073302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-073401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-073502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-073601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-073701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-073801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-073901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-074002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-074101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-074201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-074301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-074402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-074501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-074601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-074701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-074801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-074901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-075001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-075100] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-075201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-075301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-075401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-075501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-075601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-075701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-075801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-075901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-080001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-080101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-080202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-080302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-080402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-080502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-080602] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-080701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-080801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-080901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-081001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-081101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-081201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-081301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-081401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-081501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-081601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-081701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-081801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-081901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-082001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-082101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-082201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-082301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-082401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-082501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-082601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-082701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-082801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-082901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-083001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-083101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-083201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-083302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-083401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-083501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-083601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-083701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-083801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-083901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-084001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-084101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-084201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-084301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-084401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-084501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-084601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-084701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-084801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-084901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-085001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-085102] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-085202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-085302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-085402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-085502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-085601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-085701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-085801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-085901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-090001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-090102] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-090201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-090301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-090401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220125-090502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_net
+[20220128-003101] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2303
+[20220128-155001] Error in: /storage/Docker/influxdb/data/data/data/octopus/autogen/16
+[20220130-114701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-114801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-114901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-115001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-115101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-115201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-115301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-115401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-115501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-115601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-115701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-115801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-115901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-120002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-120101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-120201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-120302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-120401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-120501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-120601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-120701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-120801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-120901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-121001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-121101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-121201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-121301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-121401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-121502] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-121601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-121701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-121801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-121901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-122002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-122101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-122202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-122302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-122401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-122501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-122601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-122701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-122801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-122901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-123001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-123101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-123201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-123301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-123401] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-123501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-123601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-123701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-123801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-123901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-124001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-124101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-124201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220130-124301] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_mem
+[20220206-163401] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2662
+[20220207-022501] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2432
+[20220207-065001] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2488
+[20220214-055001] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2981
+[20220215-160402] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3027
+[20220220-045209] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2696
+[20220220-091601] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3066
+[20220220-124202] Error in: /storage/Docker/influxdb/data/data/data/octopus/autogen/1465
+[20220221-074801] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3241
+[20220221-153401] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2961
+[20220223-212301] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2974
+[20220225-140701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-140801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-140901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-141001] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-141101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-141202] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-141302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-141402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-141501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-141601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-141701] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-141801] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-141901] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-142002] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-142101] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-142201] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-142302] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-142402] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-142501] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+[20220225-142601] Error in: /storage/Docker/influxdb/data/data{"log":"panic: keys must be added in sorted order: docker_container_cpu
+
+# Started logging raw error line too
+
+[20220226-183102] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3229
+[20220226-183102] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=6a0afb9bafdb,id=3229,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3229,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3229#!~#TsmOptimizeCompactionDuration \u003c tsm1_engine,database=varken,engine=tsm1,hostname=6a0afb9bafdb,id=3229,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3229,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3229#!~#tsmLevel3CompactionsActive\n","stream":"stderr","time":"2022-02-26T18:30:32.539866996Z"}
+[20220227-183102] Error in: /storage/Docker/influxdb/data/data/data/octopus/autogen/31
+[20220227-183102] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=octopus,engine=tsm1,hostname=4a13479f45b6,id=31,indexType=inMem,path=/var/lib/influxdb/data/octopus/autogen/31,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/31#!~#writePointsOk \u003c shard,database=octopus,engine=tsm1,hostname=4a13479f45b6,id=31,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/31,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/31#!~#writePointsErr\n","stream":"stderr","time":"2022-02-27T18:30:31.87361899Z"}
+[20220304-071801] Error in: /storage/Docker/influxdb/data/data/data/octopus/autogen/22
+[20220304-071801] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=octopus,engine=tsm1,hostname=1b36230efcf0,id=22,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/22,retentionPolicy=autogen,walPath=/var/lib/influXdb/wal/octopus/autogen/22#!~#writePointsDropped \u003c shard,database=octopus,engine=tsm1,hostname=1b36230efcf0,id=22,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/22,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/22#!~#writeBytes\n","stream":"stderr","time":"2022-03-04T07:17:42.099945875Z"}
+[20220304-230102] Error in: /storage/Docker/influxdb/data/data/data/telegraf/autogen/3544
+[20220304-230102] Raw Error Line: {"log":"ts=2022-03-04T23:00:11.460656Z lvl=info msg=\"Compacting file\" log_id=0_1ddtp0000 engine=tsm1 tsm1_level=2 tsm1_strategy=level trace_id=0_1nRYH0000 op_name=tsm1_compact_group db_shard_id=3544 tsm1_index=3 tsm1_file=/var/lib/influxdb/data/telegraf/autogen/3544/000000309-000000002.tsm\n","stream":"stderr","time":"2022-03-04T23:00:11.460880162Z"}
+[20220305-003001] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/2977
+[20220305-003001] Raw Error Line: {"log":"panic: keys must be added in sorted order: Shard,database=varken,engine=tsm1,hostname=c358a4b22985,id=2977,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/2977,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/2977#!~#writePointsOk \u003c shard,database=varken,engine=tsm1,hostname=c358a4b22985,id=2977,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/2977,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/2977#!~#writePointsErr\n","stream":"stderr","time":"2022-03-05T00:29:12.17505607Z"}
+[20220307-032401] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3307
+[20220307-032401] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=43df9851af4b,id=3307,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3307,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varKen\\ 30d-1h/3307#!~#tsmOptimizeCompactionQueue \u003c tsm1_engine,database=varken,engine=tsm1,hostname=43df9851af4b,id=3307,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3307,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3307#!~#tsmOptimizeCompactionErr\n","stream":"stderr","time":"2022-03-07T03:23:02.030491954Z"}
+[20220308-193002] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3143
+[20220308-193002] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=eda2cb176694,id=3143,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3143,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/vArken\\ 30d-1h/3143#!~#tsmLevel1CompactionErr \u003c tsm1_engine,database=varken,engine=tsm1,hostname=eda2cb176694,id=3143,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3143,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3143#!~#tsmLevel1CompactionDuration\n","stream":"stderr","time":"2022-03-08T19:29:12.370850878Z"}
+[20220308-212701] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3281
+[20220308-212701] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=varken,engine=tsm1,hostname=72bec937f016,id=3281,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3281,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h\u000f3281#!~#writeBytes \u003c shard,database=varken,engine=tsm1,hostname=72bec937f016,id=3281,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3281,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3281#!~#seriesCreate\n","stream":"stderr","time":"2022-03-08T21:26:22.020631568Z"}
+[20220310-193001] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3704
+[20220310-193001] Raw Error Line: {"log":"panic: keys must be added in sorted order: shArd,database=varken,engine=tsm1,hostname=bd41ca8e1689,id=3704,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3704,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3704#!~#fieldsCreate \u003c shard,database=varken,engine=tsm1,hostname=bd41ca8e1689,id=3704,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3704,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3704#!~#diskBytes\n","stream":"stderr","time":"2022-03-10T19:29:11.382310261Z"}
+[20220313-173201] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3784
+[20220313-173201] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=1b68502d9fd2,id=3784,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3784,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/Influxdb/wal/varken/varken\\ 30d-1h/3784#!~#tsmLevel3CompactionDuration \u003c tsm1_engine,database=varken,engine=tsm1,hostname=1b68502d9fd2,id=3784,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3784,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3784#!~#tsmLevel2CompactionsActive\n","stream":"stderr","time":"2022-03-13T17:31:12.291976428Z"}
+[20220313-182901] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3894
+[20220313-182901] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=f71a591ebfdf,id=3894,indexType=inmem,path=/var/lib/influxdb/data/varken/vaRken\\ 30d-1h/3894,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3894#!~#tsmLevel3CompactionQueue \u003c tsm1_engine,database=varken,engine=tsm1,hostname=f71a591ebfdf,id=3894,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3894,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3894#!~#tsmLevel3CompactionErr\n","stream":"stderr","time":"2022-03-13T18:28:02.587796345Z"}
+[20220314-041001] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3316
+[20220314-041001] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=varken,engine=tsm1,hostname=38b410f216d5,id=3316,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3316,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/33\u00116#!~#writeReqErr \u003c shard,database=varken,engine=tsm1,hostname=38b410f216d5,id=3316,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3316,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3316#!~#writeReq\n","stream":"stderr","time":"2022-03-14T04:09:52.019511932Z"}
+[20220314-115401] Error in: /storage/Docker/influxdb/data/data/data/octopus/autogen/46
+[20220314-115401] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=octopus,engine=tsm1,hostname=5b5dff24795d,id=46,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/46,retentionPolicy=autogEn,walPath=/var/lib/influxdb/wal/octopus/autogen/46#!~#writePointsDropped \u003c shard,database=octopus,engine=tsm1,hostname=5b5dff24795d,id=46,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/46,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/46#!~#writeBytes\n","stream":"stderr","time":"2022-03-14T11:54:01.021028957Z"}
+[20220317-202901] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3391
+[20220317-202901] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostnamE=597657492c5e,id=3391,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3391,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3391#!~#tsmLevel1CompactionDuration \u003c tsm1_engine,database=varken,engine=tsm1,hostname=597657492c5e,id=3391,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3391,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3391#!~#tsmFullCompactionsActive\n","stream":"stderr","time":"2022-03-17T20:28:12.23632114Z"}
+[20220319-212402] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/3334
+[20220319-212402] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=3ff803fa32d0,id=3334,indexType=inmem,path=/var/lib/influxdb/data/varken/varjen\\ 30d-1h/3334,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3334#!~#tsmLevel1CompactionErr \u003c tsm1_engine,database=varken,engine=tsm1,hostname=3ff803fa32d0,id=3334,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/3334,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/3334#!~#tsmLevel1CompactionDuration\n","stream":"stderr","time":"2022-03-19T21:23:31.813535457Z"}
+[20220402-092401] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4334
+[20220402-092401] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=varken,engine=tsm1,hostname=7682f43f5e11,id=4334,indexType=inmem,path=/v`r/lib/influxdb/data/varken/varken\\ 30d-1h/4334,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4334#!~#seriesCreate \u003c shard,database=varken,engine=tsm1,hostname=7682f43f5e11,id=4334,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4334,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4334#!~#fieldsCreate\n","stream":"stderr","time":"2022-04-02T08:23:02.159703683Z"}
+[20220407-045601] Error in: /storage/Docker/influxdb/data/data/data/telegraf/autogen/4443
+[20220407-045601] Raw Error Line: {"log":"ts=2022-04-07T03:55:47.339725Z lvl=info msg=\"Compacting file\" log_id=0_hWmbL0000 engine=tsm1 tsm1_level=1 tsm1_strategy=level trace_id=0_hYTV2l000 op_name=tsm1_compact_group db_shard_id=4443 tsm1_index=7 tsm1_file=/var/lib/influxdb/data/telegraf/autogen/4443/000000191-000000001.tsm\n","stream":"stderr","time":"2022-04-07T03:55:47.339958193Z"}
+[20220410-153401] Error in: /storage/Docker/influxdb/data/data/data/telegraf/autogen/4443
+[20220410-153401] Raw Error Line: {"log":"ts=2022-04-10T14:33:41.064853Z lvl=info msg=\"Compacting file\" log_id=0_luJxSl000 engine=tsm1 tsm1_level=1 tsm1_strategy=level trace_id=0_lz9qn0000 op_name=tsm1_compact_group db_shard_id=4443 tsm1_index=7 tsm1_file=/var/lib/influxdb/data/telegraf/autogen/4443/000000207-000000001.tsm\n","stream":"stderr","time":"2022-04-10T14:33:41.064983638Z"}
+[20220410-182101] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4258
+[20220410-182101] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,database=varken,engine=tsm1,hostname=eda686aa4395,id=4258,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4258,reTentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4258#!~#writeDropped \u003c tsm1_cache,database=varken,engine=tsm1,hostname=eda686aa4395,id=4258,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4258,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4258#!~#snapshotCount\n","stream":"stderr","time":"2022-04-10T17:20:12.230281702Z"}
+[20220413-102001] Error in: /storage/Docker/influxdb/data/data/data/minecraft/autogen/4266
+[20220413-102001] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=minecraft,engine=tsm1,hostname=4e95b123b8de,id=4266,indexType=inmem,path=/var/lib/influxdb/data/minecraft/autogen/4266,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/minecraft/autogen/4266#!~#tsmOptimizeCompactionsActive \u003c tsm1_engine,database=minecraft,engine=tsm1,hostname=4e95b123b8de,id=4266,indexType=inmem,path=/var/lib/influxdb/data/minecraft/autogen/4266,retentionPolicy=autogen,walPath=/vas/lib/influxdb/wal/minecraft/autogen/4266#!~#tsmOptimizeCompactions\n","stream":"stderr","time":"2022-04-13T09:19:13.354294286Z"}
+[20220414-124003] Error in: /storage/Docker/influxdb/data/data/data/octopus/autogen/52
+[20220414-124003] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=octopus,engine=tsm1,hostname=eee188d01c9f,id\u001d52,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/52,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/52#!~#writePointsDropped \u003c shard,database=octopus,engine=tsm1,hostname=eee188d01c9f,id=52,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/52,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/52#!~#writeBytes\n","stream":"stderr","time":"2022-04-14T11:39:03.00539931Z"}
+[20220502-183401] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4610
+[20220502-183401] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=varken,engine=tsm1,hostname=6c8f0652a529,id=4610,indexType=inmem,path=/vaR/lib/influxdb/data/varken/varken\\ 30d-1h/4610,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4610#!~#writeReqOk \u003c shard,database=varken,engine=tsm1,hostname=6c8f0652a529,id=4610,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4610,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4610#!~#writeReqErr\n","stream":"stderr","time":"2022-05-02T17:33:51.440593639Z"}
+[20220502-223901] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4709
+[20220502-223901] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=varken,engine=tsm1,hostname=c8119247a5b8,id=4709,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4709,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varkEn\\ 30d-1h/4709#!~#writePointsDropped \u003c shard,database=varken,engine=tsm1,hostname=c8119247a5b8,id=4709,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4709,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4709#!~#writeBytes\n","stream":"stderr","time":"2022-05-02T21:38:51.472075703Z"}
+[20220503-091201] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4525
+[20220503-091201] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=fb02a5623694,id=4525,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4525,retentionPolIcy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4525#!~#cacheCompactions \u003c tsm1_engine,database=varken,engine=tsm1,hostname=fb02a5623694,id=4525,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4525,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4525#!~#cacheCompactionErr\n","stream":"stderr","time":"2022-05-03T08:11:11.501128Z"}
+[20220506-015001] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4644
+[20220506-015001] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_filestore,database=varken,engine=tsm1,hostname=be20f4dd54d6,id=4644,indexType=inmem,path=/var/lib/influxdb/data/varken/varkeN\\ 30d-1h/4644,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4644#!~#numFiles \u003c tsm1_filestore,database=varken,engine=tsm1,hostname=be20f4dd54d6,id=4644,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4644,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4644#!~#diskBytes\n","stream":"stderr","time":"2022-05-06T00:49:32.710170843Z"}
+[20220509-042001] Error in: /storage/Docker/influxdb/data/data/data/telegraf/autogen/5075
+[20220509-042001] Raw Error Line: {"log":"ts=2022-05-09T03:19:22.012244Z lvl=info msg=\"Compacting file\" log_id=0aLaeDKG000 engine=tsm1 tsm1_level=1 tsm1_strategy=level trace_id=0aLi66c0000 op_name=tsm1_compact_group db_shard_id=5075 tsm1_index=7 tsm1_file=/var/lib/influxdb/data/telegraf/autogen/5075/000000009-000000001.tsm\n","stream":"stderr","time":"2022-05-09T03:19:22.012459764Z"}
+[20220511-073301] Error in: /storage/Docker/influxdb/data/data/data/nodered/autogen/1233
+[20220511-073301] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,database=nodered,engine=tsm1,hostname=0a27f4ad28d1,id=1233,indexType=inmem,Path=/var/lib/influxdb/data/nodered/autogen/1233,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/nodered/autogen/1233#!~#writeDropped \u003c tsm1_cache,database=nodered,engine=tsm1,hostname=0a27f4ad28d1,id=1233,indexType=inmem,path=/var/lib/influxdb/data/nodered/autogen/1233,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/nodered/autogen/1233#!~#snapshotCount\n","stream":"stderr","time":"2022-05-11T06:32:12.759186324Z"}
+[20220511-140801] Error in: /storage/Docker/influxdb/data/data/data/nodered/autogen/4269
+[20220511-140801] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsM1_cache,database=nodered,engine=tsm1,hostname=3b5c43825c63,id=4269,indexType=inmem,path=/var/lib/influxdb/data/nodered/autogen/4269,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/nodered/autogen/4269#!~#diskBytes \u003c tsm1_cache,database=nodered,engine=tsm1,hostname=3b5c43825c63,id=4269,indexType=inmem,path=/var/lib/influxdb/data/nodered/autogen/4269,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/nodered/autogen/4269#!~#cachedBytes\n","stream":"stderr","time":"2022-05-11T13:07:12.187695711Z"}
+[20220511-233101] Error in: /storage/Docker/influxdb/data/data/data/telegraf/autogen/5075
+[20220511-233101] Raw Error Line: {"log":"ts=2022-05-11T22:30:34.970097Z lvl=info msg=\"Compacting file\" log_id=0aP8EtgW000 engine=tsm1 tsm1_level=1 tsm1_strategy=level trace_id=0aPJlrrG000 op_name=tsm1_compact_group db_shard_id=5075 tsm1_index=7 tsm1_file=/var/lib/influxdb/data/telegraf/autogen/5075/000000174-000000001.tsm\n","stream":"stderr","time":"2022-05-11T22:30:34.970204482Z"}
+[20220513-122901] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5131
+[20220513-122901] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,enGine=tsm1,hostname=69a336df8fa7,id=5131,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5131,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5131#!~#tsmOptimizeCompactionDuration \u003c tsm1_engine,database=varken,engine=tsm1,hostname=69a336df8fa7,id=5131,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5131,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5131#!~#tsmLevel3CompactionsActive\n","stream":"stderr","time":"2022-05-13T11:28:32.164229584Z"}
+[20220515-073502] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4790
+[20220515-073502] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=95dadf19abe5,id=4790,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4790,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal\u000fvarken/varken\\ 30d-1h/4790#!~#tsmLevel3CompactionDuration \u003c tsm1_engine,database=varken,engine=tsm1,hostname=95dadf19abe5,id=4790,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4790,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4790#!~#tsmLevel2CompactionsActive\n","stream":"stderr","time":"2022-05-15T06:34:32.438506378Z"}
+[20220515-213002] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4785
+[20220515-213002] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,database=varken,engine=tsm1,hostname=209d96daff8c,id=4785,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4785,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/inFluxdb/wal/varken/varken\\ 30d-1h/4785#!~#cacheAgeMs \u003c tsm1_cache,database=varken,engine=tsm1,hostname=209d96daff8c,id=4785,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4785,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4785#!~#WALCompactionTimeMs\n","stream":"stderr","time":"2022-05-15T20:29:42.207517512Z"}
+[20220516-032601] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5031
+[20220516-032601] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=varken,engine=tsm1,hostname=a5634881f341,id=5031,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5031,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4031#!~#writeValuesOk \u003c shard,database=varken,engine=tsm1,hostname=a5634881f341,id=5031,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5031,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5031#!~#writeReqOk\n","stream":"stderr","time":"2022-05-16T02:25:42.32655188Z"}
+[20220516-050601] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4963
+[20220516-050601] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,database=varken,engine=tsm1,hostname=fee08db5b878,id=4963,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4963,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h\u000f4963#!~#memBytes \u003c tsm1_cache,database=varken,engine=tsm1,hostname=fee08db5b878,id=4963,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4963,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4963#!~#diskBytes\n","stream":"stderr","time":"2022-05-16T04:05:32.19468539Z"}
+[20220518-175901] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4858
+[20220518-175901] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=43\u00171b67b09c1,id=4858,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4858,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4858#!~#tsmLevel3CompactionErr \u003c tsm1_engine,database=varken,engine=tsm1,hostname=4371b67b09c1,id=4858,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4858,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4858#!~#tsmLevel3CompactionDuration\n","stream":"stderr","time":"2022-05-18T16:58:22.152755355Z"}
+[20220518-233401] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/4826
+[20220518-233401] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=varken,engine=tsm1,hostname=f6873d6b554c,id=4826,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4826,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/infLuxdb/wal/varken/varken\\ 30d-1h/4826#!~#writeValuesOk \u003c shard,database=varken,engine=tsm1,hostname=f6873d6b554c,id=4826,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/4826,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/4826#!~#writeReqOk\n","stream":"stderr","time":"2022-05-18T22:33:23.12147897Z"}
+[20220519-162601] Error in: /storage/Docker/influxdb/data/data/data/octopus/autogen/4088
+[20220519-162601] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=octopus,eNgine=tsm1,hostname=527e8bd1e43a,id=4088,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/4088,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/4088#!~#writeBytes \u003c shard,database=octopus,engine=tsm1,hostname=527e8bd1e43a,id=4088,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/4088,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/4088#!~#seriesCreate\n","stream":"stderr","time":"2022-05-19T15:25:31.409369038Z"}
+[20220519-214101] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5262
+[20220519-214101] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=varken,engine=tsm1,hostname=8861914d2432,id=5262,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5262,retentionPoliCy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5262#!~#writeValuesOk \u003c shard,database=varken,engine=tsm1,hostname=8861914d2432,id=5262,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5262,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5262#!~#writeReqOk\n","stream":"stderr","time":"2022-05-19T20:40:11.286827304Z"}
+[20220520-154401] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5018
+[20220520-154401] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=6e1ab1d1b7cd,id=5018,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/50\u00118,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5018#!~#tsmLevel1CompactionsActive \u003c tsm1_engine,database=varken,engine=tsm1,hostname=6e1ab1d1b7cd,id=5018,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5018,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5018#!~#tsmLevel1Compactions\n","stream":"stderr","time":"2022-05-20T14:43:03.504840431Z"}
+[20220523-051002] Error in: /storage/Docker/influxdb/data/data/data/_internal/monitor/5408
+[20220523-051002] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=_internal,engine=tsm1,hostname=3e67c7619860,id=5408,indexTYpe=inmem,path=/var/lib/influxdb/data/_internal/monitor/5408,retentionPolicy=monitor,walPath=/var/lib/influxdb/wal/_internal/monitor/5408#!~#tsmLevel1CompactionsActive \u003c tsm1_engine,database=_internal,engine=tsm1,hostname=3e67c7619860,id=5408,indexType=inmem,path=/var/lib/influxdb/data/_internal/monitor/5408,retentionPolicy=monitor,walPath=/var/lib/influxdb/wal/_internal/monitor/5408#!~#tsmLevel1Compactions\n","stream":"stderr","time":"2022-05-23T04:09:54.596210051Z"}
+[20220527-104913] Error in: /storage/Docker/influxdb/data/data/data/octopus/autogen/34
+[20220527-104913] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=octopus,engine=tsm1,hostname=bce052eeba08,id=34,indexTyPe=inmem,path=/var/lib/influxdb/data/octopus/autogen/34,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/34#!~#writeReqOk \u003c shard,database=octopus,engine=tsm1,hostname=bce052eeba08,id=34,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/34,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/34#!~#writeReqErr\n","stream":"stderr","time":"2022-05-27T07:09:12.104673692Z"}
+[20220528-173801] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5085
+[20220528-173801] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,database=varken,engine=tsm1,hostname=89324dbf920c,id=5085,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5085,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varKen/varken\\ 30d-1h/5085#\u0001~#diskBytes \u003c tsm1_cache,database=varken,engine=tsm1,hostname=89324dbf920c,id=5085,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5085,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5085#!~#cachedBytes\n","stream":"stderr","time":"2022-05-28T16:37:12.243936846Z"}
+[20220529-181602] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5387
+[20220529-181602] Raw Error Line: {"log":"panic: keys must be added in sorted order: sHard,database=varken,engine=tsm1,hostname=71c690283e2b,id=5387,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5387,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5387#!~#writeReq \u003c shard,database=varken,engine=tsm1,hostname=71c690283e2b,id=5387,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5387,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5387#!~#writePointsOk\n","stream":"stderr","time":"2022-05-29T17:15:52.22140232Z"}
+[20220602-104801] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5405
+[20220602-104801] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=varken,engine=tsm1,hostname=ab4d075e1190,id=5405,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5405,retentionPolicy=Varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5405#!~#writeReqErr \u003c shard,database=varken,engine=tsm1,hostname=ab4d075e1190,id=5405,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5405,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5405#!~#writeReq\n","stream":"stderr","time":"2022-06-02T09:47:51.196493671Z"}
+[20220602-181701] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5044
+[20220602-181701] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,database=varken,engine=tsm1,hostname=d8c224657592,id=5044,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5044,retentionPolicy=varken\\ 30d-1h\u000cwalPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5044#!~#writeOk \u003c tsm1_cache,database=varken,engine=tsm1,hostname=d8c224657592,id=5044,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5044,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5044#!~#writeErr\n","stream":"stderr","time":"2022-06-02T17:16:52.090300244Z"}
+[20220604-162401] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5338
+[20220604-162401] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,database=varken,engine=tsm1,hostname=4a00f0944a0b,id=5338,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5338,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/53\u00138#!~#diskBytes \u003c tsm1_cache,database=varken,engine=tsm1,hostname=4a00f0944a0b,id=5338,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5338,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5338#!~#cachedBytes\n","stream":"stderr","time":"2022-06-04T15:23:32.122647668Z"}
+[20220604-201701] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5295
+[20220604-201701] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=502c3d0d2f01,id=5295,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5295,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal\u000fvarken/varken\\ 30d-1h/5295#!~#cacheCompactionsActive \u003c tsm1_engine,database=varken,engine=tsm1,hostname=502c3d0d2f01,id=5295,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5295,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5295#!~#cacheCompactions\n","stream":"stderr","time":"2022-06-04T19:16:12.756428704Z"}
+[20220604-204701] Error in: /storage/Docker/influxdb/data/data/data/nodered/autogen/5080
+[20220604-204701] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=nodered,engine=tsm1,hostname=685f9096c3b1,id=5080,indexType=inmem,path=/var/lib\u000finfluxdb/data/nodered/autogen/5080,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/nodered/autogen/5080#!~#tsmLevel3CompactionsActive \u003c tsm1_engine,database=nodered,engine=tsm1,hostname=685f9096c3b1,id=5080,indexType=inmem,path=/var/lib/influxdb/data/nodered/autogen/5080,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/nodered/autogen/5080#!~#tsmLevel3Compactions\n","stream":"stderr","time":"2022-06-04T19:47:01.780957849Z"}
+[20220607-085001] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5125
+[20220607-085001] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=fb97562e56aa,id=5125,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d\r1h/5125,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5125#!~#tsmOptimizeCompactionDuration \u003c tsm1_engine,database=varken,engine=tsm1,hostname=fb97562e56aa,id=5125,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5125,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5125#!~#tsmLevel3CompactionsActive\n","stream":"stderr","time":"2022-06-07T07:49:34.699732832Z"}
+[20220616-235004] Error in: /storage/Docker/influxdb/data/data/data/_internal/monitor/5987
+[20220616-235004] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,database=_internal,engine=tsm1,hostname=38dfa9e80a3c,id=5987,indexType=inmem,path=\u000fvar/lib/influxdb/data/_internal/monitor/5987,retentionPolicy=monitor,walPath=/var/lib/influxdb/wal/_internal/monitor/5987#!~#snapshotCount \u003c tsm1_cache,database=_internal,engine=tsm1,hostname=38dfa9e80a3c,id=5987,indexType=inmem,path=/var/lib/influxdb/data/_internal/monitor/5987,retentionPolicy=monitor,walPath=/var/lib/influxdb/wal/_internal/monitor/5987#!~#memBytes\n","stream":"stderr","time":"2022-06-16T22:49:41.745646319Z"}
+[20220618-193501] Error in: /storage/Docker/influxdb/data/data/data/octopus/autogen/873
+[20220618-193501] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,databasE=octopus,engine=tsm1,hostname=d9173775a688,id=873,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/873,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/873#!~#diskBytes \u003c tsm1_cache,database=octopus,engine=tsm1,hostname=d9173775a688,id=873,indexType=inmem,path=/var/lib/influxdb/data/octopus/autogen/873,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/octopus/autogen/873#!~#cachedBytes\n","stream":"stderr","time":"2022-06-18T18:34:32.21634324Z"}
+[20220622-143901] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/6174
+[20220622-143901] Raw Error Line: {"log":"panic: keys must be added in sorted order: shard,database=varken,engine=tsm1,hostnamE=bfbdf1ac523a,id=6174,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/6174,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/6174#!~#writeValuesOk \u003c shard,database=varken,engine=tsm1,hostname=bfbdf1ac523a,id=6174,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/6174,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/6174#!~#writeReqOk\n","stream":"stderr","time":"2022-06-22T13:38:52.693904652Z"}
+[20220622-150902] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/6178
+[20220622-150902] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=varken,engine=tsm1,hostname=48390f4a5a6a,id=6178,indexType=inmem,path=/var/lib/influxdb/data\u000fvarken/varken\\ 30d-1h/6178,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/6178#!~#tsmOptimizeCompactionErr \u003c tsm1_engine,database=varken,engine=tsm1,hostname=48390f4a5a6a,id=6178,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/6178,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/6178#!~#tsmOptimizeCompactionDuration\n","stream":"stderr","time":"2022-06-22T14:08:42.826604468Z"}
+[20220622-160901] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5733
+[20220622-160901] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,database=varken,engine=tsm1,hostname=80d46512985e,id=5733,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5733,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5733#!~#wriTeOk \u003c tsm1_cache,database=varken,engine=tsm1,hostname=80d46512985e,id=5733,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5733,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5733#!~#writeErr\n","stream":"stderr","time":"2022-06-22T15:08:22.312651036Z"}
+[20220624-105301] Error in: /storage/Docker/influxdb/data/data/data/varken/varken\ 30d-1h/5789
+[20220624-105301] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_cache,database=varken,engine=tsm1,hostname=0bbf1d25cdc3,id=5789,indexTypE=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5789,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5789#!~#memBytes \u003c tsm1_cache,database=varken,engine=tsm1,hostname=0bbf1d25cdc3,id=5789,indexType=inmem,path=/var/lib/influxdb/data/varken/varken\\ 30d-1h/5789,retentionPolicy=varken\\ 30d-1h,walPath=/var/lib/influxdb/wal/varken/varken\\ 30d-1h/5789#!~#diskBytes\n","stream":"stderr","time":"2022-06-24T09:52:01.802657509Z"}
+[20220625-051002] Error in: /storage/Docker/influxdb/data/data/data/nodered/autogen/2133
+[20220625-051002] Raw Error Line: {"log":"panic: keys must be added in sorted order: tsm1_engine,database=nodered,engine=tsm1,hostname=1558923e9b6b,id=2133,indexType=inmem,path=/var/lib/influxdb/data/nodered/autogen/2133,retentionPolicy=autogen,walPath\u001d/var/lib/influxdb/wal/nodered/autogen/2133#!~#tsmLevel1Compactions \u003c tsm1_engine,database=nodered,engine=tsm1,hostname=1558923e9b6b,id=2133,indexType=inmem,path=/var/lib/influxdb/data/nodered/autogen/2133,retentionPolicy=autogen,walPath=/var/lib/influxdb/wal/nodered/autogen/2133#!~#tsmLevel1CompactionQueue\n","stream":"stderr","time":"2022-06-25T04:09:53.962166232Z"}

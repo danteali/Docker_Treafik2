@@ -1,0 +1,471 @@
+version: "3.8"
+
+# Main world and router in other compose file.
+# This file ocntains additional worlds.
+
+########################### NETWORKS
+networks:
+  # Docker will use the same default network for all compose files in
+  # the same directory. It will use the settings of the first network
+  # created even of othere compose files try to set the default to a
+  # different subnet.
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $DEFAULT_COMPOSE_NET
+          gateway: $DEFAULT_COMPOSE_GATEWAY
+
+
+########################### COMMON SETTINGS ('EXTENDS')
+
+#x-logging: 
+#      &default-logging
+#      options:
+#        # For default json-file driver
+#        #max-size: "50m"
+#        #max-file: "1"
+#        # For local driver when journald enabled
+#        # Now defined globally in /etc/docker/daemon.json
+#        cache-max-size: "50m"
+#        cache-max-file: "1"
+
+########################### SERVICES
+
+services:
+# All services / apps go below this line
+
+
+
+  ### - beside a line is a reminder to update it for each service
+  # On initial world update,to minimise chance of errors, run servies without any
+  # mods (don't map volume) and give service a lot more RAM than normal - 3072M worked.
+
+  mc-fabric-Hermitcraft4:                                             ### Change
+    container_name: mc-fabric-Hermitcraft4                            ### Change
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    ports:
+      - $MC_FABRIC_HERMITCRAFT4:$MC_MULTIPLAYER_PORT                  ### Change - to connect directly to server with HOST_IP:PORT
+      - $MC_FE_HC4:25585       # Fabric Exporter Metrics (test port = 7700)
+      - $MC_UM_HC4:9100        # Unified Metrics (test port = 7800)
+      - $MC_SS_HC4:8000  # Serverstats Prometheus Metrics Port
+    volumes:
+      - $DOCKER_DIR/minecraft/itzg/fabric_Hermitcraft4/data:/data     ### Change
+      - $DOCKER_DIR/minecraft/itzg/1.18_mods:/data/mods               ### Change to match version mods dir
+      - $DOCKER_DIR/minecraft/itzg/1.18_config:/data/config           ### Change to match version config dir
+    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (not necessary but defined in docs)
+    #stdin_open: true                # Same as using -i in docker run, i.e. start interactive shell (not using)
+    environment:
+      - VERSION=1.18.2                                                ### Change to required version number
+      - TZ=$TZ
+      - TYPE=FABRIC
+      - ENABLE_AUTOPAUSE=TRUE
+      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Change - increase on frequently used servers
+      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Change - increase on frequently used servers
+      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+      - INIT_MEMORY=512M
+      - MAX_MEMORY=1024M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+      - USE_AIKAR_FLAGS=TRUE
+      # ------- server.properties config (only applies to initial creation) ------- `
+      - MOTD="Hermitcraft 4"                                          ### Change
+      - DEBUG=TRUE
+      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+      - EULA=TRUE
+      - DIFFICULTY=hard
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+      - ENABLE_COMMAND_BLOCK=TRUE
+      - ALLOW_FLIGHT=TRUE
+      - ONLINE_MODE=TRUE
+      - MAX_TICK_TIME=-1
+      - SYNC_CHUNK_WRITES=false
+      - NETWORK_COMPRESSION_THRESHOLD=-1
+    mem_limit: 1536m # represents the hard memory limits
+    mem_reservation: 128m # represents the soft memory limits
+    labels:
+      - org.label-schema.group=minecraft
+      ## Exclude Watchtower
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+  mc-fabric-Hermitcraft5:                                             ### Change
+    container_name: mc-fabric-Hermitcraft5                            ### Change
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    ports:
+      - $MC_FABRIC_HERMITCRAFT5:$MC_MULTIPLAYER_PORT                  ### Change - to connect directly to server with HOST_IP:PORT
+      - $MC_FE_HC5:25585       # Fabric Exporter Metrics (test port = 7700)
+      - $MC_UM_HC5:9100        # Unified Metrics (test port = 7800)
+      - $MC_SS_HC5:8000  # Serverstats Prometheus Metrics Port
+    volumes:
+      - $DOCKER_DIR/minecraft/itzg/fabric_Hermitcraft5/data:/data     ### Change
+      - $DOCKER_DIR/minecraft/itzg/1.18_mods:/data/mods               ### Change to match version mods dir
+      - $DOCKER_DIR/minecraft/itzg/1.18_config:/data/config           ### Change to match version config dir
+    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (not necessary but defined in docs)
+    #stdin_open: true                # Same as using -i in docker run, i.e. start interactive shell (not using)
+    environment:
+      - VERSION=1.18.2                                                ### Change to required version number
+      - TZ=$TZ
+      - TYPE=FABRIC
+      - ENABLE_AUTOPAUSE=TRUE
+      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Change - increase on frequently used servers
+      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Change - increase on frequently used servers
+      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+      - INIT_MEMORY=512M
+      - MAX_MEMORY=1024M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+      - USE_AIKAR_FLAGS=TRUE
+      # ------- server.properties config (only applies to initial creation) ------- `
+      - MOTD="Hermitcraft 5"                                          ### Change
+      - DEBUG=TRUE
+      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+      - EULA=TRUE
+      - DIFFICULTY=hard
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+      - ENABLE_COMMAND_BLOCK=TRUE
+      - ALLOW_FLIGHT=TRUE
+      - ONLINE_MODE=TRUE
+      - MAX_TICK_TIME=-1
+      - SYNC_CHUNK_WRITES=false
+      - NETWORK_COMPRESSION_THRESHOLD=-1
+    mem_limit: 1536m # represents the hard memory limits
+    mem_reservation: 128m # represents the soft memory limits
+    labels:
+      - org.label-schema.group=minecraft
+      ## Exclude Watchtower
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+  mc-fabric-Hermitcraft6:                                             ### Change
+    container_name: mc-fabric-Hermitcraft6                            ### Change
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    ports:
+      - $MC_FABRIC_HERMITCRAFT6:$MC_MULTIPLAYER_PORT                  ### Change - to connect directly to server with HOST_IP:PORT
+      - $MC_FE_HC6:25585       # Fabric Exporter Metrics (test port = 7700)
+      - $MC_UM_HC6:9100        # Unified Metrics (test port = 7800)
+      - $MC_SS_HC6:8000  # Serverstats Prometheus Metrics Port
+    volumes:
+      - $DOCKER_DIR/minecraft/itzg/fabric_Hermitcraft6/data:/data     ### Change
+      - $DOCKER_DIR/minecraft/itzg/1.18_mods:/data/mods               ### Change to match version mods dir
+      - $DOCKER_DIR/minecraft/itzg/1.18_config:/data/config           ### Change to match version config dir
+    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (not necessary but defined in docs)
+    #stdin_open: true                # Same as using -i in docker run, i.e. start interactive shell (not using)
+    environment:
+      - VERSION=1.18.2                                                ### Change to required version number
+      - TZ=$TZ
+      - TYPE=FABRIC
+      - ENABLE_AUTOPAUSE=TRUE
+      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Change - increase on frequently used servers
+      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Change - increase on frequently used servers
+      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+      - INIT_MEMORY=512M
+      - MAX_MEMORY=1024M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+      - USE_AIKAR_FLAGS=TRUE
+      # ------- server.properties config (only applies to initial creation) ------- `
+      - MOTD="Hermitcraft 6"                                          ### Change
+      - DEBUG=TRUE
+      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+      - EULA=TRUE
+      - DIFFICULTY=hard
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+      - ENABLE_COMMAND_BLOCK=TRUE
+      - ALLOW_FLIGHT=TRUE
+      - ONLINE_MODE=TRUE
+      - MAX_TICK_TIME=-1
+      - SYNC_CHUNK_WRITES=false
+      - NETWORK_COMPRESSION_THRESHOLD=-1
+    mem_limit: 1536m # represents the hard memory limits
+    mem_reservation: 128m # represents the soft memory limits
+    labels:
+      - org.label-schema.group=minecraft
+      ## Exclude Watchtower
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+  mc-fabric-Hermitcraft7:                                             ### Change
+    container_name: mc-fabric-Hermitcraft7                            ### Change
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    ports:
+      - $MC_FABRIC_HERMITCRAFT7:$MC_MULTIPLAYER_PORT                  ### Change - to connect directly to server with HOST_IP:PORT
+      - $MC_FE_HC7:25585       # Fabric Exporter Metrics (test port = 7700)
+      - $MC_UM_HC7:9100        # Unified Metrics (test port = 7800)
+      - $MC_SS_HC7:8000  # Serverstats Prometheus Metrics Port
+    volumes:
+      - $DOCKER_DIR/minecraft/itzg/fabric_Hermitcraft7/data:/data     ### Change
+      - $DOCKER_DIR/minecraft/itzg/1.18_mods:/data/mods               ### Change to match version mods dir
+      - $DOCKER_DIR/minecraft/itzg/1.18_config:/data/config           ### Change to match version config dir
+    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (not necessary but defined in docs)
+    #stdin_open: true                # Same as using -i in docker run, i.e. start interactive shell (not using)
+    environment:
+      - VERSION=1.18.2                                                ### Change to required version number
+      - TZ=$TZ
+      - TYPE=FABRIC
+      - ENABLE_AUTOPAUSE=TRUE
+      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Change - increase on frequently used servers
+      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Change - increase on frequently used servers
+      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+      - INIT_MEMORY=512M
+      - MAX_MEMORY=1024M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+      - USE_AIKAR_FLAGS=TRUE
+      # ------- server.properties config (only applies to initial creation) ------- `
+      - MOTD="Hermitcraft 7"                                          ### Change
+      - DEBUG=TRUE
+      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+      - EULA=TRUE
+      - DIFFICULTY=hard
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+      - ENABLE_COMMAND_BLOCK=TRUE
+      - ALLOW_FLIGHT=TRUE
+      - ONLINE_MODE=TRUE
+      - MAX_TICK_TIME=-1
+      - SYNC_CHUNK_WRITES=false
+      - NETWORK_COMPRESSION_THRESHOLD=-1
+    mem_limit: 1536m # represents the hard memory limits
+    mem_reservation: 128m # represents the soft memory limits
+    labels:
+      - org.label-schema.group=minecraft
+      ## Exclude Watchtower
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+# ===============================================================================================
+# 1.17
+# ===============================================================================================
+
+#
+#  # Minecraft
+#  mc_itzg_fabric_117_DaddyJames:
+#    container_name: mc_itzg_fabric_117_DaddyJames
+#    image: itzg/minecraft-server
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    networks:
+#      - default
+#    ports:
+#      - $MINECRAFT_FABRIC_117_DADDYJAMES_SERVER:25565
+#    volumes:
+#      - $DOCKER_DIR/minecraft/itzg/fabric_1.17_DaddyJames/data:/data
+#      - $DOCKER_DIR//minecraft/itzg/1.17_mods:/data/mods
+#      - $DOCKER_DIR/minecraft/itzg/1.17_config:/data/config
+#    environment:
+#      - TZ=$TZ
+#      - TYPE=FABRIC
+#      - VERSION=1.17.1
+#      - ENABLE_AUTOPAUSE=TRUE
+#      - AUTOPAUSE_TIMEOUT_EST=300
+#      - AUTOPAUSE_TIMEOUT_INIT=120
+#      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+#      #- INIT_MEMORY=512M
+#      #- MAX_MEMORY=3072M # or can use e.g. 4G`
+#      - USE_AIKAR_FLAGS=TRUE
+#      # ------- server.properties config (only applies to initial creation) ------- `
+#      - MOTD="Minecraft 1.17 (Fabric) - DaddyJames"
+#      - DEBUG=TRUE
+#      - VIEW_DISTANCE=12
+#      - EULA=TRUE
+#      - DIFFICULTY=hard
+#      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+#      - ENABLE_COMMAND_BLOCK=TRUE
+#      - ALLOW_FLIGHT=TRUE
+#      - ONLINE_MODE=TRUE
+#      - MAX_TICK_TIME=-1
+#      - SYNC_CHUNK_WRITES=false
+#      - NETWORK_COMPRESSION_THRESHOLD=-1
+#    labels:
+#      - org.label-schema.group=minecraft
+#      ## Exclude Watchtower
+#      - "com.centurylinklabs.watchtower.enable=false"
+#
+#
+#  # Minecraft
+#  mc_itzg_fabric_117_Hermitcraft4:
+#    container_name: mc_itzg_fabric_117_Hermitcraft4
+#    image: itzg/minecraft-server
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    networks:
+#      - default
+#    ports:
+#      - $MINECRAFT_FABRIC_117_HERMITCRAFT4_SERVER:25565
+#    volumes:
+#      - $DOCKER_DIR/minecraft/itzg/fabric_1.17_Hermitcraft4/data:/data
+#      - $DOCKER_DIR//minecraft/itzg/1.17_mods:/data/mods
+#      - $DOCKER_DIR/minecraft/itzg/1.17_config:/data/config
+#    environment:
+#      - TZ=$TZ
+#      - TYPE=FABRIC
+#      - VERSION=1.17.1
+#      - ENABLE_AUTOPAUSE=TRUE
+#      - AUTOPAUSE_TIMEOUT_EST=300
+#      - AUTOPAUSE_TIMEOUT_INIT=120
+#      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+#      #- INIT_MEMORY=512M
+#      #- MAX_MEMORY=3072M # or can use e.g. 4G`
+#      - USE_AIKAR_FLAGS=TRUE
+#      # ------- server.properties config (only applies to initial creation) ------- `
+#      - MOTD="Minecraft 1.17 (Fabric) - Hermitcraft 4"
+#      - DEBUG=TRUE
+#      - VIEW_DISTANCE=12
+#      - EULA=TRUE
+#      - DIFFICULTY=hard
+#      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+#      - ENABLE_COMMAND_BLOCK=TRUE
+#      - ALLOW_FLIGHT=TRUE
+#      - ONLINE_MODE=TRUE
+#      - MAX_TICK_TIME=-1
+#      - SYNC_CHUNK_WRITES=false
+#      - NETWORK_COMPRESSION_THRESHOLD=-1
+#    labels:
+#      - org.label-schema.group=minecraft
+#      ## Exclude Watchtower
+#      - "com.centurylinklabs.watchtower.enable=false"
+#
+#
+#  # Minecraft
+#  mc_itzg_fabric_117_Hermitcraft5:
+#    container_name: mc_itzg_fabric_117_Hermitcraft5
+#    image: itzg/minecraft-server
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    networks:
+#      - default
+#    ports:
+#      - $MINECRAFT_FABRIC_117_HERMITCRAFT5_SERVER:25565
+#    volumes:
+#      - $DOCKER_DIR/minecraft/itzg/fabric_1.17_Hermitcraft5/data:/data
+#      - $DOCKER_DIR//minecraft/itzg/1.17_mods:/data/mods
+#      - $DOCKER_DIR/minecraft/itzg/1.17_config:/data/config
+#    environment:
+#      - TZ=$TZ
+#      - TYPE=FABRIC
+#      - VERSION=1.17.1
+#      - ENABLE_AUTOPAUSE=TRUE
+#      - AUTOPAUSE_TIMEOUT_EST=300
+#      - AUTOPAUSE_TIMEOUT_INIT=120
+#      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+#      #- INIT_MEMORY=512M
+#      #- MAX_MEMORY=3072M # or can use e.g. 4G`
+#      - USE_AIKAR_FLAGS=TRUE
+#      # ------- server.properties config (only applies to initial creation) ------- `
+#      - MOTD="Minecraft 1.17 (Fabric) - Hermitcraft 5"
+#      - DEBUG=TRUE
+#      - VIEW_DISTANCE=12
+#      - EULA=TRUE
+#      - DIFFICULTY=hard
+#      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+#      - ENABLE_COMMAND_BLOCK=TRUE
+#      - ALLOW_FLIGHT=TRUE
+#      - ONLINE_MODE=TRUE
+#      - MAX_TICK_TIME=-1
+#      - SYNC_CHUNK_WRITES=false
+#      - NETWORK_COMPRESSION_THRESHOLD=-1
+#    labels:
+#      - org.label-schema.group=minecraft
+#      ## Exclude Watchtower
+#      - "com.centurylinklabs.watchtower.enable=false"
+#
+#
+#  # Minecraft
+#  mc_itzg_fabric_117_Hermitcraft6:
+#    container_name: mc_itzg_fabric_117_Hermitcraft6
+#    image: itzg/minecraft-server
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    networks:
+#      - default
+#    ports:
+#      - $MINECRAFT_FABRIC_117_HERMITCRAFT6_SERVER:25565
+#    volumes:
+#      - $DOCKER_DIR/minecraft/itzg/fabric_1.17_Hermitcraft6/data:/data
+#      - $DOCKER_DIR//minecraft/itzg/1.17_mods:/data/mods
+#      - $DOCKER_DIR/minecraft/itzg/1.17_config:/data/config
+#    environment:
+#      - TZ=$TZ
+#      - TYPE=FABRIC
+#      - VERSION=1.17.1
+#      - ENABLE_AUTOPAUSE=TRUE
+#      - AUTOPAUSE_TIMEOUT_EST=300
+#      - AUTOPAUSE_TIMEOUT_INIT=120
+#      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+#      #- INIT_MEMORY=512M
+#      #- MAX_MEMORY=3072M # or can use e.g. 4G`
+#      - USE_AIKAR_FLAGS=TRUE
+#      # ------- server.properties config (only applies to initial creation) ------- `
+#      - MOTD="Minecraft 1.17 (Fabric) - Hermitcraft 6"
+#      - DEBUG=TRUE
+#      - VIEW_DISTANCE=12
+#      - EULA=TRUE
+#      - DIFFICULTY=hard
+#      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+#      - ENABLE_COMMAND_BLOCK=TRUE
+#      - ALLOW_FLIGHT=TRUE
+#      - ONLINE_MODE=TRUE
+#      - MAX_TICK_TIME=-1
+#      - SYNC_CHUNK_WRITES=false
+#      - NETWORK_COMPRESSION_THRESHOLD=-1
+#    labels:
+#      - org.label-schema.group=minecraft
+#      ## Exclude Watchtower
+#      - "com.centurylinklabs.watchtower.enable=false"
+#
+#
+#  # Minecraft
+#  mc_itzg_fabric_117_Hermitcraft7:
+#    container_name: mc_itzg_fabric_117_Hermitcraft7
+#    image: itzg/minecraft-server
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    networks:
+#      - default
+#    ports:
+#      - $MINECRAFT_FABRIC_117_HERMITCRAFT7_SERVER:25565
+#    volumes:
+#      - $DOCKER_DIR/minecraft/itzg/fabric_1.17_Hermitcraft7/data:/data
+#      - $DOCKER_DIR//minecraft/itzg/1.17_mods:/data/mods
+#      - $DOCKER_DIR/minecraft/itzg/1.17_config:/data/config
+#    environment:
+#      - TZ=$TZ
+#      - TYPE=FABRIC
+#      - VERSION=1.17.1
+#      - ENABLE_AUTOPAUSE=TRUE
+#      - AUTOPAUSE_TIMEOUT_EST=300
+#      - AUTOPAUSE_TIMEOUT_INIT=120
+#      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+#      #- INIT_MEMORY=512M
+#      #- MAX_MEMORY=3072M # or can use e.g. 4G`
+#      - USE_AIKAR_FLAGS=TRUE
+#      # ------- server.properties config (only applies to initial creation) ------- `
+#      - MOTD="Minecraft 1.17 (Fabric) - Hermitcraft 7"
+#      - DEBUG=TRUE
+#      - VIEW_DISTANCE=12
+#      - EULA=TRUE
+#      - DIFFICULTY=hard
+#      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+#      - ENABLE_COMMAND_BLOCK=TRUE
+#      - ALLOW_FLIGHT=TRUE
+#      - ONLINE_MODE=TRUE
+#      - MAX_TICK_TIME=-1
+#      - SYNC_CHUNK_WRITES=false
+#      - NETWORK_COMPRESSION_THRESHOLD=-1
+#    labels:
+#      - org.label-schema.group=minecraft
+#      ## Exclude Watchtower
+#      - "com.centurylinklabs.watchtower.enable=false"
+
+
+
+#==============================================================================
+

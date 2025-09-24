@@ -1,0 +1,485 @@
+# TBC IF LOG PROCESSING REQUIRED
+# vscode - HAS BUILT-IN LOGROTATION - BUT UNCLEAR IF/WHEN OLD FILES REMOVED - TBC
+# heimdall - no longer using, no processing configured
+#          - LOOKS LIKE BUILT-IN LOGROTATION BUT NOT CERTAIN IF IT WILL REMOVE OLD LOGS YET, NO PROCESSING ADDED (YET)
+# emby - no longer using, no processing configured
+# jellyfin - no longer using, no processing configured
+# zigbee2mqtt - BUILT-IN LOGROTATION CREATES NEW DIRECTORIES EACH DAY BUT DOESN'T APPEAR TO REMOVE THEM
+
+# FULL LIST OF SERVICES WITH LOG PATHS MOUNTED IN SYSTEM
+# authelia - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# bazaar - IMAGE HAS BUILT-IN LOGROTATION BUT NO EVIDENCE OF OLD FILE CLEANUP - OLD FILE CLEANUP REQUIRED
+# cadvisor -  NO LOG FIES IN DIRECTORY - NOT PROCESSED BY SCRIPT
+# calibre-web - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# crowdsec - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# docker-gc - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# eclipse-mosquitto - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# emby
+# firefox - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# grafana - IMAGE HAS BUILT-IN LOGROTATION BUT NO EVIDENCE OF OLD FILE CLEANUP - OLD FILE CLEANUP REQUIRED
+# guacamole - IMAGE HAS BUILT-IN LOGROTATION BUT NO EVIDENCE OF OLD FILE CLEANUP - OLD FILE CLEANUP REQUIRED
+# heimdall 
+# home-assistant - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# home-assistant-test - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# home-assistant-old - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# jackett - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# jellyfin
+# jDownloader - LOGROTATE FULLY IMPLEMENTED BY IMAGE 
+# kavita - LOGROTATE FULLY IMPLEMENTED BY IMAGE 
+# kometa - LOGROTATE FULLY IMPLEMENTED BY IMAGE 
+# librespeed - IMAGE HAS BUILT-IN LOGROTATION BUT NO EVIDENCE OF OLD FILE CLEANUP - OLD FILE CLEANUP REQUIRED
+# mylar - IMAGE HAS BUILT-IN LOGROTATION BUT NO EVIDENCE OF OLD FILE CLEANUP - OLD FILE CLEANUP REQUIRED
+# nextcloud - LOGROTATE FULLY IMPLEMENTED BY IMAGE
+# organizr2 - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# pihole - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# plex - LOGROTATE FULLY IMPLEMENTED BY IMAGE
+# posterizarr - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# prowlarr - LOGROTATE FULLY IMPLEMENTED BY IMAGE 
+# radarr - IMAGE HAS BUILT-IN LOGROTATION BUT NO EVIDENCE OF OLD FILE CLEANUP - OLD FILE CLEANUP REQUIRED
+# sonarr - IMAGE HAS BUILT-IN LOGROTATION BUT NO EVIDENCE OF OLD FILE CLEANUP - OLD FILE CLEANUP REQUIRED
+# tautulli - LOGROTATE FULLY IMPLEMENTED BY IMAGE
+# tdarr - LOGROTATE FULLY IMPLEMENTED BY IMAGE
+# telegraf - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# traefik - LOGROTATE FULLY IMPLEMENTED BY IMAGE
+# ubooquity - LOGROTATE FULLY IMPLEMENTED BY IMAGE
+# unifi - LOGROTATION NOT EVIDENT IN IMAGE - FULL ROTATION REQUIRED
+# varken - LOGROTATE FULLY IMPLEMENTED BY IMAGE
+# vscode
+# zigbee2mqtt
+
+
+/var/log/docker/authelia/*.log {
+  # Rotate log files set under this user and group instead of using default user/group (usually root).
+  # Doesn't appear to change rotated file ownership to this if not already root.
+  su root root
+  
+  # Log files are rotated only if they grow bigger then size bytes. 
+  size 5M
+  
+  # Log files are rotated count times before being removed. If count is 0, old versions are removed rather than rotated.
+  rotate 5
+  
+  # Truncate the original log file in place after creating a copy, instead of moving the old log file and creating a new one.
+  copytruncate
+  
+  # If the log file is missing, go on to the next one without issuing an error message.
+  missingok
+
+  # Do not rotate the log if it is empty
+  notifempty
+}
+
+
+
+
+# BAZARR has it's own logrotate but doesn't appear to remove older files.
+# Need to create file "logrotate_placeholder" in log folder to give
+# logrotate something to process in order to run the post-rotate script
+/var/log/docker/bazarr/logrotate_placeholder {
+  su root root
+  # Set size to zero to force rotation of empty placeholder otherwise postroate script is not run
+  size 0
+  # Keep as few rotations of placeholder as possible.
+  rotate 0
+  copytruncate
+  missingok
+  ifempty
+
+  # 'sharedscripts' means postscript will only be run once at the end of
+  # processing instead of after every file processed.
+  sharedscripts
+
+  # Run script after processing
+  postrotate
+
+    LOGDIR="/var/log/docker/bazarr"
+    
+    # Find files in LOGDIR which have a modified time of "less than"
+    # MAXAGE days before now, then delete
+    MAXAGE=7
+    find $LOGDIR/* -mtime +$MAXAGE -delete
+  
+  endscript
+}
+
+
+# Don't know if it has logrotation but added rules anyway
+/var/log/docker/calibre-web/*.log {
+  su root root
+  size 1M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+/var/log/docker/crowdsec/*.log {
+  su root root
+  size 10M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+# Don't know if it has logrotation but added rules anyway
+/var/log/docker/docker-gc/*.log {
+  su root root
+  size 1M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+# Don't know if it has logrotation but added rules anyway
+/var/log/docker/eclipse-mosquitto/*.log {
+  su root root
+  size 1M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+# Don't know if it has logrotation but added rules anyway
+/var/log/docker/firefox/*.log /var/log/docker/firefox/*/*.log {
+  su root root
+  size 1M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+
+
+
+# GRAFANA has it's own logrotate but doesn't appear to remove older files.
+# Need to create file "logrotate_placeholder" in log folder to give
+# logrotate something to process in order to run the post-rotate script
+/var/log/docker/grafana/logrotate_placeholder {
+  su root root
+  # Set size to zero to force rotation of empty placeholder otherwise postroate script is not run
+  size 0
+  # Keep as few rotations of placeholder as possible.
+  rotate 0
+  copytruncate
+  missingok
+  ifempty
+
+  # 'sharedscripts' means postscript will only be run once at the end of
+  # processing instead of after every file processed.
+  sharedscripts
+
+  # Run script after processing
+  postrotate
+
+    LOGDIR="/var/log/docker/grafana"
+    
+    # Find files in LOGDIR which have amodified time of "less than"
+    # MAXAGE days before now, then delete
+    MAXAGE=7
+    find $LOGDIR/* -mtime +$MAXAGE -delete
+  
+  endscript
+}
+
+
+
+# GUACAMOLE has it's own logrotate but doesn't appear to remove older files.
+# Need to create file "logrotate_placeholder" in log folder to give
+# logrotate something to process in order to run the post-rotate script
+/var/log/docker/guacamole/logrotate_placeholder {
+  su root root
+  # Set size to zero to force rotation of empty placeholder otherwise postroate script is not run
+  size 0
+  # Keep as few rotations of placeholder as possible.
+  rotate 0
+  copytruncate
+  missingok
+  ifempty
+
+  # 'sharedscripts' means postscript will only be run once at the end of
+  # processing instead of after every file processed.
+  sharedscripts
+
+  # Run script after processing
+  postrotate
+
+    LOGDIR="/var/log/docker/guacamole"
+    
+    # Find files in LOGDIR which have amodified time of "less than"
+    # MAXAGE days before now, then delete
+    MAXAGE=7
+    find $LOGDIR/* -mtime +$MAXAGE -delete
+  
+  endscript
+}
+
+
+# Heimdall has logrotation but don't know yet if log logs removed.
+
+
+/var/log/docker/home-assistant/*.log {
+  su root root
+  size 10M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+/var/log/docker/home-assistant-test/*.log {
+  su root root
+  size 10M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+# Don't know if it has logrotation but added rules anyway
+/var/log/docker/jackett/*.txt {
+  su root root
+  size 1M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+# LIBRESPEED has it's own logrotate but doesn't appear to remove older files.
+# Need to create file "logrotate_placeholder" in log folder to give
+# logrotate something to process in order to run the post-rotate script
+/var/log/docker/librespeed/logrotate_placeholder {
+  su root root
+  # Set size to zero to force rotation of empty placeholder otherwise postroate script is not run
+  size 0
+  # Keep as few rotations of placeholder as possible.
+  rotate 0
+  copytruncate
+  missingok
+  ifempty
+
+  # 'sharedscripts' means postscript will only be run once at the end of
+  # processing instead of after every file processed.
+  sharedscripts
+
+  # Run script after processing
+  postrotate
+
+    LOGDIR="/var/log/docker/librespeed"
+    
+    # Find files in LOGDIR which have amodified time of "less than"
+    # MAXAGE days before now, then delete
+    MAXAGE=7
+    find $LOGDIR/* -mtime +$MAXAGE -delete
+  
+  endscript
+}
+
+
+# MYLAR has it's own logrotate but doesn't appear to remove older files.
+# Need to create file "logrotate_placeholder" in log folder to give
+# logrotate something to process in order to run the post-rotate script
+/var/log/docker/mylar/logrotate_placeholder {
+  su root root
+  # Set size to zero to force rotation of empty placeholder otherwise postroate script is not run
+  size 0
+  # Keep as few rotations of placeholder as possible.
+  rotate 0
+  copytruncate
+  missingok
+  ifempty
+
+  # 'sharedscripts' means postscript will only be run once at the end of
+  # processing instead of after every file processed.
+  sharedscripts
+
+  # Run script after processing
+  postrotate
+
+    LOGDIR="/var/log/docker/mylar"
+    
+    # Find files in LOGDIR which have amodified time of "less than"
+    # MAXAGE days before now, then delete
+    MAXAGE=7
+    find $LOGDIR/* -mtime +$MAXAGE -delete
+  
+  endscript
+}
+
+# Nextcloud - logrotation built in
+
+
+# Don't know if it has logrotation but added rules anyway
+/var/log/docker/organizr2/*.json {
+  su root root
+  size 1M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+/var/log/docker/pihole/*.log {
+  su root root
+  size 10M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+/var/log/docker/posterizarr/Logs/*.log {
+  su root root
+  size 10M
+  rotate 3
+  copytruncate
+  missingok
+  notifempty
+}
+
+# RADARR has it's own logrotate but doesn't appear to remove older files.
+# Need to create file "logrotate_placeholder" in log folder to give
+# logrotate something to process in order to run the post-rotate script
+/var/log/docker/radarr/logrotate_placeholder {
+  su root root
+  # Set size to zero to force rotation of empty placeholder otherwise postroate script is not run
+  size 0
+  # Keep as few rotations of placeholder as possible.
+  rotate 0
+  copytruncate
+  missingok
+  ifempty
+
+  # 'sharedscripts' means postscript will only be run once at the end of
+  # processing instead of after every file processed.
+  sharedscripts
+
+  # Run script after processing
+  postrotate
+
+    LOGDIR="/var/log/docker/radarr"
+    
+    # Find files in LOGDIR which have amodified time of "less than"
+    # MAXAGE days before now, then delete
+    MAXAGE=7
+    find $LOGDIR/* -mtime +$MAXAGE -delete
+  
+  endscript
+}
+
+
+# SONARR has it's own logrotate but doesn't appear to remove older files.
+# Need to create file "logrotate_placeholder" in log folder to give
+# logrotate something to process in order to run the post-rotate script
+/var/log/docker/sonarr/logrotate_placeholder { 
+  su root root
+  # Set size to zero to force rotation of empty placeholder otherwise postroate script is not run
+  size 0
+  # Keep as few rotations of placeholder as possible.
+  rotate 0
+  copytruncate
+  missingok
+  ifempty
+
+  # 'sharedscripts' means postscript will only be run once at the end of
+  # processing instead of after every file processed.
+  sharedscripts
+
+  # Run script after processing
+  postrotate
+
+    LOGDIR="/var/log/docker/sonarr"
+    
+    # Find files in LOGDIR which have amodified time of "less than"
+    # MAXAGE days before now, then delete
+    MAXAGE=7
+    find $LOGDIR/* -mtime +$MAXAGE -delete
+  
+  endscript
+}
+
+
+# Tautulli has logrotation built-in
+
+
+/var/log/docker/telegraf/*.log {
+  size 5M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+/var/log/docker/traefik/*.log {
+  size 5M
+  rotate 5
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+# Ubooquity DID have logrotation built in but doesn't seem to rotate with Oct-21 update
+# May just be due to not reaching relevant size yet.
+
+
+/var/log/docker/unifi/*.log /var/log/docker/unifi/*/*.log {
+  size 5M
+  rotate 3
+  copytruncate
+  missingok
+  notifempty
+}
+
+
+# varken hgas log rotation built in
+
+
+# ZIGBEE2MQTT has it's own logrotate but doesn't appear to remove older files.
+# It creates folders to hold older logs so we need to remove these with the
+# postrotate script.
+# Need to create file "logrotate_placeholder" in log folder to give
+# logrotate something to process in order to run the post-rotate script
+/var/log/docker/zigbee2mqtt/logrotate_placeholder {
+  su root root
+  # Set size to zero to force rotation of empty placeholder otherwise postroate script is not run
+  size 0
+  # Keep as few rotations of placeholder as possible.
+  rotate 0
+  copytruncate
+  missingok
+  ifempt
+
+  # 'sharedscripts' means postscript will only be run once at the end of
+  # processing instead of after every file processed.
+  sharedscripts
+
+  # Run script after processing
+  postrotate
+
+    LOGDIR="/var/log/docker/zigbee2mqtt"
+    
+    # Find files in LOGDIR which have amodified time of "less than"
+    # MAXAGE days before now, then delete
+    MAXAGE=7
+    find $LOGDIR -mtime +$MAXAGE -type d -exec rm -rf "{}" \;
+  
+  endscript
+}
+
+
+
+

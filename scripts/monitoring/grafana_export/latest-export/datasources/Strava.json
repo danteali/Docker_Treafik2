@@ -1,0 +1,28 @@
+{
+  "id": 7,
+  "uid": "cef4af31-23f5-4503-bc24-cff4c0b40bf1",
+  "orgId": 1,
+  "name": "Strava",
+  "type": "grafana-strava-datasource",
+  "typeLogoUrl": "public/plugins/grafana-strava-datasource/img/strava_logo.svg",
+  "access": "proxy",
+  "url": "",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": false,
+  "jsonData": {
+    "clientID": "114846",
+    "oauthPassThru": true,
+    "stravaAuthType": "refresh_token"
+  },
+  "secureJsonFields": {
+    "clientSecret": true,
+    "refreshToken": true
+  },
+  "version": 5,
+  "readOnly": false,
+  "apiVersion": ""
+}

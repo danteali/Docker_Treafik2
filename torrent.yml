@@ -1,0 +1,1504 @@
+version: "3.8"
+
+
+########################### NETWORKS
+networks:
+  t2_proxy:
+    external: true  # Will not try to re-create and will look for existing network
+    #name: t2_proxy
+    #driver: bridge
+    #ipam:
+    #  config:
+    #    - subnet: $TRAEFIK_NET
+    #      gateway: $TRAEFIK_GATEWAY
+
+  # Docker will use the same default network for all compose files in
+  # the same directory. It will use the settings of the first network
+  # created even of other compose files try to set the default to a
+  # different subnet.
+  # Can not declare the 'default' network as external.
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $DEFAULT_COMPOSE_NET
+          gateway: $DEFAULT_COMPOSE_GATEWAY
+
+########################### SECRETS
+# If passed to container in 'secrets' key, the secrets
+# files are saved inside containers at /run/secrets/<name>
+secrets:
+  pia_auth: # For act28/pia-openvpn
+    file: $SECRETS_DIR/pia_auth
+  transmission_rpc_username:
+    file: $SECRETS_DIR/transmission_rpc_username
+  transmission_rpc_password: # For act28/pia-openvpn
+    file: $SECRETS_DIR/transmission_rpc_password
+
+########################### COMMON SETTINGS ('EXTENDS')
+
+#x-logging: 
+#      &default-logging
+#      options:
+#        # For default json-file driver
+#        #max-size: "50m"
+#        #max-file: "1"
+#        # For local driver when journald enabled
+#        # Now defined globally in /etc/docker/daemon.json
+#        cache-max-size: "50m"
+#        cache-max-file: "1"
+
+########################### VPN
+services:
+# All services / apps go below this line
+  
+#-----------------------------------------------------------------------------------------------------------
+
+  #############################
+  ###          VPN          ###
+  #############################
+  ## SEE BOTTOM OF FILE FOR OTHER VPN SERVICE SNIPPETS
+
+  ## OPENVPN CLIENT - FOR USE WITH GENERIC OPEN VPN SETUPS
+  ## https://github.com/dperson/openvpn-client
+  vpn-torr:
+    image: dperson/openvpn-client:latest
+    # cap_add, security_opt, and volume required for the image to function
+    container_name: vpn-torr
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    cap_add:
+      - NET_ADMIN
+    security_opt:
+      - label:disable
+      - no-new-privileges:true
+    #devices:
+    #  - /dev/net/tun
+    networks:
+      - default
+      - t2_proxy
+    dns:
+      - 1.1.1.1 # Cloudflare
+      - 1.0.0.1 # Cloudflare
+      - 9.9.9.9 # Quad9
+      - 142.112.112.112 # Quad9
+    # if using '-d' or 'DNS' you can't enable the `read_only: true` option unless also specifying tmpfs below
+    read_only: true
+    tmpfs:
+    # tmpfs (volumes held in RAM) used instead of bind volumes to hold sensitive data which is inaccesible
+    # to other services and destroyed on exit. https://docs.docker.com/storage/tmpfs/
+      - /run
+      - /tmp
+    restart: always
+    volumes:
+      - $DOCKER_DIR/vpn-torr/ovpn/PIA/$PIA_REGION.ovpn:/vpn/vpn.conf
+      - $DOCKER_DIR/vpn-torr/ovpn/PIA/ca.rsa.2048.crt:/vpn/vpn-ca.crt
+    #environment:
+    #  - FIREWALL=''
+    secrets:
+      - pia_auth
+    ports:
+    # Publish the relevant service ports which are using the VPN service
+    # if IP_address:port access is needed
+      - "$BAZARR_PORT:6767" # Bazarr
+      - "$DELUGE_EXPORTER_PORT:9354" # Deluge Exporter
+      - "$DELUGE_GUI_PORT:8112" # Deluge GUI
+      - "$DELUGE_HOST_PORT:58846" # Deluge Host Port - only needed for Deluge Exporter to connect
+      - "$DELUGE_TORRENT_PORT:6881" # Deluge torrent port
+      - "$DELUGE_TORRENT_PORT:6881/udp" # Deluge torrent port
+      - "$JACKETT_PORT:9117" # Jackett
+      - "$JDOWNLOADER_PORT:5800" #jdownloader
+      - "$JDOWNLOADER_VNC_PORT:5900" #jdownloader VNC
+      - "$LAZYLIBRARIAN_PORT:5299" # LazyLibrarian
+      - "$MYLAR_PORT:8090" # Mylar
+      - "$NZBHYDRA2_PORT:5076" # Maps to 5076
+      - "$PROWLARR_PORT:9696" # Prowlarr
+      - "$QBITTORRENT_GUI_PORT:8070" # Originally 8080 but changed via env var
+      - "$QBITTORRENT_TORRENT_PORT:6881" # Exposed port = 6882 (check .env for details)
+      - "$QBITTORRENT_TORRENT_PORT:6881/udp"
+      - "$RADARR_PORT:7878" # Radarr
+      - "$SABNZBD_PORT:8080" # Sabnzbd
+      - "$SONARR_PORT:8989" # Sonarr
+      # DEPRECIATED
+      #- "$RUTORRENT_BITTORRENT1_PORT:51413" # RUTorrent Torrent Port - exposed port is 51414
+      #- "$RUTORRENT_BITTORRENT2_PORT_UDP:6881/udp" # RUTorrent Torrent Port - exposed port is 6883
+      #- "$RUTORRENT_GUI_PORT:80" # RUTorrent GUI - exposed port is 83 
+      #- "$RUTORRENT_SCGI_PORT:5000" # RUTorrent SCGI - exposed port is 5001
+      #- "$TRANSMISSION_PORT:9091" # Transmission GUI
+      #- "$TRANSMISSION_TORRENT_PORT:51413" # Transmission Torrent Port
+      #- "$TRANSMISSION_TORRENT_PORT:51413/udp" # Transmission Torrent Port
+    labels:
+      - org.label-schema.group=torrent
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## DELUGE - TORRENT CLIENT
+      - "traefik.http.routers.deluge-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.deluge-vpn-rtr.rule=Host(`deluge.$DOMAINNAME0`)"
+      - "traefik.http.routers.deluge-vpn-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.deluge-vpn-rtr.service=deluge-vpn-svc"
+      - "traefik.http.services.deluge-vpn-svc.loadbalancer.server.port=8112"
+      ## TRANSMISSION - TORRENT CLIENT
+      #- "traefik.http.routers.transmission-vpn-rtr.entrypoints=https"
+      #- "traefik.http.routers.transmission-vpn-rtr.rule=Host(`transmission.$DOMAINNAME0`)"
+      #- "traefik.http.routers.transmission-vpn-rtr.priority=99"
+      #- "traefik.http.routers.transmission-vpn-rtr.middlewares=chain-authelia@file" #,transmission-add-prefix"
+      #- "traefik.http.middlewares.transmission-add-prefix.addPrefix.prefix=/transmission/web"
+      #- "traefik.http.routers.transmission-vpn-rtr.service=transmission-vpn-svc"
+      #- "traefik.http.routers.transmission-vpn-rtr-bypass.entrypoints=https"
+      #- "traefik.http.routers.transmission-vpn-rtr-bypass.rule=Host(`transmission.$DOMAINNAME0`) && PathPrefix(`/transmission/rpc`)"
+      #- "traefik.http.routers.transmission-vpn-rtr-bypass.priority=100"
+      #- "traefik.http.routers.transmission-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+      #- "traefik.http.routers.transmission-vpn-rtr-bypass.service=transmission-vpn-svc"
+      #- "traefik.http.services.transmission-vpn-svc.loadbalancer.server.port=9091"
+      ## JDOWNLOADER2 - DOWNLOADER
+      - "traefik.http.routers.jdownloader-rtr.entrypoints=https"
+      - "traefik.http.routers.jdownloader-rtr.rule=Host(`jdownloader.$DOMAINNAME0`)"
+      - "traefik.http.routers.jdownloader-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.jdownloader-rtr.service=jdownloader-svc"
+      - "traefik.http.services.jdownloader-svc.loadbalancer.server.port=5800"
+      ## SONARR - TV
+      - "traefik.http.routers.sonarr-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.sonarr-vpn-rtr.rule=Host(`sonarr.$DOMAINNAME0`)"
+      - "traefik.http.routers.sonarr-vpn-rtr.priority=99"
+      - "traefik.http.routers.sonarr-vpn-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.sonarr-vpn-rtr.service=sonarr-vpn-svc"
+      - "traefik.http.routers.sonarr-vpn-rtr-bypass.entrypoints=https"
+      # 'Headers' and 'HeadersRegexp' matchers depreciated in v3.0
+      #- "traefik.http.routers.sonarr-vpn-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME0`) && (Headers(`X-Api-Key`, `$SONARR_API_KEY`) || Query(`apikey`, `$SONARR_API_KEY`))" # Old API structure
+      #- "traefik.http.routers.sonarr-vpn-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME0`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.sonarr-vpn-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME0`) && Query(`apikey=$SONARR_API_KEY`)"
+      - "traefik.http.routers.sonarr-vpn-rtr-bypass.priority=100"
+      - "traefik.http.routers.sonarr-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.sonarr-vpn-rtr-bypass.service=sonarr-vpn-svc"
+      - "traefik.http.services.sonarr-vpn-svc.loadbalancer.server.port=8989"
+      ## RADARR - MOVIES
+      - "traefik.http.routers.radarr-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.radarr-vpn-rtr.rule=Host(`radarr.$DOMAINNAME0`)"
+      - "traefik.http.routers.radarr-vpn-rtr.priority=99"
+      - "traefik.http.routers.radarr-vpn-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.radarr-vpn-rtr.service=radarr-vpn-svc"
+      - "traefik.http.routers.radarr-vpn-rtr-bypass.entrypoints=https"
+      # 'Headers' and 'HeadersRegexp' matchers depreciated in v3.0
+      #- "traefik.http.routers.radarr-vpn-rtr-bypass.rule=Host(`radarr.$DOMAINNAME0`) && (Headers(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"  # Old API version
+      #- "traefik.http.routers.radarr-vpn-rtr-bypass.rule=Host(`radarr.$DOMAINNAME0`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.radarr-vpn-rtr-bypass.rule=Host(`radarr.$DOMAINNAME0`) && Query(`apiKey=$RADARR_API_KEY`)"
+      - "traefik.http.routers.radarr-vpn-rtr-bypass.priority=100"
+      - "traefik.http.routers.radarr-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.radarr-vpn-rtr-bypass.service=radarr-vpn-svc"
+      - "traefik.http.services.radarr-vpn-svc.loadbalancer.server.port=7878"
+      ## PROWLARR - INDEXER MANAGER
+      - "traefik.http.routers.prowlarr-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.prowlarr-vpn-rtr.rule=Host(`prowlarr.$DOMAINNAME0`)"
+      - "traefik.http.routers.prowlarr-vpn-rtr.middlewares=chain-authelia@file" 
+      - "traefik.http.routers.prowlarr-vpn-rtr.service=prowlarr-vpn-svc"
+      - "traefik.http.services.prowlarr-vpn-svc.loadbalancer.server.port=9696"
+      ## BAZARR - SUBTITLE GRABBER
+      - "traefik.http.routers.bazarr-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.bazarr-vpn-rtr.rule=Host(`bazarr.$DOMAINNAME0`)"
+      - "traefik.http.routers.bazarr-vpn-rtr.priority=99"
+      - "traefik.http.routers.bazarr-vpn-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.bazarr-vpn-rtr.service=bazarr-vpn-svc"
+      - "traefik.http.routers.bazarr-vpn-rtr-bypass.entrypoints=https"
+      #- "traefik.http.routers.bazarr-vpn-rtr-bypass.rule=Host(`bazarr.$DOMAINNAME0`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.bazarr-vpn-rtr-bypass.rule=Host(`bazarr.$DOMAINNAME0`) && Query(`apikey=$BAZARR_API_KEY`)"
+      - "traefik.http.routers.bazarr-vpn-rtr-bypass.priority=100"
+      - "traefik.http.routers.bazarr-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.bazarr-vpn-rtr-bypass.service=bazarr-vpn-svc"
+      - "traefik.http.services.bazarr-vpn-svc.loadbalancer.server.port=6767"
+      ## MYLAR - COMIC DOWNLOADER AND ORGANISER
+      - "traefik.http.routers.mylar-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.mylar-vpn-rtr.rule=Host(`mylar.$DOMAINNAME0`)"
+      - "traefik.http.routers.mylar-vpn-rtr.priority=99"
+      - "traefik.http.routers.mylar-vpn-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.mylar-vpn-rtr.service=mylar-vpn-svc"
+      - "traefik.http.routers.mylar-vpn-rtr-bypass.entrypoints=https"
+      #- "traefik.http.routers.mylar-vpn-rtr-bypass.rule=Host(`mylar.$DOMAINNAME0`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.mylar-vpn-rtr-bypass.rule=Host(`mylar.$DOMAINNAME0`) && Query(`apikey=$MYLAR_API_KEY`)"
+      - "traefik.http.routers.mylar-vpn-rtr-bypass.priority=100"
+      - "traefik.http.routers.mylar-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.mylar-vpn-rtr-bypass.service=mylar-vpn-svc"
+      - "traefik.http.services.mylar-vpn-svc.loadbalancer.server.port=8090"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "https://google.com"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+
+
+#-----------------------------------------------------------------------------------------------------------
+
+  #############################
+  ###      DOWNLOADER       ###
+  #############################
+
+  # DELUGE
+  # https://github.com/linuxserver/docker-deluge
+  # https://docs.linuxserver.io/images/docker-deluge
+  # Default username/password: admin/deluge
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    security_opt:
+      - no-new-privileges:true
+    network_mode: 
+      service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+    #depends_on:
+    #  - vpn-torr
+    # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+    #networks:
+    #  - default
+    #  - t2_proxy
+    # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+    #ports:
+    #  - $DELUGE_GUI_PORT:8112
+    #  - $DELUGE_TORRENT_PORT:6881
+    #  - $DELUGE_TORRENT_PORT:6881/udp
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - DELUGE_LOGLEVEL=error #optional
+    volumes:
+      - $DOCKER_DIR/deluge/data:/config
+      - $DOCKER_DIR/deluge/watchdir:/watchdir
+      - $DOWNLOAD_DIR/_torrents:/downloads
+      - /home/ryan/scripts/docker/scripts/torrents/custom_scripts:/custom-scripts
+    labels:
+      - org.label-schema.group=torrent
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      # <<< SEE VPN CONFIG FOR TRAEFIK ACCESS SINCE THIS SERVICE IS CONNECTING THROUGH THE VPN NETWORKING >>>
+      # <<< STACK WE CAN NOT ALSO ADD TRAEFIK NETWORK TO THIS SERVICE'S NETWORKING STACK >>>
+      - "traefik.enable=false"
+      ## HTTP Routers
+      - "traefik.http.routers.deluge-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.deluge-vpn-rtr.rule=Host(`deluge.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.deluge-vpn-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.deluge-vpn-rtr.service=deluge-vpn-svc"
+      - "traefik.http.services.deluge-vpn-svc.loadbalancer.server.port=8112"
+
+  # JDOWNLOADER2 - DOWNLOAD MANAGER
+  # https://github.com/jlesage/docker-jdownloader-2
+  # v22.11.2 & v22.12.1 in Dec 22 didn't work - kept crashing
+  # Reverted to known working version.
+  jdownloader:
+    image: jlesage/jdownloader-2:v22.11.1
+    container_name: jdownloader
+    restart: always # to allow access from Guacamole if we need to connect and troubleshoot
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    network_mode: 
+      service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+    #depends_on:
+    #  - vpn-torr
+    # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+    #networks:
+    #  default:
+    #  t2_proxy:
+    #    ipv4_address: $JDOWNLOADER_IP # Static IP for easier Guacamole connection
+    # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+    #ports:
+    #  - $JDOWNLOADER_PORT:5800 # This is for accessing GUI via browser. Use 5900 from Guacamole
+    #  - 3129:3129 # Used by MyJDownloader external web app
+    volumes:
+      - $DOCKER_DIR/jdownloader/data:/config
+      - $DOCKERLOG_DIR/jdownloader/logs:/config/logs
+      - $DOCKERLOG_DIR/jdownloader/nginx:/config/log
+      - $DOWNLOAD_DIR/_jdownloader:/output
+    environment:
+      USER_ID: $PUID
+      GROUP_ID: $PGID
+      TZ: $TZ
+      UMASK: 002
+      KEEP_APP_RUNNING: 1
+      CLEAN_TMP_DIR: 1
+      DISPLAY_WIDTH: 1920
+      DISPLAY_HEIGHT: 1080
+      VNC_PASSWD: $JDOWNLOADER_VNC_PASSWD # Only applies to access via web i.e. port 5800
+    labels:
+      - org.label-schema.group=torrent
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      # <<< SEE VPN CONFIG FOR TRAEFIK ACCESS SINCE THIS SERVICE IS CONNECTING THROUGH THE VPN NETWORKING >>>
+      # <<< STACK WE CAN NOT ALSO ADD TRAEFIK NETWORK TO THIS SERVICE'S NETWORKING STACK >>>
+      - "traefik.enable=false"
+      ## HTTP Routers
+      - "traefik.http.routers.jdownloader-rtr.entrypoints=https"
+      - "traefik.http.routers.jdownloader-rtr.rule=Host(`jdownloader.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.jdownloader-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.jdownloader-rtr.service=jdownloader-svc"
+      - "traefik.http.services.jdownloader-svc.loadbalancer.server.port=5800"
+
+#-----------------------------------------------------------------------------------------------------------
+
+  ##############################
+  ###  INDEXERS / SEARCHING  ###
+  ##############################
+
+  # SONARR
+  # https://gitlab.com/Linuxserver.io/docker-sonarr
+  sonarr:
+    image: lscr.io/linuxserver/sonarr
+    container_name: sonarr
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    network_mode: 
+      service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+    #depends_on:
+    #  - vpn-torr
+    # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+    #networks:
+    #  - default
+    #  - t2_proxy
+    # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+    #ports:
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $DOCKER_DIR/sonarr/data:/config
+      - $DOCKERLOG_DIR/sonarr:/config/logs
+      - $DOWNLOAD_DIR/_torrents:/downloads
+      - $MEDIA_TV_DIR:/tv
+      - $MEDIA_VIDEO_DIR:/all_vids
+      - /home/ryan/scripts/docker/scripts/torrents/custom_scripts:/custom-scripts
+    environment:
+      #- DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    labels:
+      - org.label-schema.group=torrent,external
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      # <<< SEE VPN CONFIG FOR TRAEFIK ACCESS SINCE THIS SERVICE IS CONNECTING THROUGH THE VPN NETWORKING >>>
+      # <<< STACK WE CAN NOT ALSO ADD TRAEFIK NETWORK TO THIS SERVICE'S NETWORKING STACK >>>
+      - "traefik.enable=false"
+      ## HTTP Routers
+      - "traefik.http.routers.sonarr-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.sonarr-vpn-rtr.rule=Host(`sonarr.$DOMAINNAME0`)"
+      - "traefik.http.routers.sonarr-vpn-rtr.priority=99"
+      - "traefik.http.routers.sonarr-vpn-rtr-bypass.entrypoints=https"
+      # 'Headers' and 'HeadersRegexp' matchers depreciated in v3.0
+      #- "traefik.http.routers.sonarr-vpn-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME0`) && (Headers(`X-Api-Key`, `$SONARR_API_KEY`) || Query(`apikey`, `$SONARR_API_KEY`))" # Old API structure
+      #- "traefik.http.routers.sonarr-vpn-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME0`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.sonarr-vpn-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME0`) && Query(`apikey=$SONARR_API_KEY`)"
+      - "traefik.http.routers.sonarr-vpn-rtr-bypass.priority=100"
+      ## Middlewares
+      - "traefik.http.routers.sonarr-vpn-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.sonarr-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.sonarr-vpn-rtr.service=sonarr-vpn-svc"
+      - "traefik.http.routers.sonarr-vpn-rtr-bypass.service=sonarr-vpn-svc"
+      - "traefik.http.services.sonarr-vpn-svc.loadbalancer.server.port=8989"
+
+  # RADARR 
+  # https://gitlab.com/Linuxserver.io/docker-radarr
+  radarr:
+    image: lscr.io/linuxserver/radarr
+    container_name: radarr
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    network_mode: 
+      service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+    #depends_on:
+    #  - vpn-torr
+    # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+    #networks:
+    #  - default
+    #  - t2_proxy
+    # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+    #ports:
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $DOCKER_DIR/radarr/data:/config
+      - $DOCKERLOG_DIR/radarr:/config/logs
+      - $DOWNLOAD_DIR/_torrents:/downloads
+      - $MEDIA_MOVIE_DIR:/movies
+      #- $MEDIA_MOVIE4K_DIR:/movies_4k       # Dir deleted now - all movies in the same folder 
+      - $MEDIA_VIDEO_DIR:/all_vids
+      - /home/ryan/scripts/docker/scripts/torrents/custom_scripts:/custom-scripts
+    environment:
+      #- DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    labels:
+      - org.label-schema.group=torrent,external
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      # <<< SEE VPN CONFIG FOR TRAEFIK ACCESS SINCE THIS SERVICE IS CONNECTING THROUGH THE VPN NETWORKING >>>
+      # <<< STACK WE CAN NOT ALSO ADD TRAEFIK NETWORK TO THIS SERVICE'S NETWORKING STACK >>>
+      - "traefik.enable=false"
+      ## HTTP Routers     
+      - "traefik.http.routers.radarr-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.radarr-vpn-rtr.rule=Host(`radarr.$DOMAINNAME0`)"
+      - "traefik.http.routers.radarr-vpn-rtr.priority=99"
+      - "traefik.http.routers.radarr-vpn-rtr-bypass.entrypoints=https"
+      # 'Headers' and 'HeadersRegexp' matchers depreciated in v3.0
+      #- "traefik.http.routers.radarr-vpn-rtr-bypass.rule=Host(`radarr.$DOMAINNAME0`) && (Headers(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"  # Old API version
+      #- "traefik.http.routers.radarr-vpn-rtr-bypass.rule=Host(`radarr.$DOMAINNAME0`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.radarr-vpn-rtr-bypass.rule=Host(`radarr.$DOMAINNAME0`) && Query(`apiKey=$RADARR_API_KEY`)"
+      - "traefik.http.routers.radarr-vpn-rtr-bypass.priority=100"
+      ## Middlewares
+      - "traefik.http.routers.radarr-vpn-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.radarr-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.radarr-vpn-rtr.service=radarr-vpn-svc"
+      - "traefik.http.routers.radarr-vpn-rtr-bypass.service=radarr-vpn-svc"
+      - "traefik.http.services.radarr-vpn-svc.loadbalancer.server.port=7878"
+
+  # PROWLARR - INDEXER MANAGER
+  # https://gitlab.com/Linuxserver.io/docker-prowlarr
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr
+    container_name: prowlarr
+    # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+    network_mode: 
+      service:vpn-torr
+    #depends_on:
+    #  - vpn-torr # Forces restart of vpn-torr if we rstart this service
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $DOCKER_DIR/prowlarr/data:/config
+      - $DOCKERLOG_DIR/prowlarr:/config/logs
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    labels:
+      - org.label-schema.group=torrent
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      # <<< SEE VPN CONFIG FOR TRAEFIK ACCESS SINCE THIS SERVICE IS CONNECTING THROUGH THE VPN NETWORKING >>>
+      # <<< STACK WE CAN NOT ALSO ADD TRAEFIK NETWORK TO THIS SERVICE'S NETWORKING STACK >>>
+      - "traefik.enable=false"
+      ## HTTP Routers
+      - "traefik.http.routers.prowlarr-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.prowlarr-vpn-rtr.rule=Host(`prowlarr.$DOMAINNAME0`)"
+       ## Middlewares
+      - "traefik.http.routers.prowlarr-vpn-rtr.middlewares=chain-authelia@file" 
+      ## HTTP Services
+      - "traefik.http.routers.prowlarr-vpn-rtr.service=prowlarr-vpn-svc"
+      - "traefik.http.services.prowlarr-vpn-svc.loadbalancer.server.port=9696"
+
+  # BAZARR - SUBTITLE GRABBER
+  # https://gitlab.com/Linuxserver.io/docker-bazarr
+  bazarr:
+    image: lscr.io/linuxserver/bazarr
+    container_name: bazarr
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    network_mode: 
+      service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+    #depends_on:
+    #  - vpn-torr
+    # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+    #networks:
+    #  - default
+    #  - t2_proxy
+    # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+    #ports:
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $DOCKER_DIR/bazarr/data:/config
+      - $DOCKERLOG_DIR/bazarr:/config/log
+      - $MEDIA_MOVIE_DIR:/movies
+      - $MEDIA_TV_DIR:/tv
+      #- $MEDIA_MOVIE4K_DIR:/movies_4k       # Dir deleted now - all movies in the same folder     
+      - $MEDIA_VIDEO_DIR:/all_media
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    labels:
+      - org.label-schema.group=torrent
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      # <<< SEE VPN CONFIG FOR TRAEFIK ACCESS SINCE THIS SERVICE IS CONNECTING THROUGH THE VPN NETWORKING >>>
+      # <<< STACK WE CAN NOT ALSO ADD TRAEFIK NETWORK TO THIS SERVICE'S NETWORKING STACK >>>
+      - "traefik.enable=false"
+      ## HTTP Routers
+      - "traefik.http.routers.bazarr-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.bazarr-vpn-rtr.rule=Host(`bazarr.$DOMAINNAME0`)"
+      - "traefik.http.routers.bazarr-vpn-rtr.priority=99"
+      - "traefik.http.routers.bazarr-vpn-rtr-bypass.entrypoints=https"
+      #- "traefik.http.routers.bazarr-vpn-rtr-bypass.rule=Host(`bazarr.$DOMAINNAME0`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.bazarr-vpn-rtr-bypass.rule=Host(`bazarr.$DOMAINNAME0`) && Query(`apikey=$BAZARR_API_KEY`)"
+      - "traefik.http.routers.bazarr-vpn-rtr-bypass.priority=100"
+      ## Middlewares
+      - "traefik.http.routers.bazarr-vpn-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.bazarr-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.bazarr-vpn-rtr.service=bazarr-vpn-svc"
+      - "traefik.http.routers.bazarr-vpn-rtr-bypass.service=bazarr-vpn-svc"
+      - "traefik.http.services.bazarr-vpn-svc.loadbalancer.server.port=6767"
+
+  # MYLAR - Comic downloader and organiser
+  # https://gitlab.com/Linuxserver.io/docker-mylar
+  # https://docs.linuxserver.io/images/docker-mylar3
+  # API Address Format: https://mylar.mc-guinness.co.uk/api?apikey=9f3274c7380e27da891d192cc9e3859f&cmd=downloadNZB&nzbname=Blade.Runner.2019.0
+  mylar:
+    image: lscr.io/linuxserver/mylar3
+    container_name: mylar
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    network_mode: 
+      service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+    #depends_on:
+    #  - vpn-torr
+    # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+    #networks:
+    #  - default
+    #  - t2_proxy
+    # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+    #ports:
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $DOCKER_DIR/mylar/data:/config
+      - $MEDIA_COMICS_DIR:/comics:ro
+      - $DOWNLOAD_DIR:/downloads
+      - $TRANSMISSION_WATCHDIR:/watchdir
+      - $DOCKERLOG_DIR/mylar:/config/mylar/logs
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    labels:
+      - org.label-schema.group=torrent
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      # <<< SEE VPN CONFIG FOR TRAEFIK ACCESS SINCE THIS SERVICE IS CONNECTING THROUGH THE VPN NETWORKING >>>
+      # <<< STACK WE CAN NOT ALSO ADD TRAEFIK NETWORK TO THIS SERVICE'S NETWORKING STACK >>>
+      - "traefik.enable=false"
+      ## HTTP Routers
+      - "traefik.http.routers.mylar-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.mylar-vpn-rtr.rule=Host(`mylar.$DOMAINNAME0`)"
+      - "traefik.http.routers.mylar-vpn-rtr.priority=99"
+      - "traefik.http.routers.mylar-vpn-rtr-bypass.entrypoints=https"
+      #- "traefik.http.routers.mylar-vpn-rtr-bypass.rule=Host(`mylar.$DOMAINNAME0`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.mylar-vpn-rtr-bypass.rule=Host(`mylar.$DOMAINNAME0`) && Query(`apikey=$MYLAR_API_KEY`)"
+      - "traefik.http.routers.mylar-vpn-rtr-bypass.priority=100"
+       ## Middlewares
+      - "traefik.http.routers.mylar-vpn-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.mylar-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.mylar-vpn-rtr.service=mylar-vpn-svc"
+      - "traefik.http.routers.mylar-vpn-rtr-bypass.service=mylar-vpn-svc"
+      - "traefik.http.services.mylar-vpn-svc.loadbalancer.server.port=8090"
+
+
+
+#  # sabnzbd  – Binary newsgrabber (NZB downloader)
+#  # Disable SABNnzbd's built-in HTTPS support for traefik proxy to work
+#  # Needs trailing / if using PathPrefix
+#  # https://gitlab.com/Linuxserver.io/docker-sabnzbd
+#  sabnzbd:
+#    image: lscr.io/linuxserver/sabnzbd:latest
+#    container_name: sabnzbd
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    network_mode: 
+#      service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+#    #depends_on:
+#    #  - vpn-torr
+#    # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+#    #networks:
+#    #  - default
+#    #  - t2_proxy
+#    # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+#    #ports:
+#    #  - $SABNZBD_PORT:8080 # Maps to 9092
+#    security_opt:
+#      - no-new-privileges:true
+#    volumes:
+#      - $DOCKER_DIR/sabnzbd/data:/config
+#      - $DOWNLOAD_DIR/_torrents:/downloads      
+#      - $DOWNLOAD_DIR/_torrents/incomplete:/incomplete-downloads 
+#    environment:
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#      - UMASK_SET=002
+#    labels:
+#      - org.label-schema.group=torrent
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      # <<< SEE VPN CONFIG FOR TRAEFIK ACCESS SINCE THIS SERVICE IS CONNECTING THROUGH THE VPN NETWORKING >>>
+#      # <<< STACK WE CAN NOT ALSO ADD TRAEFIK NETWORK TO THIS SERVICE'S NETWORKING STACK >>>
+#      - "traefik.enable=false"
+#      ## HTTP Routers Auth Bypass
+#      - "traefik.http.routers.sabnzbd-vpn-rtr-bypass.entrypoints=https"
+#      - "traefik.http.routers.sabnzbd-vpn-rtr-bypass.rule=Host(`sabnzbd.$DOMAINNAME0`) && Query(`apikey`, `$SABNZBD_API_KEY`)"
+#      - "traefik.http.routers.sabnzbd-vpn-rtr-bypass.priority=100"
+#      ## HTTP Routers
+#      - "traefik.http.routers.sabnzbd-vpn-rtr.entrypoints=https"
+#      - "traefik.http.routers.sabnzbd-vpn-rtr.rule=Host(`sabnzbd.$DOMAINNAME0`)"
+#      - "traefik.http.routers.sabnzbd-vpn-rtr.priority=99"
+#      ## Middlewares
+#      - "traefik.http.routers.sabnzbd-vpn-rtr.middlewares=chain-authelia@file"
+#      - "traefik.http.routers.sabnzbd-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.sabnzbd-vpn-rtr-bypass.service=sabnzbd-vpn-svc"
+#      - "traefik.http.routers.sabnzbd-vpn-rtr.service=sabnzbd-vpn-svc"
+#      - "traefik.http.services.sabnzbd-vpn-svc.loadbalancer.server.port=8080"
+#
+#
+#  # nzbhydra2  – Usenet Indexer Consolidation
+#  # https://docs.linuxserver.io/images/docker-nzbhydra2
+#  nzbhydra2:
+#    image: lscr.io/linuxserver/nzbhydra2:latest
+#    container_name: nzbhydra2
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    network_mode: 
+#      service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+#    #depends_on:
+#    #  - vpn-torr
+#    # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+#    #networks:
+#    #  - default
+#    #  - t2_proxy
+#    # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+#    #ports:
+#    #  - $NZBHYDRA2_PORT:5076 # Maps to 5076
+#    security_opt:
+#      - no-new-privileges:true
+#    volumes:
+#      - $DOCKER_DIR/nzbhydra2/data:/config
+#      - $DOWNLOAD_DIR/_torrents:/downloads  # optional
+#    environment:
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#      - UMASK_SET=002
+#    labels:
+#      - org.label-schema.group=torrent
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      # <<< SEE VPN CONFIG FOR TRAEFIK ACCESS SINCE THIS SERVICE IS CONNECTING THROUGH THE VPN NETWORKING >>>
+#      # <<< STACK WE CAN NOT ALSO ADD TRAEFIK NETWORK TO THIS SERVICE'S NETWORKING STACK >>>
+#      - "traefik.enable=false"
+#      ## HTTP Routers Auth Bypass
+#      #- "traefik.http.routers.nzbhydra2-vpn-rtr-bypass.entrypoints=https"
+#      #- "traefik.http.routers.nzbhydra2-vpn-rtr-bypass.rule=Host(`nzbhydra2.$DOMAINNAME0`) && Query(`apikey`, `$NZBHYDRA2_API_KEY`)"
+#      #- "traefik.http.routers.nzbhydra2-vpn-rtr-bypass.priority=100"
+#      ## HTTP Routers
+#      - "traefik.http.routers.nzbhydra2-vpn-rtr.entrypoints=https"
+#      - "traefik.http.routers.nzbhydra2-vpn-rtr.rule=Host(`nzbhydra2.$DOMAINNAME0`)"
+#      - "traefik.http.routers.nzbhydra2-vpn-rtr.priority=99"
+#      ## Middlewares
+#      - "traefik.http.routers.nzbhydra2-vpn-rtr.middlewares=chain-authelia@file"
+#      #- "traefik.http.routers.nzbhydra2-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+#      ## HTTP Services
+#      #- "traefik.http.routers.nzbhydra2-vpn-rtr-bypass.service=nzbhydra2-vpn-svc"
+#      - "traefik.http.routers.nzbhydra2-vpn-rtr.service=nzbhydra2-vpn-svc"
+#      - "traefik.http.services.nzbhydra2-vpn-svc.loadbalancer.server.port=5076"
+
+
+#  # Lazylibrarian  – Ebooks Automated Downloader
+#  # https://gitlab.com/Linuxserver.io/docker-lazylibrarian
+#  lazylibrarian:
+#    image: lscr.io/linuxserver/lazylibrarian:latest
+#    container_name: lazylibrarian
+#    depends_on:
+#      - vpn-torr
+#    network_mode: 
+#      # Can't publish ports if using: network_mode: "service:vpn-torr"
+#      # Ports get pblished through VPN container
+#      service:vpn-torr
+#    security_opt:
+#      - no-new-privileges:true
+#    volumes:
+#      - $DOCKER_DIR/lazylibrarian/data:/config
+#      - $DOWNLOAD_DIR:/downloads
+#      - $CALIBRE_LIBRARY_DIR:/books
+#      - $AUDIOBOOKS_DIR:/audiobooks
+#    environment:
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#    labels:
+#      - org.label-schema.group=torrent
+#      #----------- TRAEFIK LABELS -----------#
+#      # <<< SEE VPN CONFIG FOR TRAEFIK ACCESS SINCE THIS SERVICE IS CONNECTING THROUGH THE VPN NETWORKING >>>
+#      # <<< STACK WE CAN NOT ALSO ADD TRAEFIK NETWORK TO THIS SERVICE'S NETWORKING STACK >>>
+#      - "traefik.enable=false"
+#      ## HTTP Routers
+#      - "traefik.http.routers.lazylibrarian-vpn-rtr.entrypoints=https"
+#      - "traefik.http.routers.lazylibrarian-vpn-rtr.rule=Host(`lazylibrarian.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.lazylibrarian-vpn-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.lazylibrarian-vpn-rtr.service=lazylibrarian-vpn-svc"
+#      - "traefik.http.services.lazylibrarian-vpn-svc.loadbalancer.server.port=5299"
+
+
+#-----------------------------------------------------------------------------------------------------------
+
+  ##############################
+  ###       MONITORING       ###
+  ##############################
+
+
+  # DELUGE EXPORTER (PROMETHEUS)
+  # https://github.com/tobbez/deluge_exporter
+  # Would usually have exporter service in 'monitoring' compose file but needs to be in same
+  # compose file as VPN to enable access to ports.
+  # Access to this service is through the deluge -> vpn-torr container.
+  # i.e. To get to metrics we need to expose the exporter port in vpn-torr
+  deluge-exporter-prometheus:
+    image: tobbez/deluge_exporter
+    container_name: deluge-exporter-prometheus
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    security_opt:
+      - no-new-privileges:true
+    #networks:
+    #  - default
+    #  - t2_proxy
+    network_mode: 
+      service:deluge     # network_mode: container:vpn-torr    # network_mode: host
+    #ports:
+    #  - $DELUGE_EXPORTER_PORT:9354
+    environment:
+      - DELUGE_HOST=0.0.0.0 # Host for deluge access 
+      #- DELUGE_PORT=58846 # Not needed if deluge config provided n volumes below - Deluge listening port - get from Deluge web GUI 'Connection Manager'
+      #- DELUGE_USER=localclient # Not needed if deluge config provided in volumes below
+      #- DELUGE_PASSWORD= # Not needed if deluge config provided in volumes below
+      - PER_TORRENT_METRICS=1 # (Default=0) May significantly increase number of time series.
+      #- LISTEN_PORT=9354 # (Default=9354) Specify this container's port
+      #- LOG_LEVEL=DEBUG # (Default=ERROR) Options: ERROR / INFO / DEBUG
+    volumes:
+      - $DOCKER_DIR/deluge/data:/root/.config/deluge:ro
+    labels:
+      - org.label-schema.group=torrent,monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # VARKEN - MONITOR PLEX, SONARR, RADARR, AND OTHER DATA
+  # Releases: https://hub.docker.com/r/boerderij/varken/tags
+  # Releases: https://github.com/Boerderij/Varken/releases
+  # 20220109: Existing 1.7.7 tag already latest, publishe'd 20201221
+  # 20220722: Existing 1.7.7 tag already latest, publishe'd 20201221
+  # 20230819: Existing 1.7.7 tag already latest, publishe'd 20201221
+  varken:
+    image: boerderij/varken:1.7.7
+    container_name: varken
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy # To access vpn-torr (and torrent stack) directly.
+      - default # To log to Influx
+    volumes:
+      - $DOCKER_DIR/varken/data:/config # Only needed if using conf file instead of env vars
+      - $DOCKER_DIR/varken/data/GeoLite2-City.mmdb:/config/GeoLite2-City.mmdb
+      - $DOCKERLOG_DIR/varken:/config/logs
+    labels:
+      - org.label-schema.group=torrent,monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      #- VRKN_GLOBAL_SONARR_SERVER_IDS=1
+      #- VRKN_GLOBAL_RADARR_SERVER_IDS=1
+      #- VRKN_GLOBAL_LIDARR_SERVER_IDS=false
+      #- VRKN_GLOBAL_TAUTULLI_SERVER_IDS=1
+      #- VRKN_GLOBAL_OMBI_SERVER_IDS=false
+      #- VRKN_GLOBAL_SICKCHILL_SERVER_IDS=false
+      #- VRKN_GLOBAL_UNIFI_SERVER_IDS=false
+      #- VRKN_GLOBAL_MAXMIND_LICENSE_KEY=$VARKEN_MAXMIND_LICENSE_KEY
+      #- VRKN_INFLUXDB_URL=influxdb
+      #- VRKN_INFLUXDB_PORT=8086
+      #- VRKN_INFLUXDB_SSL="false"
+      #- VRKN_INFLUXDB_VERIFY_SSL="false"
+      #- VRKN_INFLUXDB_USERNAME=  #$VARKEN_INFLUXV1_USER
+      #- VRKN_INFLUXDB_PASSWORD=  #$VARKEN_INFLUXV1_PASS
+      #- VRKN_TAUTULLI_1_URL=tautulli:8181
+      #- VRKN_TAUTULLI_1_FALLBACK_IP=1.1.1.1
+      #- VRKN_TAUTULLI_1_APIKEY=$TAUTULLI_API
+      #- VRKN_TAUTULLI_1_SSL="false"
+      #- VRKN_TAUTULLI_1_VERIFY_SSL="false"
+      #- VRKN_TAUTULLI_1_GET_ACTIVITY="true"
+      #- VRKN_TAUTULLI_1_GET_ACTIVITY_RUN_SECONDS=30
+      #- VRKN_TAUTULLI_1_GET_STATS="true"
+      #- VRKN_TAUTULLI_1_GET_STATS_RUN_SECONDS=3600      
+      #- VRKN_SONARR_1_URL=vpn-torr:8989
+      #- VRKN_SONARR_1_APIKEY=$SONARR_API_KEY
+      #- VRKN_SONARR_1_SSL="false"
+      #- VRKN_SONARR_1_VERIFY_SSL="false"
+      #- VRKN_SONARR_1_MISSING_DAYS=7
+      #- VRKN_SONARR_1_MISSING_DAYS_RUN_SECONDS=300
+      #- VRKN_SONARR_1_FUTURE_DAYS=1
+      #- VRKN_SONARR_1_FUTURE_DAYS_RUN_SECONDS=300
+      #- VRKN_SONARR_1_QUEUE="true"
+      #- VRKN_SONARR_1_QUEUE_RUN_SECONDS=300      
+      #- VRKN_RADARR_1_URL=vpn-torr:7878
+      #- VRKN_RADARR_1_APIKEY=$RADARR_API_KEY
+      #- VRKN_RADARR_1_SSL="false"
+      #- VRKN_RADARR_1_VERIFY_SSL="false"
+      #- VRKN_RADARR_1_QUEUE="true"
+      #- VRKN_RADARR_1_QUEUE_RUN_SECONDS=300
+      #- VRKN_RADARR_1_GET_MISSING="true"
+      #- VRKN_RADARR_1_GET_MISSING_RUN_SECONDS=300      
+      ##- VRKN_UNIFI_1_URL=192.168.0.227:8443
+      ##- VRKN_UNIFI_1_USERNAME=admin
+      ##- VRKN_UNIFI_1_PASSWORD=$VARKEN_UNIFI_1_PASSWORD
+      ##- VRKN_UNIFI_1_SITE=Default
+      ##- VRKN_UNIFI_1_USG_NAME=USG
+      ##- VRKN_UNIFI_1_SSL="true"
+      ##- VRKN_UNIFI_1_VERIFY_SSL="false"
+      ##- VRKN_UNIFI_1_GET_USG_STATS_RUN_SECONDS=300
+
+  # EXPORTARR - SONARR
+  # https://github.com/onedr0p/exportarr
+  sonarr-exportarr:
+    image: ghcr.io/onedr0p/exportarr
+    container_name: sonarr-exportarr
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default 
+    ports:
+      - $SONARR_EXPORTARR:9707 # Maps to 9707
+    environment:
+      PORT: 9707
+      URL:  http://sonarr:8989 # or "http://192.168.0.10:8989/"
+      APIKEY: $SONARR_API_KEY
+    command: ["sonarr"]
+    labels:
+      - org.label-schema.group=torrent,monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # EXPORTARR - RADARR
+  # https://github.com/onedr0p/exportarr
+  radarr-exportarr:
+    image: ghcr.io/onedr0p/exportarr
+    container_name: radarr-exportarr
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default 
+    ports:
+      - $RADARR_EXPORTARR:9708 # Maps to 9708
+    environment:
+      PORT: 9708
+      URL:  http://radarr:7878 # or "http://192.168.0.10:8989/"
+      APIKEY: $RADARR_API_KEY
+    command: ["radarr"]
+    labels:
+      - org.label-schema.group=torrent,monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # EXPORTARR - PROWLARR
+  # https://github.com/onedr0p/exportarr
+  prowlarr-exportarr:
+    image: ghcr.io/onedr0p/exportarr
+    container_name: prowlarr-exportarr
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default 
+    ports:
+      - $PROWLARR_EXPORTARR:9710 # Maps to 9710
+    environment:
+      PORT: 9710
+      URL:  http://prowlarr:9696 # or "http://192.168.0.10:8989/"
+      APIKEY: $PROWLARR_API_KEY
+      PROWLARR__BACKFILL: true # optional
+      #PROWLARR__BACKFILL_SINCE_DATE: "2023-03-01" # optional
+    command: ["prowlarr"]
+    labels:
+      - org.label-schema.group=torrent,monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # EXPORTARR - BAZARR
+  bazarr-exportarr:
+    image: ghcr.io/onedr0p/exportarr
+    container_name: bazarr-exportarr
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default 
+    ports:
+      - $BAZARR_EXPORTARR:9712 # Maps to 9712
+    environment:
+      PORT: 9712
+      URL:  http://bazarr:6767 # or "http://192.168.0.10:8989/"
+      APIKEY: $BAZARR_API_KEY
+    command: ["bazarr"]
+    labels:
+      - org.label-schema.group=torrent,monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+  # EXPORTARR - SABNZBD
+
+  # EXPORTARR - READARR
+
+  # EXPORTARR - LIDARR
+
+#-----------------------------------------------------------------------------------------------------------
+
+  ##############################
+  ###  DEPRECIATED / UNUSED  ###
+  ##############################
+
+
+  ## TRANSMISSION DOWNLOAD CLIENT
+  ## https://gitlab.com/Linuxserver.io/docker-transmission
+  #transmission:
+  #  image: lscr.io/linuxserver/transmission
+  #  container_name: transmission
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  network_mode: 
+  #    service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+  #  #depends_on:
+  #  #  - vpn-torr
+  #  # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+  #  #networks:
+  #  #  - default
+  #  #  - t2_proxy
+  #  # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+  #  #ports:
+  #  volumes:
+  #    - $DOCKER_DIR/transmission/data:/config
+  #    - $TRANSMISSION_WATCHDIR:/watch
+  #    - $DOWNLOAD_DIR/_torrents:/downloads
+  #  environment:
+  #    - DOCKER_MODS=$LINUXSERVER_MODS
+  #    - PUID=$PUID
+  #    - PGID=$PGID
+  #    - TZ=$TZ
+  #    #- TRANSMISSION_WEB_HOME=/combustion-release/
+  #    - TRANSMISSION_WEB_HOME=/flood-for-transmission/
+  #    #- USER=username
+  #    #- PASS=password
+  #    - FILE__USER=/run/secrets/transmission_rpc_username
+  #    - FILE__PASS=/run/secrets/transmission_rpc_password
+  #  secrets:
+  #    - transmission_rpc_username
+  #    - transmission_rpc_password
+  #  labels:
+  #    - org.label-schema.group=torrent
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    #- "com.centurylinklabs.watchtower.monitor-only=true"
+  #    #----------- TRAEFIK LABELS -----------#
+  #    # <<< SEE VPN CONFIG FOR TRAEFIK LABELS >>>
+  #    #- "traefik.enable=true"
+  #    ### HTTP Routers
+  #    #- "traefik.http.routers.transmission-vpn-rtr.entrypoints=https"
+  #    #- "traefik.http.routers.transmission-vpn-rtr.rule=Host(`transmission.$DOMAINNAME0`)"
+  #    #- "traefik.http.routers.transmission-vpn-rtr.priority=100"
+  #    #- "traefik.http.routers.transmission-vpn-rtr-bypass.entrypoints=https"
+  #    #- "traefik.http.routers.transmission-vpn-rtr-bypass.rule=Host(`transmission.$DOMAINNAME0`) && PathPrefix(`/transmission/rpc`)"
+  #    #- "traefik.http.routers.transmission-vpn-rtr-bypass.priority=99"
+  #    ### Middlewares
+  #    #- "traefik.http.routers.transmission-vpn-rtr.middlewares=chain-authelia@file" #,transmission-add-prefix"
+  #    #- "traefik.http.middlewares.transmission-add-prefix.addPrefix.prefix=/transmission/web"
+  #    #- "traefik.http.routers.transmission-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+  #    ### HTTP Services
+  #    #- "traefik.http.routers.transmission-vpn-rtr.service=transmission-vpn-svc"
+  #    #- "traefik.http.routers.transmission-vpn-rtr-bypass.service=transmission-vpn-svc"
+  #    #- "traefik.http.services.transmission-vpn-svc.loadbalancer.server.port=9091"
+
+  ## TRANSMISSION EXPORTER (TO PROMETHEUS) - IMPORT TRANSMISSION METRICS
+  ## https://github.com/metalmatze/transmission-exporter
+  ## Would usually have exporter service in 'monitoring' compose file but needs to be in same
+  ## compose file as VPN to enable access to ports.
+  ## 20220109: Existing tag 0.3.0 remains latest, published 20190910
+  ##           '0.3.0' tag didn't work so left tag off.
+  #transmission-exporter-prometheus:
+  #  image: micaelserrano/transmission-exporter
+  #  container_name: transmission-exporter-prometheus
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  networks:
+  #    - default
+  #  ports:
+  #    - $TRANSMISSION_EXPORTER_PROMETHEUS_PORT:19091
+  #  environment:
+  #    - TRANSMISSION_USERNAME=$TRANSMISSION_USERNAME
+  #    - TRANSMISSION_PASSWORD=$TRANSMISSION_PASSWORD   # Need to escape any '$' with another $ - or use single quotes in env file
+  #    - TRANSMISSION_ADDR=$TRANSMISSION_API_URL # Use VPN container IP and transmission port if on same network
+  #    #- WEB_PATH=/metrics # Default = /metrics
+  #    #- WEB_ADDR=19091 # Default = 19091
+  #    - CLIENT_NAME=transmission # Default = TRANSMISSION_ADDR
+  #    #- CONFIG_FILE=/config/config.yaml # Can use a config file to specify variables, usefulif multiple clients
+  #  labels:
+  #    - org.label-schema.group=monitoring
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+
+  ## QBITTORRENT
+  ## https://docs.linuxserver.io/images/docker-qbittorrent
+  ## Default username/password: admin/adminadmin
+  #qbittorrent:
+  #  image: lscr.io/linuxserver/qbittorrent:latest
+  #  container_name: qbittorrent
+  #  logging: *default-logging
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  network_mode: 
+  #    service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+  #  #depends_on:
+  #  #  - vpn-torr
+  #  # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+  #  #networks:
+  #  #  - default
+  #  #  - t2_proxy
+  #  # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+  #  #ports:
+  #  #  - $QBITTORRENT_GUI_PORT:8070 # Originally 8080 but changed via env var
+  #  #  - $QBITTORRENT_TORRENT_PORT:6881 # Exposed port = 6882 (check .env for details)
+  #  #  - $QBITTORRENT_TORRENT_PORT:6881/udp
+  #  environment:
+  #    - DOCKER_MODS=$LINUXSERVER_MODS
+  #    - PUID=$PUID
+  #    - PGID=$PGID
+  #    - TZ=$TZ
+  #    - WEBUI_PORT=$QBITTORRENT_GUI_PORT
+  #  volumes:
+  #    - $DOCKER_DIR/qbittorrent/data:/config
+  #    - $DOCKER_DIR/qbittorrent/watchdir:/watchdir
+  #    - $DOWNLOAD_DIR/_torrents:/downloads
+  #    - $DOCKERLOG_DIR/qbittorrent:/config/qBittorrent/logs
+  #  labels:
+  #    - org.label-schema.group=torrent
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    #- "com.centurylinklabs.watchtower.monitor-only=true"
+  #    #----------- TRAEFIK LABELS -----------#
+  #    - "traefik.enable=true"
+  #    ## HTTP Routers
+  #    - "traefik.http.routers.qbittorrent-vpn-rtr.entrypoints=https"
+  #    - "traefik.http.routers.qbittorrent-vpn-rtr.rule=Host(`qbittorrent.$DOMAINNAME0`)"
+  #    ## Middlewares
+  #    - "traefik.http.routers.qbittorrent-vpn-rtr.middlewares=chain-authelia@file"
+  #    ## HTTP Services
+  #    - "traefik.http.routers.qbittorrent-vpn-rtr.service=qbittorrent-vpn-svc"
+  #    - "traefik.http.services.qbittorrent-vpn-svc.loadbalancer.server.port=8070"
+
+  ## DEPRECIATED - see this for replacement if needed: https://github.com/crazy-max/docker-rtorrent-rutorrent
+  ## RUTORRENT
+  ## https://gitlab.com/Linuxserver.io/docker-rutorrent
+  ## https://github.com/linuxserver/docker-rutorrent
+  #rutorrent:
+  #  image: ghcr.io/linuxserver/rutorrent
+  #  container_name: rutorrent
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  networks:
+  #    - default
+  #    - t2_proxy
+  #  # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+  #  #network_mode: 
+  #  #  service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+  #  ports:
+  #    - "$RUTORRENT_GUI_PORT:80" # GUI - exposed port is 83
+  #    - "$RUTORRENT_SCGI_PORT:5000" # SCGI - exposed port is 5001
+  #    - "$RUTORRENT_BITTORRENT1_PORT:51413" # Torrent Port - exposed port is 51414
+  #    - "$RUTORRENT_BITTORRENT2_PORT_UDP:6881/udp" # Torrent Port - exposed port is 6883
+  #  environment:
+  #    - DOCKER_MODS=$LINUXSERVER_MODS
+  #    - PUID=$PUID
+  #    - PGID=$PGID
+  #    - TZ=$TZ
+  #  volumes:
+  #    - $DOCKER_DIR/rutorrent/data:/config
+  #    - $DOWNLOAD_DIR:/downloads
+  #  labels:
+  #    - org.label-schema.group=torrent
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    #- "com.centurylinklabs.watchtower.monitor-only=true"
+  #    #----------- TRAEFIK LABELS -----------#
+  #    - "traefik.enable=true"
+  #    ## HTTP Routers
+  #    - "traefik.http.routers.rutorrent-vpn-rtr.entrypoints=https"
+  #    - "traefik.http.routers.rutorrent-vpn-rtr.rule=Host(`rutorrent.$DOMAINNAME0`)"
+  #    - "traefik.http.routers.rutorrent-vpn-rtr.priority=99"
+  #    ## Middlewares
+  #    - "traefik.http.routers.rutorrent-vpn-rtr.middlewares=chain-authelia@file"
+  #    ## HTTP Services
+  #    - "traefik.http.routers.rutorrent-vpn-rtr.service=rutorrent-vpn-svc"
+  #    - "traefik.http.services.rutorrent-vpn-svc.loadbalancer.server.port=80"
+
+  ## JACKETT - TORRENT SEARCH ENGINE & TORRENT LISTING PROXY
+  ## Touch log file before first run: touch /var/log/docker/jackett/log.txt
+  ## https://gitlab.com/Linuxserver.io/docker-jackett
+  #jackett:
+  #  image: lscr.io/linuxserver/jackett
+  #  container_name: jackett
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  network_mode: 
+  #    service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+  #  #depends_on:
+  #  #  - vpn-torr
+  #  # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+  #  #networks:
+  #  #  - default
+  #  #  - t2_proxy
+  #  # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+  #  #ports:
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  volumes:
+  #    - $DOCKER_DIR/jackett/data:/config
+  #    - $DOCKERLOG_DIR/jackett/log.txt:/config/jackett/log.txt
+  #    - $TRANSMISSION_WATCHDIR:/downloads 
+  #  environment:
+  #    - DOCKER_MODS=$LINUXSERVER_MODS
+  #    - PUID=$PUID
+  #    - PGID=$PGID
+  #    - TZ=$TZ
+  #    - AUTO_UPDATE=true
+  #  labels:
+  #    - org.label-schema.group=torrent
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    #- "com.centurylinklabs.watchtower.monitor-only=true"
+  #    #----------- TRAEFIK LABELS -----------#
+  #    - "traefik.enable=true"
+  #    ## HTTP Routers
+  #    - "traefik.http.routers.jackett-vpn-rtr.entrypoints=https"
+  #    - "traefik.http.routers.jackett-vpn-rtr.rule=Host(`jackett.$DOMAINNAME0`)"
+  #    - "traefik.http.routers.jackett-vpn-rtr.priority=99"
+  #    - "traefik.http.routers.jackett-vpn-rtr-bypass.entrypoints=https"
+  #    #- "traefik.http.routers.jackett-vpn-rtr-bypass.rule=Host(`jackett.$DOMAINNAME0`) && PathPrefix(`/api`)"
+  #    - "traefik.http.routers.jackett-vpn-rtr-bypass.rule=Host(`jackett.$DOMAINNAME0`) && Query(`apikey=$JACKETT_API_KEY`)"
+  #    - "traefik.http.routers.jackett-vpn-rtr-bypass.priority=100"
+  #     ## Middlewares
+  #    - "traefik.http.routers.jackett-vpn-rtr.middlewares=chain-authelia@file"
+  #    - "traefik.http.routers.jackett-vpn-rtr-bypass.middlewares=chain-no-auth@file"
+  #    ## HTTP Services
+  #    - "traefik.http.routers.jackett-vpn-rtr.service=jackett-vpn-svc"
+  #    - "traefik.http.routers.jackett-vpn-rtr-bypass.service=jackett-vpn-svc"
+  #    - "traefik.http.services.jackett-vpn-svc.loadbalancer.server.port=9117"
+
+#-----------------------------------------------------------------------------------------------------------
+
+  #############################
+  ###   OTHER VPN SERVICES  ###
+  #############################
+
+  # SEE FURTHER DOWN FOR OTHER EXAMPLES OF OPENVPN SERVICE WHICH WE USED FOR TESTING
+
+  ## VPN - PRIVATE INTERNET ACCESS SPECIFIC IMAGE
+  ## https://hub.docker.com/r/act28/pia-openvpn-proxy
+  #vpn-torr:
+  #  image: act28/pia-openvpn:latest
+  #  container_name: vpn-torr
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  networks:
+  #    - default
+  #    - t2_proxy
+  #    #  ipv4_address: 192.168.90.169
+  #  # ports:
+  #  #  - "$TRANSMISSION_PORT:9091"
+  #  cap_add:
+  #    - NET_ADMIN
+  #  devices:
+  #    - /dev/net/tun
+  #  dns:
+  #    - 209.222.18.222
+  #    - 209.222.18.218
+  #  environment:
+  #    - REGION=$PIA_REGION # default = Switzerland
+  #    - USERNAME=$PIA_USERNAME
+  #    - PASSWORD=$PIA_PASSWORD
+
+  ## WIREGUARD VPN
+  ## https://gitlab.com/Linuxserver.io/docker-wireguard
+  ## The same image can be used to setup a Wireguard server
+  ## Generate PIA config with: https://github.com/hsand/pia-wg
+  #vpn-torr:
+  #  image: lscr.io/linuxserver/wireguard
+  #  container_name: vpn-torr
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  #privileged: true
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  cap_add:
+  #    - NET_ADMIN
+  #    - SYS_MODULE
+  #  networks:
+  #    - default
+  #    - t2_proxy
+  #  environment:
+  #    - DOCKER_MODS=$LINUXSERVER_MODS
+  #    - PUID=$PUID
+  #    - PGID=$PGID
+  #    - TZ=$TZ
+  #    #- PEERS=1 # enabling sets to server mode
+  #    #- SERVERURL=wireguard.domain.com #optional if running in server mode
+  #    #- SERVERPORT=51820 #optional if running in server mode
+  #    #- PEERDNS=auto #optional if running in server mode
+  #    #- INTERNAL_SUBNET=10.13.13.0 #optional if running in server mode
+  #    #- ALLOWEDIPS=0.0.0.0/0 #optional if running in server mode
+  #  volumes:
+  #    - $DOCKER_DIR/vpn-torr/wg/PIA/PIA-Romania-1633172448.conf:/config/wg0.conf
+  #    - /lib/modules:/lib/modules
+  #  ports:
+  #    - 51820:51820/udp
+  #  sysctls:
+  #    - net.ipv4.conf.all.src_valid_mark=1
+
+
+
+
+  #### VPN - trying to fix
+  #### Testing config while trying to fix.
+  #### Most of the tested ovpns were working after updating per below but
+  #### can't access any of the VPN'd services locally
+  #### (likely related to the added firewall line: command: -f "")
+  #
+  ## OPENVPN CLIENT - FOR USE WITH GENERIC OPEN VPN SETUPS
+  ## https://github.com/dperson/openvpn-client
+  #vpn-torr:
+  #  image: dperson/openvpn-client:latest
+  #  # cap_add, security_opt, and volume required for the image to function
+  #  container_name: vpn-torr
+  #  logging: *default-logging
+  #  cap_add:
+  #    - NET_ADMIN
+  #  security_opt:
+  #    - label:disable
+  #  #  - no-new-privileges:true
+  #  devices:          # <<< prev disabled
+  #    - /dev/net/tun  # <<< prev disabled
+  #  networks:
+  #    - default
+  #    - t2_proxy
+  #  #dns:
+  #  #  8.8.8.8
+  #  #  1.1.1.1
+  #    # Prev: 2xQuad9s
+  #    #- 1.1.1.1 # Cloudflare
+  #    #- 1.0.0.1 # Cloudflare
+  #    #- 8.8.8.8 # Google
+  #    #- 10.0.0.242 # PIA - DNS
+  #    #- 10.0.0.243 # DNS+Streaming
+  #    #- 10.0.0.244 # DNS+MACE
+  #    #- 10.0.0.241 # DNS+Streaming+Mace
+  #    #- 9.9.9.9 # Quad9
+  #    #- 142.112.112.112 # Quad9
+  #  # if using '-d' or 'DNS' you can't enable the `read_only: true` option unless also specifying tmpfs below
+  #  read_only: false    # <<< prev 'true'
+  #  tmpfs:
+  #    - /run
+  #    - /tmp
+  #  restart: always
+  #  volumes:
+  #    #- /storage/Docker/vpn-torr/tmp/tcp-ireland.ovpn:/vpn/vpn.conf
+  #    #- /storage/Docker/vpn-torr/tmp/ip-newzealand.ovpn:/vpn/vpn.conf
+  #    #- /storage/Docker/vpn-torr/tmp/ip-italy.ovpn:/vpn/vpn.conf
+  #    #- /storage/Docker/vpn-torr/tmp/tcp-ireland.ovpn:/vpn/vpn.conf
+  #    #- /storage/Docker/vpn-torr/tmp/norway.ovpn:/vpn/vpn.conf          #worked
+  #    #- /storage/Docker/vpn-torr/tmp/spain.ovpn:/vpn/vpn.conf            #worked
+  #    #- /storage/Docker/vpn-torr/tmp/romania.ovpn:/vpn/vpn.conf           #worked
+  #    #- /storage/Docker/vpn-torr/ovpn/PIA/romania.ovpn:/vpn/vpn.conf   # worked
+  #    #- /storage/Docker/vpn-torr/ovpn/PIA/ip/romania.ovpn:/vpn/vpn.conf # not worked
+  #    - /storage/Docker/vpn-torr/ovpn/PIA/ip/spain.ovpn:/vpn/vpn.conf   # works
+  #    #- $DOCKER_DIR/vpn-torr/ovpn/PIA/$PIA_REGION.ovpn:/vpn/vpn.conf
+  #    - $DOCKER_DIR/vpn-torr/ovpn/PIA/ca.rsa.2048.crt:/vpn/vpn-ca.crt
+  #  environment:        # <<< prev disabled
+  #    DNS: '8.8.8.8'    # <<< prev not existed
+  #    #ROUTE: '192.168.0.0/24'
+  #    #PUID: 1000
+  #    #PGID: 1000
+  #    #VPN 'server_address;user;password;port'
+  #    FIREWALL: ''      # <<< prev disabled
+  #  stdin_open: true    # <<< prev not existed
+  #  tty: true           # <<< prev not existed
+  #  #command: '-f "" -r 192.168.0.0/24'    # <<< prev not existed
+  #  command: -f ""            # <<< prev not existed
+  #  secrets:
+  #    - pia_auth
+  #  ports:
+  #  # Publish the relevant service ports which are using the VPN service
+  #  # if IP_address:port access is needed
+  #    - "$TRANSMISSION_PORT:9091" # Transmission
+  #    - "$SONARR_PORT:8989" # Sonarr
+  #    - "$RADARR_PORT:7878" # Radarr
+  #    - "$BAZARR_PORT:6767" # Bazarr
+  #    - "$JACKETT_PORT:9117" # Jackett
+  #    - "$LAZYLIBRARIAN_PORT:5299" # LazyLibrarian
+  #    - "$SABNZBD_PORT:8080" # Sabnzbd
+  #  labels:
+  #    ## Exclude From Watchtower Auto-Update But Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+  #    #-----------
+  #    - org.label-schema.group=torrent
+  #  healthcheck:
+  #    test: ["CMD", "curl", "-f", "https://google.com"]
+  #    interval: 1m
+  #    timeout: 10s
+  #    retries: 3
+  #    start_period: 30s
+
+  #### Testing minimal changes from original working version pre-May
+  #### Trying to make as few changes as possible to pre-May config and get working.
+  # OPENVPN CLIENT - FOR USE WITH GENERIC OPEN VPN SETUPS
+  # https://github.com/dperson/openvpn-client
+  #vpn-torr:
+  #  image: dperson/openvpn-client:latest
+  #  # cap_add, security_opt, and volume required for the image to function
+  #  container_name: vpn-torr
+  #  logging: *default-logging
+  #  cap_add:
+  #    - NET_ADMIN
+  #  security_opt:
+  #    - label:disable
+  #  #  - no-new-privileges:true
+  #  #devices:
+  #  #  - /dev/net/tun
+  #  networks:
+  #    - default
+  #    - t2_proxy
+  #  dns:
+  #    - 1.1.1.1 # Cloudflare
+  #    - 1.0.0.1 # Cloudflare
+  #    #- 8.8.8.8 # Google
+  #    #- 10.0.0.242 # PIA - DNS
+  #    #- 10.0.0.243 # DNS+Streaming
+  #    #- 10.0.0.244 # DNS+MACE
+  #    #- 10.0.0.241 # DNS+Streaming+Mace
+  #    #- 9.9.9.9 # Quad9
+  #    #- 142.112.112.112 # Quad9
+  #  # if using '-d' or 'DNS' you can't enable the `read_only: true` option unless also specifying tmpfs below
+  #  read_only: true
+  #  tmpfs:
+  #    - /run
+  #    - /tmp
+  #  restart: always
+  #  volumes:
+  #    - $DOCKER_DIR/vpn-torr/ovpn/PIA/$PIA_REGION.ovpn:/vpn/vpn.conf
+  #    - $DOCKER_DIR/vpn-torr/ovpn/PIA/ca.rsa.2048.crt:/vpn/vpn-ca.crt
+  #  environment:
+  #    DNS: '1.1.1.1'
+  #    #ROUTE: '192.168.0.0/24'
+  #    #PUID: 1000
+  #    #PGID: 1000
+  #    #VPN 'server_address;user;password;port'
+  #    FIREWALL: ''
+  #  #stdin_open: true    # <<< prev not existed
+  #  #tty: true           # <<< prev not existed
+  #  #command: '-f "" -r 192.168.0.0/24'    # <<< prev not existed
+  #  #command: -f ""            # <<< prev not existed
+  #  secrets:
+  #    - pia_auth
+  #  ports:
+  #  # Publish the relevant service ports which are using the VPN service
+  #  # if IP_address:port access is needed
+  #    - "$TRANSMISSION_PORT:9091" # Transmission
+  #    - "$SONARR_PORT:8989" # Sonarr
+  #    - "$RADARR_PORT:7878" # Radarr
+  #    - "$BAZARR_PORT:6767" # Bazarr
+  #    - "$JACKETT_PORT:9117" # Jackett
+  #    - "$LAZYLIBRARIAN_PORT:5299" # LazyLibrarian
+  #    - "$SABNZBD_PORT:8080" # Sabnzbd
+  #  labels:
+  #    ## Exclude From Watchtower Auto-Update But Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+  #    #-----------
+  #    - org.label-schema.group=torrent
+  #  healthcheck:
+  #    test: ["CMD", "curl", "-f", "https://google.com"]
+  #    interval: 1m
+  #    timeout: 10s
+  #    retries: 3
+  #    start_period: 30s

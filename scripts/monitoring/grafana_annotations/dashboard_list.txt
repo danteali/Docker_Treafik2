@@ -1,0 +1,1463 @@
+{
+  "id": 28,
+  "uid": "mguX8eD7z",
+  "title": "Archive",
+  "uri": "db/archive",
+  "url": "/dashboards/f/mguX8eD7z/archive",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 100,
+  "uid": "MYvdSfg4k",
+  "title": "General Alerting",
+  "uri": "db/general-alerting",
+  "url": "/dashboards/f/MYvdSfg4k/general-alerting",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 40,
+  "uid": "lRJpTrdnk",
+  "title": "Library Panels",
+  "uri": "db/library-panels",
+  "url": "/dashboards/f/lRJpTrdnk/library-panels",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 73,
+  "uid": "egwWTnc7k",
+  "title": "Non-Production",
+  "uri": "db/non-production",
+  "url": "/dashboards/f/egwWTnc7k/non-production",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 131,
+  "uid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "title": "Official Dashboards",
+  "uri": "db/official-dashboards",
+  "url": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 82,
+  "uid": "UYJWr_cnz",
+  "title": "Temp",
+  "uri": "db/temp",
+  "url": "/dashboards/f/UYJWr_cnz/temp",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 74,
+  "uid": "OxHBwnc7k",
+  "title": "WIP",
+  "uri": "db/wip",
+  "url": "/dashboards/f/OxHBwnc7k/wip",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 33,
+  "uid": "MPZlkoQmk",
+  "title": "_Home",
+  "uri": "db/home",
+  "url": "/d/MPZlkoQmk/home",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 74,
+  "folderUid": "OxHBwnc7k",
+  "folderTitle": "WIP",
+  "folderUrl": "/dashboards/f/OxHBwnc7k/wip",
+  "sortMeta": 0
+}
+{
+  "id": 93,
+  "uid": "r9DNEbA7z",
+  "title": "_Home_Summary_1",
+  "uri": "db/home_summary_1",
+  "url": "/d/r9DNEbA7z/home_summary_1",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "PL_summary"
+  ],
+  "isStarred": false,
+  "folderId": 74,
+  "folderUid": "OxHBwnc7k",
+  "folderTitle": "WIP",
+  "folderUrl": "/dashboards/f/OxHBwnc7k/wip",
+  "sortMeta": 0
+}
+{
+  "id": 94,
+  "uid": "COHMwxAnz",
+  "title": "_Home_Summary_2",
+  "uri": "db/home_summary_2",
+  "url": "/d/COHMwxAnz/home_summary_2",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "PL_summary"
+  ],
+  "isStarred": false,
+  "folderId": 74,
+  "folderUid": "OxHBwnc7k",
+  "folderTitle": "WIP",
+  "folderUrl": "/dashboards/f/OxHBwnc7k/wip",
+  "sortMeta": 0
+}
+{
+  "id": 137,
+  "uid": "pMEd7m0Mz",
+  "title": "Cadvisor (14282)",
+  "uri": "db/cadvisor-14282",
+  "url": "/d/pMEd7m0Mz/cadvisor-14282",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cadvisor",
+    "docker"
+  ],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 121,
+  "uid": "6L2GdB47z",
+  "title": "Crowdsec - Details per Machine",
+  "uri": "db/crowdsec-details-per-machine",
+  "url": "/d/6L2GdB47z/crowdsec-details-per-machine",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 122,
+  "uid": "e7sWOBVnk",
+  "title": "Crowdsec - Insight",
+  "uri": "db/crowdsec-insight",
+  "url": "/d/e7sWOBVnk/crowdsec-insight",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 124,
+  "uid": "ofdKJG37k",
+  "title": "Crowdsec - LAPI Metrics",
+  "uri": "db/crowdsec-lapi-metrics",
+  "url": "/d/ofdKJG37k/crowdsec-lapi-metrics",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 123,
+  "uid": "hjmZdB4nk",
+  "title": "Crowdsec - Overview",
+  "uri": "db/crowdsec-overview",
+  "url": "/d/hjmZdB4nk/crowdsec-overview",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 132,
+  "uid": "aUec179i1",
+  "title": "Deluge Metrics (16080)",
+  "uri": "db/deluge-metrics-16080",
+  "url": "/d/aUec179i1/deluge-metrics-16080",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "deluge",
+    "system"
+  ],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 116,
+  "uid": "aUec179i4",
+  "title": "Deluge Metrics - 16080",
+  "uri": "db/deluge-metrics-16080",
+  "url": "/d/aUec179i4/deluge-metrics-16080",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "deluge",
+    "system"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 3,
+  "uid": "jPqOU7Mmk",
+  "title": "Docker [repeated container stats based on variable] (InfluxDB)",
+  "uri": "db/docker-repeated-container-stats-based-on-variable-influxdb",
+  "url": "/d/jPqOU7Mmk/docker-repeated-container-stats-based-on-variable-influxdb",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "influxdb",
+    "telegraf"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 41,
+  "uid": "eWIvOed7z",
+  "title": "Docker and system monitoring (#893) (Prometheus)",
+  "uri": "db/docker-and-system-monitoring-893-prometheus",
+  "url": "/d/eWIvOed7z/docker-and-system-monitoring-893-prometheus",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "nodeexporter",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 2,
+  "uid": "KSZhdSEmk",
+  "title": "Docker Containers",
+  "uri": "db/docker-containers",
+  "url": "/d/KSZhdSEmk/docker-containers",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cadvisor",
+    "docker",
+    "influxdb",
+    "nodeexporter",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 103,
+  "uid": "deqTyKKnz",
+  "title": "Docker Containers (incl Monitoring Services)",
+  "uri": "db/docker-containers-incl-monitoring-services",
+  "url": "/d/deqTyKKnz/docker-containers-incl-monitoring-services",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cadvisor",
+    "docker",
+    "grafana",
+    "influxdb",
+    "influxdb",
+    "monitoring",
+    "nodeexporter",
+    "production",
+    "prometheus",
+    "victoriametrics",
+    "vmagent"
+  ],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 99,
+  "uid": "MRX_2JCnk",
+  "title": "Docker Containers - Testing",
+  "uri": "db/docker-containers-testing",
+  "url": "/d/MRX_2JCnk/docker-containers-testing",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 4,
+  "uid": "GfWjZcQiz",
+  "title": "Elastiflow",
+  "uri": "db/elastiflow",
+  "url": "/d/GfWjZcQiz/elastiflow",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "ELK",
+    "elasticsearch",
+    "elastiflow",
+    "kibana",
+    "logstash",
+    "netflow",
+    "network"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 80,
+  "uid": "bjt5qtc7z",
+  "title": "Examples",
+  "uri": "db/examples",
+  "url": "/d/bjt5qtc7z/examples",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 73,
+  "folderUid": "egwWTnc7k",
+  "folderTitle": "Non-Production",
+  "folderUrl": "/dashboards/f/egwWTnc7k/non-production",
+  "sortMeta": 0
+}
+{
+  "id": 125,
+  "uid": "89VouM14z",
+  "title": "Frigate (18226)",
+  "uri": "db/frigate-18226",
+  "url": "/d/89VouM14z/frigate-18226",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 139,
+  "uid": "f594ea85-45f2-4019-b988-2d17638b5cf3",
+  "title": "Healthchecks.io",
+  "uri": "db/healthchecks-io",
+  "url": "/d/f594ea85-45f2-4019-b988-2d17638b5cf3/healthchecks-io",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 47,
+  "uid": "dPPcSG4Mk",
+  "title": "Home Assistant state changes (InfluxQL) (12705)",
+  "uri": "db/home-assistant-state-changes-influxql-12705",
+  "url": "/d/dPPcSG4Mk/home-assistant-state-changes-influxql-12705",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "hass",
+    "home assistant",
+    "influxdb",
+    "iot",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 34,
+  "uid": "7Nqpoj-ik",
+  "title": "Home Automation",
+  "uri": "db/home-automation",
+  "url": "/d/7Nqpoj-ik/home-automation",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "energy",
+    "home assistant",
+    "home automation",
+    "influxdb",
+    "octograph",
+    "octopus",
+    "production"
+  ],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 7,
+  "uid": "TTZhOIPiz",
+  "title": "Host",
+  "uri": "db/host",
+  "url": "/d/TTZhOIPiz/host",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "dockprom",
+    "influxdb",
+    "nodeexporter",
+    "production",
+    "prometheus",
+    "speedtest",
+    "system",
+    "telegraf"
+  ],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 6,
+  "uid": "BQiyyesmz",
+  "title": "Host (InfluxDB)",
+  "uri": "db/host-influxdb",
+  "url": "/d/BQiyyesmz/host-influxdb",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "influxdb",
+    "telegraf"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 46,
+  "uid": "000000127",
+  "title": "Host - Telegraf system dashboard (928)",
+  "uri": "db/host-telegraf-system-dashboard-928",
+  "url": "/d/000000127/host-telegraf-system-dashboard-928",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "influxdb",
+    "telegraf"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 79,
+  "uid": "Ewfd2pxMk",
+  "title": "House Power",
+  "uri": "db/house-power",
+  "url": "/d/Ewfd2pxMk/house-power",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 52,
+  "uid": "Sa7ADcK7z",
+  "title": "InfluxDB Metrics (317)",
+  "uri": "db/influxdb-metrics-317",
+  "url": "/d/Sa7ADcK7z/influxdb-metrics-317",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "influxdb"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 48,
+  "uid": "Ekiwl0JmzP3",
+  "title": "InfluxDB Overview (13109)",
+  "uri": "db/influxdb-overview-13109",
+  "url": "/d/Ekiwl0JmzP3/influxdb-overview-13109",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "influxdb"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 25,
+  "uid": "ysbKIhiGk",
+  "title": "Internet Speed Test",
+  "uri": "db/internet-speed-test",
+  "url": "/d/ysbKIhiGk/internet-speed-test",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "influxdb",
+    "speedtest"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 43,
+  "uid": "000000010",
+  "title": "linux-node-exporter (6490) (prometheus)",
+  "uri": "db/linux-node-exporter-6490-prometheus",
+  "url": "/d/000000010/linux-node-exporter-6490-prometheus",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "Linux",
+    "nodeexporter",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 11,
+  "uid": "iTbnha5mkasdf",
+  "title": "Media (Plex - Sonarr - Radarr - Transmission)",
+  "uri": "db/media-plex-sonarr-radarr-transmission",
+  "url": "/d/iTbnha5mkasdf/media-plex-sonarr-radarr-transmission",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "deluge",
+    "influxdb",
+    "plex",
+    "production",
+    "prometheus",
+    "radarr",
+    "sonarr",
+    "tautulli",
+    "torrent",
+    "transmission",
+    "varken"
+  ],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 68,
+  "uid": "6UU5TBqGz",
+  "title": "Minecraft",
+  "uri": "db/minecraft",
+  "url": "/d/6UU5TBqGz/minecraft",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "ServerStats",
+    "host",
+    "influxdb",
+    "linux",
+    "mc-router",
+    "minecraft",
+    "production",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 96,
+  "uid": "kU0rMsi7k",
+  "title": "Minecraft - UnifiedMetrics 0.3.x / Prometheus",
+  "uri": "db/minecraft-unifiedmetrics-0-3-x-prometheus",
+  "url": "/d/kU0rMsi7k/minecraft-unifiedmetrics-0-3-x-prometheus",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "minecraft"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 109,
+  "uid": "WVxBumzVz",
+  "title": "Minecraft Fabric (14492)",
+  "uri": "db/minecraft-fabric-14492",
+  "url": "/d/WVxBumzVz/minecraft-fabric-14492",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 98,
+  "uid": "GtgaQ1znk",
+  "title": "Minecraft ServerStats",
+  "uri": "db/minecraft-serverstats",
+  "url": "/d/GtgaQ1znk/minecraft-serverstats",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 39,
+  "uid": "01",
+  "title": "Mo Server (12966) (prometheus)",
+  "uri": "db/mo-server-12966-prometheus",
+  "url": "/d/01/mo-server-12966-prometheus",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "host",
+    "linux",
+    "nodeexporter",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 71,
+  "uid": "grafana-utils",
+  "title": "Monitoring Art - Grafana utils (12975)",
+  "uri": "db/monitoring-art-grafana-utils-12975",
+  "url": "/d/grafana-utils/monitoring-art-grafana-utils-12975",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 73,
+  "folderUid": "egwWTnc7k",
+  "folderTitle": "Non-Production",
+  "folderUrl": "/dashboards/f/egwWTnc7k/non-production",
+  "sortMeta": 0
+}
+{
+  "id": 8,
+  "uid": "9UWhOSPik",
+  "title": "Monitoring Services",
+  "uri": "db/monitoring-services",
+  "url": "/d/9UWhOSPik/monitoring-services",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cadvisor",
+    "docker",
+    "dockprom",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 9,
+  "uid": "09Ezx5siz",
+  "title": "Nginx (dockprom default dashboard) (prometheus)",
+  "uri": "db/nginx-dockprom-default-dashboard-prometheus",
+  "url": "/d/09Ezx5siz/nginx-dockprom-default-dashboard-prometheus",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "nginx",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 130,
+  "uid": "rYdddlPWk",
+  "title": "Node Exporter Full (1860)",
+  "uri": "db/node-exporter-full-1860",
+  "url": "/d/rYdddlPWk/node-exporter-full-1860",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "linux"
+  ],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 92,
+  "uid": "7Nqpoj-ik2",
+  "title": "Octograph - Energy usage",
+  "uri": "db/octograph-energy-usage",
+  "url": "/d/7Nqpoj-ik2/octograph-energy-usage",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 135,
+  "uid": "EEQD4wv7z",
+  "title": "Ohm Windows Desktop (11587)",
+  "uri": "db/ohm-windows-desktop-11587",
+  "url": "/d/EEQD4wv7z/ohm-windows-desktop-11587",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 138,
+  "uid": "EEQD4wv7z1",
+  "title": "Ohm Windows Desktop - Fixed Variables (11587)",
+  "uri": "db/ohm-windows-desktop-fixed-variables-11587",
+  "url": "/d/EEQD4wv7z1/ohm-windows-desktop-fixed-variables-11587",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 27,
+  "uid": "PI-Hole-Exporter",
+  "title": "PI-Hole",
+  "uri": "db/pi-hole",
+  "url": "/d/PI-Hole-Exporter/pi-hole",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "Prometheus",
+    "networking",
+    "pihole",
+    "pihole exporter",
+    "production"
+  ],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 10,
+  "uid": "jC6srERgk",
+  "title": "Pi-hole (InfluxDB)",
+  "uri": "db/pi-hole-influxdb",
+  "url": "/d/jC6srERgk/pi-hole-influxdb",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "influxdb",
+    "network",
+    "pi-hole"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 53,
+  "uid": "dkBzZfF7k",
+  "title": "Plex [Varken] (InfluxDB) (9558)",
+  "uri": "db/plex-varken-influxdb-9558",
+  "url": "/d/dkBzZfF7k/plex-varken-influxdb-9558",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 129,
+  "uid": "Dp7Cd57Zza",
+  "title": "Proxmox via Prometheus (10347)",
+  "uri": "db/proxmox-via-prometheus-10347",
+  "url": "/d/Dp7Cd57Zza/proxmox-via-prometheus-10347",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "Prometheus",
+    "Proxmox"
+  ],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 120,
+  "uid": "PkPI4xGWz",
+  "title": "S.M.A.R.T Dashboard (13654)",
+  "uri": "db/s-m-a-r-t-dashboard-13654",
+  "url": "/d/PkPI4xGWz/s-m-a-r-t-dashboard-13654",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "SPN",
+    "node_exporter",
+    "prometheus",
+    "smartmon"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 87,
+  "uid": "eak7BovZk",
+  "title": "SMART disk data (10664)",
+  "uri": "db/smart-disk-data-10664",
+  "url": "/d/eak7BovZk/smart-disk-data-10664",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "node_exporter",
+    "prometheus",
+    "smartmon"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 29,
+  "uid": "m2yWweD7k",
+  "title": "SNMP - Host",
+  "uri": "db/snmp-host",
+  "url": "/d/m2yWweD7k/snmp-host",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 51,
+  "uid": "kLXTiedGz23",
+  "title": "SpeedTest",
+  "uri": "db/speedtest",
+  "url": "/d/kLXTiedGz23/speedtest",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "influxdb",
+    "network",
+    "speedtest",
+    "telegraf"
+  ],
+  "isStarred": false,
+  "folderId": 73,
+  "folderUid": "egwWTnc7k",
+  "folderTitle": "Non-Production",
+  "folderUrl": "/dashboards/f/egwWTnc7k/non-production",
+  "sortMeta": 0
+}
+{
+  "id": 72,
+  "uid": "AfHKnzcnz",
+  "title": "Sun and Moon (630)",
+  "uri": "db/sun-and-moon-630",
+  "url": "/d/AfHKnzcnz/sun-and-moon-630",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "grafana",
+    "moon",
+    "plugin",
+    "sun"
+  ],
+  "isStarred": false,
+  "folderId": 73,
+  "folderUid": "egwWTnc7k",
+  "folderTitle": "Non-Production",
+  "folderUrl": "/dashboards/f/egwWTnc7k/non-production",
+  "sortMeta": 0
+}
+{
+  "id": 136,
+  "uid": "000003127",
+  "title": "Telegraf: system dashboard (928)",
+  "uri": "db/telegraf-system-dashboard-928",
+  "url": "/d/000003127/telegraf-system-dashboard-928",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "influxdb",
+    "telegraf"
+  ],
+  "isStarred": false,
+  "folderId": 131,
+  "folderUid": "e9106ae8-ac80-45f7-a5cb-6c8ef27644ca",
+  "folderTitle": "Official Dashboards",
+  "folderUrl": "/dashboards/f/e9106ae8-ac80-45f7-a5cb-6c8ef27644ca/official-dashboards",
+  "sortMeta": 0
+}
+{
+  "id": 30,
+  "uid": "O23g2BeWk",
+  "title": "Traefik",
+  "uri": "db/traefik",
+  "url": "/d/O23g2BeWk/traefik",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "production",
+    "prometheus",
+    "traefik"
+  ],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 17,
+  "uid": "EHnPMYPmz",
+  "title": "Traefik v1",
+  "uri": "db/traefik-v1",
+  "url": "/d/EHnPMYPmz/traefik-v1",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "traefik"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 18,
+  "uid": "y_TlWHJiz",
+  "title": "Transmission",
+  "uri": "db/transmission",
+  "url": "/d/y_TlWHJiz/transmission",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "prometheus",
+    "transmission"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 56,
+  "uid": "zIpbKbiGk",
+  "title": "Ubiquiti EdgeRouter (12504)",
+  "uri": "db/ubiquiti-edgerouter-12504",
+  "url": "/d/zIpbKbiGk/ubiquiti-edgerouter-12504",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 14,
+  "uid": "I9RCiR8ik",
+  "title": "Ubiquity EdgeRouter X [SNMP] (1756)",
+  "uri": "db/ubiquity-edgerouter-x-snmp-1756",
+  "url": "/d/I9RCiR8ik/ubiquity-edgerouter-x-snmp-1756",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "ERX",
+    "SNMP",
+    "edgerouter",
+    "influxdb",
+    "network",
+    "production",
+    "router",
+    "telegraf"
+  ],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 126,
+  "uid": "vxPFDuQVz",
+  "title": "Ubiquity EdgeRouter X [SNMP] (1756) - 20230531",
+  "uri": "db/ubiquity-edgerouter-x-snmp-1756-20230531",
+  "url": "/d/vxPFDuQVz/ubiquity-edgerouter-x-snmp-1756-20230531",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 15,
+  "uid": "FPh5IgUmk",
+  "title": "Ubiquity UniFi Access Point [SNMP & Unpoller]",
+  "uri": "db/ubiquity-unifi-access-point-snmp-and-unpoller",
+  "url": "/d/FPh5IgUmk/ubiquity-unifi-access-point-snmp-and-unpoller",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "AP",
+    "SNMP",
+    "influxdb",
+    "network",
+    "production",
+    "telegraf",
+    "unifi",
+    "unifi-poller"
+  ],
+  "isStarred": false,
+  "sortMeta": 0
+}
+{
+  "id": 127,
+  "uid": "fhvpDuQ4z",
+  "title": "Ubiquity UniFi Access Point [SNMP & Unpoller] - 20230531",
+  "uri": "db/ubiquity-unifi-access-point-snmp-and-unpoller-20230531",
+  "url": "/d/fhvpDuQ4z/ubiquity-unifi-access-point-snmp-and-unpoller-20230531",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 55,
+  "uid": "1zM_ZXKnz",
+  "title": "UBNT EdgeRouter Dashboard (1756)",
+  "uri": "db/ubnt-edgerouter-dashboard-1756",
+  "url": "/d/1zM_ZXKnz/ubnt-edgerouter-dashboard-1756",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 59,
+  "uid": "HXRDoWyWz",
+  "title": "UniFi AP Dashboard (1486)",
+  "uri": "db/unifi-ap-dashboard-1486",
+  "url": "/d/HXRDoWyWz/unifi-ap-dashboard-1486",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "AP",
+    "System",
+    "Templated",
+    "UBNT",
+    "UniFi"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 65,
+  "uid": "w3usaHLZk",
+  "title": "UniFi-Poller -  Client DPI - Prometheus (11310)",
+  "uri": "db/unifi-poller-client-dpi-prometheus-11310",
+  "url": "/d/w3usaHLZk/unifi-poller-client-dpi-prometheus-11310",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "unifi",
+    "unifi-poller"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 60,
+  "uid": "jMfvAjxWz",
+  "title": "UniFi-Poller - Client Insights - Prometheus (11315)",
+  "uri": "db/unifi-poller-client-insights-prometheus-11315",
+  "url": "/d/jMfvAjxWz/unifi-poller-client-insights-prometheus-11315",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "unifi",
+    "unifi-poller"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 62,
+  "uid": "9WaGWZaZk",
+  "title": "UniFi-Poller - Network Sites - Prometheus (11311)",
+  "uri": "db/unifi-poller-network-sites-prometheus-11311",
+  "url": "/d/9WaGWZaZk/unifi-poller-network-sites-prometheus-11311",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "unifi",
+    "unifi-poller"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 61,
+  "uid": "g5wFWqxZk",
+  "title": "UniFi-Poller - UAP Insights - Prometheus (11314)",
+  "uri": "db/unifi-poller-uap-insights-prometheus-11314",
+  "url": "/d/g5wFWqxZk/unifi-poller-uap-insights-prometheus-11314",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "uap",
+    "unifi",
+    "unifi-poller"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 63,
+  "uid": "FsfxpWaZz",
+  "title": "UniFi-Poller - USW Insights - Prometheus (11312)",
+  "uri": "db/unifi-poller-usw-insights-prometheus-11312",
+  "url": "/d/FsfxpWaZz/unifi-poller-usw-insights-prometheus-11312",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "unifi",
+    "unifi-poller",
+    "usw"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 105,
+  "uid": "wNf0q_kZk",
+  "title": "VictoriaMetrics (10229)",
+  "uri": "db/victoriametrics-10229",
+  "url": "/d/wNf0q_kZk/victoriametrics-10229",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "victoriametrics",
+    "vmsingle"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 106,
+  "uid": "Nj6SjyR4z",
+  "title": "VictoriaMetrics - no variables (10229)",
+  "uri": "db/victoriametrics-no-variables-10229",
+  "url": "/d/Nj6SjyR4z/victoriametrics-no-variables-10229",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 102,
+  "uid": "G7Z9GzMGz",
+  "title": "vmagent",
+  "uri": "db/vmagent",
+  "url": "/d/G7Z9GzMGz/vmagent",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "victoriametrics",
+    "vmagent"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 107,
+  "uid": "9u7NRUR4z",
+  "title": "vmagent - no variables",
+  "uri": "db/vmagent-no-variables",
+  "url": "/d/9u7NRUR4z/vmagent-no-variables",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 20,
+  "uid": "cESxZJwmk",
+  "title": "Windows",
+  "uri": "db/windows",
+  "url": "/d/cESxZJwmk/windows",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "desktop",
+    "gpu",
+    "influxdb",
+    "laptop",
+    "nvidia",
+    "telegraf",
+    "windows"
+  ],
+  "isStarred": false,
+  "folderId": 74,
+  "folderUid": "OxHBwnc7k",
+  "folderTitle": "WIP",
+  "folderUrl": "/dashboards/f/OxHBwnc7k/wip",
+  "sortMeta": 0
+}
+{
+  "id": 111,
+  "uid": "W-1U5bz4k",
+  "title": "Windows (InfluxDB)",
+  "uri": "db/windows-influxdb",
+  "url": "/d/W-1U5bz4k/windows-influxdb",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}
+{
+  "id": 19,
+  "uid": "0QW_029mk",
+  "title": "Windows Copy",
+  "uri": "db/windows-copy",
+  "url": "/d/0QW_029mk/windows-copy",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "desktop",
+    "influxdb",
+    "laptop",
+    "telegraf",
+    "windows"
+  ],
+  "isStarred": false,
+  "folderId": 28,
+  "folderUid": "mguX8eD7z",
+  "folderTitle": "Archive",
+  "folderUrl": "/dashboards/f/mguX8eD7z/archive",
+  "sortMeta": 0
+}

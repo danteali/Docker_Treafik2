@@ -1,0 +1,21 @@
+{
+  "id": 1,
+  "uid": "P28FE84CA23A93199",
+  "orgId": 1,
+  "name": "InfluxDB_varken_plex",
+  "type": "influxdb",
+  "typeLogoUrl": "public/app/plugins/datasource/influxdb/img/influxdb_logo.svg",
+  "access": "proxy",
+  "url": "http://influxdb:8086",
+  "user": "",
+  "database": "varken",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": false,
+  "jsonData": {},
+  "secureJsonFields": {},
+  "version": 1,
+  "readOnly": false,
+  "apiVersion": ""
+}

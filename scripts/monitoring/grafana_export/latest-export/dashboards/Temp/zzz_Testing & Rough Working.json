@@ -1,0 +1,385 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "zzz-testing-and-rough-working",
+    "url": "/d/fac3a25b-cf47-4874-bf34-e7c90b8b57dd/zzz-testing-and-rough-working",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 33,
+    "folderUid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+    "folderTitle": "Temp",
+    "folderUrl": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/temp",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Misc random stuff",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 116,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "scaleDistribution": {
+                "type": "linear"
+              }
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "maxDataPoints": 25,
+        "options": {
+          "calculate": false,
+          "cellGap": 1,
+          "color": {
+            "exponent": 0.5,
+            "fill": "dark-orange",
+            "mode": "scheme",
+            "reverse": false,
+            "scale": "exponential",
+            "scheme": "Oranges",
+            "steps": 64
+          },
+          "exemplars": {
+            "color": "rgba(255,0,255,0.7)"
+          },
+          "filterValues": {
+            "le": 1e-09
+          },
+          "legend": {
+            "show": true
+          },
+          "rowsFrame": {
+            "layout": "auto"
+          },
+          "tooltip": {
+            "show": true,
+            "yHistogram": false
+          },
+          "yAxis": {
+            "axisPlacement": "left",
+            "reverse": false
+          }
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(rate(cs_bucket_pour_seconds_bucket[$__rate_interval])) by (le)",
+            "hide": true,
+            "instant": false,
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "cs_bucket_pour_seconds_bucket",
+            "format": "heatmap",
+            "hide": true,
+            "instant": false,
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "BarGuage"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(increase(cs_bucket_pour_seconds_bucket[$__interval])) by (le)",
+            "format": "heatmap",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "Heatmap"
+          }
+        ],
+        "title": "Testing - Buckets & Histograms",
+        "type": "heatmap"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 80,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineWidth": 1
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "id": 2,
+        "maxDataPoints": 25,
+        "options": {
+          "bucketOffset": 0,
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          }
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(rate(cs_bucket_pour_seconds_bucket[$__rate_interval])) by (le)",
+            "hide": true,
+            "instant": false,
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "cs_bucket_pour_seconds_bucket",
+            "format": "heatmap",
+            "hide": true,
+            "instant": false,
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "BarGuage"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(cs_bucket_pour_seconds_bucket) by (le)",
+            "format": "heatmap",
+            "hide": true,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "BarGuage1"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "histogram_quantile(0.95, rate(vm_rows_read_per_query_bucket[1h]))",
+            "format": "heatmap",
+            "hide": true,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "Histogram"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(vm_rows_read_per_query_bucket) by (le)",
+            "format": "heatmap",
+            "hide": true,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "Histogram1"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(traefik_service_request_duration_seconds_bucket) by (le)",
+            "format": "heatmap",
+            "hide": true,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "Histogram2"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "histogram_quantile(0.95, rate(traefik_service_request_duration_seconds_bucket[1h]))",
+            "format": "heatmap",
+            "hide": true,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "Histogram3"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "histogram_quantile(0.95, rate(vm_promscrape_scrape_duration_seconds_bucket[1h]))",
+            "format": "heatmap",
+            "hide": true,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "Histogram4"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(rate(vm_promscrape_scrape_duration_seconds_bucket[$__interval])) by (le)",
+            "format": "heatmap",
+            "hide": false,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{le}}",
+            "range": true,
+            "refId": "Histogram5"
+          }
+        ],
+        "title": "Testing - Buckets & Histograms",
+        "type": "histogram"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [
+      "testing"
+    ],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "zzz_Testing & Rough Working",
+    "uid": "fac3a25b-cf47-4874-bf34-e7c90b8b57dd",
+    "weekStart": ""
+  }
+}

@@ -1,0 +1,887 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "home-summary-2-wip",
+    "url": "/d/COHMwxAnz/home-summary-2-wip",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 35,
+    "folderUid": "c09552b0-b52e-498a-b669-dca40886ae9c",
+    "folderTitle": "ZZZ-OLD-Non-Production-&-WIP",
+    "folderUrl": "/dashboards/f/c09552b0-b52e-498a-b669-dca40886ae9c/zzz-old-non-production-and-wip",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "W_4Ss6Dnk"
+          },
+          "enable": true,
+          "expr": "container_start_time_seconds*1000",
+          "iconColor": "dark-green",
+          "name": "Container Starts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "textFormat": "{{image}}",
+          "titleFormat": "Container Started",
+          "useValueForTime": true
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "W_4Ss6Dnk"
+          },
+          "enable": true,
+          "expr": "node_docker_container_stop_time_seconds*1000",
+          "iconColor": "red",
+          "name": "Container Stops",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "textFormat": "{{name}}",
+          "titleFormat": "Container Stopped",
+          "useValueForTime": true
+        }
+      ]
+    },
+    "description": "Single screen summary - Docker Services",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 29,
+    "links": [
+      {
+        "asDropdown": true,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [
+          "PL_summary"
+        ],
+        "targetBlank": false,
+        "title": "Switch Summary Dashboards",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      },
+      {
+        "asDropdown": false,
+        "icon": "dashboard",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": false,
+        "title": "Detailed: Docker",
+        "tooltip": "",
+        "type": "link",
+        "url": "https://grafana.mc-guinness.co.uk/d/KSZhdSEmk/docker-containers?"
+      },
+      {
+        "asDropdown": false,
+        "icon": "dashboard",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": false,
+        "title": "Detailed: Docker Monitoring Services",
+        "tooltip": "",
+        "type": "link",
+        "url": "https://grafana.mc-guinness.co.uk/d/deqTyKKnz/docker-containers-monitoring-services"
+      }
+    ],
+    "liveNow": false,
+    "panels": [
+      {
+        "gridPos": {
+          "h": 8,
+          "w": 3,
+          "x": 0,
+          "y": 0
+        },
+        "id": 20,
+        "libraryPanel": {
+          "uid": "US0vPxAnk"
+        },
+        "title": ""
+      },
+      {
+        "gridPos": {
+          "h": 8,
+          "w": 3,
+          "x": 3,
+          "y": 0
+        },
+        "id": 6,
+        "libraryPanel": {
+          "uid": "juXHQb07z"
+        },
+        "title": ""
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 20,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 18,
+          "x": 6,
+          "y": 0
+        },
+        "id": 12,
+        "links": [],
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "9.0.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "sum by (name) (rate(container_cpu_usage_seconds_total{name=~\".+\"}[$__rate_interval])) / scalar(count(node_cpu_seconds_total{mode=\"user\"})) * 100",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 3,
+            "legendFormat": "{{ name }}",
+            "metric": "container_cpu_user_seconds_total",
+            "refId": "A",
+            "step": 10
+          }
+        ],
+        "title": "Container CPU Usage",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "text",
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": null
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 35
+                },
+                {
+                  "color": "dark-green",
+                  "value": 45
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 60
+                },
+                {
+                  "color": "dark-red",
+                  "value": 65
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 3,
+          "x": 0,
+          "y": 8
+        },
+        "id": 2,
+        "links": [],
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "count(rate(container_last_seen{name=~\".+\"}[$__rate_interval]))",
+            "interval": "",
+            "intervalFactor": 2,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Running Containers",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "max": 16709316608,
+            "min": 0,
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "rgba(50, 172, 45, 0.97)",
+                  "value": null
+                },
+                {
+                  "color": "rgba(237, 129, 40, 0.89)",
+                  "value": 70
+                },
+                {
+                  "color": "rgba(245, 54, 54, 0.9)",
+                  "value": 85
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 3,
+          "x": 3,
+          "y": 8
+        },
+        "hideTimeOverride": true,
+        "id": 8,
+        "links": [],
+        "maxDataPoints": 100,
+        "options": {
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "text": {}
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "sum(container_memory_usage_bytes{name=~\".+\"})",
+            "format": "time_series",
+            "interval": "10s",
+            "intervalFactor": 2,
+            "legendFormat": "",
+            "refId": "A",
+            "step": 20
+          }
+        ],
+        "timeFrom": "10s",
+        "title": "Container Memory Load",
+        "type": "gauge"
+      },
+      {
+        "alert": {
+          "alertRuleTags": {},
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [
+                  10000000000
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "avg"
+              },
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "Per Cont Mem Use > 10G [5 min avg] (Prometheus)",
+          "noDataState": "no_data",
+          "notifications": [
+            {
+              "uid": "Aj0XYXo7z"
+            }
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "line+area"
+              }
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "transparent",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 10000000000
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 18,
+          "x": 6,
+          "y": 8
+        },
+        "id": 14,
+        "links": [],
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "9.0.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "sum by (name) (container_memory_usage_bytes{name=~\".+\"})",
+            "format": "time_series",
+            "instant": false,
+            "interval": "",
+            "intervalFactor": 3,
+            "legendFormat": "{{ name }}",
+            "metric": "container_cpu_user_seconds_total",
+            "refId": "A",
+            "step": 10
+          }
+        ],
+        "title": "Container Memory Usage",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 19,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "Bps"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Sent"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "dark-red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 0,
+          "y": 16
+        },
+        "id": 10,
+        "links": [],
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.1",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "sum(rate(container_network_receive_bytes_total{id=\"/\"}[$__rate_interval])) by (id)",
+            "hide": false,
+            "interval": "",
+            "intervalFactor": 4,
+            "legendFormat": "Received",
+            "refId": "A"
+          },
+          {
+            "exemplar": true,
+            "expr": "- sum(rate(container_network_transmit_bytes_total{id=\"/\"}[$__rate_interval])) by (id)",
+            "hide": false,
+            "interval": "",
+            "intervalFactor": 4,
+            "legendFormat": "Sent",
+            "refId": "B"
+          }
+        ],
+        "title": "Container Network Traffic",
+        "type": "timeseries"
+      },
+      {
+        "alert": {
+          "alertRuleTags": {},
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [
+                  5369000000
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "10m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "avg"
+              },
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "keep_state",
+          "for": "5m",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "Docker-Managed Volume > 5GB [10 min avg] (Prometheus)",
+          "noDataState": "keep_state",
+          "notifications": [
+            {
+              "uid": "AAu_Nev7k"
+            }
+          ]
+        },
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "description": "",
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 8,
+          "y": 16
+        },
+        "hiddenSeries": false,
+        "id": 16,
+        "legend": {
+          "alignAsTable": true,
+          "avg": true,
+          "current": true,
+          "max": true,
+          "min": true,
+          "rightSide": false,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": true,
+        "steppedLine": false,
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "container_fs_usage_bytes{name=~\".+\"}",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 4,
+            "legendFormat": "{{ name }}",
+            "metric": "container_cpu_user_seconds_total",
+            "refId": "A",
+            "step": 10
+          }
+        ],
+        "thresholds": [
+          {
+            "$$hashKey": "object:666",
+            "colorMode": "critical",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "value": 5369000000,
+            "visible": true,
+            "yaxis": "left"
+          }
+        ],
+        "timeRegions": [],
+        "title": "Container Ephemeral (Docker Managed) Volume Disk Usage",
+        "tooltip": {
+          "shared": true,
+          "sort": 2,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:890",
+            "format": "decbytes",
+            "logBase": 1,
+            "min": "0",
+            "show": true
+          },
+          {
+            "$$hashKey": "object:891",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 16,
+          "y": 16
+        },
+        "id": 18,
+        "libraryPanel": {
+          "uid": "n8GUzahnz"
+        },
+        "title": ""
+      }
+    ],
+    "refresh": "30s",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [
+      "playlist-999"
+    ],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "_Home_Summary_2 (WIP)",
+    "uid": "COHMwxAnz",
+    "weekStart": ""
+  }
+}

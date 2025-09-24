@@ -1,0 +1,3947 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "monitoring-art-grafana-utils-12975",
+    "url": "/d/grafana-utils/monitoring-art-grafana-utils-12975",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 56,
+    "folderUid": "fb2b30e2-66d0-4c15-9ba9-464d36c4b5c0",
+    "folderTitle": "NonProd",
+    "folderUrl": "/dashboards/f/fb2b30e2-66d0-4c15-9ba9-464d36c4b5c0/nonprod",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        },
+        {
+          "datasource": {
+            "type": "grafana-simple-json-datasource",
+            "uid": "P4B4ECDFF6FAA6F38"
+          },
+          "enable": true,
+          "hide": false,
+          "iconColor": "#FFEE52",
+          "limit": 100,
+          "name": "Server Events",
+          "query": "Server Events",
+          "showIn": 0,
+          "tags": [],
+          "type": "tags"
+        },
+        {
+          "datasource": {
+            "type": "grafana-simple-json-datasource",
+            "uid": "P4B4ECDFF6FAA6F38"
+          },
+          "enable": false,
+          "hide": false,
+          "iconColor": "#A352CC",
+          "limit": 100,
+          "name": "Client Events",
+          "query": "Client Events",
+          "showIn": 0,
+          "tags": [],
+          "type": "tags"
+        }
+      ]
+    },
+    "description": "Demo dashboard for monitoring art using Grafana utils. https://github.com/yesoreyeram/grafana-utils for more details",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 12975,
+    "graphTooltip": 0,
+    "id": 11,
+    "links": [
+      {
+        "icon": "doc",
+        "tags": [],
+        "targetBlank": true,
+        "title": "Github",
+        "tooltip": "Github Repository",
+        "type": "link",
+        "url": "https://github.com/yesoreyeram/grafana-simple-deno-api-backend"
+      }
+    ],
+    "liveNow": false,
+    "panels": [
+      {
+        "aliasColors": {
+          "A": "dark-orange",
+          "A11": "dark-orange",
+          "A13": "dark-orange",
+          "A15": "dark-orange",
+          "C": "dark-blue",
+          "F": "dark-orange",
+          "F12": "dark-orange",
+          "G": "dark-orange",
+          "G9": "dark-orange",
+          "I": "light-blue",
+          "L": "light-purple",
+          "N": "dark-orange",
+          "N14": "dark-orange",
+          "O": "light-blue",
+          "R": "dark-orange",
+          "R10": "dark-orange",
+          "S": "light-green",
+          "T": "light-red",
+          "U": "semi-dark-yellow"
+        },
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": true,
+        "id": 53,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": false,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 1,
+        "points": true,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "rawQuery": true,
+            "refId": "A",
+            "target": "LED(*       GRAFANA UTILS  *)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "rawQuery": true,
+            "refId": "B",
+            "target": "LED(*   MAKE GRAFANA COOLEST *,-20)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": "170m",
+        "timeRegions": [],
+        "tooltip": {
+          "shared": false,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": false,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {
+          "Series A": "light-red",
+          "Series B": "semi-dark-red"
+        },
+        "bars": true,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 4,
+          "w": 8,
+          "x": 0,
+          "y": 6
+        },
+        "hiddenSeries": false,
+        "id": 59,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 0.5,
+        "points": true,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": true,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "A",
+            "target": "Expression(Series B,multiply:0.1,cos,abs)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "B",
+            "target": "Expression(Series A,multiply:0.1,sin,abs)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Love",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": false,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {
+          " ": "semi-dark-green",
+          "Moon": "rgb(255, 255, 255)"
+        },
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 9,
+          "x": 8,
+          "y": 6
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": true,
+        "id": 61,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": false,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 0.5,
+        "points": true,
+        "renderer": "flot",
+        "seriesOverrides": [
+          {
+            "alias": "Hill",
+            "color": "rgb(140, 59, 59)",
+            "fill": 2,
+            "lines": true,
+            "linewidth": 1,
+            "points": false
+          },
+          {
+            "alias": "Moon",
+            "pointradius": 15
+          },
+          {
+            "alias": "Star",
+            "color": "rgb(102, 97, 97)",
+            "pointradius": 2
+          },
+          {
+            "alias": "Rainbow-V",
+            "color": "#4b0082",
+            "fill": 0,
+            "fillGradient": 0,
+            "lines": true,
+            "linewidth": 2,
+            "points": false,
+            "stack": true
+          },
+          {
+            "alias": "Rainbow-I",
+            "color": "indigo",
+            "fill": 0,
+            "fillGradient": 0,
+            "lines": true,
+            "linewidth": 2,
+            "points": false
+          },
+          {
+            "alias": "Rainbow-B",
+            "color": "blue",
+            "fill": 0,
+            "fillGradient": 0,
+            "lines": true,
+            "linewidth": 2,
+            "points": false
+          },
+          {
+            "alias": "Rainbow-G",
+            "color": "green",
+            "fill": 0,
+            "fillGradient": 0,
+            "lines": true,
+            "linewidth": 2,
+            "points": false
+          },
+          {
+            "alias": "Rainbow-Y",
+            "color": "yellow",
+            "fill": 0,
+            "fillGradient": 0,
+            "lines": true,
+            "linewidth": 2,
+            "points": false
+          },
+          {
+            "alias": "Rainbow-O",
+            "color": "orange",
+            "fill": 0,
+            "fillGradient": 0,
+            "lines": true,
+            "linewidth": 2,
+            "points": false
+          },
+          {
+            "alias": "Rainbow-R",
+            "color": "red",
+            "fill": 0,
+            "fillGradient": 0,
+            "lines": true,
+            "linewidth": 2,
+            "points": false
+          },
+          {
+            "alias": "Falls",
+            "color": "#8AB8FF",
+            "fill": 0,
+            "fillGradient": 0,
+            "lines": true,
+            "linewidth": 2,
+            "points": false
+          },
+          {
+            "alias": "roof",
+            "color": "rgb(201, 141, 86)",
+            "fill": 10,
+            "lines": true,
+            "points": false
+          },
+          {
+            "alias": "house",
+            "color": "#A352CC",
+            "fill": 10,
+            "lines": true,
+            "points": false
+          },
+          {
+            "alias": "Door",
+            "color": "#E02F44",
+            "fill": 10,
+            "lines": true,
+            "points": false
+          },
+          {
+            "alias": "Cloud1",
+            "color": "rgb(219, 215, 215)",
+            "pointradius": 5
+          },
+          {
+            "alias": "Cloud2",
+            "color": "rgb(219, 215, 215)",
+            "pointradius": 5
+          },
+          {
+            "alias": "Cloud3",
+            "color": "rgb(219, 215, 215)",
+            "pointradius": 5
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "C",
+            "target": "Pattern( ,0,0,0,0,0,3,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "rawQuery": true,
+            "refId": "A",
+            "target": "Pattern( ,0,0,0,0,2.75,2.75,2.75,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "rawQuery": true,
+            "refId": "B",
+            "target": "Pattern( ,0,0,0,2.50,2.50,2.50,2.50,2.50,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "D",
+            "target": "Pattern( ,0,0,2.25,2.25,2.25,2.25,2.25,2.25,2.25,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "E",
+            "target": "Pattern( ,0,0,0,0,0,1,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "F",
+            "target": "Pattern( ,0,0,0,0,0,0.5,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "G",
+            "target": "Pattern( ,0,0,0,0,0,0.25,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "H",
+            "target": "Pattern( ,0,0,0,0,0,0.75,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "I",
+            "target": "Pattern( ,0,0,0,0,0,1.25,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "J",
+            "target": "Pattern( ,0,0,0,0,0,1.5,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "K",
+            "target": "Pattern( ,0,0,0,0,0,1.75,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "rawQuery": false,
+            "refId": "M",
+            "target": "Matrix(Moon,60,0,[5])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "rawQuery": false,
+            "refId": "N",
+            "target": "Matrix(Star,10,0,[4.5])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "rawQuery": false,
+            "refId": "O",
+            "target": "Matrix(Star,70,0,[4.1])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "rawQuery": false,
+            "refId": "P",
+            "target": "Matrix(Star,80,0,[4.8])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "rawQuery": false,
+            "refId": "Q",
+            "target": "Matrix(Star,40,0,[5.8])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "R",
+            "target": "Expression(Rainbow-V,divide:6,sin,abs,add:0.1,start-after:23,stop-after:37)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "S",
+            "target": "Expression(Rainbow-I,divide:6,sin,abs,add:0.1,start-after:23,stop-after:37,add:0.05)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "T",
+            "target": "Expression(Rainbow-B,divide:6,sin,abs,add:0.1,start-after:23,stop-after:37,add:0.10)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "U",
+            "target": "Expression(Rainbow-G,divide:6,sin,abs,add:0.1,start-after:23,stop-after:37,add:0.15)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "V",
+            "target": "Expression(Rainbow-Y,divide:6,sin,abs,add:0.1,start-after:23,stop-after:37,add:0.20)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "W",
+            "target": "Expression(Rainbow-O,divide:6,sin,abs,add:0.1,start-after:23,stop-after:37,add:0.25)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "X",
+            "target": "Expression(Rainbow-R,divide:6,sin,abs,add:0.1,start-after:23,stop-after:37,add:0.30)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "L",
+            "target": "Expression(Hill,multiply:0.1,sin,abs)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "rawQuery": true,
+            "refId": "Y",
+            "target": "Matrix(Falls,50,0,[1,0.9][0.9,0.8][0.8,0.7][0.8,0.6,0.7][0.5]0.4,0.3][0.1,0][0][0][0])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "rawQuery": true,
+            "refId": "Z",
+            "target": "Matrix(roof,10,0.2,[0.3][0.5][0.7][0.5][0.3])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "AA",
+            "target": "Matrix(house,10,0.2,[0.3][0.3][0.3][0.3][0.3])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "AB",
+            "target": "Matrix(Door,12,0,[0.3][0.3])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "AC",
+            "target": "Matrix(Cloud1,40,0,[4][3.75,4.25][4])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "AD",
+            "target": "Matrix(Cloud2,20,1,[4][3.75,4.25][4])",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": "90m",
+        "timeRegions": [],
+        "title": "Cloud Monitoring",
+        "tooltip": {
+          "shared": false,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": false,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "label": "",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {
+          "Series A": "light-red",
+          "Series B": "semi-dark-red",
+          "hello": "super-light-blue",
+          "hello1": "dark-blue",
+          "hello2": "light-blue",
+          "hello3": "semi-dark-blue"
+        },
+        "bars": true,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 5,
+        "gridPos": {
+          "h": 4,
+          "w": 7,
+          "x": 17,
+          "y": 6
+        },
+        "hiddenSeries": false,
+        "id": 65,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 0.5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": true,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "B",
+            "target": "Expression(hello1,multiply:0.1,sin,abs,min:0.75)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "D",
+            "target": "Expression(hello3,multiply:0.1,cos,abs,min:0.65)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "C",
+            "target": "Expression(hello2,multiply:0.1,cos,abs,max:0.75)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "A",
+            "target": "Expression(hello,multiply:0.1,sin,abs,max:0.75)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "E",
+            "target": "Expression(hello,multiply:0.1,sin,abs,sqrt)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Wave",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": false,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 3,
+          "w": 8,
+          "x": 0,
+          "y": 10
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": true,
+        "id": 63,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [
+          {
+            "alias": "HeartBeat",
+            "color": "#E02F44"
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "C",
+            "target": "Pattern(HeartBeat,0,0,0,-3,-2,5,0,0)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": "60m",
+        "timeRegions": [],
+        "title": "Heartbeat",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": false,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {
+          "A": "dark-green",
+          "B": "dark-yellow",
+          "C": "dark-red"
+        },
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 3,
+          "w": 7,
+          "x": 17,
+          "y": 10
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": true,
+        "id": 67,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": true,
+        "renderer": "flot",
+        "seriesOverrides": [
+          {
+            "alias": "A1",
+            "color": "#37872D",
+            "points": false
+          },
+          {
+            "alias": "B1",
+            "color": "#E0B400",
+            "points": false
+          },
+          {
+            "alias": "C1",
+            "color": "#C4162A",
+            "points": false
+          },
+          {
+            "alias": "A2",
+            "color": "#37872D"
+          },
+          {
+            "alias": "B2",
+            "color": "#E0B400"
+          },
+          {
+            "alias": "C2",
+            "color": "#C4162A"
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "B",
+            "target": "Expression(A,sin,stop-after:6)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "Expression(B,sin,start-after:5,stop-after:8)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "C",
+            "target": "Expression(C,sin,start-after:7)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "D",
+            "target": "Expression(A1,sin,add:-0.5,stop-after:6)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "E",
+            "target": "Expression(B1,sin,add:-0.5,start-after:5,stop-after:8)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "F",
+            "target": "Expression(C1,sin,add:-0.5,start-after:7)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "G",
+            "target": "Expression(A2,sin,add:-1,stop-after:6)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "H",
+            "target": "Expression(B2,sin,add:-1,start-after:5,stop-after:8)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "I",
+            "target": "Expression(C2,sin,add:-1,start-after:7)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": "15m",
+        "timeRegions": [],
+        "title": "Together",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": false,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 13
+        },
+        "id": 19,
+        "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Demo",
+        "type": "row"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 7,
+          "x": 0,
+          "y": 14
+        },
+        "hiddenSeries": false,
+        "id": 2,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "cpu",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "B",
+            "target": "memory",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Timeseries with annotations",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 50
+                },
+                {
+                  "color": "red",
+                  "value": 70
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 17,
+          "x": 7,
+          "y": 14
+        },
+        "id": 8,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "max"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value_and_name"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "RandomWalk(4, Server)",
+            "type": "timeserie"
+          }
+        ],
+        "title": "Usage",
+        "transformations": [
+          {
+            "id": "seriesToColumns",
+            "options": {
+              "byField": "Server"
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "cellOptions": {
+                "mode": "gradient",
+                "type": "color-background"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 50
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "memory"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 83
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Server"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 90
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "cpu"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 137
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 7,
+          "y": 17
+        },
+        "id": 3,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "frameIndex": 1,
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "memory",
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "B",
+            "target": "cpu",
+            "type": "table"
+          }
+        ],
+        "title": "Table",
+        "transformations": [
+          {
+            "id": "seriesToColumns",
+            "options": {
+              "byField": "Server"
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "red",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 5,
+          "x": 13,
+          "y": 17
+        },
+        "id": 6,
+        "options": {
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "last"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "text": {}
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "cpu",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "B",
+            "target": "memory",
+            "type": "timeserie"
+          }
+        ],
+        "title": "Usage",
+        "transformations": [
+          {
+            "id": "seriesToColumns",
+            "options": {
+              "byField": "Server"
+            }
+          }
+        ],
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 50
+                },
+                {
+                  "color": "red",
+                  "value": 70
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 18,
+          "y": 17
+        },
+        "id": 7,
+        "options": {
+          "displayMode": "lcd",
+          "minVizHeight": 10,
+          "minVizWidth": 0,
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "max"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true,
+          "text": {},
+          "valueMode": "color"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "RandomWalk(5)",
+            "type": "timeserie"
+          }
+        ],
+        "title": "Usage",
+        "transformations": [
+          {
+            "id": "seriesToColumns",
+            "options": {
+              "byField": "Server"
+            }
+          }
+        ],
+        "type": "bargauge"
+      },
+      {
+        "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 22
+        },
+        "id": 25,
+        "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Series Demo",
+        "type": "row"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 7,
+          "x": 0,
+          "y": 23
+        },
+        "hiddenSeries": false,
+        "id": 27,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "RandomWalk()",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "RandomWalk()",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 7,
+          "x": 7,
+          "y": 23
+        },
+        "hiddenSeries": false,
+        "id": 28,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "RandomWalk(3)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "RandomWalk(3)",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 10,
+          "x": 14,
+          "y": 23
+        },
+        "hiddenSeries": false,
+        "id": 29,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "RandomWalk(5,Server)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "RandomWalk(5,Server)",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 7,
+          "x": 0,
+          "y": 29
+        },
+        "hiddenSeries": false,
+        "id": 30,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "FlatLine()",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "FlatLine()",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 7,
+          "x": 7,
+          "y": 29
+        },
+        "hiddenSeries": false,
+        "id": 31,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "FlatLine(16)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "FlatLine(16)",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 10,
+          "x": 14,
+          "y": 29
+        },
+        "hiddenSeries": false,
+        "id": 32,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "FlatLine(7,Rainbow)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "FlatLine(7,Rainbow)",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 5,
+          "x": 0,
+          "y": 35
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": true,
+        "id": 34,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": true,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "Step()",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": "10m",
+        "timeRegions": [],
+        "title": "Step()",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 5,
+          "y": 35
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": true,
+        "id": 35,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": true,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "Step(50)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": "10m",
+        "timeRegions": [],
+        "title": "Step(50)",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 11,
+          "y": 35
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": true,
+        "id": 36,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": true,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "Step(50,Speed)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": "10m",
+        "timeRegions": [],
+        "title": "Step(50,Speed)",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 7,
+          "x": 17,
+          "y": 35
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": true,
+        "id": 37,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": true,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "Step(0,Speed,10)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "B",
+            "target": "Step(1,,3)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": "10m",
+        "timeRegions": [],
+        "title": "Step(0,Speed,10) & Step(1,,3)",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": true,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 5,
+          "w": 9,
+          "x": 0,
+          "y": 41
+        },
+        "hiddenSeries": false,
+        "id": 43,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": false,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": true,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "rawQuery": true,
+            "refId": "C",
+            "target": "Patterns([B,4,3,2,1,2,3][A,1,2,3,2])",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Buildings",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {
+          "Series A": "light-red",
+          "Series B": "semi-dark-red",
+          "hello": "dark-red",
+          "hello1": "semi-dark-red",
+          "hello2": "light-red",
+          "hello3": "super-light-red"
+        },
+        "bars": true,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 5,
+        "gridPos": {
+          "h": 5,
+          "w": 15,
+          "x": 9,
+          "y": 41
+        },
+        "hiddenSeries": false,
+        "id": 42,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 0.5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": true,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "B",
+            "target": "Expression(hello1,multiply:0.1,sin,abs,min:0.75)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "D",
+            "target": "Expression(hello3,multiply:0.1,cos,abs,min:0.65)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "C",
+            "target": "Expression(hello2,multiply:0.1,cos,abs,max:0.75)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "Expression(hello,multiply:0.1,sin,abs,max:0.75)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Hello",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {
+          "Bar": "semi-dark-green",
+          "Bau": "dark-green",
+          "Baz": "light-green"
+        },
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 46
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": true,
+        "id": 46,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": false,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 0.5,
+        "points": true,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "Matrix(Foo,0,0,[6,7,1,2,3,4,5][1,2,0,4,5][1,2,,4,5])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "B",
+            "target": "Matrix(Bar,3,0,[1,2,3,4,5][1,2,0,4,5][1,2,6,4,5])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "C",
+            "target": "Matrix(Baz,6,0,[1,2,3,4,5][1,2,7,0,4,5][1,2,,4,5])",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "D",
+            "target": "Matrix(Bau,9,0,[1,2,3,4,5][1,2,0,4,5][1,2,,4,5])",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": "12m",
+        "timeRegions": [],
+        "title": "Matrix",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": false,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 5,
+          "w": 12,
+          "x": 4,
+          "y": 46
+        },
+        "hiddenSeries": false,
+        "id": 49,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "RandomWalk(5,Server)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Random Walk",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": false,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {
+          " ": "semi-dark-orange",
+          "A ": "light-yellow",
+          "B ": "light-yellow",
+          "C": "light-yellow",
+          "D": "light-yellow",
+          "E ": "light-yellow",
+          "F ": "light-yellow",
+          "G ": "light-yellow",
+          "H ": "light-yellow",
+          "I ": "semi-dark-orange",
+          "J": "semi-dark-orange",
+          "K ": "semi-dark-orange"
+        },
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 5,
+          "w": 8,
+          "x": 16,
+          "y": 46
+        },
+        "hiddenSeries": false,
+        "id": 39,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": false,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 0.5,
+        "points": true,
+        "renderer": "flot",
+        "seriesOverrides": [
+          {}
+        ],
+        "spaceLength": 10,
+        "stack": true,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "C",
+            "target": "Pattern(A ,0,0,0,0,0,5,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "A",
+            "target": "Pattern(B ,0,0,0,0,4,0,4,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "B",
+            "target": "Pattern(C,0,0,0,3,0,0,0,3,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "D",
+            "target": "Pattern(D,0,0,2,0,0,0,0,0,2,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "E",
+            "target": "Pattern(E ,0,0,0,0,0,1,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "F",
+            "target": "Pattern(F ,0,0,0,0,0,0.5,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "G",
+            "target": "Pattern(G ,0,0,0,0,0,0.25,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "H",
+            "target": "Pattern(H ,0,0,0,0,0,0.75,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "I",
+            "target": "Pattern(I ,0,0,0,0,0,1.25,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "J",
+            "target": "Pattern(J,0,0,0,0,0,1.5,0,0,0,0,0)",
+            "type": "timeserie"
+          },
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "hide": false,
+            "refId": "K",
+            "target": "Pattern(K ,0,0,0,0,0,1.75,0,0,0,0,0)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Tower",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": false,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          },
+          {
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 51
+        },
+        "id": 55,
+        "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Alphabets",
+        "type": "row"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 52
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": true,
+        "id": 51,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": false,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "10.1.2",
+        "pointradius": 2,
+        "points": true,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "LED(*ABCDEFGHIJKLMNOPQRSTUVWXYZ*)",
+            "type": "timeserie"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": "170m",
+        "timeRegions": [],
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": false,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:1186",
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          },
+          {
+            "$$hashKey": "object:1187",
+            "format": "short",
+            "logBase": 1,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 54
+        },
+        "id": 21,
+        "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Logo",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 50
+                },
+                {
+                  "color": "red",
+                  "value": 70
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "server1"
+              },
+              "properties": [
+                {
+                  "id": "displayName"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 9,
+          "x": 7,
+          "y": 55
+        },
+        "id": 10,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "name"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "Grafana Deno JSON Backend",
+            "type": "timeserie"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 50
+                },
+                {
+                  "color": "red",
+                  "value": 70
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "server1"
+              },
+              "properties": [
+                {
+                  "id": "displayName"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 7,
+          "y": 57
+        },
+        "id": 11,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "none"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "server1",
+            "type": "timeserie"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 9,
+          "y": 57
+        },
+        "id": 17,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "![](https://camo.githubusercontent.com/68631b19ad7605c7f5f1f161f5dcc9452cc288f9/68747470733a2f2f64656e6f6c69622e6769746875622e696f2f686967682d7265732d64656e6f2d6c6f676f2f64656e6f5f68725f636972636c652e706e67)",
+          "mode": "markdown"
+        },
+        "pluginVersion": "10.1.2",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 50
+                },
+                {
+                  "color": "red",
+                  "value": 70
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "server1"
+              },
+              "properties": [
+                {
+                  "id": "displayName"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 14,
+          "y": 57
+        },
+        "id": 13,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "none"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "server1",
+            "type": "timeserie"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 50
+                },
+                {
+                  "color": "red",
+                  "value": 70
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "server1"
+              },
+              "properties": [
+                {
+                  "id": "displayName"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 2,
+          "x": 7,
+          "y": 61
+        },
+        "id": 15,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "none"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "server1",
+            "type": "timeserie"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 50
+                },
+                {
+                  "color": "red",
+                  "value": 70
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "server1"
+              },
+              "properties": [
+                {
+                  "id": "displayName"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 2,
+          "x": 14,
+          "y": 61
+        },
+        "id": 14,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "none"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "server1",
+            "type": "timeserie"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 50
+                },
+                {
+                  "color": "red",
+                  "value": 70
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "server1"
+              },
+              "properties": [
+                {
+                  "id": "displayName"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 9,
+          "x": 7,
+          "y": 64
+        },
+        "id": 12,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "none"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-simple-json-datasource",
+              "uid": "P4B4ECDFF6FAA6F38"
+            },
+            "refId": "A",
+            "target": "server1",
+            "type": "timeserie"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 66
+        },
+        "id": 23,
+        "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "WIki",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "P4B4ECDFF6FAA6F38"
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 67
+        },
+        "id": 5,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "Running directly from url\n```\ndeno run --allow-net https://raw.githubusercontent.com/yesoreyeram/grafana-simple-deno-api-backend/master/index.ts --port 8080\n```\n\nRunning from local\n```\ngit clone https://github.com/yesoreyeram/grafana-simple-deno-api-backend.git\ncd grafana-simple-deno-api-backend\ndeno run --allow-net index.ts --port 8080\n```\n",
+          "mode": "markdown"
+        },
+        "pluginVersion": "10.1.2",
+        "title": "Help",
+        "type": "text"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": true,
+            "text": "Server 1",
+            "value": "Server 1"
+          },
+          "datasource": {
+            "type": "grafana-simple-json-datasource",
+            "uid": "P4B4ECDFF6FAA6F38"
+          },
+          "definition": "Servers()",
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "Servers",
+          "options": [],
+          "query": "Servers()",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "datasource": {
+            "uid": "SimpleJson"
+          },
+          "filters": [
+            {
+              "condition": "",
+              "key": "Servers",
+              "operator": "=",
+              "value": "Server 1"
+            }
+          ],
+          "hide": 0,
+          "label": "Adhoc Filter",
+          "name": "AdhocFilter",
+          "skipUrlSync": false,
+          "type": "adhoc"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-3h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "",
+    "title": "Monitoring Art - Grafana utils (12975)",
+    "uid": "grafana-utils",
+    "weekStart": ""
+  }
+}

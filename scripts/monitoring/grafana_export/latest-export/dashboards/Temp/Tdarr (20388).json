@@ -1,0 +1,5644 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "tdarr-20388",
+    "url": "/d/d468b00e-f30c-4d03-9229-6e44be5756941/tdarr-20388",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 33,
+    "folderUid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+    "folderTitle": "Temp",
+    "folderUrl": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/temp",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 20388,
+    "graphTooltip": 0,
+    "id": 138,
+    "links": [
+      {
+        "asDropdown": true,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [
+          "production"
+        ],
+        "targetBlank": false,
+        "title": "Switch Dashboard...",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      }
+    ],
+    "liveNow": false,
+    "panels": [
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 70,
+        "panels": [
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "purple",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 6,
+              "w": 4,
+              "x": 0,
+              "y": 1
+            },
+            "id": 60,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_transcodes_total{tdarr_instance=\"$instance\"}",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Transcodes",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 6,
+              "w": 2,
+              "x": 4,
+              "y": 1
+            },
+            "id": 27,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_library_transcodes{tdarr_instance=\"$instance\", library_id=\"all_libraries\", status=\"error\"}",
+                "instant": false,
+                "legendFormat": "{{status}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Transcode Errors (Current Value)",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "mappings": [],
+                "unit": "Transcodes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 12,
+              "w": 7,
+              "x": 6,
+              "y": 1
+            },
+            "id": 54,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "value",
+                  "percent"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "maxHeight": 600,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.2.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "sum(tdarr_library_transcodes_total{tdarr_instance=\"$instance\", library_id!=\"all_libraries\"}) by (library_name)",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Transcodes by Library",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "mappings": [],
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 12,
+              "w": 5,
+              "x": 13,
+              "y": 1
+            },
+            "id": 36,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "value"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "maxHeight": 600,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.2.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "sum(tdarr_library_transcodes{tdarr_instance=\"$instance\", library_id=\"all_libraries\"}) by (status)",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Transcodes by Status",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "mappings": [],
+                "unit": "Health Checks"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 6,
+              "x": 18,
+              "y": 1
+            },
+            "id": 57,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "value"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "maxHeight": 600,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.2.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "sum(tdarr_library_health_checks_total{tdarr_instance=\"$instance\", library_id!=\"all_libraries\"}) by (library_name)",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Health Checks by Library",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "orange",
+                      "value": null
+                    },
+                    {
+                      "color": "dark-blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "decgbytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 6,
+              "w": 6,
+              "x": 0,
+              "y": 7
+            },
+            "id": 52,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_size_diff_gb{tdarr_instance=\"$instance\"}",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "(+/-) Total Size Difference in GB by Tdarr Transcodes",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "dark-orange",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 18,
+              "y": 9
+            },
+            "id": 13,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_health_checks_total{tdarr_instance=\"$instance\"}",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Health Checks",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 21,
+              "y": 9
+            },
+            "id": 28,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_library_health_checks{tdarr_instance=\"$instance\", library_id=\"all_libraries\", status=\"error\"}",
+                "instant": false,
+                "legendFormat": "{{status}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Health Check Errors (Current Value)",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 3,
+              "w": 6,
+              "x": 0,
+              "y": 13
+            },
+            "id": 51,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "text": {},
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_files_total{tdarr_instance=\"$instance\"}",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Media Count",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "displayName": "${__field.displayName}",
+                "mappings": [],
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 14,
+              "w": 6,
+              "x": 6,
+              "y": 13
+            },
+            "id": 14,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "percent",
+                  "value"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sort_desc(sum(tdarr_library_video_codecs{tdarr_instance=\"$instance\", library_id=\"all_libraries\"}) by (codec))",
+                "instant": true,
+                "legendFormat": "{{library_name}}",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Video Codec Count by Type",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "displayName": "${__field.displayName}",
+                "mappings": [],
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 14,
+              "w": 6,
+              "x": 12,
+              "y": 13
+            },
+            "id": 26,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "percent",
+                  "value"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sort_desc(sum(tdarr_library_video_resolutions{tdarr_instance=\"$instance\", library_id=\"all_libraries\"}) by (resolution))",
+                "instant": true,
+                "legendFormat": "{{resolution}}",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Video Resolutions by Type",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "mappings": [],
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 14,
+              "w": 6,
+              "x": 18,
+              "y": 13
+            },
+            "id": 15,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "percent",
+                  "value"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sort_desc(sum(tdarr_library_video_containers{tdarr_instance=\"$instance\", library_id=\"all_libraries\"}) by (container_type))",
+                "instant": true,
+                "legendFormat": "{{library_name}}",
+                "range": false,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "B"
+              }
+            ],
+            "title": "Total Video Containers by Type",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "mappings": [],
+                "unit": "Files"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 6,
+              "x": 0,
+              "y": 16
+            },
+            "id": 53,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "value"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "maxHeight": 600,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.2.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "sum (tdarr_library_files_total{tdarr_instance=\"$instance\", library_id != \"all_libraries\"}) by (library_name)",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Media Count by Library",
+            "type": "piechart"
+          }
+        ],
+        "title": "All Time",
+        "type": "row"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 1
+        },
+        "id": 7,
+        "panels": [],
+        "title": "Overview",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "purple",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 2
+        },
+        "id": 12,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "diff"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "tdarr_transcodes_total{tdarr_instance=\"$instance\"}",
+            "instant": false,
+            "legendFormat": "{{library_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Transcodes (in period)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 2,
+          "x": 4,
+          "y": 2
+        },
+        "id": 61,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "range"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(tdarr_library_transcodes{tdarr_instance=\"$instance\", library_id!=\"all_libraries\", status=\"error\"})",
+            "instant": false,
+            "legendFormat": "{{status}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Transcode Errors (in period)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": [],
+            "unit": "Transcodes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 6,
+          "x": 6,
+          "y": 2
+        },
+        "id": 9,
+        "options": {
+          "displayLabels": [
+            "name",
+            "percent"
+          ],
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "values": [
+              "value"
+            ]
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "diff"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "maxHeight": 600,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "10.2.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(tdarr_library_transcodes_total{tdarr_instance=\"$instance\", library_id!=\"all_libraries\"}) by (library_name)",
+            "instant": false,
+            "legendFormat": "{{library_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Transcodes by Library (in period)",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": [],
+            "unit": "Health Checks"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 6,
+          "x": 12,
+          "y": 2
+        },
+        "id": 10,
+        "options": {
+          "displayLabels": [
+            "name",
+            "percent"
+          ],
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "values": [
+              "value"
+            ]
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "diff"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "maxHeight": 600,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "10.2.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(tdarr_library_health_checks_total{tdarr_instance=\"$instance\", library_id!=\"all_libraries\"}) by (library_name)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Health Checks by Library (in period)",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": [],
+            "unit": "Files"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 6,
+          "x": 18,
+          "y": 2
+        },
+        "id": 2,
+        "options": {
+          "displayLabels": [
+            "name",
+            "percent"
+          ],
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "values": [
+              "value"
+            ]
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "diff"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "maxHeight": 600,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "10.2.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum (tdarr_library_files_total{tdarr_instance=\"$instance\", library_id != \"all_libraries\"}) by (library_name)",
+            "instant": false,
+            "legendFormat": "{{library_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Media Count Changes (in period)",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "orange",
+                  "value": null
+                },
+                {
+                  "color": "dark-blue",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "decgbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 0,
+          "y": 7
+        },
+        "id": 11,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "diff"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "tdarr_size_diff_gb{tdarr_instance=\"$instance\"}",
+            "instant": false,
+            "legendFormat": "{{library_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "(+/-) Total Size Difference in GB by Tdarr Transcodes (in period)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 18,
+          "y": 11
+        },
+        "id": 3,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "diff"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum (tdarr_library_files_total{tdarr_instance=\"$instance\", library_id != \"all_libraries\"})",
+            "instant": false,
+            "legendFormat": "{{library_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Media Count Change (in period)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "description": "Score based on how many media files (compared to total media files) were successfully transcoded by Tdarr",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "orange",
+                  "value": 80
+                },
+                {
+                  "color": "yellow",
+                  "value": 90
+                },
+                {
+                  "color": "green",
+                  "value": 100
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 20,
+          "y": 11
+        },
+        "id": 58,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "tdarr_score_pct{tdarr_instance=\"$instance\"}",
+            "instant": false,
+            "legendFormat": "{{library_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Tdarr Score (at end of period)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "description": "Score based on how many media files (compared to total media files) were successfully health checked by Tdarr",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "orange",
+                  "value": 80
+                },
+                {
+                  "color": "yellow",
+                  "value": 90
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 100
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 22,
+          "y": 11
+        },
+        "id": 59,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "tdarr_health_check_score_pct{tdarr_instance=\"$instance\"}",
+            "instant": false,
+            "legendFormat": "{{library_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Health Check Score (at end of period)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "mappings": [],
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 12,
+          "w": 5,
+          "x": 0,
+          "y": 13
+        },
+        "id": 37,
+        "options": {
+          "displayLabels": [
+            "name",
+            "percent"
+          ],
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "values": [
+              "value"
+            ]
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "tooltip": {
+            "maxHeight": 600,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "10.2.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(tdarr_library_health_checks{tdarr_instance=\"$instance\", library_id=\"all_libraries\"}) by (status)",
+            "instant": false,
+            "legendFormat": "{{status}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Health Checks by Status",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 12,
+          "y": 13
+        },
+        "id": 56,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "diff"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "tdarr_health_checks_total{tdarr_instance=\"$instance\"}",
+            "instant": false,
+            "legendFormat": "{{library_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Health Checks (in period)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 14,
+          "y": 13
+        },
+        "id": 55,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "diff"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "increase(tdarr_library_health_checks{tdarr_instance=\"$instance\", library_id=\"all_libraries\", status=\"error\"})",
+            "instant": false,
+            "legendFormat": "{{status}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Health Check Errors (in period)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 4,
+          "x": 0,
+          "y": 25
+        },
+        "id": 41,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "tdarr_avg_num_streams{tdarr_instance=\"$instance\"}",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Average Num of Streams",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 4,
+          "x": 0,
+          "y": 31
+        },
+        "id": 44,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(tdarr_stream_stats_duration{tdarr_instance=\"$instance\"}) by (stat_type)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Stream Stats Duration",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "Frames"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 4,
+          "x": 0,
+          "y": 37
+        },
+        "id": 45,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(tdarr_stream_stats_num_frames{tdarr_instance=\"$instance\"}) by (stat_type)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Num of Frames",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbits"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 4,
+          "x": 0,
+          "y": 43
+        },
+        "id": 42,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(tdarr_stream_stats_bit_rate{tdarr_instance=\"$instance\"}) by (stat_type)",
+            "instant": false,
+            "legendFormat": "{{stat_type}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Bit Rates",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "displayName": "${__field.displayName}",
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "orange",
+                  "value": 50
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 49
+        },
+        "id": 66,
+        "options": {
+          "displayMode": "gradient",
+          "maxVizHeight": 300,
+          "minVizHeight": 10,
+          "minVizWidth": 0,
+          "namePlacement": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": false,
+          "sizing": "auto",
+          "text": {
+            "titleSize": 30,
+            "valueSize": 30
+          },
+          "valueMode": "text"
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sort_desc(sum(tdarr_library_audio_codecs{tdarr_instance=\"$instance\", library_id=\"all_libraries\"}) by (codec))",
+            "instant": true,
+            "legendFormat": "{{library_name}}",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Audio Codec Count by Type",
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "displayName": "${__field.displayName}",
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "orange",
+                  "value": 50
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 54
+        },
+        "id": 67,
+        "options": {
+          "displayMode": "gradient",
+          "maxVizHeight": 300,
+          "minVizHeight": 10,
+          "minVizWidth": 0,
+          "namePlacement": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": false,
+          "sizing": "auto",
+          "text": {
+            "titleSize": 30,
+            "valueSize": 30
+          },
+          "valueMode": "text"
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sort_desc(sum(tdarr_library_audio_containers{tdarr_instance=\"$instance\", library_id=\"all_libraries\"}) by (container_type))",
+            "instant": true,
+            "legendFormat": "{{library_name}}",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Audio Containers by Type",
+        "type": "bargauge"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 59
+        },
+        "id": 32,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "description": "CPU used percentage for host that Tdarr node runs on",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 2,
+                  "pointSize": 3,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 8,
+              "x": 0,
+              "y": 96
+            },
+            "id": 34,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "maxHeight": 600,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.2.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_node_host_cpu_percent{tdarr_instance=\"$instance\", node_name=\"$tdarr_node\"}",
+                "legendFormat": "{{node_name}} - host cpu percentage",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Host CPU Used %",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "description": "Memory usage for host that Tdarr node runs on",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 38,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineStyle": {
+                    "fill": "solid"
+                  },
+                  "lineWidth": 2,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "decgbytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 8,
+              "x": 8,
+              "y": 96
+            },
+            "id": 35,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "maxHeight": 600,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.2.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_node_host_mem_used_gb{tdarr_instance=\"$instance\", node_name=\"$tdarr_node\"}",
+                "legendFormat": "{{node_name}} - heap used mb",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_node_host_mem_total_gb{tdarr_instance=\"$instance\", node_name=\"$tdarr_node\"}",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{node_name }} - heap total mb",
+                "range": true,
+                "refId": "B"
+              }
+            ],
+            "title": "Host Memory (GB)",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 38,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineStyle": {
+                    "fill": "solid"
+                  },
+                  "lineWidth": 2,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "decmbytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 8,
+              "x": 16,
+              "y": 96
+            },
+            "id": 33,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "maxHeight": 600,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.2.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_node_heap_used_mb{tdarr_instance=\"$instance\", node_name=\"$tdarr_node\"}",
+                "legendFormat": "{{node_name}} - heap used mb",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_node_heap_total_mb{tdarr_instance=\"$instance\", node_name=\"$tdarr_node\"}",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{node_name }} - heap total mb",
+                "range": true,
+                "refId": "B"
+              }
+            ],
+            "title": "Tdarr Node Heap (MB)",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "description": "\"-\" gpu transcpding type = \"auto\"",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "inspect": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "PID"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 65
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Inactive"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 81
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Priority"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 65
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "GPU transcoding type"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 167
+                    },
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "CPU Health Check Workers"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 205
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "semi-dark-orange",
+                            "value": 0
+                          },
+                          {
+                            "color": "green",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "CPU Transcode Workers"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 188
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "semi-dark-orange",
+                            "value": 0
+                          },
+                          {
+                            "color": "green",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "GPU Health Check Workers"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 209
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "semi-dark-orange",
+                            "value": 0
+                          },
+                          {
+                            "color": "green",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Name"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 128
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "GPU Transcode Workers"
+                  },
+                  "properties": [
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "semi-dark-orange",
+                            "value": 0
+                          },
+                          {
+                            "color": "green",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 15,
+              "x": 0,
+              "y": 104
+            },
+            "id": 38,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "tdarr_node_info{tdarr_instance=\"$instance\", node_name=\"$tdarr_node\"}",
+                "format": "table",
+                "instant": true,
+                "legendFormat": "",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Node Info",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true,
+                    "Value": true,
+                    "__name__": true,
+                    "container": true,
+                    "endpoint": true,
+                    "instance": true,
+                    "job": true,
+                    "namespace": true,
+                    "node_cpu_health_check_limit": false,
+                    "node_cpu_transcode_limit": false,
+                    "node_gpu_health_check_limit": false,
+                    "node_gpu_transcode_limit": false,
+                    "node_health_check_cpu_queue": true,
+                    "node_health_check_gpu_queue": true,
+                    "node_id": true,
+                    "node_transcode_cpu_queue": true,
+                    "node_transcode_gpu_queue": true,
+                    "pod": true,
+                    "service": true,
+                    "tdarr_instance": true
+                  },
+                  "indexByName": {
+                    "Time": 0,
+                    "Value": 24,
+                    "__name__": 1,
+                    "container": 2,
+                    "endpoint": 3,
+                    "gpu_select": 14,
+                    "instance": 4,
+                    "job": 5,
+                    "namespace": 6,
+                    "node_cpu_health_check_limit": 15,
+                    "node_cpu_transcode_limit": 16,
+                    "node_gpu_health_check_limit": 17,
+                    "node_gpu_transcode_limit": 18,
+                    "node_health_check_cpu_queue": 7,
+                    "node_health_check_gpu_queue": 8,
+                    "node_id": 9,
+                    "node_name": 10,
+                    "node_paused": 12,
+                    "node_pid": 11,
+                    "node_priority": 13,
+                    "node_transcode_cpu_queue": 19,
+                    "node_transcode_gpu_queue": 20,
+                    "pod": 21,
+                    "service": 22,
+                    "tdarr_instance": 23
+                  },
+                  "renameByName": {
+                    "Time": "",
+                    "Value": "",
+                    "container": "",
+                    "gpu_select": "GPU transcoding type",
+                    "node_cpu_health_check_limit": "CPU Health Check Workers",
+                    "node_cpu_transcode_limit": "CPU Transcode Workers",
+                    "node_gpu_health_check_limit": "GPU Health Check Workers",
+                    "node_gpu_transcode_limit": "GPU Transcode Workers",
+                    "node_health_check_cpu_queue": "",
+                    "node_health_check_gpu_queue": "",
+                    "node_id": "",
+                    "node_name": "Name",
+                    "node_paused": "Inactive",
+                    "node_pid": "PID",
+                    "node_priority": "Priority",
+                    "node_transcode_cpu_queue": "",
+                    "node_transcode_gpu_queue": "",
+                    "pod": "",
+                    "tdarr_instance": "",
+                    "tdarr_node_info{container=\"tdarr-exporter\", endpoint=\"metrics\", gpu_select=\"-\", instance=\"10.42.5.90:9090\", job=\"tdarr-exporter\", namespace=\"local-tdarr-exporter\", node_cpu_health_check_limit=\"0\", node_cpu_transcode_limit=\"0\", node_gpu_health_check_limit=\"1\", node_gpu_transcode_limit=\"1\", node_health_check_cpu_queue=\"160\", node_health_check_gpu_queue=\"160\", node_id=\"NHgSUARFY\", node_name=\"PlexGpuNode\", node_paused=\"false\", node_pid=\"195\", node_priority=\"0\", node_transcode_cpu_queue=\"161\", node_transcode_gpu_queue=\"161\", pod=\"tdarr-exporter-bb8f8b9-whx9r\", service=\"tdarr-exporter\", tdarr_instance=\"tdarr.homeylab.org\"}": ""
+                  }
+                }
+              },
+              {
+                "id": "convertFieldType",
+                "options": {
+                  "conversions": [
+                    {
+                      "destinationType": "number",
+                      "targetField": "GPU Health Check Workers"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "CPU Transcode Workers"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "CPU Health Check Workers"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "GPU Transcode Workers"
+                    }
+                  ],
+                  "fields": {}
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "description": "If Node is GPU worker that has \"CPU Tasks\" enabled, \"CPU/GPU\" tasks will be the same",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "inspect": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Name"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 114
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "CPU Health Check"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 151
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "green",
+                            "value": 0
+                          },
+                          {
+                            "color": "semi-dark-orange",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "CPU Transcode"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 138
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "green",
+                            "value": 0
+                          },
+                          {
+                            "color": "semi-dark-orange",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "GPU Health Check"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 154
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "green",
+                            "value": 0
+                          },
+                          {
+                            "color": "semi-dark-orange",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "GPU Transcode"
+                  },
+                  "properties": [
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "green",
+                            "value": 0
+                          },
+                          {
+                            "color": "semi-dark-orange",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 9,
+              "x": 15,
+              "y": 104
+            },
+            "id": 40,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "tdarr_node_info{tdarr_instance=\"$instance\", node_name=\"$tdarr_node\"}",
+                "format": "table",
+                "instant": true,
+                "legendFormat": "__auto",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Current Node Queues",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true,
+                    "Value": true,
+                    "__name__": true,
+                    "container": true,
+                    "endpoint": true,
+                    "gpu_select": true,
+                    "instance": true,
+                    "job": true,
+                    "namespace": true,
+                    "node_cpu_health_check_limit": true,
+                    "node_cpu_transcode_limit": true,
+                    "node_gpu_health_check_limit": true,
+                    "node_gpu_transcode_limit": true,
+                    "node_id": true,
+                    "node_paused": true,
+                    "node_pid": true,
+                    "node_priority": true,
+                    "pod": true,
+                    "service": true,
+                    "tdarr_instance": true
+                  },
+                  "indexByName": {
+                    "Time": 0,
+                    "Value": 24,
+                    "__name__": 1,
+                    "container": 2,
+                    "endpoint": 3,
+                    "gpu_select": 4,
+                    "instance": 5,
+                    "job": 6,
+                    "namespace": 7,
+                    "node_cpu_health_check_limit": 8,
+                    "node_cpu_transcode_limit": 9,
+                    "node_gpu_health_check_limit": 10,
+                    "node_gpu_transcode_limit": 11,
+                    "node_health_check_cpu_queue": 14,
+                    "node_health_check_gpu_queue": 16,
+                    "node_id": 12,
+                    "node_name": 13,
+                    "node_paused": 18,
+                    "node_pid": 19,
+                    "node_priority": 20,
+                    "node_transcode_cpu_queue": 15,
+                    "node_transcode_gpu_queue": 17,
+                    "pod": 21,
+                    "service": 22,
+                    "tdarr_instance": 23
+                  },
+                  "renameByName": {
+                    "node_health_check_cpu_queue": "CPU Health Check",
+                    "node_health_check_gpu_queue": "GPU Health Check",
+                    "node_name": "Name",
+                    "node_transcode_cpu_queue": "CPU Transcode",
+                    "node_transcode_gpu_queue": "GPU Transcode"
+                  }
+                }
+              },
+              {
+                "id": "convertFieldType",
+                "options": {
+                  "conversions": [
+                    {
+                      "destinationType": "number",
+                      "targetField": "GPU Health Check"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "GPU Transcode"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "CPU Health Check"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "CPU Transcode"
+                    }
+                  ],
+                  "fields": {}
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "inspect": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Start Time"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "dateTimeAsLocal"
+                    },
+                    {
+                      "id": "custom.width",
+                      "value": 206
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "PID"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 77
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Worker Id"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 93
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Node"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 130
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "% Completed"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 115
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "light-red",
+                            "value": 0
+                          },
+                          {
+                            "color": "super-light-red",
+                            "value": 25
+                          },
+                          {
+                            "color": "orange",
+                            "value": 50
+                          },
+                          {
+                            "color": "yellow",
+                            "value": 75
+                          },
+                          {
+                            "color": "green",
+                            "value": 90
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "gradient",
+                        "type": "color-background"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "ETA"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 80
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "FPS"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 62
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": null
+                          },
+                          {
+                            "color": "orange",
+                            "value": 0
+                          },
+                          {
+                            "color": "green",
+                            "value": 200
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "gradient",
+                        "type": "color-background"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "File"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 352
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Original File Size (GB)"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 160
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    },
+                    {
+                      "id": "unit",
+                      "value": "decgbytes"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Flow Step"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 238
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Output File Size (GB)"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 164
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    },
+                    {
+                      "id": "unit",
+                      "value": "decgbytes"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Last Status Update"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "dateTimeAsLocal"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Est File Size (GB)"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    },
+                    {
+                      "id": "unit",
+                      "value": "decgbytes"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Worker Type"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 127
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 24,
+              "x": 0,
+              "y": 112
+            },
+            "id": 43,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "tdarr_node_worker_flow_info{tdarr_instance=\"$instance\", node_name=\"$tdarr_node\"}",
+                "format": "table",
+                "instant": true,
+                "legendFormat": "__auto",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Flow Workers",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true,
+                    "Value": true,
+                    "__name__": true,
+                    "container": true,
+                    "endpoint": true,
+                    "instance": true,
+                    "job": true,
+                    "namespace": true,
+                    "node_id": true,
+                    "pod": true,
+                    "service": true,
+                    "tdarr_instance": true,
+                    "worker_connected": true,
+                    "worker_idle": true,
+                    "worker_job_start_ts": true,
+                    "worker_type": false
+                  },
+                  "includeByName": {},
+                  "indexByName": {
+                    "Time": 0,
+                    "Value": 28,
+                    "__name__": 1,
+                    "container": 2,
+                    "endpoint": 3,
+                    "instance": 4,
+                    "job": 5,
+                    "namespace": 6,
+                    "node_id": 7,
+                    "node_name": 14,
+                    "pod": 8,
+                    "service": 9,
+                    "tdarr_instance": 10,
+                    "worker_connected": 11,
+                    "worker_est_size_gb": 25,
+                    "worker_eta": 21,
+                    "worker_file": 23,
+                    "worker_fps": 20,
+                    "worker_id": 16,
+                    "worker_idle": 12,
+                    "worker_job_start_ts": 13,
+                    "worker_original_file_size_gb": 24,
+                    "worker_output_size_gb": 26,
+                    "worker_percentage": 19,
+                    "worker_pid": 17,
+                    "worker_start_ts": 18,
+                    "worker_status": 22,
+                    "worker_status_ts": 27,
+                    "worker_type": 15
+                  },
+                  "renameByName": {
+                    "node_name": "Node",
+                    "worker_est_size_gb": "Est File Size (GB)",
+                    "worker_eta": "ETA",
+                    "worker_file": "File",
+                    "worker_fps": "FPS",
+                    "worker_id": "Worker Id",
+                    "worker_idle": "",
+                    "worker_job_process_start_ts": "Flow Step Start Time",
+                    "worker_job_start_ts": "Start Time",
+                    "worker_original_file_size_gb": "Original File Size (GB)",
+                    "worker_output_size_gb": "Output File Size (GB)",
+                    "worker_percentage": "% Completed",
+                    "worker_pid": "PID",
+                    "worker_start_ts": "Start Time",
+                    "worker_status": "Flow Step",
+                    "worker_status_ts": "Last Status Update",
+                    "worker_type": "Worker Type"
+                  }
+                }
+              },
+              {
+                "id": "convertFieldType",
+                "options": {
+                  "conversions": [
+                    {
+                      "destinationType": "number",
+                      "targetField": "Start Time"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "Last Status Update"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "Original File Size (GB)"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "Est File Size (GB)"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "% Completed"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "FPS"
+                    }
+                  ],
+                  "fields": {}
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "inspect": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Start Time"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "dateTimeAsLocal"
+                    },
+                    {
+                      "id": "custom.width",
+                      "value": 206
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "worker_original_file_size_gb"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 219
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "File"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 419
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Last Status Update"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "dateTimeAsLocal"
+                    },
+                    {
+                      "id": "custom.width",
+                      "value": 213
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Node"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 133
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "PID"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 78
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Status"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 107
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "% Completed"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 112
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green"
+                          },
+                          {
+                            "color": "light-red",
+                            "value": 0
+                          },
+                          {
+                            "color": "super-light-red",
+                            "value": 25
+                          },
+                          {
+                            "color": "orange",
+                            "value": 50
+                          },
+                          {
+                            "color": "yellow",
+                            "value": 75
+                          },
+                          {
+                            "color": "green",
+                            "value": 90
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "ETA"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 85
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "FPS"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 76
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green"
+                          },
+                          {
+                            "color": "orange",
+                            "value": 0
+                          },
+                          {
+                            "color": "green",
+                            "value": 200
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Worker Id"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 107
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "File Size (GB)"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 158
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    },
+                    {
+                      "id": "unit",
+                      "value": "decgbytes"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Type"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 129
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Worker Type"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 134
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 0,
+              "y": 122
+            },
+            "id": 39,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "tdarr_node_worker_info{tdarr_instance=\"$instance\", node_name=\"$tdarr_node\", worker_type=~\"healthcheck.*\"}",
+                "format": "table",
+                "instant": true,
+                "legendFormat": "__auto",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Health Check Workers",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true,
+                    "Value": true,
+                    "__name__": true,
+                    "container": true,
+                    "endpoint": true,
+                    "instance": true,
+                    "job": true,
+                    "namespace": true,
+                    "node_id": true,
+                    "pod": true,
+                    "service": true,
+                    "tdarr_instance": true,
+                    "worker_connected": true,
+                    "worker_est_size_gb": true,
+                    "worker_idle": true,
+                    "worker_job_process_start_ts": true,
+                    "worker_job_start_ts": true,
+                    "worker_output_size_gb": true,
+                    "worker_plugin_position": true,
+                    "worker_type": false
+                  },
+                  "includeByName": {},
+                  "indexByName": {
+                    "Time": 0,
+                    "Value": 29,
+                    "__name__": 1,
+                    "container": 2,
+                    "endpoint": 3,
+                    "instance": 4,
+                    "job": 5,
+                    "namespace": 6,
+                    "node_id": 7,
+                    "node_name": 16,
+                    "pod": 8,
+                    "service": 9,
+                    "tdarr_instance": 10,
+                    "worker_connected": 14,
+                    "worker_est_size_gb": 11,
+                    "worker_eta": 23,
+                    "worker_file": 25,
+                    "worker_fps": 22,
+                    "worker_id": 18,
+                    "worker_idle": 13,
+                    "worker_job_start_ts": 15,
+                    "worker_original_file_size_gb": 26,
+                    "worker_output_size_gb": 12,
+                    "worker_percentage": 21,
+                    "worker_pid": 19,
+                    "worker_plugin_position": 28,
+                    "worker_start_ts": 20,
+                    "worker_status": 24,
+                    "worker_status_ts": 27,
+                    "worker_type": 17
+                  },
+                  "renameByName": {
+                    "node_name": "Node",
+                    "worker_connected": "Connected",
+                    "worker_est_size_gb": "",
+                    "worker_eta": "ETA",
+                    "worker_file": "File",
+                    "worker_fps": "FPS",
+                    "worker_id": "Worker Id",
+                    "worker_idle": "Is Idle",
+                    "worker_job_process_start_ts": "",
+                    "worker_job_start_ts": "Start Time",
+                    "worker_original_file_size_gb": "File Size (GB)",
+                    "worker_output_size_gb": "",
+                    "worker_percentage": "% Completed",
+                    "worker_pid": "PID",
+                    "worker_start_ts": "Start Time",
+                    "worker_status": "Status",
+                    "worker_status_ts": "Last Status Update",
+                    "worker_type": "Worker Type"
+                  }
+                }
+              },
+              {
+                "id": "convertFieldType",
+                "options": {
+                  "conversions": [
+                    {
+                      "destinationType": "number",
+                      "targetField": "Start Time"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "Last Status Update"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "% Completed"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "File Size (GB)"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "FPS"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "% Completed"
+                    }
+                  ],
+                  "fields": {}
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "description": "",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "inspect": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "% Completed"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green"
+                          },
+                          {
+                            "color": "light-red",
+                            "value": 0
+                          },
+                          {
+                            "color": "super-light-red",
+                            "value": 25
+                          },
+                          {
+                            "color": "orange",
+                            "value": 50
+                          },
+                          {
+                            "color": "yellow",
+                            "value": 75
+                          },
+                          {
+                            "color": "green",
+                            "value": 90
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "custom.width",
+                      "value": 116
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Start Time"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "dateTimeAsLocal"
+                    },
+                    {
+                      "id": "custom.width",
+                      "value": 224
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "ETA"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    },
+                    {
+                      "id": "custom.width",
+                      "value": 80
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "PID"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 64
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Worker Id"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 112
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Node"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 131
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "FPS"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 77
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green"
+                          },
+                          {
+                            "color": "orange",
+                            "value": 0
+                          },
+                          {
+                            "color": "green",
+                            "value": 200
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Status"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 164
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Plugin Position"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 122
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "File"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 361
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Original Fize Size (GB)"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 164
+                    },
+                    {
+                      "id": "unit",
+                      "value": "decgbytes"
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Output Size (GB)"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 144
+                    },
+                    {
+                      "id": "unit",
+                      "value": "decgbytes"
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Est File Size (GB)"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 148
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    },
+                    {
+                      "id": "unit",
+                      "value": "decgbytes"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Last Status Update"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "dateTimeAsLocal"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Worker Type"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 133
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 12,
+              "x": 12,
+              "y": 122
+            },
+            "id": 50,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "tdarr_node_worker_info{tdarr_instance=\"$instance\", node_name=\"$tdarr_node\", worker_type!~\"healthcheck.*\"}",
+                "format": "table",
+                "instant": true,
+                "legendFormat": "__auto",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Classic Plugin Workers",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true,
+                    "Value": true,
+                    "__name__": true,
+                    "container": true,
+                    "endpoint": true,
+                    "instance": true,
+                    "job": true,
+                    "namespace": true,
+                    "node_id": true,
+                    "pod": true,
+                    "service": true,
+                    "tdarr_instance": true,
+                    "worker_connected": true,
+                    "worker_idle": true,
+                    "worker_job_start_ts": true,
+                    "worker_type": false
+                  },
+                  "includeByName": {},
+                  "indexByName": {
+                    "Time": 0,
+                    "Value": 14,
+                    "__name__": 1,
+                    "container": 2,
+                    "endpoint": 3,
+                    "instance": 4,
+                    "job": 5,
+                    "namespace": 6,
+                    "node_id": 7,
+                    "node_name": 15,
+                    "pod": 8,
+                    "service": 9,
+                    "tdarr_instance": 10,
+                    "worker_connected": 11,
+                    "worker_est_size_gb": 28,
+                    "worker_eta": 21,
+                    "worker_file": 25,
+                    "worker_fps": 22,
+                    "worker_id": 17,
+                    "worker_idle": 12,
+                    "worker_job_start_ts": 13,
+                    "worker_original_file_size_gb": 26,
+                    "worker_output_size_gb": 27,
+                    "worker_percentage": 20,
+                    "worker_pid": 18,
+                    "worker_plugin_position": 24,
+                    "worker_start_ts": 19,
+                    "worker_status": 23,
+                    "worker_status_ts": 29,
+                    "worker_type": 16
+                  },
+                  "renameByName": {
+                    "node_name": "Node",
+                    "worker_connected": "",
+                    "worker_est_size_gb": "Est File Size (GB)",
+                    "worker_eta": "ETA",
+                    "worker_file": "File",
+                    "worker_fps": "FPS",
+                    "worker_id": "Worker Id",
+                    "worker_idle": "",
+                    "worker_job_start_ts": "",
+                    "worker_original_file_size_gb": "Original Fize Size (GB)",
+                    "worker_output_size_gb": "Output Size (GB)",
+                    "worker_percentage": "% Completed",
+                    "worker_pid": "PID",
+                    "worker_plugin_position": "Plugin Position",
+                    "worker_start_ts": "Start Time",
+                    "worker_status": "Status",
+                    "worker_status_ts": "Last Status Update",
+                    "worker_type": "Worker Type"
+                  }
+                }
+              },
+              {
+                "id": "convertFieldType",
+                "options": {
+                  "conversions": [
+                    {
+                      "destinationType": "number",
+                      "targetField": "% Completed"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "FPS"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "Original Fize Size (GB)"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "Output Size (GB)"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "Est File Size (GB)"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "Start Time"
+                    },
+                    {
+                      "destinationType": "number",
+                      "targetField": "Last Status Update"
+                    }
+                  ],
+                  "fields": {}
+                }
+              }
+            ],
+            "type": "table"
+          }
+        ],
+        "title": "Nodes",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 60
+        },
+        "id": 8,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 6,
+              "w": 2,
+              "x": 0,
+              "y": 33
+            },
+            "id": 16,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_library_files_total{tdarr_instance=\"$instance\", library_name=\"$library\"}",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Media Count",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "purple",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 6,
+              "w": 2,
+              "x": 2,
+              "y": 33
+            },
+            "id": 17,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_library_transcodes_total{tdarr_instance=\"$instance\", library_name=\"$library\"}",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Transcodes",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "dark-orange",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 6,
+              "w": 2,
+              "x": 4,
+              "y": 33
+            },
+            "id": 18,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_library_health_checks_total{tdarr_instance=\"$instance\", library_name=\"$library\"}",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Health Checks",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "mappings": [],
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 5,
+              "x": 6,
+              "y": 33
+            },
+            "id": 20,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "value",
+                  "percent"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "maxHeight": 600,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.2.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "sum(tdarr_library_transcodes{tdarr_instance=\"$instance\", library_name = \"$library\"}) by (status)",
+                "instant": false,
+                "legendFormat": "{{status}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Transcodes by Status",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "displayName": "${__field.displayName}",
+                "mappings": [],
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 4,
+              "x": 11,
+              "y": 33
+            },
+            "id": 63,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "percent",
+                  "value"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sort_desc(sum(tdarr_library_video_codecs{tdarr_instance=\"$instance\",library_name=\"$library\"}) by (codec))",
+                "instant": true,
+                "legendFormat": "{{library_name}}",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Video Codec Count by Type",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "displayName": "${__field.displayName}",
+                "mappings": [],
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 5,
+              "x": 15,
+              "y": 33
+            },
+            "id": 64,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "percent",
+                  "value"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sort_desc(sum(tdarr_library_video_resolutions{tdarr_instance=\"$instance\",library_name=\"$library\"}) by (resolution))",
+                "instant": true,
+                "legendFormat": "{{resolution}}",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Video Resolutions by Type",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "mappings": [],
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 4,
+              "x": 20,
+              "y": 33
+            },
+            "id": 65,
+            "options": {
+              "displayLabels": [
+                "name",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "values": [
+                  "percent",
+                  "value"
+                ]
+              },
+              "pieType": "pie",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sort_desc(sum(tdarr_library_video_containers{tdarr_instance=\"$instance\",library_name=\"$library\"}) by (container_type))",
+                "instant": true,
+                "legendFormat": "{{library_name}}",
+                "range": false,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Video Containers by Type",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "orange",
+                      "value": null
+                    },
+                    {
+                      "color": "dark-blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "decgbytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 2,
+              "x": 0,
+              "y": 39
+            },
+            "id": 22,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_library_size_diff_gb{tdarr_instance=\"$instance\", library_name=\"$library\"}",
+                "instant": false,
+                "legendFormat": "{{library_name}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "(+/-) Total Size Difference in GB by Tdarr Transcodes",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 2,
+              "x": 2,
+              "y": 39
+            },
+            "id": 68,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_library_transcodes{tdarr_instance=\"$instance\", library_name=\"$library\", status=\"error\"}",
+                "instant": false,
+                "legendFormat": "{{status}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Transcode Errors (Current Value)",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 2,
+              "x": 4,
+              "y": 39
+            },
+            "id": 69,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "tdarr_library_health_checks{tdarr_instance=\"$instance\", library_name=\"$library\", status=\"error\"}",
+                "instant": false,
+                "legendFormat": "{{status}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Total Health Check Errors (Current Value)",
+            "type": "stat"
+          }
+        ],
+        "title": "By Library: $library",
+        "type": "row"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 39,
+    "tags": [
+      "tdarr",
+      "media"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "VictoriaMetrics",
+            "value": "P4169E866C3094E38"
+          },
+          "hide": 2,
+          "includeAll": false,
+          "multi": false,
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "/VictoriaMetrics$/",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "192.168.0.10",
+            "value": "192.168.0.10"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(tdarr_instance)",
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "instance",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(tdarr_instance)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "UFC",
+            "value": "UFC"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(tdarr_library_files_total{tdarr_instance=\"$instance\"},library_name)",
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "library",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(tdarr_library_files_total{tdarr_instance=\"$instance\"},library_name)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "allValue": "",
+          "current": {
+            "selected": false,
+            "text": "Internal",
+            "value": "Internal"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(tdarr_node_heap_used_mb,node_name)",
+          "hide": 2,
+          "includeAll": false,
+          "multi": false,
+          "name": "tdarr_node",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(tdarr_node_heap_used_mb,node_name)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Tdarr (20388)",
+    "uid": "d468b00e-f30c-4d03-9229-6e44be5756941",
+    "weekStart": ""
+  }
+}

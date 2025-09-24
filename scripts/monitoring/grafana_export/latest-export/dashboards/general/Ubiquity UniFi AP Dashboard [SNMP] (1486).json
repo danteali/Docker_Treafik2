@@ -1,0 +1,4512 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "ubiquity-unifi-ap-dashboard-snmp-1486",
+    "url": "/d/b0209f9b-6fd4-4b7b-980a-3727e57d91dd/ubiquity-unifi-ap-dashboard-snmp-1486",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Ubiquiti Networks UniFi AP Dashboard",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 1486,
+    "graphTooltip": 1,
+    "id": 88,
+    "links": [
+      {
+        "asDropdown": true,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": true,
+        "tags": [
+          "network",
+          "production"
+        ],
+        "targetBlank": false,
+        "title": "Other Networking Dashboards...",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      },
+      {
+        "asDropdown": true,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": true,
+        "tags": [
+          "production"
+        ],
+        "targetBlank": false,
+        "title": "Switch Dashboard...",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      }
+    ],
+    "liveNow": false,
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 56,
+        "panels": [],
+        "title": "Overview",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "decimals": 2,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 18,
+          "x": 0,
+          "y": 1
+        },
+        "id": 1,
+        "links": [],
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (instance,unifiApSystemModel) (snmp_unifiApSystemModel{instance=~\"$instance\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (instance,sysName) (snmp_sysName{instance=~\"$instance\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (instance,unifiApSystemVersion) (snmp_unifiApSystemVersion{instance=~\"$instance\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (instance,sysLocation) (snmp_sysLocation{instance=~\"$instance\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (instance,sysContact) (snmp_sysContact{instance=~\"$instance\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "F"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (instance,sysDescr) (snmp_sysDescr{instance=~\"$instance\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "G"
+          }
+        ],
+        "title": "AP Info",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": false,
+                "Value #B": true,
+                "Value #C": true,
+                "Value #D": true,
+                "Value #E": true,
+                "Value #F": true,
+                "Value #G": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value #B": 8,
+                "Value #C": 9,
+                "Value #D": 10,
+                "Value #E": 11,
+                "Value #F": 12,
+                "Value #G": 13,
+                "instance": 1,
+                "sysContact": 6,
+                "sysDescr": 5,
+                "sysLocation": 7,
+                "sysName": 2,
+                "unifiApSystemModel": 3,
+                "unifiApSystemVersion": 4
+              },
+              "renameByName": {
+                "instance": "AP",
+                "sysContact": "Contact",
+                "sysDescr": "Description",
+                "sysLocation": "Location",
+                "sysName": "Name",
+                "unifiApSystemModel": "Model",
+                "unifiApSystemVersion": "Version"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "description": "",
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 18,
+          "y": 1
+        },
+        "id": 55,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "* RSSI = Signal strength of connection to AP as measured by client.</br>\n* Signal Strength = Signal strength from client to AP as measured by AP.\n\n---\n\n* na = a/n/ac\n* ng = b/g/n",
+          "mode": "markdown"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Information",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "rgba(245, 54, 54, 0.9)",
+                  "value": null
+                },
+                {
+                  "color": "rgba(237, 129, 40, 0.89)",
+                  "value": 120
+                },
+                {
+                  "color": "rgba(50, 172, 45, 0.97)",
+                  "value": 300
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 0,
+          "y": 6
+        },
+        "id": 2,
+        "links": [],
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "snmp_sysUpTime{instance=~\"$instance\"}/100",
+            "hide": false,
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Uptime",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": false,
+              "inspect": false,
+              "minWidth": 30
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Time"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Time"
+                },
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "unifiVapRadio"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "Radio"
+                },
+                {
+                  "id": "unit",
+                  "value": "string"
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "na": {
+                          "index": 0,
+                          "text": "a/n/ac"
+                        },
+                        "ng": {
+                          "index": 1,
+                          "text": "b/g/n"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Tx Power"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "dBm"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "rgba(50, 172, 45, 0.97)",
+                        "value": null
+                      },
+                      {
+                        "color": "rgba(237, 129, 40, 0.89)",
+                        "value": 12
+                      },
+                      {
+                        "color": "rgba(245, 54, 54, 0.9)",
+                        "value": 18
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 10,
+          "x": 4,
+          "y": 6
+        },
+        "id": 52,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg by (instance,unifiVapRadio,unifiVapExtChannel) (snmp_unifiVapExtChannel) ",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg by (instance,unifiVapRadio,unifiVapChannel) (snmp_unifiVapChannel)",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg by (instance,unifiVapRadio,unifiVapTxPower) (snmp_unifiVapTxPower)",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (instance,unifiVapRadio) (snmp_unifiVapRadio) ",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "D"
+          }
+        ],
+        "title": "Radios",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value #A": true,
+                "Value #D": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value #A": 5,
+                "Value #B": 3,
+                "Value #C": 4,
+                "Value #D": 6,
+                "instance": 1,
+                "unifiVapRadio": 2
+              },
+              "renameByName": {
+                "Value #A": "ExtChannel",
+                "Value #B": "Channel",
+                "Value #C": "Tx Power",
+                "Value #D": ""
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "orange",
+                  "value": 60
+                },
+                {
+                  "color": "red",
+                  "value": 75
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 10,
+          "x": 14,
+          "y": 6
+        },
+        "id": 11,
+        "links": [],
+        "options": {
+          "displayMode": "gradient",
+          "minVizHeight": 10,
+          "minVizWidth": 0,
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true,
+          "valueMode": "color"
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "(snmp_unifiRadioCuTotal{instance=~\"$instance\",unifiRadioRadio=~\"$radio\"})",
+            "hide": false,
+            "legendFormat": "{{instance}}: {{unifiRadioRadio}} ({{unifiRadioName}})",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "RF Channel Utilization",
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 0,
+          "y": 10
+        },
+        "id": 3,
+        "links": [],
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max",
+              "min",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.4.4",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "snmp_laLoadInt{instance=~\"$instance\"}/100",
+            "hide": false,
+            "legendFormat": "{{instance}}: {{laNames}}",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "CPU Load Average",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 12,
+          "y": 10
+        },
+        "id": 49,
+        "links": [],
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max",
+              "min",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.4.4",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "snmp_hrProcessorLoad{instance=~\"$instance\"}",
+            "hide": false,
+            "legendFormat": "{{instance}}: {{hrDeviceIndex}}",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Processor Load (1 Minute Average)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": 600000,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "deckbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 0,
+          "y": 17
+        },
+        "id": 68,
+        "interval": "1m",
+        "links": [],
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "snmp_memBuffer{instance=~\"$instance\"}",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "{{instance}}: Buffer",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "snmp_memCached{instance=~\"$instance\"}",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "{{instance}}: Cache",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "snmp_memShared{instance=~\"$instance\"}",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "{{instance}}: Shared",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "snmp_memTotalFree{instance=~\"$instance\"}",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "{{instance}}: Free",
+            "range": true,
+            "refId": "D"
+          }
+        ],
+        "title": "Memory Distribution",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "line+area"
+              }
+            },
+            "decimals": 3,
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "transparent",
+                  "value": null
+                },
+                {
+                  "color": "orange",
+                  "value": 0.9
+                },
+                {
+                  "color": "red",
+                  "value": 0.95
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 12,
+          "y": 17
+        },
+        "id": 47,
+        "links": [],
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max",
+              "min",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.4.4",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "(avg by (instance) (snmp_memTotalReal) - avg by (instance) (snmp_memAvailReal) ) / avg by (instance) (snmp_memTotalReal) !=0",
+            "hide": false,
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "D"
+          }
+        ],
+        "title": "Memory Utilization",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "stepAfter",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 16,
+          "x": 0,
+          "y": 24
+        },
+        "id": 19,
+        "links": [],
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max",
+              "min",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.4.4",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "snmp_unifiVapNumStations{instance=~\"$instance\",unifiVapRadio=~\"$radio\",unifiVapName=~\"$vap\",unifiVapEssId=~\"$ssid\"}",
+            "hide": false,
+            "legendFormat": "{{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Stations",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "stepAfter",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 24
+        },
+        "id": 23,
+        "links": [],
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max",
+              "min",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.4.4",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "snmp_unifiRadioOtherBss{instance=~\"$instance\",unifiRadioRadio=~\"$radio\"} !=0",
+            "hide": false,
+            "legendFormat": "{{instance}}: {{unifiRadioRadio}} ({{unifiRadioName}})",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Other BSS",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 31
+        },
+        "id": 59,
+        "panels": [
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 34
+            },
+            "id": 57,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_laLoadInt{instance=~\"$instance\"} / 100",
+                "hide": false,
+                "legendFormat": "{{instance}}: {{laNames}}",
+                "range": true,
+                "refId": "B"
+              }
+            ],
+            "title": "CPU Load ",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 24,
+              "x": 0,
+              "y": 41
+            },
+            "id": 58,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_hrProcessorLoad{instance=~\"$instance\"}",
+                "hide": false,
+                "legendFormat": "{{instance}}: {{hrDeviceIndex}}",
+                "range": true,
+                "refId": "B"
+              }
+            ],
+            "title": "CPU Load (1 Minute Average)",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": 600000,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "normal"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "deckbytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 49
+            },
+            "id": 69,
+            "interval": "1m",
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.2.3",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_memBuffer{instance=~\"$instance\"}",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{instance}}: Buffer",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_memCached{instance=~\"$instance\"}",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{instance}}: Cache",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_memShared{instance=~\"$instance\"}",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{instance}}: Shared",
+                "range": true,
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_memTotalFree{instance=~\"$instance\"}",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{instance}}: Free",
+                "range": true,
+                "refId": "D"
+              }
+            ],
+            "title": "Memory Distribution",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "line+area"
+                  }
+                },
+                "decimals": 3,
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "transparent",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 0.9
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.95
+                    }
+                  ]
+                },
+                "unit": "percentunit"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 24,
+              "x": 0,
+              "y": 56
+            },
+            "id": 70,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "(avg by (instance) (snmp_memTotalReal) - avg by (instance) (snmp_memAvailReal) ) / avg by (instance) (snmp_memTotalReal) !=0",
+                "hide": false,
+                "legendFormat": "{{instance}}",
+                "range": true,
+                "refId": "D"
+              }
+            ],
+            "title": "Memory Utilization",
+            "type": "timeseries"
+          }
+        ],
+        "title": "CPU & Memory",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 32
+        },
+        "id": 62,
+        "panels": [
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 33
+            },
+            "id": 8,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_unifiRadioCuSelfRx{instance=~\"$instance\",unifiRadioRadio=~\"$radio\"}",
+                "hide": false,
+                "legendFormat": "In - {{instance}}: {{unifiRadioRadio}} ({{unifiRadioName}})",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_unifiRadioCuSelfTx{instance=~\"$instance\",unifiRadioRadio=~\"$radio\"}",
+                "hide": false,
+                "legendFormat": "Out - {{instance}}: {{unifiRadioRadio}} ({{unifiRadioName}})",
+                "range": true,
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_unifiRadioCuTotal{instance=~\"$instance\",unifiRadioRadio=~\"$radio\"}",
+                "hide": false,
+                "legendFormat": "Busy - {{instance}}: {{unifiRadioRadio}} ({{unifiRadioName}})",
+                "range": true,
+                "refId": "D"
+              }
+            ],
+            "title": "WiFi (802.11) Channel Utilization",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "bps"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/: *Out$/"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.transform",
+                      "value": "negative-Y"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 40
+            },
+            "id": 20,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapRxBytes{instance=~\"$instance\", unifiVapRadio=~\"$radio\", unifiVapEssId=~\"$ssid\"}[$__rate_interval]) * 8",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "In - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "B",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapTxBytes{instance=~\"$instance\",unifiVapRadio=~\"$radio\",unifiVapEssId=~\"$ssid\"}[$__rate_interval]) * -8",
+                "hide": false,
+                "legendFormat": "Out - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "C"
+              }
+            ],
+            "title": "WiFi (802.11) Traffic",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "description": "",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "pps"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/: *Out$/"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.transform",
+                      "value": "negative-Y"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 47
+            },
+            "id": 22,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapRxPackets{instance=~\"$instance\", unifiVapRadio=~\"$radio\", unifiVapEssId=~\"$ssid\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "In - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "B",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapTxPackets{instance=~\"$instance\", unifiVapRadio=~\"$radio\", unifiVapEssId=~\"$ssid\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Out - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "C",
+                "useBackend": false
+              }
+            ],
+            "title": "WiFi (802.11) Traffic Distribution",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "pps"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 54
+            },
+            "id": 21,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapRxDropped{instance=~\"$instance\", unifiVapRadio=~\"$radio\", unifiVapEssId=~\"$ssid\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Dropped - In - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "B",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapTxDropped{instance=~\"$instance\", unifiVapRadio=~\"$radio\", unifiVapEssId=~\"$ssid\"}[$__rate_interval]) *-1",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Dropped - Out - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "C",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapRxErrors{instance=~\"$instance\", unifiVapRadio=~\"$radio\", unifiVapEssId=~\"$ssid\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Errors - In - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "D",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapTxErrors{instance=~\"$instance\", unifiVapRadio=~\"$radio\", unifiVapEssId=~\"$ssid\"}[$__rate_interval]) *-1",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Errors - Out - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "E",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapRxCrypts{instance=~\"$instance\", unifiVapRadio=~\"$radio\", unifiVapEssId=~\"$ssid\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Bad Crypts - In - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "F",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapRxFrags{instance=~\"$instance\", unifiVapRadio=~\"$radio\", unifiVapEssId=~\"$ssid\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Bad Frags - In - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "G",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiVapTxRetries{instance=~\"$instance\", unifiVapRadio=~\"$radio\", unifiVapEssId=~\"$ssid\"}[$__rate_interval]) *-1",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Retries - Out - {{instance}}: {{unifiVapEssId}} ({{unifiVapRadio}}) ({{unifiVapName}})",
+                "range": true,
+                "refId": "H",
+                "useBackend": false
+              }
+            ],
+            "title": "WiFi (802.11) Drops/Errors",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Wifi",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 33
+        },
+        "id": 63,
+        "panels": [
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "bps"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/: *Out$/"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.transform",
+                      "value": "negative-Y"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 32
+            },
+            "id": 5,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiIfRxBytes{instance=~\"$instance\",unifiIfName=~\"$inft\"}[$__rate_interval]) *8",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "In - {{instance}}: {{unifiIfName}}",
+                "range": true,
+                "refId": "B",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiIfTxBytes{instance=~\"$instance\",unifiIfName=~\"$inft\"}[$__rate_interval]) *-8",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Out - {{instance}}: {{unifiIfName}}",
+                "range": true,
+                "refId": "C",
+                "useBackend": false
+              }
+            ],
+            "title": "Ethernet (802.3) Traffic",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "pps"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 39
+            },
+            "id": 24,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiIfRxPackets{instance=~\"$instance\",unifiIfName=~\"$inft\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "In - {{instance}}: {{unifiIfName}}",
+                "range": true,
+                "refId": "B",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiIfRxPackets{instance=~\"$instance\",unifiIfName=~\"$inft\"}[$__rate_interval]) * -1",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Out - {{instance}}: {{unifiIfName}}",
+                "range": true,
+                "refId": "C",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiIfRxMulticast{instance=~\"$instance\",unifiIfName=~\"$inft\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Multicast In - {{instance}}: {{unifiIfName}}",
+                "range": true,
+                "refId": "D",
+                "useBackend": false
+              }
+            ],
+            "title": "Ethernet (802.3) Traffic Distribution",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "pps"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 46
+            },
+            "id": 6,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiIfRxDropped{instance=~\"$instance\", unifiIfName=~\"$inft\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Drop - In - {{instance}}: {{unifiIfName}}",
+                "range": true,
+                "refId": "B",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiIfTxDropped{instance=~\"$instance\", unifiIfName=~\"$inft\"}[$__rate_interval]) * -1",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Drop - Out - {{instance}}: {{unifiIfName}}",
+                "range": true,
+                "refId": "C",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiIfRxError{instance=~\"$instance\", unifiIfName=~\"$inft\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Error - In - {{instance}}: {{unifiIfName}}",
+                "range": true,
+                "refId": "D",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "irate(snmp_unifiIfTxError{instance=~\"$instance\", unifiIfName=~\"$inft\"}[$__rate_interval])",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Error - Out - {{instance}}: {{unifiIfName}}",
+                "range": true,
+                "refId": "E",
+                "useBackend": false
+              }
+            ],
+            "title": "Ethernet (802.3) Drops/Errors",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "pps"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/: *Out$/"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.transform",
+                      "value": "negative-Y"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 53
+            },
+            "id": 4,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "max",
+                  "min",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_ifInDiscards{instance=~\"$instance\"} != 0",
+                "hide": false,
+                "legendFormat": "Drop - In - {{instance}}: {{ifDescr}}",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "(snmp_ifOutDiscards{instance=~\"$instance\"} != 0)* -1",
+                "hide": false,
+                "legendFormat": "Drop - Out - {{instance}}: {{ifDescr}}",
+                "range": true,
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_ifInErrors{instance=~\"$instance\"} !=0",
+                "hide": false,
+                "legendFormat": "Errors - In - {{instance}}: {{ifDescr}}",
+                "range": true,
+                "refId": "D"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "(snmp_ifOutErrors{instance=~\"$instance\"} !=0)* -1",
+                "hide": false,
+                "legendFormat": "Errors - Out - {{instance}}: {{ifDescr}}",
+                "range": true,
+                "refId": "E"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "snmp_ifInUnknownProtos{instance=~\"$instance\"} !=0",
+                "hide": false,
+                "legendFormat": "Unknown - In - {{instance}}: {{ifDescr}}",
+                "range": true,
+                "refId": "F"
+              }
+            ],
+            "title": "All Interface Drops/Errors",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Ethernet",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 34
+        },
+        "id": 71,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "pps"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 33
+            },
+            "id": 72,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.2.3",
+            "targets": [
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpStatsInMsgs{instance=~\"$instance\",icmpStatsIPVersion=\"1\"}[$__interval])",
+                "legendFormat": "{{instance}} - IPv4:Msg:In",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpStatsOutMsgs{instance=~\"$instance\",icmpStatsIPVersion=\"1\"}[$__interval])*-1",
+                "hide": false,
+                "legendFormat": "{{instance}} - IPv4:Msg:Out",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpStatsInErrors{instance=~\"$instance\",icmpStatsIPVersion=\"1\"}[$__interval])",
+                "hide": false,
+                "legendFormat": "{{instance}} - IPv4:Error:In",
+                "range": true,
+                "refId": "C"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpStatsOutErrors{instance=~\"$instance\",icmpStatsIPVersion=\"1\"}[$__interval]) *-1",
+                "hide": false,
+                "legendFormat": "{{instance}} - IPv4:Error:Out",
+                "range": true,
+                "refId": "D"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpStatsInMsgs{instance=~\"$instance\",icmpStatsIPVersion=\"2\"}[$__interval])",
+                "hide": false,
+                "legendFormat": "{{instance}} - IPv6:Msg:In",
+                "range": true,
+                "refId": "E"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpStatsOutMsgs{instance=~\"$instance\",icmpStatsIPVersion=\"2\"}[$__interval])*-1",
+                "hide": false,
+                "legendFormat": "{{instance}} - IPv6:Msg:Out",
+                "range": true,
+                "refId": "F"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpStatsInErrors{instance=~\"$instance\",icmpStatsIPVersion=\"2\"}[$__interval])",
+                "hide": false,
+                "legendFormat": "{{instance}} - IPv6:Error:In",
+                "range": true,
+                "refId": "G"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpStatsOutErrors{instance=~\"$instance\",icmpStatsIPVersion=\"2\"}[$__interval]) *-1",
+                "hide": false,
+                "legendFormat": "{{instance}} - IPv6:Error:Out",
+                "range": true,
+                "refId": "H"
+              }
+            ],
+            "title": "ICMP Summary",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "pps"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 40
+            },
+            "id": 73,
+            "links": [
+              {
+                "targetBlank": true,
+                "title": "ICMP Codes",
+                "url": "https://www.wikiwand.com/en/Internet_Control_Message_Protocol#Control_messages"
+              }
+            ],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.2.3",
+            "targets": [
+              {
+                "alias": "$tag_index:$col",
+                "datasource": {
+                  "type": "influxdb",
+                  "uid": "kUqSv6vnk"
+                },
+                "disableTextWrap": false,
+                "dsType": "influxdb",
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpMsgStatsInPkts{instance=~\"$instance\",icmpMsgStatsIPVersion=\"1\"}[$__interval])",
+                "fullMetaSearch": false,
+                "groupBy": [
+                  {
+                    "params": [
+                      "$interval"
+                    ],
+                    "type": "time"
+                  },
+                  {
+                    "params": [
+                      "index"
+                    ],
+                    "type": "tag"
+                  },
+                  {
+                    "params": [
+                      "null"
+                    ],
+                    "type": "fill"
+                  }
+                ],
+                "includeNullMetadata": true,
+                "legendFormat": "{{instance}} - IPv4:{{icmpMsgStatsType}}:In",
+                "measurement": "icmpMsgStatsTable",
+                "orderByTime": "ASC",
+                "policy": "default",
+                "range": true,
+                "refId": "A",
+                "resultFormat": "time_series",
+                "select": [
+                  [
+                    {
+                      "params": [
+                        "icmpMsgStatsInPkts"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "last"
+                    },
+                    {
+                      "params": [
+                        "1s"
+                      ],
+                      "type": "non_negative_derivative"
+                    },
+                    {
+                      "params": [
+                        "In"
+                      ],
+                      "type": "alias"
+                    }
+                  ],
+                  [
+                    {
+                      "params": [
+                        "icmpMsgStatsOutPkts"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "last"
+                    },
+                    {
+                      "params": [
+                        "1s"
+                      ],
+                      "type": "non_negative_derivative"
+                    },
+                    {
+                      "params": [
+                        " *-1"
+                      ],
+                      "type": "math"
+                    },
+                    {
+                      "params": [
+                        "Out"
+                      ],
+                      "type": "alias"
+                    }
+                  ]
+                ],
+                "tags": [
+                  {
+                    "key": "agent_host",
+                    "operator": "=~",
+                    "value": "/^$host$/"
+                  }
+                ],
+                "useBackend": false
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpMsgStatsOutPkts{instance=~\"$instance\",icmpMsgStatsIPVersion=\"1\"}[$__interval])*-1",
+                "hide": false,
+                "legendFormat": "{{instance}} - IPv4:{{icmpMsgStatsType}}:Out",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpMsgStatsInPkts{instance=~\"$instance\",icmpMsgStatsIPVersion=\"2\"}[$__interval])",
+                "hide": false,
+                "legendFormat": "{{instance}} - IPv6:{{icmpMsgStatsType}}:In",
+                "range": true,
+                "refId": "C"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_icmpMsgStatsOutPkts{instance=~\"$instance\",icmpMsgStatsIPVersion=\"2\"}[$__interval])*-1",
+                "hide": false,
+                "legendFormat": "{{instance}} - IPv6:{{icmpMsgStatsType}}:Out",
+                "range": true,
+                "refId": "D"
+              }
+            ],
+            "title": "ICMP Message Type",
+            "type": "timeseries"
+          }
+        ],
+        "title": "ICMP",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 35
+        },
+        "id": 64,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 14,
+              "x": 0,
+              "y": 34
+            },
+            "id": 74,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.2.3",
+            "targets": [
+              {
+                "alias": "$col",
+                "datasource": {
+                  "type": "influxdb",
+                  "uid": "kUqSv6vnk"
+                },
+                "disableTextWrap": false,
+                "dsType": "influxdb",
+                "editorMode": "code",
+                "expr": "irate(snmp_snmpInPkts{instance=~\"$instance\"}[1m])",
+                "fullMetaSearch": false,
+                "groupBy": [
+                  {
+                    "params": [
+                      "$interval"
+                    ],
+                    "type": "time"
+                  },
+                  {
+                    "params": [
+                      "null"
+                    ],
+                    "type": "fill"
+                  }
+                ],
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "{{instance}} - Msgs:In",
+                "measurement": "snmp",
+                "orderByTime": "ASC",
+                "policy": "default",
+                "range": true,
+                "refId": "A",
+                "resultFormat": "time_series",
+                "select": [
+                  [
+                    {
+                      "params": [
+                        "snmpInPkts"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "mean"
+                    },
+                    {
+                      "params": [
+                        "1m"
+                      ],
+                      "type": "non_negative_derivative"
+                    },
+                    {
+                      "params": [
+                        "Msgs:In"
+                      ],
+                      "type": "alias"
+                    }
+                  ],
+                  [
+                    {
+                      "params": [
+                        "snmpOutPkts"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "mean"
+                    },
+                    {
+                      "params": [
+                        "1m"
+                      ],
+                      "type": "non_negative_derivative"
+                    },
+                    {
+                      "params": [
+                        " *-1"
+                      ],
+                      "type": "math"
+                    },
+                    {
+                      "params": [
+                        "Msgs:Out"
+                      ],
+                      "type": "alias"
+                    }
+                  ],
+                  [
+                    {
+                      "params": [
+                        "snmpInGetResponses"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "mean"
+                    },
+                    {
+                      "params": [
+                        "1m"
+                      ],
+                      "type": "non_negative_derivative"
+                    },
+                    {
+                      "params": [
+                        "GetResp:In"
+                      ],
+                      "type": "alias"
+                    }
+                  ],
+                  [
+                    {
+                      "params": [
+                        "snmpOutGetResponses"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "mean"
+                    },
+                    {
+                      "params": [
+                        "1m"
+                      ],
+                      "type": "non_negative_derivative"
+                    },
+                    {
+                      "params": [
+                        " *-1"
+                      ],
+                      "type": "math"
+                    },
+                    {
+                      "params": [
+                        "GetResp:Out"
+                      ],
+                      "type": "alias"
+                    }
+                  ]
+                ],
+                "tags": [
+                  {
+                    "key": "agent_host",
+                    "operator": "=~",
+                    "value": "/^$host$/"
+                  }
+                ],
+                "useBackend": false
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_snmpOutPkts{instance=~\"$instance\"}[1m]) *-1",
+                "hide": false,
+                "legendFormat": "{{instance}} - Msgs:Out",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_snmpInGetResponses{instance=~\"$instance\"}[1m])",
+                "hide": false,
+                "legendFormat": "{{instance}} - GetResp:In",
+                "range": true,
+                "refId": "C"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_snmpOutGetResponses{instance=~\"$instance\"}[1m]) * -1",
+                "hide": false,
+                "legendFormat": "{{instance}} - GetResp:Out",
+                "range": true,
+                "refId": "D"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "irate(snmpInGetRequests{instance=~\"$instance\"}[1m])",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{instance}} - GetReq:In",
+                "range": true,
+                "refId": "E"
+              },
+              {
+                "editorMode": "code",
+                "expr": "irate(snmpOutGetRequests{instance=~\"$instance\"}[1m]) *-1",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{instance}} - GetReq:Out",
+                "range": true,
+                "refId": "F"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "irate(snmpInGetNexts{instance=~\"$instance\"}[1m])",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{instance}} - GetNext:In",
+                "range": true,
+                "refId": "G"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "irate(snmpOutGetNexts{instance=~\"$instance\"}[1m])",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{instance}} - GetNext:Out",
+                "range": true,
+                "refId": "H"
+              }
+            ],
+            "title": "SNMP Messages (/min)",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 10,
+              "x": 14,
+              "y": 34
+            },
+            "id": 75,
+            "links": [],
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "8.2.3",
+            "targets": [
+              {
+                "editorMode": "code",
+                "expr": "irate(snmp_snmpInTotalReqVars{instance=~\"$instance\"}[1m])",
+                "legendFormat": "{{instance}} - Objects",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "SNMP Objects Retrieved (/min)",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "description": "Sum of scrape durations for a specific instance.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 41
+            },
+            "id": 65,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "lastNotNull",
+                  "max",
+                  "min"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "sum by (instance) (snmp_snmp_scrape_duration_seconds{instance=~\"$instance\"})",
+                "interval": "",
+                "legendFormat": "{{ instance }}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "SNMP Exporter - Scrape Duration by Instance",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 41
+            },
+            "id": 66,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "lastNotNull",
+                  "max",
+                  "min"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "desc"
+              }
+            },
+            "pluginVersion": "10.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "avg(snmp_snmp_scrape_walk_duration_seconds{instance=~\"$instance\"}) by (instance)",
+                "interval": "",
+                "legendFormat": "{{ instance }}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "SNMP Exporter - Walk Duration",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "links": [],
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 49
+            },
+            "id": 67,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "lastNotNull",
+                  "max",
+                  "min"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "desc"
+              }
+            },
+            "pluginVersion": "10.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "avg(snmp_snmp_scrape_pdus_returned{instance=~\"$instance\"}) by (instance)",
+                "interval": "",
+                "legendFormat": "{{instance}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "SNMP Exporter - PDUs returned",
+            "type": "timeseries"
+          }
+        ],
+        "title": "SNMP",
+        "type": "row"
+      }
+    ],
+    "refresh": "1m",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [
+      "ubiquity",
+      "unifi",
+      "snmp",
+      "prometheus",
+      "network",
+      "production"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P28FE84CA23A93199"
+          },
+          "definition": "",
+          "hide": 2,
+          "includeAll": false,
+          "label": "UniFi AP:",
+          "multi": false,
+          "name": "host_old",
+          "options": [],
+          "query": "SHOW TAG VALUES FROM \"snmp.UAP\" WITH KEY = \"agent_host\"",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "current": {},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P28FE84CA23A93199"
+          },
+          "definition": "",
+          "hide": 2,
+          "includeAll": true,
+          "label": "Radio",
+          "multi": false,
+          "name": "radio_old",
+          "options": [],
+          "query": "SHOW TAG VALUES FROM \"unifiVapTable\" WITH KEY = \"unifiVapRadio\" WHERE \"agent_host\" =~ /^$host$/",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "current": {},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P28FE84CA23A93199"
+          },
+          "definition": "",
+          "hide": 2,
+          "includeAll": true,
+          "label": "vAP:",
+          "multi": true,
+          "name": "vap_old",
+          "options": [],
+          "query": "SHOW TAG VALUES FROM \"unifiVapTable\" WITH KEY = \"unifiVapName\" WHERE \"agent_host\" =~ /^$host$/",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "current": {},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P28FE84CA23A93199"
+          },
+          "definition": "",
+          "hide": 2,
+          "includeAll": true,
+          "label": "Interface:",
+          "multi": true,
+          "name": "intf_old",
+          "options": [],
+          "query": "SHOW TAG VALUES FROM \"unifiIfTable\" WITH KEY = \"unifiIfName\" WHERE \"agent_host\" =~ /^$host$/",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": [
+              "192.168.0.3",
+              "192.168.0.2"
+            ],
+            "value": [
+              "192.168.0.3",
+              "192.168.0.2"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(snmp_sysUpTime{module=\"unifi\"},instance)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "AP",
+          "multi": true,
+          "name": "instance",
+          "options": [],
+          "query": {
+            "query": "label_values(snmp_sysUpTime{module=\"unifi\"},instance)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": [
+              "eth0"
+            ],
+            "value": [
+              "eth0"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(snmp_unifiIfName{module=\"unifi\", instance=~\"$instance\"},unifiIfName)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Interface",
+          "multi": true,
+          "name": "inft",
+          "options": [],
+          "query": {
+            "query": "label_values(snmp_unifiIfName{module=\"unifi\", instance=~\"$instance\"},unifiIfName)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": [
+              "ng",
+              "na"
+            ],
+            "value": [
+              "ng",
+              "na"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(snmp_unifiVapRadio{module=\"unifi\", instance=~\"$instance\"},unifiVapRadio)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Radio",
+          "multi": true,
+          "name": "radio",
+          "options": [],
+          "query": {
+            "query": "label_values(snmp_unifiVapRadio{module=\"unifi\", instance=~\"$instance\"},unifiVapRadio)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(snmp_unifiVapName{module=\"unifi\", instance=~\"$instance\"},unifiVapName)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "VAP",
+          "multi": true,
+          "name": "vap",
+          "options": [],
+          "query": {
+            "query": "label_values(snmp_unifiVapName{module=\"unifi\", instance=~\"$instance\"},unifiVapName)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": [
+              "PrettyFlyForAWifi"
+            ],
+            "value": [
+              "PrettyFlyForAWifi"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(snmp_unifiVapEssId{module=\"unifi\", instance=~\"$instance\"},unifiVapEssId)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "SSID",
+          "multi": true,
+          "name": "ssid",
+          "options": [],
+          "query": {
+            "query": "label_values(snmp_unifiVapEssId{module=\"unifi\", instance=~\"$instance\"},unifiVapEssId)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ]
+    },
+    "timezone": "browser",
+    "title": "Ubiquity UniFi AP Dashboard [SNMP] (1486)",
+    "uid": "b0209f9b-6fd4-4b7b-980a-3727e57d91dd",
+    "weekStart": ""
+  }
+}

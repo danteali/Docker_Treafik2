@@ -1,0 +1,882 @@
+version: "3.8"
+
+# Only main world and 'router' are in this file.
+# Other worlds in minecraft_extra.yml
+
+########################### NETWORKS
+networks:
+  t2_proxy:
+    name: t2_proxy
+    external: true  # Will not try to re-create and will look for existing network
+    #driver: bridge
+    #ipam:
+    #  config:
+    #    - subnet: $TRAEFIK_NET
+    #      gateway: $TRAEFIK_GATEWAY
+  # Docker will use the same default network for all compose files in
+  # the same directory. It will use the settings of the first network
+  # created even of othere compose files try to set the default to a
+  # different subnet.
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $DEFAULT_COMPOSE_NET
+          gateway: $DEFAULT_COMPOSE_GATEWAY
+
+########################### COMMON SETTINGS ('EXTENDS')
+
+#x-logging: 
+#      &default-logging
+#      options:
+#        # For default json-file driver
+#        #max-size: "50m"
+#        #max-file: "1"
+#        # For local driver when journald enabled
+#        # Now defined globally in /etc/docker/daemon.json
+#        cache-max-size: "50m"
+#        cache-max-file: "1"
+
+########################### SERVICES
+
+services:
+# All services / apps go below this line
+
+
+# AUTO-PAUSE
+# Enabling auto-pause is done with: -e ENABLE_AUTOPAUSE=TRUE
+# Remember to set server.properties option Max Tick Time to '-1' to disable
+# See notes here: https://github.com/itzg/docker-minecraft-server/blob/master/README.md#autopause
+# Env var defined below which will auto set this in server.properties on first run but env var
+# son't change anything in subsequent runs.
+# Auto-pause slows down the server and makes a tick last for the duration of suspension. So if
+# max tick time set then server might think it's broken and shut itself down.
+
+# JAVA
+#
+# Extra java flags come from: https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/
+# However all can now be auto used by simply adding: -e USE_AIKAR_FLAGS=TRUE \
+# And extra java options for memory garbage collection which we use in client. Not sure if useful in server?
+# -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode
+# 
+# Previous manual definition:
+#-e JVM_DD_OPTS=using.aikars.flags:mcflags.emc.gs
+#-e JVM_XX_OPTS="-XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=35 -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+UseLargePagesInMetaspace"
+#
+# JAVA VERSIONS
+# https://github.com/itzg/docker-minecraft-server#running-minecraft-server-on-different-java-version
+# Untagged or 'latest' image should be using a suitable java version bu specific versions can be specified. 
+# Generally best practice to use named tags instead of 'latest' so for now trying named tag without specific
+# java version specified.
+#
+# TRAEFIK PROXY FOR INDIVIDUAL MINECRAFT INSTANCES
+# Instead of using mc-router to proxy minecraft servers via Traefik, we can instead use Traefik directly
+# on any of the servers to make their multiplayer (or other) services available at a specific FQDN.
+# This is done in the same way as any other Traefik proxy conifg. e.g. for Epicland we previously used the
+# below config to route FQDNs to the multiplayer port and to Bluemap. 
+# Note that mc-router ONLY proxies multiplayer ports so would still need Traefik config section if we want
+# to access any addition services using a FQDN but note the mc-router host rule which catches all FQDNs
+# starting 'mc-' so can't use that string at the start of the FQDN.
+#   #----------- TRAEFIK LABELS -----------#
+#   - "traefik.enable=true"
+#   # ---------- GAME ----------- #
+#   ### HTTP Routers
+#   - "traefik.http.routers.mc_itzg_fabric_117_Epicland-rtr.entrypoints=https"
+#   - "traefik.http.routers.mc_itzg_fabric_117_Epicland-rtr.rule=Host(`mc-epicland.$DOMAINNAME0`)"
+#   - "traefik.http.routers.mc_itzg_fabric_117_Epicland-rtr.tls=true"
+#   ### Middlewares (prob not needed since not using authelia for MC services)
+#   #- "traefik.http.routers.mc_itzg_fabric_117_Epicland-rtr.middlewares=chain-no-auth@file"
+#   ### HTTP Services
+#   - "traefik.http.routers.mc_itzg_fabric_117_Epicland-rtr.service=mc_itzg_fabric_117_Epicland-svc"
+#   - "traefik.http.services.mc_itzg_fabric_117_Epicland-svc.loadbalancer.server.port=25565"
+#   # ---------- MAP ----------- #
+#   ## HTTP Routers
+#   - "traefik.http.routers.mc_itzg_fabric_117_Epicland-map-rtr.entrypoints=https"
+#   - "traefik.http.routers.mc_itzg_fabric_117_Epicland-map-rtr.rule=Host(`epicland-map.$DOMAINNAME0`)"
+#   - "traefik.http.routers.mc_itzg_fabric_117_Epicland-map-rtr.tls=true"
+#   ## Middlewares
+#   - "traefik.http.routers.mc_itzg_fabric_117_Epicland-map-rtr.middlewares=chain-no-auth@file"
+#   ## HTTP Services
+#   - "traefik.http.routers.mc_itzg_fabric_117_Epicland-map-rtr.service=mc_itzg_fabric_117_Epicland-map-svc"
+#   - "traefik.http.services.mc_itzg_fabric_117_Epicland-map-svc.loadbalancer.server.port=8100"
+
+
+
+  # Minecraft Router
+  # Don't need to add ":port" to minecraft client when configuring. It adds :25565 automatically
+  # Add all MC endpoints to Traefik labels below to direct them to mc-router.
+  # And add them to the --mapping command to point at the relevant MC service name.
+  #
+  # Note that it looks like we can dynamically add new servers to the mapping without restarting router
+  # by using the REST API: https://github.com/itzg/mc-router#rest-api
+  # Also see: https://github.com/itzg/mc-router/issues/19
+  mc-router:
+    container_name: mc-router
+    image: ${MC_ROUTER_IMAGE:-itzg/mc-router}
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy
+      - default
+    environment:
+      - CONNECTION_RATE_LIMIT=2
+      - EULA=TRUE
+      #- DEBUG=true
+      - METRICS_BACKEND=influxdb
+      #- METRICS_BACKEND_CONFIG_INFLUXDB_ADDR=http://vmagent:8429 # Transitioned to VictoriaMetrics. Old Influx addr: http://influxdb:8086
+      - METRICS_BACKEND_CONFIG_INFLUXDB_ADDR=http://192.168.0.222:8429 # Transitioned to VictoriaMetrics. Old Influx addr: http://influxdb:8086
+      - METRICS_BACKEND_CONFIG_INFLUXDB_DATABASE=minecraft # Create DB in Influx
+      #- METRICS_BACKEND_CONFIG_INFLUXDB_RETENTION_POLICY # Not Required
+      #- METRICS_BACKEND_CONFIG_INFLUXDB_INTERVAL # Not Required
+      #- METRICS_BACKEND_CONFIG_INFLUXDB_USERNAME # Not Required
+      #- METRICS_BACKEND_CONFIG_INFLUXDB_PASSWORD # Not Required
+      # For influx v2 via telegraf listener
+      #- METRICS_BACKEND_CONFIG_INFLUXDB_ADDR=http://telegraf-listener-minecraft:8186
+      #- METRICS_BACKEND_CONFIG_INFLUXDB_ADDR=http://$HOST:$TELEGRAF_LISTENER_MINECRAFT_PORT # If listener not on same network
+      #- METRICS_BACKEND_CONFIG_INFLUXDB_INTERVAL=5s # For testing. Default = 1m
+    ports:
+      - $MC_ROUTER_PORT:$MC_MULTIPLAYER_PORT # Multiplayer port is 25565
+    labels:
+      #- org.label-schema.group=minecraft,external  # Disabled external DNS - was mc-external.mc-guinness.co.uk
+      - org.label-schema.group=minecraft
+      ## Exclude From Watchtower Auto-Update But Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## Routers
+      - "traefik.http.routers.mc-router-rtr.entrypoints=https"
+      - "traefik.http.routers.mc-router-rtr.tls=true"
+      #- "traefik.http.routers.mc-router-rtr.rule=Host(`mc-*.$DOMAINNAME0`)"
+      # We would need a router and Rule per backend address if not using HostRegexp rule
+      # This matches any domain: mc-*.domain.com
+      - "traefik.http.routers.mc-router-rtr.rule=HostRegexp(`{subdomain:mc-.+}.$DOMAINNAME0`)"
+      ## Middlewares
+      #- "traefik.http.routers.mc-router-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.mc-router-rtr.service=mc-router-svc"
+      ## Ports
+      - "traefik.http.services.mc-router-svc.loadbalancer.server.port=$MC_MULTIPLAYER_PORT"
+    command:
+      - --mapping=mc-external.$DOMAINNAME0=mc_itzg_fabric_117_Epicland:$MC_MULTIPLAYER_PORT
+      #- --mapping=mc-epicland.$DOMAINNAME0=mc_itzg_fabric_117_Epicland:$MC_MULTIPLAYER_PORT
+      #- --mapping=mc-daddyjames.$DOMAINNAME0=mc_itzg_fabric_117_DaddyJames:$MC_MULTIPLAYER_PORT
+      #- --mapping=mc-testing-superflat.$DOMAINNAME0=mc_itzg_fabric_117_Testing_Superflat:$MC_MULTIPLAYER_PORT
+      #- --mapping=mc-hermitcraft4.$DOMAINNAME0=mc_itzg_fabric_117_Hermitcraft4:$MC_MULTIPLAYER_PORT
+      #- --mapping=mc-hermitcraft5.$DOMAINNAME0=mc_itzg_fabric_117_Hermitcraft5:$MC_MULTIPLAYER_PORT
+      #- --mapping=mc-hermitcraft6.$DOMAINNAME0=mc_itzg_fabric_117_Hermitcraft6:$MC_MULTIPLAYER_PORT
+      #- --mapping=mc-hermitcraft7.$DOMAINNAME0=mc_itzg_fabric_117_Hermitcraft7:$MC_MULTIPLAYER_PORT
+      #- --mapping=mc-hermitcraft8.$DOMAINNAME0=mc_itzg_fabric_117_Hermitcraft8:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-hermitcraft4.$DOMAINNAME0=mc-fabric-Hermitcraft4:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-hermitcraft5.$DOMAINNAME0=mc-fabric-Hermitcraft5:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-hermitcraft6.$DOMAINNAME0=mc-fabric-Hermitcraft6:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-hermitcraft7.$DOMAINNAME0=mc-fabric-Hermitcraft7:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-hermitcraft8.$DOMAINNAME0=mc-fabric-Hermitcraft8:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-hermitcraft9.$DOMAINNAME0=mc-fabric-Hermitcraft9:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-testing.$DOMAINNAME0=mc-fabric-testingsuperflat:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-epicland.$DOMAINNAME0=mc-fabric-epicland:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-daddyjames.$DOMAINNAME0=mc-fabric-daddyjames:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-donutmountain.$DOMAINNAME0=mc-fabric-donutmountain:$MC_MULTIPLAYER_PORT
+      - --mapping=mc-daddyjames-1-18.$DOMAINNAME0=mc-fabric-daddyjames-1-18:$MC_MULTIPLAYER_PORT
+      
+
+  ## Telegraf Listener - Listens for InfluxDB v1 data input from services not set up to connect to Influx v2
+  ## This is an example.
+  ## Give container an appropriate name so that there are no clashes.
+  ## Create Influx bucket for data and update variable below.
+  ## Set port for this service, the client will connect to this port with URL:
+  ## urls = ["udp://telegraf-listener:8087"]
+  ## See example config in main telegraf service config file where we tested sending data to this example listener.
+  #telegraf-listener-minecraft:
+  #  container_name: telegraf-listener-minecraft
+  #  image: telegraf
+  #  restart: unless-stopped
+  #  logging: *default-logging
+  #  networks:
+  #    - default
+  #  #ports:
+  #  # Only needed if client not on same network as listener
+  #  # Otherwise point client directly at listener port.
+  #  #  - $TELEGRAF_LISTENER_MINECRAFT_PORT:8186
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  volumes:
+  #    - $DOCKER_DIR/telegraf-listener-minecraft/data/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+  #  environment:
+  #    # Configuration file variables
+  #    #- INFLUX_HOST=$INFLUX_HOST_SAMENET # If service shares network with InfluxDB
+  #    - INFLUX_HOST=$INFLUX_HOST_FQDN # If service doesn't share network with InfluxDB
+  #    - INFLUX_TOKEN=$INFLUX_TOKEN
+  #    - INFLUX_ORG=$INFLUX_ORG
+  #    - INFLUX_BUCKET=minecraft
+  #  labels:
+  #    - org.label-schema.group=minecraft
+  #    ## Exclude Watchtower
+  #    - "com.centurylinklabs.watchtower.enable=false"
+
+
+  mc-fabric-epicland:                                               ### Change
+    container_name: mc-fabric-epicland                              ### Change
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    ports:
+      - $MC_FABRIC_EPICLAND:$MC_MULTIPLAYER_PORT   #(test port=25585)      ### Change - to connect directly to server with HOST_IP:PORT
+      - $MC_FE_EPICLAND:25585         # Fabric Exporter Metrics (test port = 7700)
+      - $MC_UM_EPICLAND:9100          # Unified Metrics (test port = 7800)
+      #- $MC_SS_EPICLAND:8000         # Serverstats Prometheus Metrics Port
+    volumes:
+      - $DOCKER_DIR/minecraft/itzg/fabric_Epicland-1-20-4/data:/data       ### Change
+      - $DOCKER_DIR/minecraft/itzg/1.20_mods:/data/mods               ### Change to match version mods dir
+      - $DOCKER_DIR/minecraft/itzg/1.20_config:/data/config           ### Change to match version config dir
+    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (works without this but defined in docs)
+    stdin_open: true                 # Same as using -i in docker run, i.e. start interactive shell (works without this but defined in docs)
+    environment:
+      - VERSION=1.20.4                                                ### Change to required version number
+      - TZ=$TZ
+      - TYPE=FABRIC
+      - ENABLE_AUTOPAUSE=TRUE
+      - AUTOPAUSE_TIMEOUT_EST=300                                     ### [optional] Time between the last client disconnect and the pausing of the process. Change - increase on frequently used servers (default 3600)
+      - AUTOPAUSE_TIMEOUT_INIT=60                                     ### [optional] Time between server start and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 600)
+      - AUTOPAUSE_TIMEOUT_KN=60                                       ### [optional] Time between knocking of the port (e.g. by the main menu ping) and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 120)
+      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+      - INIT_MEMORY=512M
+      - MAX_MEMORY=2048M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+      - USE_AIKAR_FLAGS=TRUE
+      - DATAPACKS=/datapacks                                          # To match the volume mount location
+      - REMOVE_OLD_DATAPACKS=true                                     # Remove any existing datapacks and replace with mounted volume packs?
+      # ------- server.properties config (only applies to initial creation) ------- `
+      - MOTD="Daddy & James World"                                    ### Change
+      - DEBUG=TRUE
+      - VIEW_DISTANCE=12                                              ### Change - increase for main world server
+      - EULA=TRUE
+      - DIFFICULTY=hard
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+      - ENABLE_COMMAND_BLOCK=TRUE
+      - ALLOW_FLIGHT=TRUE
+      - ONLINE_MODE=TRUE
+      - MAX_TICK_TIME=-1
+      - SYNC_CHUNK_WRITES=false
+      - NETWORK_COMPRESSION_THRESHOLD=-1
+    mem_limit: 2176m # represents the hard memory limits = minecraft limit + 128m
+    mem_reservation: 128m # represents the soft memory limits
+    labels:
+      - org.label-schema.group=minecraft
+      ## Exclude Watchtower
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+
+  mc-fabric-daddyjames:                                               ### Change
+    container_name: mc-fabric-daddyjames                              ### Change
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    ports:
+      - $MC_FABRIC_DADDYJAMES:$MC_MULTIPLAYER_PORT   #(test port=25585)      ### Change - to connect directly to server with HOST_IP:PORT
+      - $MC_FE_DADDYJAMES:25585       # Fabric Exporter Metrics (test port = 7700)
+      - $MC_UM_DADDYJAMES:9100        # Unified Metrics (test port = 7800)
+      #- $MC_SS_DADDYJAMES:8000       # Serverstats Metrics
+    volumes:
+      - $DOCKER_DIR/minecraft/itzg/fabric_DaddyJames-1-20-4/data:/data       ### Change
+      - $DOCKER_DIR/minecraft/itzg/1.20_mods:/data/mods               ### Change to match version mods dir
+      - $DOCKER_DIR/minecraft/itzg/1.20_config:/data/config           ### Change to match version config dir
+    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (works without this but defined in docs)
+    stdin_open: true                 # Same as using -i in docker run, i.e. start interactive shell (works without this but defined in docs)
+    environment:
+      - VERSION=1.20.4                                                ### Change to required version number
+      - TZ=$TZ
+      - TYPE=FABRIC
+      - ENABLE_AUTOPAUSE=TRUE
+      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Time between the last client disconnect and the pausing of the process. Change - increase on frequently used servers (default 3600)
+      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Time between server start and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 600)
+      - AUTOPAUSE_TIMEOUT_KN=60                                       ### [optional] Time between knocking of the port (e.g. by the main menu ping) and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 120)
+      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+      - INIT_MEMORY=512M
+      - MAX_MEMORY=1536M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+      - USE_AIKAR_FLAGS=TRUE
+      - DATAPACKS=/datapacks                                          # To match the volume mount location
+      - REMOVE_OLD_DATAPACKS=true                                     # Remove any existing datapacks and replace with mounted volume packs?
+      # ------- server.properties config (only applies to initial creation) ------- `
+      - MOTD="Epicland"                                               ### Change
+      - DEBUG=TRUE
+      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+      - EULA=TRUE
+      - DIFFICULTY=hard
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+      - ENABLE_COMMAND_BLOCK=TRUE
+      - ALLOW_FLIGHT=TRUE
+      - ONLINE_MODE=TRUE
+      - MAX_TICK_TIME=-1
+      - SYNC_CHUNK_WRITES=false
+      - NETWORK_COMPRESSION_THRESHOLD=-1
+    mem_limit: 1664m # represents the hard memory limits = minecraft limit + 128m
+    mem_reservation: 128m # represents the soft memory limits
+    labels:
+      - org.label-schema.group=minecraft
+      ## Exclude Watchtower
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+  mc-fabric-testingsuperflat:                                               ### Change
+    container_name: mc-fabric-testingsuperflat                              ### Change
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    ports:
+      - $MC_FABRIC_SUPERFLAT:$MC_MULTIPLAYER_PORT   #(test port=25585)      ### Change - to connect directly to server with HOST_IP:PORT
+      - $MC_FE_SUPERFLAT:25585       # Fabric Exporter Metrics (test port = 7700)
+      - $MC_UM_SUPERFLAT:9100        # Unified Metrics (test port = 7800)
+      #- $MC_SS_SUPERFLAT:8000       # Serverstats Metrics
+    volumes:
+      - $DOCKER_DIR/minecraft/itzg/fabric_TestingSuperflat-1-20-4/data:/data       ### Change
+      - $DOCKER_DIR/minecraft/itzg/1.20_mods:/data/mods               ### Change to match version mods dir
+      - $DOCKER_DIR/minecraft/itzg/1.20_config:/data/config           ### Change to match version config dir
+    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (works without this but defined in docs)
+    stdin_open: true                 # Same as using -i in docker run, i.e. start interactive shell (works without this but defined in docs)
+    environment:
+      - VERSION=1.20.4                                                ### Change to required version number
+      - TZ=$TZ
+      - TYPE=FABRIC
+      - ENABLE_AUTOPAUSE=TRUE
+      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Time between the last client disconnect and the pausing of the process. Change - increase on frequently used servers (default 3600)
+      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Time between server start and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 600)
+      - AUTOPAUSE_TIMEOUT_KN=60                                       ### [optional] Time between knocking of the port (e.g. by the main menu ping) and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 120)
+      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+      - INIT_MEMORY=512M
+      - MAX_MEMORY=2048M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+      - USE_AIKAR_FLAGS=TRUE
+      - DATAPACKS=/datapacks                                          # To match the volume mount location
+      - REMOVE_OLD_DATAPACKS=true                                     # Remove any existing datapacks and replace with mounted volume packs?
+      # ------- server.properties config (only applies to initial creation) ------- `
+      - MOTD="Testing Superflat"                                    ### Change
+      - DEBUG=TRUE
+      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+      - EULA=TRUE
+      - DIFFICULTY=hard
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+      - ENABLE_COMMAND_BLOCK=TRUE
+      - ALLOW_FLIGHT=TRUE
+      - ONLINE_MODE=TRUE
+      - MAX_TICK_TIME=-1
+      - SYNC_CHUNK_WRITES=false
+      - NETWORK_COMPRESSION_THRESHOLD=-1
+    mem_limit: 2176m # represents the hard memory limits = minecraft limit + 128m
+    mem_reservation: 128m # represents the soft memory limits
+    labels:
+      - org.label-schema.group=minecraft
+      ## Exclude Watchtower
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+  mc-fabric-donutmountain:                                                  ### Change
+    container_name: mc-fabric-donutmountain                              ### Change
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    ports:
+      - $MC_FABRIC_DONUTMOUNTAIN:$MC_MULTIPLAYER_PORT   #(test port=25585)      ### Change - to connect directly to server with HOST_IP:PORT
+      - $MC_FE_DONUTMOUNTAIN:25585       # Fabric Exporter Metrics (test port = 7700)
+      - $MC_UM_DONUTMOUNTAIN:9100        # Unified Metrics (test port = 7800)
+      #- $MC_SS_DONUTMOUNTAIN:8000       # Serverstats Metrics
+    volumes:
+      - $DOCKER_DIR/minecraft/itzg/fabric_donutmountain-1-20-4/data:/data       ### Change
+      - $DOCKER_DIR/minecraft/itzg/1.20_mods:/data/mods               ### Change to match version mods dir
+      - $DOCKER_DIR/minecraft/itzg/1.20_config:/data/config           ### Change to match version config dir
+      - $DOCKER_DIR/minecraft/itzg/1.20_datapacks:/datapacks          ### Change to match version config dir
+    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (works without this but defined in docs)
+    stdin_open: true                 # Same as using -i in docker run, i.e. start interactive shell (works without this but defined in docs)
+    environment:
+      - VERSION=1.20.4                                                ### Change to required version number
+      - TZ=$TZ
+      - TYPE=FABRIC
+      - ENABLE_AUTOPAUSE=TRUE
+      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Time between the last client disconnect and the pausing of the process. Change - increase on frequently used servers (default 3600)
+      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Time between server start and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 600)
+      - AUTOPAUSE_TIMEOUT_KN=60                                       ### [optional] Time between knocking of the port (e.g. by the main menu ping) and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 120)
+      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+      - INIT_MEMORY=512M
+      - MAX_MEMORY=2048M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+      - USE_AIKAR_FLAGS=TRUE
+      - DATAPACKS=/datapacks                                          # To match the volume mount location
+      - REMOVE_OLD_DATAPACKS=true                                     # Remove any existing datapacks and replace with mounted volume packs?
+      # ------- server.properties config (only applies to initial creation) ------- `
+      - MOTD="Donut Mountain"                                         ### Change
+      - DEBUG=TRUE
+      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+      - EULA=TRUE
+      - DIFFICULTY=hard
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+      - ENABLE_COMMAND_BLOCK=TRUE
+      - ALLOW_FLIGHT=TRUE
+      - ONLINE_MODE=TRUE
+      - MAX_TICK_TIME=-1
+      - SYNC_CHUNK_WRITES=false
+      - NETWORK_COMPRESSION_THRESHOLD=-1
+    mem_limit: 2176m # represents the hard memory limits = minecraft limit + 128m
+    mem_reservation: 128m # represents the soft memory limits
+    labels:
+      - org.label-schema.group=minecraft
+      ## Exclude Watchtower
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+
+  mc-fabric-Hermitcraft8:                                                  ### Change
+    container_name: mc-fabric-Hermitcraft8                                 ### Change
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    ports:
+      - $MC_FABRIC_HERMITCRAFT8:$MC_MULTIPLAYER_PORT   #(test port=25585)      ### Change - to connect directly to server with HOST_IP:PORT
+      - $MC_FE_HC8:25585       # Fabric Exporter Metrics (test port = 7700)
+      - $MC_UM_HC8:9100        # Unified Metrics (test port = 7800)
+      #- $MC_SS_HC8:8000       # Serverstats Metrics
+    volumes:
+      - $DOCKER_DIR/minecraft/itzg/fabric_Hermitcraft8-1-20-4/data:/data       ### Change
+      - $DOCKER_DIR/minecraft/itzg/1.20_mods:/data/mods               ### Change to match version mods dir
+      - $DOCKER_DIR/minecraft/itzg/1.20_config:/data/config           ### Change to match version config dir
+    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (works without this but defined in docs)
+    stdin_open: true                 # Same as using -i in docker run, i.e. start interactive shell (works without this but defined in docs)
+    environment:
+      - VERSION=1.20.4                                                ### Change to required version number
+      - TZ=$TZ
+      - TYPE=FABRIC
+      - ENABLE_AUTOPAUSE=TRUE
+      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Time between the last client disconnect and the pausing of the process. Change - increase on frequently used servers (default 3600)
+      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Time between server start and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 600)
+      - AUTOPAUSE_TIMEOUT_KN=60                                       ### [optional] Time between knocking of the port (e.g. by the main menu ping) and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 120)
+      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+      - INIT_MEMORY=512M
+      - MAX_MEMORY=2048M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+      - USE_AIKAR_FLAGS=TRUE
+      # ------- server.properties config (only applies to initial creation) ------- `
+      - MOTD="Hermitcraft 8"                                         ### Change
+      - DEBUG=TRUE
+      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+      - EULA=TRUE
+      - DIFFICULTY=hard
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+      - ENABLE_COMMAND_BLOCK=TRUE
+      - ALLOW_FLIGHT=TRUE
+      - ONLINE_MODE=TRUE
+      - MAX_TICK_TIME=-1
+      - SYNC_CHUNK_WRITES=false
+      - NETWORK_COMPRESSION_THRESHOLD=-1
+    mem_limit: 2176m # represents the hard memory limits = minecraft limit + 128m
+    mem_reservation: 128m # represents the soft memory limits
+    labels:
+      - org.label-schema.group=minecraft
+      ## Exclude Watchtower
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+  mc-fabric-Hermitcraft9:                                                  ### Change
+    container_name: mc-fabric-Hermitcraft9                                 ### Change
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    ports:
+      - $MC_FABRIC_HERMITCRAFT9:$MC_MULTIPLAYER_PORT   #(test port=25585)      ### Change - to connect directly to server with HOST_IP:PORT
+      - $MC_FE_HC9:25585       # Fabric Exporter Metrics (test port = 7700)
+      - $MC_UM_HC9:9100        # Unified Metrics (test port = 7800)
+      #- $MC_SS_HC8:8000       # Serverstats Metrics
+      - $MC_VOICE_HERMITCRAFT9:$MC_VOICE_HERMITCRAFT9 # SimpleVoiceChat Port - needs to be unique externally and internally per world since servers on same IP, and client needs to know target port but can't set client independently from server.
+    volumes:
+      - $DOCKER_DIR/minecraft/itzg/fabric_Hermitcraft9-1-20-4/data:/data       ### Change
+      - $DOCKER_DIR/minecraft/itzg/1.20_mods:/data/mods               ### Change to match version mods dir
+      - $DOCKER_DIR/minecraft/itzg/1.20_config:/data/config           ### Change to match version config dir
+      - $DOCKER_DIR/minecraft/itzg/1.20_config/voicechat-server.properties.hermitcraft9:/data/config/voicechat/voicechat-server.properties           ### Per server settings to specify unique port
+    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (works without this but defined in docs)
+    stdin_open: true                 # Same as using -i in docker run, i.e. start interactive shell (works without this but defined in docs)
+    environment:
+      - VERSION=1.20.4                                                ### Change to required version number
+      - TZ=$TZ
+      - TYPE=FABRIC
+      - ENABLE_AUTOPAUSE=TRUE
+      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Time between the last client disconnect and the pausing of the process. Change - increase on frequently used servers (default 3600)
+      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Time between server start and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 600)
+      - AUTOPAUSE_TIMEOUT_KN=60                                       ### [optional] Time between knocking of the port (e.g. by the main menu ping) and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 120)
+      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+      - INIT_MEMORY=512M
+      - MAX_MEMORY=2048M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+      - USE_AIKAR_FLAGS=TRUE
+      # ------- server.properties config (only applies to initial creation) ------- `
+      - MOTD="Hermitcraft 9"                                         ### Change
+      - DEBUG=TRUE
+      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+      - EULA=TRUE
+      - DIFFICULTY=hard
+      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+      - ENABLE_COMMAND_BLOCK=TRUE
+      - ALLOW_FLIGHT=TRUE
+      - ONLINE_MODE=TRUE
+      - MAX_TICK_TIME=-1
+      - SYNC_CHUNK_WRITES=false
+      - NETWORK_COMPRESSION_THRESHOLD=-1
+    mem_limit: 2176m # represents the hard memory limits = minecraft limit + 128m
+    mem_reservation: 128m # represents the soft memory limits
+    labels:
+      - org.label-schema.group=minecraft
+      ## Exclude Watchtower
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+
+## ===============================================================================================
+## 1.18
+## ===============================================================================================
+##
+##  mc-fabric-epicland-1-18:                                                 ### Change
+##    container_name: mc-fabric-epicland-1-18                                ### Change
+##    image: itzg/minecraft-server
+##    restart: unless-stopped
+##    #logging: *default-logging    # Logging now defined globally in daemon.json
+##    networks:
+##      - default
+##    ports:
+##      - $MC_FABRIC_EPICLAND:$MC_MULTIPLAYER_PORT                      ### Change - to connect directly to server with HOST_IP:PORT
+##      - $MC_SS_EPICLAND:8000  # Serverstats Prometheus Metrics Port
+##    volumes:
+##      - $DOCKER_DIR/minecraft/itzg/fabric_Epicland-1-18/data:/data         ### Change
+##      - $DOCKER_DIR/minecraft/itzg/1.18_mods:/data/mods               ### Change to match version mods dir
+##      - $DOCKER_DIR/minecraft/itzg/1.18_config:/data/config           ### Change to match version config dir
+##    environment:
+##      - VERSION=1.18.2                                                ### Change to required version number
+##      - TZ=$TZ
+##      - TYPE=FABRIC
+##      - ENABLE_AUTOPAUSE=TRUE
+##      - AUTOPAUSE_TIMEOUT_EST=300                                     ### [optional] Time between the last client disconnect and the pausing of the process. Change - increase on frequently used servers (default 3600)
+##      - AUTOPAUSE_TIMEOUT_INIT=60                                     ### [optional] Time between server start and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 600)
+##      - AUTOPAUSE_TIMEOUT_KN=60                                       ### [optional] Time between knocking of the port (e.g. by the main menu ping) and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 120)
+##      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #RolyPolyBird_AFK1,RolyPolyBird_AFK2
+##      - INIT_MEMORY=512M
+##      - MAX_MEMORY=3072M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+##      - USE_AIKAR_FLAGS=TRUE
+##      # ------- server.properties config (only applies to initial creation) ------- `
+##      - MOTD="Epicland"                                               ### Change
+##      - DEBUG=TRUE
+##      - VIEW_DISTANCE=12                                              ### Change - increase for main world server
+##      - EULA=TRUE
+##      - DIFFICULTY=hard
+##      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+##      - ENABLE_COMMAND_BLOCK=TRUE
+##      - ALLOW_FLIGHT=TRUE
+##      - ONLINE_MODE=TRUE
+##      - MAX_TICK_TIME=-1
+##      - SYNC_CHUNK_WRITES=false
+##      - NETWORK_COMPRESSION_THRESHOLD=-1
+##    mem_limit: 3072M # represents the hard memory limits
+##    mem_reservation: 128m # represents the soft memory limits
+##    labels:
+##      - org.label-schema.group=minecraft
+##      ## Exclude Watchtower
+##      - "com.centurylinklabs.watchtower.enable=false"
+##      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+##
+##  mc-fabric-daddyjames-1-18:                                               ### Change
+##    container_name: mc-fabric-daddyjames-1-18                              ### Change
+##    image: itzg/minecraft-server
+##    restart: unless-stopped
+##    #logging: *default-logging    # Logging now defined globally in daemon.json
+##    networks:
+##      - default
+##    ports:
+##      - $MC_FABRIC_TEST:$MC_MULTIPLAYER_PORT                    ### Change - to connect directly to server with HOST_IP:PORT
+##      - $MC_FE_TEST:25585       # Fabric Exporter Metrics (test port = 7700)
+##      - $MC_UM_TEST:9100        # Unified Metrics (test port = 7800)
+##      - $MC_SS_TEST:8000  # Serverstats Prometheus Metrics Port
+##    volumes:
+##      - $DOCKER_DIR/minecraft/itzg/fabric_DaddyJames-1-18/data:/data  ### Change
+##      - $DOCKER_DIR/minecraft/itzg/1.18_mods:/data/mods               ### Change to match version mods dir
+##      - $DOCKER_DIR/minecraft/itzg/1.18_config:/data/config           ### Change to match version config dir
+##    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (works without this but defined in docs)
+##    stdin_open: true                 # Same as using -i in docker run, i.e. start interactive shell (works without this but defined in docs)
+##    environment:
+##      - VERSION=1.18.2                                                ### Change to required version number
+##      - TZ=$TZ
+##      - TYPE=FABRIC
+##      - ENABLE_AUTOPAUSE=TRUE
+##      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Time between the last client disconnect and the pausing of the process. Change - increase on frequently used servers (default 3600)
+##      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Time between server start and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 600)
+##      - AUTOPAUSE_TIMEOUT_KN=60                                       ### [optional] Time between knocking of the port (e.g. by the main menu ping) and the pausing of the process, when no client connects inbetween. Change - increase on frequently used servers (default 120)
+##      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+##      - INIT_MEMORY=512M
+##      - MAX_MEMORY=1024M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+##      - USE_AIKAR_FLAGS=TRUE
+##      # ------- server.properties config (only applies to initial creation) ------- `
+##      - MOTD="Daddy & James World"                                    ### Change
+##      - DEBUG=TRUE
+##      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+##      - EULA=TRUE
+##      - DIFFICULTY=hard
+##      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+##      - ENABLE_COMMAND_BLOCK=TRUE
+##      - ALLOW_FLIGHT=TRUE
+##      - ONLINE_MODE=TRUE
+##      - MAX_TICK_TIME=-1
+##      - SYNC_CHUNK_WRITES=false
+##      - NETWORK_COMPRESSION_THRESHOLD=-1
+##    mem_limit: 1536m # represents the hard memory limits
+##    mem_reservation: 128m # represents the soft memory limits
+##    labels:
+##      - org.label-schema.group=minecraft
+##      ## Exclude Watchtower
+##      - "com.centurylinklabs.watchtower.enable=false"
+##      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+##
+##
+##  mc-fabric-testingsuperflat-1-18:                                         ### Change
+##    container_name: mc-fabric-testingsuperflat-1-18                        ### Change
+##    image: itzg/minecraft-server
+##    restart: unless-stopped
+##    #logging: *default-logging    # Logging now defined globally in daemon.json
+##    networks:
+##      - default
+##    ports:
+##      - $MC_FABRIC_SUPERFLAT:$MC_MULTIPLAYER_PORT             ### Change - to connect directly to server with HOST_IP:PORT
+##      - $MC_SS_SUPERFLAT:8000  # Serverstats Prometheus Metrics Port
+##    volumes:
+##      - $DOCKER_DIR/minecraft/itzg/fabric_TestingSuperflat-1-18/data:/data     ### Change
+##      - $DOCKER_DIR/minecraft/itzg/1.18_mods:/data/mods               ### Change to match version mods dir
+##      - $DOCKER_DIR/minecraft/itzg/1.18_config:/data/config           ### Change to match version config dir
+##    environment:
+##      - VERSION=1.18.2                                                ### Change to required version number
+##      - TZ=$TZ
+##      - TYPE=FABRIC
+##      - ENABLE_AUTOPAUSE=TRUE
+##      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Change - increase on frequently used servers
+##      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Change - increase on frequently used servers
+##      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+##      - INIT_MEMORY=512M
+##      - MAX_MEMORY=2048M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+##      - USE_AIKAR_FLAGS=TRUE
+##      # ------- server.properties config (only applies to initial creation) ------- `
+##      - MOTD="Testing Superflat"                                          ### Change
+##      - DEBUG=TRUE
+##      - VIEW_DISTANCE=12                                              ### Change - increase for main world server
+##      - EULA=TRUE
+##      - DIFFICULTY=hard
+##      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+##      - ENABLE_COMMAND_BLOCK=TRUE
+##      - ALLOW_FLIGHT=TRUE
+##      - ONLINE_MODE=TRUE
+##      - MAX_TICK_TIME=-1
+##      - SYNC_CHUNK_WRITES=false
+##      - NETWORK_COMPRESSION_THRESHOLD=-1
+##    mem_limit: 2560m # represents the hard memory limits
+##    mem_reservation: 128m # represents the soft memory limits
+##    labels:
+##      - org.label-schema.group=minecraft
+##      ## Exclude Watchtower
+##      - "com.centurylinklabs.watchtower.enable=false"
+##      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+##
+##
+##  mc-fabric-Hermitcraft8:                                             ### Change
+##    container_name: mc-fabric-Hermitcraft8                            ### Change
+##    image: itzg/minecraft-server
+##    restart: unless-stopped
+##    #logging: *default-logging    # Logging now defined globally in daemon.json
+##    networks:
+##      - default
+##    ports:
+##      - $MC_FABRIC_HERMITCRAFT8:$MC_MULTIPLAYER_PORT                  ### Change - to connect directly to server with HOST_IP:PORT
+##      - $MC_FE_HC8:25585       # Fabric Exporter Metrics (test port = 7700)
+##      - $MC_UM_HC8:9100        # Unified Metrics (test port = 7800)
+##      - $MC_SS_HC8:8000  # Serverstats Prometheus Metrics Port
+##    volumes:
+##      - $DOCKER_DIR/minecraft/itzg/fabric_Hermitcraft8/data:/data     ### Change
+##      - $DOCKER_DIR/minecraft/itzg/1.18_mods:/data/mods               ### Change to match version mods dir
+##      - $DOCKER_DIR/minecraft/itzg/1.18_config:/data/config           ### Change to match version config dir
+##    environment:
+##      - VERSION=1.18.2                                                ### Change to required version number
+##      - TZ=$TZ
+##      - TYPE=FABRIC
+##      - ENABLE_AUTOPAUSE=TRUE
+##      - AUTOPAUSE_TIMEOUT_EST=180                                     ### [optional] Change - increase on frequently used servers
+##      - AUTOPAUSE_TIMEOUT_INIT=30                                     ### [optional] Change - increase on frequently used servers
+##      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles #,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+##      - INIT_MEMORY=512M
+##      - MAX_MEMORY=1536M # or can use e.g. 4G`                        ### [optional] Change - increase on big servers
+##      - USE_AIKAR_FLAGS=TRUE
+##      # ------- server.properties config (only applies to initial creation) ------- `
+##      - MOTD="Hermitcraft 8"                                          ### Change
+##      - DEBUG=TRUE
+##      - VIEW_DISTANCE=8                                               ### Change - increase for main world server
+##      - EULA=TRUE
+##      - DIFFICULTY=hard
+##      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+##      - ENABLE_COMMAND_BLOCK=TRUE
+##      - ALLOW_FLIGHT=TRUE
+##      - ONLINE_MODE=TRUE
+##      - MAX_TICK_TIME=-1
+##      - SYNC_CHUNK_WRITES=false
+##      - NETWORK_COMPRESSION_THRESHOLD=-1
+##    mem_limit: 2048m # represents the hard memory limits
+##    mem_reservation: 128m # represents the soft memory limits
+##    labels:
+##      - org.label-schema.group=minecraft
+##      ## Exclude Watchtower
+##      - "com.centurylinklabs.watchtower.enable=false"
+##      ## Add Traefik rules if proxying server directly and not through mc-router - see examples at top of minecraft.yml
+
+
+## ===============================================================================================
+## 1.17
+## ===============================================================================================
+##
+##  # Minecraft
+##  # Releases: https://github.com/itzg/docker-minecraft-server/releases
+##  # Releases: https://hub.docker.com/r/itzg/minecraft-server/tags
+##  # 20220109: Moved to latest named tag 2022.1.1 
+##  mc_itzg_fabric_117_Epicland:
+##    container_name: mc_itzg_fabric_117_Epicland
+##    image: itzg/minecraft-server:2022.1.1
+##    restart: unless-stopped
+##    #logging: *default-logging    # Logging now defined globally in daemon.json
+##    networks:
+##      - default
+##    ports:
+##      - $MINECRAFT_FABRIC_117_EPICLAND_SERVER:25565
+##      #- $MINECRAFT_FABRIC_117_EPICLAND_EXPORTER:25585 # fabric_exporter (prometheus) - no need to publish exporters since on same network as Prometheus
+##      - $MINECRAFT_FABRIC_117_EPICLAND_BLUEMAP:8100 # bluemap
+##    volumes:
+##      - $DOCKER_DIR/minecraft/itzg/fabric_1.17_Epicland/data:/data
+##      - $DOCKER_DIR/minecraft/itzg/1.17_mods_map:/data/mods
+##      - $DOCKER_DIR/minecraft/itzg/1.17_config:/data/config
+##    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (not necessary but defined in docs)
+##    #stdin_open: true                # Same as using -i in docker run, i.e. start interactive shell (not using)
+##    environment:
+##      - TZ=$TZ
+##      - TYPE=FABRIC
+##      - VERSION=1.17.1
+##      - ENABLE_AUTOPAUSE=TRUE
+##      - AUTOPAUSE_TIMEOUT_EST=300
+##      - AUTOPAUSE_TIMEOUT_INIT=120
+##      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+##      - INIT_MEMORY=512M
+##      - MAX_MEMORY=3072M # or can use e.g. 4G`
+##      - USE_AIKAR_FLAGS=TRUE
+##      # ------- server.properties config (only applies to initial creation) ------- `
+##      - MOTD="Minecraft 1.17 (Fabric) - Epicland"
+##      - DEBUG=TRUE
+##      - VIEW_DISTANCE=18
+##      - EULA=TRUE
+##      - DIFFICULTY=hard
+##      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+##      - ENABLE_COMMAND_BLOCK=TRUE
+##      - ALLOW_FLIGHT=TRUE
+##      - ONLINE_MODE=TRUE
+##      - MAX_TICK_TIME=-1
+##      - SYNC_CHUNK_WRITES=false
+##      - NETWORK_COMPRESSION_THRESHOLD=-1
+##    labels:
+##      - org.label-schema.group=minecraft
+##      ## Exclude From Watchtower Auto-Update But Notify On New Image
+##      - "com.centurylinklabs.watchtower.monitor-only=true"
+##
+##
+##  # Minecraft
+##  mc_itzg_fabric_117_Testing_Superflat:
+##    container_name: mc_itzg_fabric_117_Testing_Superflat
+##    image: itzg/minecraft-server
+##    restart: unless-stopped
+##    #logging: *default-logging    # Logging now defined globally in daemon.json
+##    networks:
+##      - default
+##    ports:
+##      - $MINECRAFT_FABRIC_117_TESTING_SUPERFLAT_SERVER:25565
+##    volumes:
+##      - $DOCKER_DIR/minecraft/itzg/fabric_1.17_Testing_Superflat/data:/data
+##      - $DOCKER_DIR//minecraft/itzg/1.17_mods:/data/mods
+##      - $DOCKER_DIR/minecraft/itzg/1.17_config:/data/config
+##    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (not necessary but defined in docs)
+##    #stdin_open: true                # Same as using -i in docker run, i.e. start interactive shell (not using)
+##    environment:
+##      - TZ=$TZ
+##      - TYPE=FABRIC
+##      - VERSION=1.17.1
+##      - ENABLE_AUTOPAUSE=TRUE
+##      - AUTOPAUSE_TIMEOUT_EST=300
+##      - AUTOPAUSE_TIMEOUT_INIT=120
+##      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+##      #- INIT_MEMORY=512M
+##      #- MAX_MEMORY=3072M # or can use e.g. 4G`
+##      - USE_AIKAR_FLAGS=TRUE
+##      # ------- server.properties config (only applies to initial creation) ------- `
+##      - MOTD="Minecraft 1.17 (Fabric) - DaddyJames"
+##      - DEBUG=TRUE
+##      - VIEW_DISTANCE=12
+##      - EULA=TRUE
+##      - DIFFICULTY=hard
+##      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+##      - ENABLE_COMMAND_BLOCK=TRUE
+##      - ALLOW_FLIGHT=TRUE
+##      - ONLINE_MODE=TRUE
+##      - MAX_TICK_TIME=-1
+##      - SYNC_CHUNK_WRITES=false
+##      - NETWORK_COMPRESSION_THRESHOLD=-1
+##    labels:
+##      - org.label-schema.group=minecraft
+##      ## Exclude Watchtower
+##      - "com.centurylinklabs.watchtower.enable=false"
+##
+##
+##  # Minecraft
+##  mc_itzg_fabric_117_Hermitcraft8:
+##    container_name: mc_itzg_fabric_117_Hermitcraft8
+##    image: itzg/minecraft-server
+##    restart: unless-stopped
+##    #logging: *default-logging    # Logging now defined globally in daemon.json
+##    networks:
+##      - default
+##    ports:
+##      - $MINECRAFT_FABRIC_117_HERMITCRAFT8_SERVER:25565
+##    volumes:
+##      - $DOCKER_DIR/minecraft/itzg/fabric_1.17_Hermitcraft8/data:/data
+##      - $DOCKER_DIR//minecraft/itzg/1.17_mods:/data/mods
+##      - $DOCKER_DIR/minecraft/itzg/1.17_config:/data/config
+##    tty: true                        # Same as using -t in docker run, i.e. allow to run in background (not necessary but defined in docs)
+##    #stdin_open: true                # Same as using -i in docker run, i.e. start interactive shell (not using)
+##    environment:
+##      - TZ=$TZ
+##      - TYPE=FABRIC
+##      - VERSION=1.17.1
+##      - ENABLE_AUTOPAUSE=TRUE
+##      - AUTOPAUSE_TIMEOUT_EST=300
+##      - AUTOPAUSE_TIMEOUT_INIT=120
+##      - OPS=RolyPolyBird,CaptainJohnSmith,OiraySparkles,RolyPolyBird_AFK1,RolyPolyBird_AFK2
+##      #- INIT_MEMORY=512M
+##      #- MAX_MEMORY=3072M # or can use e.g. 4G`
+##      - USE_AIKAR_FLAGS=TRUE
+##      # ------- server.properties config (only applies to initial creation) ------- `
+##      - MOTD="Minecraft 1.17 (Fabric) - Hermitcraft 8"
+##      - DEBUG=TRUE
+##      - VIEW_DISTANCE=12
+##      - EULA=TRUE
+##      - DIFFICULTY=hard
+##      - ANNOUNCE_PLAYER_ACHIEVEMENTS=TRUE
+##      - ENABLE_COMMAND_BLOCK=TRUE
+##      - ALLOW_FLIGHT=TRUE
+##      - ONLINE_MODE=TRUE
+##      - MAX_TICK_TIME=-1
+##      - SYNC_CHUNK_WRITES=false
+##      - NETWORK_COMPRESSION_THRESHOLD=-1
+##      - RESOURCE_PACK=$MINECRAFT_RESOURCE_PACK_HERMITCRAFT8
+##      - RESOURCE_PACK_PROMPT={"text":"Click Yes to enable Hermitcraft datapack.\nLook at model list and hold item in hand then use '/trigger CustomDataModel X' and replace X with value from model list."}
+##    labels:
+##      - org.label-schema.group=minecraft
+##      ## Exclude Watchtower
+##      - "com.centurylinklabs.watchtower.enable=false"

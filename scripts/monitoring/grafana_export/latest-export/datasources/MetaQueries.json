@@ -1,0 +1,21 @@
+{
+  "id": 2,
+  "uid": "PBBB6339AC1D17EBD",
+  "orgId": 1,
+  "name": "MetaQueries",
+  "type": "goshposh-metaqueries-datasource",
+  "typeLogoUrl": "public/img/icn-datasource.svg",
+  "access": "proxy",
+  "url": "",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": false,
+  "jsonData": {},
+  "secureJsonFields": {},
+  "version": 1,
+  "readOnly": false,
+  "apiVersion": ""
+}

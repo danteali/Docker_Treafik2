@@ -1,0 +1,2669 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "cloudflare-prometheus-zone-analytics-13133",
+    "url": "/d/mWxtnz5Mz/cloudflare-prometheus-zone-analytics-13133",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 38,
+    "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+    "folderTitle": "OfficialDashboards",
+    "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/officialdashboards",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 13133,
+    "graphTooltip": 0,
+    "id": 146,
+    "links": [],
+    "panels": [
+      {
+        "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 6,
+        "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Overview",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 1
+        },
+        "id": 19,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "increase(cloudflare_zone_requests_total{zone=~\"$zone\"}[$__range])",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Total Requests",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 4,
+          "y": 1
+        },
+        "id": 24,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "increase(cloudflare_zone_bandwidth_total{zone=~\"$zone\"}[$__range])",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Total Bandwidth",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 8,
+          "y": 1
+        },
+        "id": 22,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_requests_total{zone=~\"$zone\"}[$__interval])",
+            "instant": false,
+            "interval": "5m",
+            "intervalFactor": 10,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Requests / second",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "Bps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 12,
+          "y": 1
+        },
+        "id": 21,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_bandwidth_total{zone=~\"$zone\"}[$__interval])",
+            "instant": false,
+            "interval": "5m",
+            "intervalFactor": 10,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Bandwidth / second",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 16,
+          "y": 1
+        },
+        "id": 20,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "increase(cloudflare_zone_uniques_total{zone=~\"$zone\"}[$__range])",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Total Unique Visitors",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 20,
+          "y": 1
+        },
+        "id": 23,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_uniques_total{zone=~\"$zone\"}[$__interval])",
+            "instant": false,
+            "interval": "5m",
+            "intervalFactor": 10,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Uniques / second",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 6
+        },
+        "id": 16,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "7.1.5",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_uniques_total{zone=~\"$zone\"}[$__interval])",
+            "interval": "",
+            "intervalFactor": 10,
+            "legendFormat": "visitors",
+            "refId": "A"
+          }
+        ],
+        "title": "Unique Visitors",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 13,
+          "x": 0,
+          "y": 14
+        },
+        "id": 87,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "7.1.5",
+        "repeatDirection": "h",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_requests_country{zone=~\"$zone\", region=\"North America\"}[$__interval]) > 10",
+            "interval": "5m",
+            "intervalFactor": 10,
+            "legendFormat": "{{ country }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Requests in North America / second",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 11,
+          "x": 13,
+          "y": 14
+        },
+        "id": 88,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "7.1.5",
+        "repeatDirection": "h",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_requests_country{zone=~\"$zone\", region=\"Europe\"}[$__interval]) > 10",
+            "interval": "5m",
+            "intervalFactor": 10,
+            "legendFormat": "{{ country }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Requests in Europe / second",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 21
+        },
+        "id": 26,
+        "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Requests",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 22
+        },
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "7.1.5",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_requests_total{zone=~\"$zone\"}[$__interval])",
+            "interval": "",
+            "intervalFactor": 10,
+            "legendFormat": "total",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_requests_cached{zone=~\"$zone\"}[$__interval])",
+            "interval": "",
+            "intervalFactor": 10,
+            "legendFormat": "cached",
+            "refId": "B"
+          }
+        ],
+        "title": "Requests / second",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 22
+        },
+        "id": 14,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "7.1.5",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_requests_country{zone=~\"$zone\"}[$__interval]) > 0",
+            "instant": false,
+            "interval": "",
+            "intervalFactor": 10,
+            "legendFormat": "{{country}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Requests per Country / Second",
+        "type": "timeseries"
+      },
+      {
+        "aliasColors": {},
+        "autoMigrateFrom": "graph",
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 31
+        },
+        "hiddenSeries": false,
+        "id": 17,
+        "legend": {
+          "alignAsTable": true,
+          "avg": true,
+          "current": true,
+          "max": true,
+          "min": true,
+          "rightSide": false,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "percentage": false,
+        "pluginVersion": "7.1.5",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_requests_status{zone=~\"$zone\", status!~\"5..\"}[$__interval]) ",
+            "interval": "",
+            "intervalFactor": 10,
+            "legendFormat": "{{status}}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Requests / Second (status codes)",
+        "tooltip": {
+          "shared": true,
+          "sort": 2,
+          "value_type": "individual"
+        },
+        "type": "timeseries",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:125",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:126",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "autoMigrateFrom": "graph",
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 31
+        },
+        "hiddenSeries": false,
+        "id": 89,
+        "legend": {
+          "alignAsTable": true,
+          "avg": true,
+          "current": true,
+          "max": true,
+          "min": true,
+          "rightSide": false,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "percentage": false,
+        "pluginVersion": "7.1.5",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "increase(cloudflare_zone_requests_status{zone=~\"$zone\", status!~\"2..\"}[$__interval]) ",
+            "interval": "",
+            "intervalFactor": 10,
+            "legendFormat": "{{status}}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Requests / Second (status codes not 2XX)",
+        "tooltip": {
+          "shared": true,
+          "sort": 2,
+          "value_type": "individual"
+        },
+        "type": "timeseries",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:125",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:126",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "autoMigrateFrom": "grafana-piechart-panel",
+        "breakPoint": "50%",
+        "combine": {
+          "label": "Others",
+          "threshold": 0
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "fontSize": "80%",
+        "format": "percentunit",
+        "gridPos": {
+          "h": 11,
+          "w": 6,
+          "x": 0,
+          "y": 40
+        },
+        "id": 4,
+        "legend": {
+          "show": true,
+          "values": true
+        },
+        "legendType": "Right side",
+        "maxDataPoints": 1,
+        "nullPointMode": "connected",
+        "pieType": "pie",
+        "strokeWidth": 1,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "cloudflare_zone_requests_cached{zone=~\"$zone\"} / cloudflare_zone_requests_total{zone=~\"$zone\"}",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "cached",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "(cloudflare_zone_requests_total{zone=~\"$zone\"} - cloudflare_zone_requests_cached{zone=~\"$zone\"}) / cloudflare_zone_requests_total{zone=~\"$zone\"}",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "uncached",
+            "refId": "B"
+          }
+        ],
+        "title": "Cached Requests",
+        "type": "piechart",
+        "valueName": "current"
+      },
+      {
+        "aliasColors": {},
+        "autoMigrateFrom": "grafana-piechart-panel",
+        "breakPoint": "50%",
+        "combine": {
+          "label": "Others",
+          "threshold": 0
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "fontSize": "80%",
+        "format": "percentunit",
+        "gridPos": {
+          "h": 11,
+          "w": 6,
+          "x": 6,
+          "y": 40
+        },
+        "id": 13,
+        "legend": {
+          "show": true,
+          "values": true
+        },
+        "legendType": "Right side",
+        "maxDataPoints": 1,
+        "nullPointMode": "connected",
+        "pieType": "pie",
+        "strokeWidth": 1,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "cloudflare_zone_requests_ssl_encrypted{zone=~\"$zone\"} / cloudflare_zone_requests_total{zone=~\"$zone\"}",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "encrypted",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "( cloudflare_zone_requests_total{zone=~\"$zone\"} - cloudflare_zone_requests_ssl_encrypted{zone=~\"$zone\"}  ) / cloudflare_zone_requests_total{zone=~\"$zone\"}",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "unencrypted",
+            "refId": "B"
+          }
+        ],
+        "title": "Requests SSL",
+        "type": "piechart",
+        "valueName": "current"
+      },
+      {
+        "aliasColors": {},
+        "autoMigrateFrom": "graph",
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 40
+        },
+        "hiddenSeries": false,
+        "id": 27,
+        "legend": {
+          "alignAsTable": true,
+          "avg": true,
+          "current": true,
+          "max": true,
+          "min": true,
+          "rightSide": false,
+          "show": true,
+          "sort": "max",
+          "sortDesc": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "percentage": false,
+        "pluginVersion": "7.1.5",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "rate(cloudflare_zone_requests_status{zone=~\"$zone\", status=~\"5..\"}[$__interval]) ",
+            "interval": "",
+            "intervalFactor": 10,
+            "legendFormat": "{{status}}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Errors / Second",
+        "tooltip": {
+          "shared": true,
+          "sort": 2,
+          "value_type": "individual"
+        },
+        "type": "timeseries",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:125",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:126",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "autoMigrateFrom": "grafana-piechart-panel",
+        "breakPoint": "50%",
+        "combine": {
+          "label": "Others",
+          "threshold": "0.01"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "fontSize": "80%",
+        "format": "short",
+        "gridPos": {
+          "h": 11,
+          "w": 12,
+          "x": 12,
+          "y": 49
+        },
+        "id": 12,
+        "legend": {
+          "percentage": true,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "values": true
+        },
+        "legendType": "Right side",
+        "maxDataPoints": 1,
+        "nullPointMode": "connected",
+        "pieType": "pie",
+        "strokeWidth": 1,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "increase(cloudflare_zone_requests_country{zone=~\"$zone\"}[$__range])",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{country}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Request Country",
+        "type": "piechart",
+        "valueName": "current"
+      },
+      {
+        "aliasColors": {},
+        "autoMigrateFrom": "grafana-piechart-panel",
+        "breakPoint": "50%",
+        "combine": {
+          "label": "Others",
+          "threshold": "0.001"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "fontSize": "80%",
+        "format": "short",
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 51
+        },
+        "id": 11,
+        "legend": {
+          "percentage": true,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "values": true
+        },
+        "legendType": "Right side",
+        "maxDataPoints": 1,
+        "nullPointMode": "connected",
+        "pieType": "pie",
+        "strokeWidth": 1,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "increase(cloudflare_zone_requests_content_type{zone=~\"$zone\"}[$__range])",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{content_type}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Request Content Type",
+        "type": "piechart",
+        "valueName": "current"
+      },
+      {
+        "aliasColors": {},
+        "autoMigrateFrom": "grafana-piechart-panel",
+        "breakPoint": "50%",
+        "combine": {
+          "label": "Others",
+          "threshold": "0.00005"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "fontSize": "80%",
+        "format": "short",
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 60
+        },
+        "id": 28,
+        "legend": {
+          "percentage": true,
+          "show": true,
+          "sort": "current",
+          "sortDesc": true,
+          "values": true
+        },
+        "legendType": "Right side",
+        "maxDataPoints": 1,
+        "nullPointMode": "connected",
+        "pieType": "pie",
+        "strokeWidth": 1,
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "expr": "increase(cloudflare_zone_requests_status{zone=~\"$zone\"}[$__range])",
+            "interval": "",
+            "legendFormat": "{{ status }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Requests Status Codes",
+        "type": "piechart",
+        "valueName": "current"
+      },
+      {
+        "collapsed": true,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 70
+        },
+        "id": 30,
+        "panels": [
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 10,
+              "w": 23,
+              "x": 0,
+              "y": 16
+            },
+            "hiddenSeries": false,
+            "id": 7,
+            "legend": {
+              "alignAsTable": true,
+              "avg": true,
+              "current": true,
+              "max": true,
+              "min": true,
+              "rightSide": false,
+              "show": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "dataLinks": []
+            },
+            "percentage": false,
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "rate(cloudflare_zone_bandwidth_total{zone=~\"$zone\"}[$__interval])",
+                "interval": "5m",
+                "intervalFactor": 10,
+                "legendFormat": "total",
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "rate(cloudflare_zone_bandwidth_cached{zone=~\"$zone\"}[$__interval])",
+                "interval": "5m",
+                "intervalFactor": 10,
+                "legendFormat": "cached",
+                "refId": "B"
+              }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Bandwidth / second",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "mode": "time",
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "$$hashKey": "object:125",
+                "format": "decbytes",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "$$hashKey": "object:126",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "aliasColors": {},
+            "breakPoint": "50%",
+            "combine": {
+              "label": "Others",
+              "threshold": 0
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "fontSize": "80%",
+            "format": "percentunit",
+            "gridPos": {
+              "h": 10,
+              "w": 12,
+              "x": 0,
+              "y": 26
+            },
+            "id": 9,
+            "legend": {
+              "show": true,
+              "values": true
+            },
+            "legendType": "Right side",
+            "links": [],
+            "maxDataPoints": 1,
+            "nullPointMode": "connected",
+            "pieType": "pie",
+            "strokeWidth": 1,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "cloudflare_zone_bandwidth_cached{zone=~\"$zone\"} / cloudflare_zone_bandwidth_total{zone=~\"$zone\"}",
+                "interval": "",
+                "legendFormat": "cached",
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "(cloudflare_zone_bandwidth_total{zone=~\"$zone\"} - cloudflare_zone_bandwidth_cached{zone=~\"$zone\"}) / cloudflare_zone_bandwidth_total{zone=~\"$zone\"}",
+                "interval": "",
+                "legendFormat": "uncached",
+                "refId": "B"
+              }
+            ],
+            "title": "Cached Bandwidth",
+            "type": "grafana-piechart-panel",
+            "valueName": "current"
+          },
+          {
+            "aliasColors": {},
+            "breakPoint": "50%",
+            "combine": {
+              "label": "Others",
+              "threshold": 0
+            },
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "fontSize": "80%",
+            "format": "decbytes",
+            "gridPos": {
+              "h": 10,
+              "w": 11,
+              "x": 12,
+              "y": 26
+            },
+            "id": 15,
+            "legend": {
+              "percentage": true,
+              "show": true,
+              "sort": "current",
+              "sortDesc": true,
+              "values": true
+            },
+            "legendType": "Right side",
+            "links": [],
+            "maxDataPoints": 1,
+            "nullPointMode": "connected",
+            "pieType": "pie",
+            "strokeWidth": 1,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "rate(cloudflare_zone_bandwidth_content_type{zone=~\"$zone\"}[5m])",
+                "interval": "",
+                "legendFormat": "{{content_type}}",
+                "refId": "A"
+              }
+            ],
+            "title": "Bandwidth Content Type",
+            "type": "grafana-piechart-panel",
+            "valueName": "current"
+          }
+        ],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Bandwidth",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 71
+        },
+        "id": 38,
+        "panels": [
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 10,
+              "w": 12,
+              "x": 0,
+              "y": 24
+            },
+            "hiddenSeries": false,
+            "id": 39,
+            "legend": {
+              "alignAsTable": true,
+              "avg": true,
+              "current": true,
+              "max": true,
+              "min": true,
+              "rightSide": false,
+              "show": true,
+              "sort": "avg",
+              "sortDesc": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "dataLinks": []
+            },
+            "percentage": false,
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "sum by (region)(rate(cloudflare_zone_requests_country{zone=~\"$zone\"}[$__interval]))",
+                "format": "time_series",
+                "instant": false,
+                "interval": "5m",
+                "intervalFactor": 10,
+                "legendFormat": "{{ region }}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Requests by Region / second",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "mode": "time",
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "$$hashKey": "object:125",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "$$hashKey": "object:126",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 10,
+              "w": 12,
+              "x": 12,
+              "y": 24
+            },
+            "hiddenSeries": false,
+            "id": 40,
+            "legend": {
+              "alignAsTable": true,
+              "avg": true,
+              "current": true,
+              "max": true,
+              "min": true,
+              "rightSide": false,
+              "show": true,
+              "sort": "avg",
+              "sortDesc": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "dataLinks": []
+            },
+            "percentage": false,
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "sum by (region)(rate(cloudflare_zone_bandwidth_country{zone=~\"$zone\"}[$__interval]))",
+                "interval": "5m",
+                "intervalFactor": 10,
+                "legendFormat": "{{ region }}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Bandwidth by Region / second",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "mode": "time",
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "$$hashKey": "object:125",
+                "format": "Bps",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "$$hashKey": "object:126",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 7,
+              "w": 8,
+              "x": 0,
+              "y": 34
+            },
+            "hiddenSeries": false,
+            "id": 41,
+            "legend": {
+              "alignAsTable": true,
+              "avg": true,
+              "current": true,
+              "max": true,
+              "min": true,
+              "rightSide": false,
+              "show": true,
+              "sort": "avg",
+              "sortDesc": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "maxPerRow": 3,
+            "nullPointMode": "null",
+            "options": {
+              "dataLinks": []
+            },
+            "percentage": false,
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "repeat": "regions",
+            "repeatDirection": "h",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "rate(cloudflare_zone_requests_country{zone=~\"$zone\", region=~\"$regions\"}[$__interval]) > 10",
+                "interval": "5m",
+                "intervalFactor": 10,
+                "legendFormat": "{{ country }}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Requests in $regions / second",
+            "tooltip": {
+              "shared": true,
+              "sort": 2,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "mode": "time",
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "$$hashKey": "object:125",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "$$hashKey": "object:126",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          }
+        ],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Regions",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 72
+        },
+        "id": 32,
+        "panels": [
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 38
+            },
+            "hiddenSeries": false,
+            "id": 34,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "dataLinks": []
+            },
+            "percentage": false,
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "rate(cloudflare_zone_threats_total{zone=~\"$zone\"}[1m])",
+                "interval": "",
+                "legendFormat": "{{zone}}/threats",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Threats / second",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "mode": "time",
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "$$hashKey": "object:241",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "$$hashKey": "object:242",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 38
+            },
+            "hiddenSeries": false,
+            "id": 35,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "dataLinks": []
+            },
+            "percentage": false,
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "rate(cloudflare_zone_threats_country{zone=~\"$zone\"}[1m])",
+                "interval": "",
+                "legendFormat": "{{country}}/threats",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Threats / country",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "mode": "time",
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "$$hashKey": "object:241",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "$$hashKey": "object:242",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 24,
+              "x": 0,
+              "y": 46
+            },
+            "hiddenSeries": false,
+            "id": 36,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "dataLinks": []
+            },
+            "percentage": false,
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "rate(cloudflare_zone_threats_type{zone=~\"$zone\"}[1m])",
+                "interval": "",
+                "legendFormat": "{{type}}/threats",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Threats / type",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "mode": "time",
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "$$hashKey": "object:241",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "$$hashKey": "object:242",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          }
+        ],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Threats",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 73
+        },
+        "id": 48,
+        "panels": [
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "links": []
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 24,
+              "x": 0,
+              "y": 74
+            },
+            "hiddenSeries": false,
+            "id": 50,
+            "legend": {
+              "alignAsTable": true,
+              "avg": false,
+              "current": true,
+              "max": true,
+              "min": true,
+              "show": true,
+              "total": false,
+              "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "percentage": false,
+            "pluginVersion": "7.1.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "repeat": "zone",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "expr": "rate(cloudflare_zone_colocation_visits{zone=\"$zone\"}[$__interval]) > 0",
+                "interval": "",
+                "intervalFactor": 10,
+                "legendFormat": "{{ colocation }}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [],
+            "timeRegions": [],
+            "title": "Visits  by Colocations / second",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "mode": "time",
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "$$hashKey": "object:169",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "$$hashKey": "object:170",
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          }
+        ],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Colocations",
+        "type": "row"
+      }
+    ],
+    "refresh": false,
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {},
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(cloudflare_zone_requests_total, zone)",
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "zone",
+          "options": [],
+          "query": "label_values(cloudflare_zone_requests_total, zone)",
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "current": {},
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(cloudflare_zone_requests_country, region)",
+          "hide": 2,
+          "includeAll": false,
+          "multi": true,
+          "name": "regions",
+          "options": [],
+          "query": "label_values(cloudflare_zone_requests_country, region)",
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        }
+      ]
+    },
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "",
+    "title": "CloudFlare (Prometheus) Zone Analytics (13133)",
+    "uid": "mWxtnz5Mz",
+    "weekStart": ""
+  }
+}
