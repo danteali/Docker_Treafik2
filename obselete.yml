@@ -1,0 +1,2091 @@
+# THESE ARE APPS I DO NOT USE ANYMORE OR TESTED BUT FOUND TO BE NOT USEFUL TO ME
+
+version: "3.8"
+
+########################### NETWORKS
+networks:
+  t2_proxy:
+    name: t2_proxy
+    external: true  # Will not try to re-create and will look for existing network
+    #driver: bridge
+    #ipam:
+    #  config:
+    #    - subnet: $TRAEFIK_NET
+    #      gateway: $TRAEFIK_GATEWAY
+  socket_proxy:
+    name: socket_proxy
+    #external: true  # Will not try to re-create and will look for existing network
+    #driver: bridge
+    #ipam:
+    #  config:
+    #    - subnet: $SOCKET_PROXY_NET
+    #      gateway: $SOCKET_PROXY_GATEWAY
+  lan_net:
+    name: lan_net
+    external: true  # Will not try to re-create and will look for existing network
+    #driver: macvlan
+    #driver_opts:
+    #  parent: $MACVLAN_NIC
+    #ipam:
+    #  config:
+    #    - subnet: $MACVLAN_NET
+    #      gateway: $MACVLAN_GATEWAY
+    #      ip_range: $MACVLAN_RANGE
+          # Don't believe we need to reserve address for host as can
+          # route to host's LAN IP in host routing rules instead of
+          # having to reserve IP.
+          #aux_addresses:
+          #  host1: $MACVLAN_HOST
+  # Docker will use the same default network for all compose files in
+  # the same directory. It will use the settings of the first network
+  # created even of other compose files try to set the default to a
+  # different subnet.
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $DEFAULT_COMPOSE_NET
+          gateway: $DEFAULT_COMPOSE_GATEWAY
+
+########################### COMMON SETTINGS ('EXTENDS')
+
+#x-logging: 
+#      &default-logging
+#      options:
+#        # For default json-file driver
+#        #max-size: "50m"
+#        #max-file: "1"
+#        # For local driver when journald enabled
+#        # Now defined globally in /etc/docker/daemon.json
+#        cache-max-size: "50m"
+#        cache-max-file: "1"
+
+########################### SERVICES
+
+services:
+
+
+#  # OLD INSTANCE (TEST INSTANCE MOVED TO PRODUCTION)
+#  # Create log before 1st use & set correct permissions for container to use properly:
+#  # touch /var/log/docker/home-assistant-test/home-assistant.log
+#  # sudo chown root:root /var/log/docker/home-assistant-test/home-assistant.log
+#  home-assistant-old:
+#    image: ghcr.io/home-assistant/home-assistant:2021.10.4
+#    container_name: home-assistant-old
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    networks:
+#        default:
+#        t2_proxy:
+#        lan_net:
+#          ipv4_address: $MACVLAN_HOMEASSISTANT_IP_OLD # Specify IP address on macvlan network
+#    privileged: true
+#    #ports:
+#      # A dedicated macvlan IP means port mapping does not have any effect.
+#      # All ports are accessible on dedicated IP and no ports on docker host
+#      # are mapped.
+#      # Traefik will still redirect FQDN to container through proxy network.
+#      #- $HOMEASSISTANT_GUI_HTTP_PORT:8123 # GUI
+#      #- $HOMEASSISTANT_GUI_HTTPS_PORT:8124 # GUI HTTPS???
+#      #- $HOMEASSISTANT_HUE_PORT:8300 # Alexa integration (Hue emulation)
+#      #- $HOMEASSISTANT_HUE_PORT:8300/udp # Alexa integration (Hue emulation)
+#      #- $HOMEASSISTANT_UPNP_PORT:1900 # UPNP - discoverability
+#      #- $HOMEASSISTANT_UPNP_PORT:1900/udp # UPNP - discoverability
+#    volumes:
+#      - $DOCKER_DIR/home-assistant-old/config:/config
+#      - $SCRATCHPAD_DIR:/scratchpad
+#      - $DOCKERLOG_DIR/home-assistant-old/home-assistant.log:/config/home-assistant.log
+#      - /etc/localtime:/etc/localtime:ro          
+#    #devices:
+#    # Tried passing Bluetooth device to HA - couldn't get working (yet) - maybe after Linux update
+#    #  - /dev/bus/usb/002/06
+#    #  - /dev/bus/usb/002/06:/dev/bus/usb/002/06
+#    #  - /dev/bus/usb:/dev/bus/usb
+#    labels:
+#      - org.label-schema.group=home-auto,external
+#      ## Exclude From Watchtower Auto-Update But Notify On New Image
+#      - "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.home-assistant-old-rtr.entrypoints=https"
+#      - "traefik.http.routers.home-assistant-old-rtr.rule=Host(`ha-old.$DOMAINNAME0`)"
+#      - "traefik.http.routers.home-assistant-old-rtr.tls=true"
+#      - "traefik.http.routers.home-assistant-old-rtr.priority=99"
+#      ## Webhook Bypass
+#      - "traefik.http.routers.home-assistant-old-webhook-rtr.entrypoints=https"
+#      - "traefik.http.routers.home-assistant-old-webhook-rtr.rule=Host(`ha-old.$DOMAINNAME0`) && PathPrefix(`/api/webhook`)"
+#      - "traefik.http.routers.home-assistant-old-webhook-rtr.tls=true"
+#      - "traefik.http.routers.home-assistant-old-webhook-rtr.priority=100"
+#      ## Middlewares
+#      - "traefik.http.routers.home-assistant-old-webhook-rtr.middlewares=chain-no-auth@file"
+#      - "traefik.http.routers.home-assistant-old-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.home-assistant-old-webhook-rtr.service=home-assistant-old-svc"
+#      - "traefik.http.routers.home-assistant-old-rtr.service=home-assistant-old-svc"
+#      - "traefik.http.services.home-assistant-old-svc.loadbalancer.server.port=8123"
+
+
+#  # TAUTULLI PROMETHEUS EXPORTER
+#  # https://github.com/nwalke/tautulli-exporter
+#  tautulli-exporter:
+#    image: nwalke/tautulli_exporter:latest
+#    container_name: tautulli-exporter
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      - default
+#    # Only needed if accessing outside docker network
+#    ports:
+#      - $TAUTULLI_EXPORTER:9487 # Maps to 9487
+#    environment:
+#      #- SERVE_PORT =9487 # (default=9487) Which port for server to use to serve metrics
+#      - TAUTULLI_URI=http://tautulli:8181
+#      - TAUTULLI_API_KEY=332c9d2cb5584181a85f2ae62185e852   # tautulli API key
+#      - TAUTULLI_SSL_VERIFY=false # Whether or not to verify ssl certificates.
+#      #- TAUTULLI_TIMEOUT=5 # (default=5) Set this to the timeout the exporter should use for scraping Tautulli
+#    labels:
+#      - org.label-schema.group=monitoring
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+# Not working any longer - Oct 23
+#  # Collabora - Nextcloud integrated document editor
+#  # For testing we can start service quickly with:
+#  #   docker run -d -p 9980:9980 --name=collabora -e "domain=nc\\.domain\\.co\\.uk" -e "username=admin" -e "password=123456" --restart unless-stopped --cap-add MKNOD collabora/code
+#  collabora:
+#    image: collabora/code:23.05.2.2.1
+#    container_name: collabora
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    # May need to map to nextcloud's container network if having trouble connecting from NC
+#    #network_mode: 
+#    #  service:nextcloud
+#    networks:
+#      t2_proxy:
+#        ipv4_address: $TRAEFIKNET_COLLABORA_IP # You can specify a static IP
+#      default:
+#        #ipv4_address: $DEFAULTNET_COLLABORA_IP # You can specify a static IP
+#    # Service doesn't work with no-new-priv
+#    #security_opt: 
+#    #  - no-new-privileges:true
+#    cap_add:
+#      - MKNOD
+#    ports:
+#      - $COLLABORA_PORT:9980
+#    environment:
+#      # Got error: Use of domain variable is not supported. First host/domain who tries to connect to COOL is always allowed.
+#      #- domain=nc\\.$COLLABORA_DOMAINNAME0_DOMAIN\\.$COLLABORA_DOMAINNAME0_TLD1\\.$COLLABORA_DOMAINNAME0_TLD2
+#      #- domain=nc\\.domain\\.co\\.uk # Also try writing domain name without variables if above doesn't work (removed actual domain example from this file for security)
+#      #- aliasgroup1=https://nc.$DOMAINNAME0
+#      - dictionaries=en_GB
+#      #- username=$COLLABORA_USER # Optional - enables admin console at https://<CODE-domain>/loleaflet/dist/admin/admin.html
+#      #- password=$COLLABORA_PASSWORD # Optional - enables admin console at https://<CODE-domain>/loleaflet/dist/admin/admin.html
+#      - server_name=collabora.$DOMAINNAME0
+#      #- DONT_GEN_SSL_CERT=YES
+#      #- extra_params=--o:ssl.termination=true #--o:ssl.enable=false # Can't disable SSL or we'd have mixed HTTPS and HTTP in the same site.
+#    # Enabling traefik proxy to be able to check container working at above addresses
+#    labels:
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.collabora-rtr.entrypoints=https"
+#      - "traefik.http.routers.collabora-rtr.rule=Host(`collabora.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.collabora-rtr.middlewares=chain-nextcloud@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.collabora-rtr.service=collabora-svc"
+#      - "traefik.http.services.collabora-svc.loadbalancer.server.port=9980"
+#      - "traefik.http.services.collabora-svc.loadbalancer.server.scheme=https"
+
+# Calibre moved to KASM backend which needed ful compose re-write.
+#  # Calibre - eBook library
+#  # Uses guacamole to display desktop GUI
+#  # Can turn on web frontend from inside Calibre to enable webserver GUI
+#  # https://docs.linuxserver.io/images/docker-calibre
+#  calibre:
+#    image: lscr.io/linuxserver/calibre
+#    container_name: calibre
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    networks:
+#      - t2_proxy
+#      #- default
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - $CALIBRE_HTTP_PORT:8080
+#      #- $CALIBRE_BUILTIN_GUI_PORT:8081 # Calbire's builtin webserver frontend
+#      - $CALIBRE_GUAC_RDP_PORT:3389 # To connect directly from our own guacamole instance (if no pwd set below then use abc:abc for direct RDP login)
+#    volumes:
+#      - $DOCKER_DIR/calibre/data:/config
+#      - $MEDIA_DIR/Books/calibre_library:/library
+#    environment:
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#      #- FILE__PASSWORD=/run/secrets/calibre_password # Optional - disabled since makes difficult to access GUI via Guac's firefox VNC on phone.
+#      #- PASSWORD=$CALIBRE_PASSWORD # Optional (if not set then use abc:abc for direct RDP login)
+#      #- CLI_ARGS= #optional
+#    secrets:
+#      - calibre_password
+#    labels:
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.calibre-guac-rtr.entrypoints=https"
+#      - "traefik.http.routers.calibre-guac-rtr.rule=Host(`calibre.$DOMAINNAME0`)"
+#      #- "traefik.http.routers.calibre-webgui-rtr.entrypoints=https" # Not using webserver frontend
+#      #- "traefik.http.routers.calibre-webgui-rtr.rule=Host(`calibreweb.$DOMAINNAME0`)" # Not using webserver frontend
+#      ## Middlewares
+#      - "traefik.http.routers.calibre-guac-rtr.middlewares=chain-authelia@file"
+#      #- "traefik.http.routers.calibre-webgui-rtr.middlewares=chain-authelia@file" # Not using webserver frontend
+#      ## HTTP Services
+#      - "traefik.http.routers.calibre-guac-rtr.service=calibre-guac-svc"
+#      - "traefik.http.services.calibre-guac-svc.loadbalancer.server.port=8080"
+#      #- "traefik.http.routers.calibre-webgui-rtr.service=calibre-webgui-svc" # Not using webserver frontend
+#      #- "traefik.http.services.calibre-webgui-svc.loadbalancer.server.port=8081" # Not using webserver frontend
+
+
+# Migrated to standalone LXC
+# Note that video storage path changed - now: /storage/Frigate-LXC
+  # Frigate NVR
+  # https://docs.frigate.video/
+  # https://github.com/blakeblackshear/frigate
+  # 'touch' config.yml or restore existing version on host before running or a dir will be created!
+#  frigate:
+#    container_name: frigate
+#    image: ghcr.io/blakeblackshear/frigate:stable
+#    # Priv access or alternatively CAP_PERFMON needed
+#    # WSL - CAP_PERFMON did not work, so using priv container.
+#    privileged: true # this may not be necessary for all setups
+#    cap_add:
+#      - CAP_PERFMON
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    networks:
+#      - default
+#      - t2_proxy
+#    # Using detection streams for calc (1536x576 & 2x 640x480) = 12mb + 4mb = 16mb + 30mb for frigate itself = 46mb. Leaving at default 64mb for margin.
+#    shm_size: "64mb" # update for your cameras based on calculation at https://docs.frigate.video/frigate/installation#calculating-required-shm-size
+#    cpus: 2 # CPU limit
+#    mem_limit: 4048m # represents the hard memory limits
+#    mem_reservation: 512m # represents the soft memory limits
+#    devices:
+#      #- /dev/bus/usb:/dev/bus/usb # passes the USB Coral, needs to be modified for other versions
+#      - /dev/apex_0:/dev/apex_0 # passes a PCIe Coral, follow driver instructions here https://coral.ai/docs/m2/get-started/#2a-on-linux
+#      #- /dev/dri/renderD128 # for intel hwaccel, needs to be updated for your hardware
+#      - /dev/dri:/dev/dri # for intel hwaccel, needs to be updated for your hardware
+#    volumes:
+#      # Create target directories on SSD!!!
+#      - /etc/localtime:/etc/localtime:ro
+#      - $DOCKER_DIR/frigate/data/config.yml:/config/config.yml
+#      - /storage/scratchpad/frigate:/media/frigate
+#      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+#        target: /tmp/cache
+#        tmpfs:
+#          size: 1000000000
+#    ports:
+#      - $FRIGATE_GUI_PORT:5000
+#      - $FRIGATE_RTSP_PORT:8554 # RTSP feeds
+#      - $FRIGATE_WEBRTC_PORT:8555/tcp # WebRTC over tcp
+#      - $FRIGATE_WEBRTC_PORT:8555/udp # WebRTC over udp
+#    environment:
+#      FRIGATE_RTSP_PASSWORD: $FRIGATE_RTSP_PASSWORD
+#    labels:
+#      - org.label-schema.group=home-auto,external
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.frigate-rtr.entrypoints=https"
+#      - "traefik.http.routers.frigate-rtr.rule=Host(`frigate.$DOMAINNAME0`)"
+#      ## Middlewares
+#      #- "traefik.http.routers.frigate-rtr.middlewares=chain-basic-auth@file" 
+#      #- "traefik.http.routers.frigate-rtr.middlewares=chain-no-auth@file"
+#      - "traefik.http.routers.frigate-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.frigate-rtr.service=frigate-svc"
+#      - "traefik.http.services.frigate-svc.loadbalancer.server.port=5000"
+#      #- "traefik.http.services.frigate-svc.loadbalancer.server.scheme=https"
+
+# Migrated to standalone LXC
+#  # Frigate Prometheus Exporter
+#  # https://github.com/bairhys/prometheus-frigate-exporter
+#  # https://hub.docker.com/r/rhysbailey/prometheus-frigate-exporter
+#  frigate-exporter-prometheus:
+#    image: rhysbailey/prometheus-frigate-exporter
+#    container_name: frigate-exporter-prometheus
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      - default
+#    #ports:
+#      # Don't need to expose if on same network as prometheus & frigate
+#      #- $FRIGATE_EXPORTER_PROMETHEUS_PORT:9100
+#    environment:
+#      - FRIGATE_STATS_URL=http://frigate:5000/api/stats
+#    labels:
+#      - org.label-schema.group=monitoring
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+  ## Slack Docker Notifications
+  ## Notifies slack on changes to docker containers
+  #slack_docker_activity:
+  #  image: int128/slack-docker
+  #  container_name: slack-docker-activity
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  networks:
+  #    - default
+  #  hostname: crush
+  #  volumes:
+  #    # Comment below if we can get working with socket-proxy
+  #    - /var/run/docker.sock:/var/run/docker.sock # Preferrably Docker Socket Proxy instead for improved security
+  #  environment:
+  #    - webhook=$SLACK_WEBHOOK_DOCKER
+  #    #- image_regexp=^*(?!curl) # Want to exclude curl images e.g. appropriate/curl
+  #  #labels:
+  #    #------------- WATCHTOWER -------------#
+  #    # Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    # Exclude From Watchtower updates - Notify On New Image
+  #    #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+
+
+  # PiHole - Ad Blocking & Local DNS
+  # https://hub.docker.com/r/pihole/pihole
+  # https://github.com/pi-hole/docker-pi-hole
+  # 'touch' log file before first run:
+  #     sudo mkdir -p /var/log/docker/pihole
+  #     touch /var/log/docker/pihole/pihole.log
+  # March 22 Update to 2022.02.1
+  # See issue report: https://github.com/pi-hole/docker-pi-hole/issues/860#issuecomment-1060104737
+  # Mar 22: 2021.09 working except DB permissions issue (config backup in config_20220306_212227.zip)
+  #         Upgraded from 2021.09 to 2022.02.1 (prev 'working' data dir saved as 'data_old_20220306')
+  #         Had to set UID/GID vars to workaround permissions issue in 2022.02.1 
+  # Aug 22: Upgraded to 2022.08.3 - reverted to 2022.02.1 while investigate some 08.3 errors
+  # Jan 23: Upgraded from 2022.02.1 to 2023.01.10 - permissions issues still persist.
+  # Aug 23: Upgraded from 2023.01.10 to 2023.05.02 
+  #         Retained 2023.01.10 'working' version's data in folder 'data-2023.01.10-working' and volumes point to that if we need to revert.
+  #         2023.05.02 still has permissions issue and workarounds don't work since pihole reverts permissions at container startup.
+  #         - Tried UID/GID vars, and DNSMASQ_USER var but no help. And chmod doesn't work any longer. 
+  #         - Tried running directly on underlying /mnt/data/diskX and didn't work.
+  #        Unbound image 'cbcrowe/pihole-unbound:latest' does seem to work without the same issue and is up to date!
+  # ---------------------------
+  # Pre-Aug 2023 version - 2023.01.10
+  # ---------------------------
+  #pihole:
+  #  container_name: pihole
+  #  image: pihole/pihole:2023.01.10
+  #  restart: always
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  shm_size: 256m # Temp fix for FTL.log error about SHM filling up - real issue is permissions again
+  #  networks:
+  #      default:
+  #      t2_proxy:
+  #      lan_net:
+  #        ipv4_address: $MACVLAN_PIHOLE_IP # Specify IP address on macvlan network
+  #  cap_add:
+  #    # These should be allowed by default but specifying anyway just in case (see: https://dockerlabs.collabnix.com/advanced/security/capabilities/)
+  #    - SETGID # https://github.com/pi-hole/docker-pi-hole/issues/536
+  #    - SETUID # https://github.com/pi-hole/docker-pi-hole/issues/536
+  #    - CHOWN # We need to be able to change ownership of log files and databases in case FTL is started as a different user than pihole
+  #    - SYS_CHROOT
+  #    - CAP_NET_BIND_SERVICE #Allows FTLDNS binding to TCP/UDP sockets below 1024 (specifically DNS service on port 53)
+  #    - CAP_NET_RAW #use raw and packet sockets (needed for handling DHCPv6 requests, and verifying that an IP is not in use before leasing it)
+  #    # FTL sets itself as an important process to get some more processing time if the latter is running low
+  #    - SYS_NICE 
+  #    # For networking services - not needed if giving own IP via macvlan
+  #    #- NET_ADMIN # For DHCP 
+  #    #- CAP_NET_ADMIN # modify routing tables and other network-related operations (in particular inserting an entry in the neighbor table to answer DHCP requests using unicast packets)
+  #  #security_opt:
+  #  # Enabling this stops pihole from editing host mounted files for some reason.
+  #  # Think it stops the SETUID/SETGID above from changing pihole user to allow editing.
+  #  #  - no-new-privileges:true
+  #  #ports:
+  #    # A dedicated macvlan IP means port mapping does not have any effect.
+  #    # All ports are accessible on dedicated IP and no ports on docker host
+  #    # are mapped.
+  #    # Traefik will still redirect FQDN to container through proxy network.
+  #    #- $PIHOLE_PORT:80
+  #    #- $DNS_PORT:53/tcp # DNS
+  #    #- $DNS_PORT:53/udp # DNS
+  #    #- $DHCP_PORT:67/udp # For DHCP
+  #  # Set container's DNS nameserver (can use this in any docker-compose snippet - not pihole specific)
+  #  dns:
+  #    - 192.168.0.1 # Tell pihole to use itself to resolve names
+  #    - 1.1.1.1 # Cloudflare
+  #  volumes:
+  #    - $DOCKERLOG_DIR/pihole/pihole.log:/var/log/pihole/pihole.log
+  #    #- $DOCKERLOG_DIR/pihole/pihole.log:/var/log/pihole/pihole.log # Path as of 2022.08.3
+  #    #- $DOCKERLOG_DIR/pihole/FTL.log:/var/log/pihole/FTL.log  # Path as of 2022.08.3
+  #    - $DOCKER_DIR/pihole/data-2023.01.10-working/etc/dnsmasq.d/:/etc/dnsmasq.d/
+  #    - $DOCKER_DIR/pihole/data-2023.01.10-working/etc/pihole/:/etc/pihole/
+  #  environment:
+  #    # March 22: Setting UIDs/GIDs as workaround for permission issue (https://github.com/pi-hole/docker-pi-hole/issues/860#issuecomment-1060104737)
+  #    - PIHOLE_UID=$PUID
+  #    - PIHOLE_GID=$PGID
+  #    - WEB_UID=$PUID
+  #    - WEB_GID=$PGID
+  #    - WEBPASSWORD= # Don't enter any text after '=' to setno pwd. Use secrets file f we want a GUI pwd
+  #    - TZ=$TZ
+  #    - FTLCONF_LOCAL_IPV4=$MACVLAN_PIHOLE_IP # Var changed from 'FTLCONF_REPLY_ADDR4'
+  #    - DNSMASQ_LISTENING=all # [GUI-settable] Tell pihole to listen on all interfaces - set here so its default for any new config
+  #    #- PIHOLE_DNS_=1.1.1.1;1.0.0.1 # [GUI-settable] Specify upstream DNS servers: Google=8.8.8.8;8.8.4.4 Cloudflare=1.1.1.1;1.0.0.1
+  #    - DNS_BOGUS_PRIV=true # [GUI-settable] Never forward reverse lookups for private ranges
+  #    - DNS_FQDN_REQUIRED=true # [GUI-settable] Never forward non-FQDNs
+  #    #- REV_SERVER=true # [GUI-settable] Conditional Forwarding - to enable resolving local IPs to hostnames
+  #    #- REV_SERVER_TARGET=192.168.0.1 # [GUI-settable] Conditional Forwarding - define DHCP server address
+  #    #- REV_SERVER_CIDR=192.168.0.0/16 # [GUI-settable] Conditional Forwarding - define address space to forward to DHCP server
+  #    #- SKIPGRAVITYONBOOT=1 # Don't update Gravity DB on startup. Useful if restarting service multiple times to test changes as Gravity takes a while to do update.
+  #    #- ServerIP=$PIHOLE_SERVERIP   # Depreciated
+  #  #  - WEBPASSWORD_FILE=/run/secrets/pihole_webpassword
+  #  #secrets:
+  #  #  - pihole_webpassword
+  #  labels:
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+  #    #----------- TRAEFIK LABELS -----------#
+  #    - "traefik.enable=true"
+  #    ## HTTP Routers
+  #    - "traefik.http.routers.pihole-rtr.entrypoints=https"
+  #    - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.$DOMAINNAME0`)"
+  #    ## Middlewares     
+  #    - "traefik.http.routers.pihole-rtr.middlewares=chain-authelia@file,pihole-add-admin"
+  #    - "traefik.http.middlewares.pihole-add-admin.addPrefix.prefix=/admin"
+  #    ## HTTP Services
+  #    - "traefik.http.routers.pihole-rtr.service=pihole-svc"
+  #    - "traefik.http.services.pihole-svc.loadbalancer.server.port=80"
+  # ---------------------------
+  # Aug 2023 update attempt 2023.05.02
+  # ---------------------------
+  #pihole:
+  #  container_name: pihole
+  #  image: pihole/pihole:2023.05.2
+  #  restart: always
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  #shm_size: 256m # Temp fix for FTL.log error about SHM filling up - real issue is permissions again
+  #  networks:
+  #      default:
+  #      t2_proxy:
+  #      lan_net:
+  #        ipv4_address: $MACVLAN_PIHOLE_IP # Specify IP address on macvlan network
+  #  #cap_add:
+  #    # These should be automatically granted by the image (see: https://dockerlabs.collabnix.com/advanced/security/capabilities/)
+  #    #- NET_BIND_SERVICE                                   # Allows FTLDNS binding to TCP/UDP sockets below 1024 (specifically DNS service on port 53)
+  #    #- NET_RAW                                            # Use raw and packet sockets (needed for handling DHCPv6 requests, and verifying that an IP is not in use before leasing it)
+  #    #- SYS_NICE                                           # FTL sets itself as an important process to get some more processing time if the latter is running low
+  #    #- NET_ADMIN                                          # Only needed if using pihole for DHCP - modify routing tables and other network-related operations
+  #    #- CHOWN                                              # We need to be able to change ownership of log files and databases in case FTL is started as a different user than pihole
+  #    # Used when attempting to resolve permissions issues
+  #    #- SETGID                                             # https://github.com/pi-hole/docker-pi-hole/issues/536
+  #    #- SETUID                                             # https://github.com/pi-hole/docker-pi-hole/issues/536
+  #    #- SYS_CHROOT
+  #  #security_opt:
+  #  # Enabling this stops pihole from editing host mounted files for some reason.
+  #  # Think it stops the SETUID/SETGID above from changing pihole user to allow editing.
+  #  #  - no-new-privileges:true
+  #  #ports:
+  #    # A dedicated macvlan IP means port mapping does not have any effect.
+  #    # All ports are accessible on dedicated IP and no ports on docker host
+  #    # are mapped.
+  #    # Traefik will still redirect FQDN to container through proxy network.
+  #    #- $PIHOLE_PORT:80
+  #    #- $DNS_PORT:53/tcp # DNS
+  #    #- $DNS_PORT:53/udp # DNS
+  #    #- $DHCP_PORT:67/udp # For DHCP
+  #  # Sets a backup server of your choosing in case DNSMasq has problems starting
+  #  dns:
+  #    - 192.168.0.1                                         # Use router if pihole's DNS can't start
+  #    - 1.1.1.1                                             # Cloudflare
+  #  volumes:
+  #    - $DOCKERLOG_DIR/pihole/pihole.log:/var/log/pihole/pihole.log
+  #    - $DOCKER_DIR/pihole/data/etc/dnsmasq.d:/etc/dnsmasq.d:rw
+  #    - $DOCKER_DIR/pihole/data/etc/pihole:/etc/pihole:rw
+  #    # If using the chriscrowe/docker-pihole-unbound container we want unbound config access
+  #    # We need to manually copy content from container before trying to mount first for some reason!
+  #    #- $DOCKER_DIR/pihole/data/etc/unbound:/etc/unbound:rw
+  #    # Try directly mounting underlying disk
+  #    #- /mnt/data/disk7/Docker/pihole/data/etc/dnsmasq.d/:/etc/dnsmasq.d/
+  #    #- /mnt/data/disk7/Docker/pihole/data/etc/pihole/:/etc/pihole/
+  #  environment:
+  #    ### RECOMMENDED VARIABLES
+  #    - WEBPASSWORD=                                        # (Default=random) Don't enter any text after '=' to set no pwd. If not set find password in log with: docker logs pihole | grep random
+  #    #- WEBPASSWORD_FILE="/run/secrets/pihole_webpassword" # Use this to set password if we want one.
+  #    - TZ=$TZ # (Default=UTC)
+  #    - FTLCONF_LOCAL_IPV4=$MACVLAN_PIHOLE_IP               # (Default=Host IP) Var changed from 'FTLCONF_REPLY_ADDR4'
+  #    ### OPTIONAL VARIABLES
+  #    - PIHOLE_DNS_=208.67.222.222;208.67.220.220           # [GUI-settable] (Default=8.8.8.8;8.8.4.4) Specify upstream DNS servers: Google=8.8.8.8;8.8.4.4 Cloudflare=1.1.1.1;1.0.0.1,OpenDNS=208.67.222.222;208.67.220.220
+  #    #- DNSEC=false                                        # [GUI-settable] (Default=false) Enable DNSSEC support
+  #    #- DNS_BOGUS_PRIV=true                                # [GUI-settable] (Default=true) Never forward reverse lookups for private ranges
+  #    #- DNS_FQDN_REQUIRED=true                             # [GUI-settable] (Default=true) Never forward non-FQDNs
+  #    #- REV_SERVER=true                                    # [GUI-settable] (Default=false) Conditional Forwarding - to enable resolving local IPs to hostnames
+  #    #- REV_SERVER_DOMAIN=$DOMAINNAME0                # [GUI-settable] (Default=unset) If conditional forwarding is enabled, set the domain of the local network router
+  #    #- REV_SERVER_TARGET=192.168.0.1                      # [GUI-settable] (Default=unset) Conditional Forwarding - define DHCP server address
+  #    #- REV_SERVER_CIDR=192.168.0.0/16                     # [GUI-settable] (Default=unset) Conditional Forwarding - define address space to forward to DHCP server
+  #    - DHCP_ACTIVE=false                                   # [GUI-settable] (Default=false) Enable DHCP server. Static DHCP leases can be configured with a custom /etc/dnsmasq.d/04-pihole-static-dhcp.conf
+  #    #- DHCP_START=<IP-Address>                            # [GUI-settable] (Default=unset) Start of the range of IP addresses to hand out by the DHCP server (mandatory if DHCP server is enabled).
+  #    #- DHCP_END=<IP-Address>                              # [GUI-settable] (Default=unset) End of the range of IP addresses to hand out by the DHCP server (mandatory if DHCP server is enabled).
+  #    #- DHCP_ROUTER=192.168.0.1                            # [GUI-settable] (Default=unset) Router (gateway) IP address sent by the DHCP server (mandatory if DHCP server is enabled).
+  #    #- DHCP_LEASETIME=24                                  # [GUI-settable] (Default=24) DHCP lease time in hours.
+  #    #- PIHOLE_DOMAIN=$DOMAINNAME0                    # [GUI-settable] (Default=lan) Domain name sent by the DHCP server.
+  #    #- DHCP_IPv6=false                                    # [GUI-settable] (Default=false) Enable DHCP server IPv6 support (SLAAC + RA).
+  #    - VIRTUAL_HOST=pihole.$DOMAINNAME0               # [???GUI-settable???] (Default=${HOSTNAME}) Web server 'virtual host'. Accessing through this Hostname/IP allows changes to whitelist / blacklists. (http://pi.hole/admin/ still works too)
+  #    #- IPv6=true                                          # [???GUI-settable???] (Default=true) For unraid compatibility, strips out all the IPv6 configuration from DNS/Web services when false.
+  #    #- TEMPERATUREUNIT=C                                  # [GUI-settable] (Default=C) Set preferred temperature unit to c: Celsius, k: Kelvin, or f Fahrenheit units.
+  #    #- WEBUIBOXEDLAYOUT=boxed                             # [GUI-settable] (Default=boxed) Use boxed layout (helpful when working on large screens)
+  #    #- QUERY_LOGGING=true                                 # [GUI-settable] (Default=true) Enable query logging or not.
+  #    #- WEBTHEME=default-light                             # [GUI-settable] (Default=default-light) User interface theme to use.
+  #    ### ADVANCED VARIABLES
+  #    #- INTERFACE=<NIC>                                    # (Default=unset) Name if NIC
+  #    - DNSMASQ_LISTENING=all                               # [GUI-settable] (Default=unset) Tell pihole to listen on all interfaces - set here so its default for any new config
+  #    #- WEB_PORT=<PORT>                                    # (Default=unset) Breaks 'webpage blocked' functionality. May help synology or --net=host docker setups. See readme.
+  #    #- WEB_BIND_ADDR=<IP>                                 # (Default=unset) Lighttpd's bind address. If unset will bind to every interface, except in host mode it uses FTLCONF_LOCAL_IPV4
+  #    #- SKIPGRAVITYONBOOT=1                                # (Default=unset) Don't update Gravity DB on startup. Useful if restarting service multiple times to test changes as Gravity takes a while to do update.
+  #    #- CORS_HOSTS=<FQDN,FQDN,...>                         # (Default=unset) List of domains/subdomains on which CORS is allowed.
+  #    #- CUSTOM_CACHE_SIZE=10000                            # (Default=10000) Set the cache size for dnsmasq. Note that when DNSSEC is "true", then this setting is ignored.
+  #    #- FTL_CMD=no-deamon                                  # (Default=no-deamon) Customize dnsmasq options e.g. 'no-daemon -- --dns-forward-max 300' increases max. number of concurrent dns queries on high load setups.
+  #    #- FTLCONF_[SETTING]                                  # (Default=unset) Customize pihole-FTL.conf with settings described in https://docs.pi-hole.net/ftldns/configfile/ 
+  #    #- FTLCONF_RATE_LIMIT=8000/60                         # [GUI-settable] (Default=unset) Previously set in pihole-FTL.conf (see details https://docs.pi-hole.net/ftldns/configfile/). Disable limiting with '0/0'
+  #    ### EXPERIEMNTAL VARIABLES
+  #    # March 22: Setting UIDs/GIDs as workaround for permission issue (https://github.com/pi-hole/docker-pi-hole/issues/860#issuecomment-1060104737)
+  #    - PIHOLE_UID=$PUID                                    # (Default=999(=pihole)) Overrides image's default pihole user id to match a host user id. IMPORTANT: id must not already be in use inside the container!
+  #    - PIHOLE_GID=$PGID                                    # (Default=999(=pihole)) Overrides image's default pihole group id to match a host user id. IMPORTANT: id must not already be in use inside the container!
+  #    - WEB_UID=$PUID                                       # (Default=33(=www-data)) Overrides image's default www-data user id to match a host user id. IMPORTANT: id must not already be in use inside the container! (Make sure it is different to PIHOLE_UID if you are using that, also)
+  #    - WEB_GID=$PGID                                       # (Default=33(=www-data)) Overrides image's default www-data group id to match a host group id. IMPORTANT: id must not already be in use inside the container! (Make sure it is different to PIHOLE_GID if you are using that, also)
+  #    # DNSMASQ_USER was not available when previously trying to resolve permissions issue
+  #    #- DNSMASQ_USER=root                                  # (Default=pihole(=999)) Allows changing the user that FTLDNS runs as. Default: pihole, some systems such as Synology NAS may require you to change this to root
+  #    ### DEPRECIATED VARIABLES (only listed those we used previously)
+  #    #- ServerIP=$PIHOLE_SERVERIP                          # Depreciated - replaced by FTLCONF_LOCAL_IPV4
+  #  #secrets:
+  #    #- pihole_webpassword
+  #  labels:
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+  #    #----------- TRAEFIK LABELS -----------#
+  #    - "traefik.enable=true"
+  #    ## HTTP Routers
+  #    - "traefik.http.routers.pihole-rtr.entrypoints=https"
+  #    - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.$DOMAINNAME0`)"
+  #    ## Middlewares     
+  #    - "traefik.http.routers.pihole-rtr.middlewares=chain-authelia@file,pihole-add-admin"
+  #    - "traefik.http.middlewares.pihole-add-admin.addPrefix.prefix=/admin"
+  #    ## HTTP Services
+  #    - "traefik.http.routers.pihole-rtr.service=pihole-svc"
+  #    - "traefik.http.services.pihole-svc.loadbalancer.server.port=80"
+  # ---------------------------
+  # Aug 2023 - Unbound image cbcrowe/pihole-unbound
+  # ---------------------------
+  #pihole:
+  #  container_name: pihole
+  #  image: cbcrowe/pihole-unbound:latest
+  #  restart: always
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  #shm_size: 256m # Temp fix for FTL.log error about SHM filling up - real issue is permissions again
+  #  networks:
+  #      default:
+  #      t2_proxy:
+  #      lan_net:
+  #        ipv4_address: $MACVLAN_PIHOLE_IP # Specify IP address on macvlan network
+  #  #cap_add:
+  #    # These should be automatically granted by the image (see: https://dockerlabs.collabnix.com/advanced/security/capabilities/)
+  #    #- NET_BIND_SERVICE                                   # Allows FTLDNS binding to TCP/UDP sockets below 1024 (specifically DNS service on port 53)
+  #    #- NET_RAW                                            # Use raw and packet sockets (needed for handling DHCPv6 requests, and verifying that an IP is not in use before leasing it)
+  #    #- SYS_NICE                                           # FTL sets itself as an important process to get some more processing time if the latter is running low
+  #    #- NET_ADMIN                                          # Only needed if using pihole for DHCP - modify routing tables and other network-related operations
+  #    #- CHOWN                                              # We need to be able to change ownership of log files and databases in case FTL is started as a different user than pihole
+  #    # Used when attempting to resolve permissions issues
+  #    #- SETGID                                             # https://github.com/pi-hole/docker-pi-hole/issues/536
+  #    #- SETUID                                             # https://github.com/pi-hole/docker-pi-hole/issues/536
+  #    #- SYS_CHROOT
+  #  #security_opt:
+  #  # Enabling this stops pihole from editing host mounted files for some reason.
+  #  # Think it stops the SETUID/SETGID above from changing pihole user to allow editing.
+  #  #  - no-new-privileges:true
+  #  #ports:
+  #    # A dedicated macvlan IP means port mapping does not have any effect.
+  #    # All ports are accessible on dedicated IP and no ports on docker host
+  #    # are mapped.
+  #    # Traefik will still redirect FQDN to container through proxy network.
+  #    #- $PIHOLE_PORT:80
+  #    #- $DNS_PORT:53/tcp # DNS
+  #    #- $DNS_PORT:53/udp # DNS
+  #    #- $DHCP_PORT:67/udp # For DHCP
+  #  # Sets a backup server of your choosing in case DNSMasq has problems starting
+  #  dns:
+  #    - 192.168.0.1                                         # Use router if pihole's DNS can't start
+  #    - 1.1.1.1                                             # Cloudflare
+  #  volumes:
+  #    - $DOCKERLOG_DIR/pihole/pihole.log:/var/log/pihole/pihole.log
+  #    - $DOCKER_DIR/pihole/data-unbound/etc/dnsmasq.d:/etc/dnsmasq.d:rw
+  #    - $DOCKER_DIR/pihole/data-unbound/etc/pihole:/etc/pihole:rw
+  #    # If using the chriscrowe/docker-pihole-unbound container we want unbound config access
+  #    # We need to manually copy content from container before trying to mount first for some reason!
+  #    - $DOCKER_DIR/pihole/data-unbound/etc/unbound:/etc/unbound:rw
+  #  environment:
+  #    ### RECOMMENDED VARIABLES
+  #    - WEBPASSWORD=                                        # (Default=random) Don't enter any text after '=' to set no pwd. If not set find password in log with: docker logs pihole | grep random
+  #    #- WEBPASSWORD_FILE="/run/secrets/pihole_webpassword" # Use this to set password if we want one.
+  #    - TZ=$TZ # (Default=UTC)
+  #    - FTLCONF_LOCAL_IPV4=$MACVLAN_PIHOLE_IP               # (Default=Host IP) Var changed from 'FTLCONF_REPLY_ADDR4'
+  #    ### OPTIONAL VARIABLES
+  #    - PIHOLE_DNS_=208.67.222.222;208.67.220.220           # [GUI-settable] (Default=8.8.8.8;8.8.4.4) 127.0.0.1#5335 = Unbound service bundled with image.
+  #    #- PIHOLE_DNS_=127.0.0.1#5335                         # Unbound internal address = 127.0.0.1#5335
+  #    - DNSEC=false                                         # [GUI-settable] (Default=false) Enable DNSSEC support. Use 'true' for Unbound
+  #    #- DNSEC=true                                         # Unbound - Enable DNSSEC support
+  #    #- DNS_BOGUS_PRIV=true                                # [GUI-settable] (Default=true) Never forward reverse lookups for private ranges
+  #    #- DNS_FQDN_REQUIRED=true                             # [GUI-settable] (Default=true) Never forward non-FQDNs
+  #    #- REV_SERVER=true                                    # [GUI-settable] (Default=false) Conditional Forwarding - to enable resolving local IPs to hostnames
+  #    #- REV_SERVER_DOMAIN=$DOMAINNAME0                # [GUI-settable] (Default=unset) If conditional forwarding is enabled, set the domain of the local network router
+  #    #- REV_SERVER_TARGET=192.168.0.1                      # [GUI-settable] (Default=unset) Conditional Forwarding - define DHCP server address
+  #    #- REV_SERVER_CIDR=192.168.0.0/16                     # [GUI-settable] (Default=unset) Conditional Forwarding - define address space to forward to DHCP server
+  #    - DHCP_ACTIVE=false                                   # [GUI-settable] (Default=false) Enable DHCP server. Static DHCP leases can be configured with a custom /etc/dnsmasq.d/04-pihole-static-dhcp.conf
+  #    #- DHCP_START=<IP-Address>                            # [GUI-settable] (Default=unset) Start of the range of IP addresses to hand out by the DHCP server (mandatory if DHCP server is enabled).
+  #    #- DHCP_END=<IP-Address>                              # [GUI-settable] (Default=unset) End of the range of IP addresses to hand out by the DHCP server (mandatory if DHCP server is enabled).
+  #    #- DHCP_ROUTER=192.168.0.1                            # [GUI-settable] (Default=unset) Router (gateway) IP address sent by the DHCP server (mandatory if DHCP server is enabled).
+  #    #- DHCP_LEASETIME=24                                  # [GUI-settable] (Default=24) DHCP lease time in hours.
+  #    #- PIHOLE_DOMAIN=$DOMAINNAME0                    # [GUI-settable] (Default=lan) Domain name sent by the DHCP server.
+  #    #- DHCP_IPv6=false                                    # [GUI-settable] (Default=false) Enable DHCP server IPv6 support (SLAAC + RA).
+  #    - VIRTUAL_HOST=pihole.$DOMAINNAME0              # [???GUI-settable???] (Default=${HOSTNAME}) Web server 'virtual host'. Accessing through this Hostname/IP allows changes to whitelist / blacklists. (http://pi.hole/admin/ still works too)
+  #    #- IPv6=true                                          # [???GUI-settable???] (Default=true) For unraid compatibility, strips out all the IPv6 configuration from DNS/Web services when false.
+  #    #- TEMPERATUREUNIT=C                                  # [GUI-settable] (Default=C) Set preferred temperature unit to c: Celsius, k: Kelvin, or f Fahrenheit units.
+  #    #- WEBUIBOXEDLAYOUT=boxed                             # [GUI-settable] (Default=boxed) Use boxed layout (helpful when working on large screens)
+  #    #- QUERY_LOGGING=true                                 # [GUI-settable] (Default=true) Enable query logging or not.
+  #    #- WEBTHEME=default-light                             # [GUI-settable] (Default=default-light) User interface theme to use.
+  #    ### ADVANCED VARIABLES
+  #    #- INTERFACE=<NIC>                                    # (Default=unset) Name if NIC
+  #    - DNSMASQ_LISTENING=all                               # [GUI-settable] (Default=unset) Tell pihole to listen on all interfaces - set here so its default for any new config
+  #    #- WEB_PORT=<PORT>                                    # (Default=unset) Breaks 'webpage blocked' functionality. May help synology or --net=host docker setups. See readme.
+  #    #- WEB_BIND_ADDR=<IP>                                 # (Default=unset) Lighttpd's bind address. If unset will bind to every interface, except in host mode it uses FTLCONF_LOCAL_IPV4
+  #    #- SKIPGRAVITYONBOOT=1                                # (Default=unset) Don't update Gravity DB on startup. Useful if restarting service multiple times to test changes as Gravity takes a while to do update.
+  #    #- CORS_HOSTS=<FQDN,FQDN,...>                         # (Default=unset) List of domains/subdomains on which CORS is allowed.
+  #    #- CUSTOM_CACHE_SIZE=10000                            # (Default=10000) Set the cache size for dnsmasq. Note that when DNSSEC is "true", then this setting is ignored.
+  #    #- FTL_CMD=no-deamon                                  # (Default=no-deamon) Customize dnsmasq options e.g. 'no-daemon -- --dns-forward-max 300' increases max. number of concurrent dns queries on high load setups.
+  #    #- FTLCONF_[SETTING]                                  # (Default=unset) Customize pihole-FTL.conf with settings described in https://docs.pi-hole.net/ftldns/configfile/ 
+  #    #- FTLCONF_RATE_LIMIT=8000/60                         # [GUI-settable] (Default=unset) Previously set in pihole-FTL.conf (see details https://docs.pi-hole.net/ftldns/configfile/). Disable limiting with '0/0'
+  #    ### EXPERIEMNTAL VARIABLES
+  #    # March 22: Setting UIDs/GIDs as workaround for permission issue (https://github.com/pi-hole/docker-pi-hole/issues/860#issuecomment-1060104737)
+  #    - PIHOLE_UID=$PUID                                    # (Default=999(=pihole)) Overrides image's default pihole user id to match a host user id. IMPORTANT: id must not already be in use inside the container!
+  #    - PIHOLE_GID=$PGID                                    # (Default=999(=pihole)) Overrides image's default pihole group id to match a host user id. IMPORTANT: id must not already be in use inside the container!
+  #    - WEB_UID=$PUID                                       # (Default=33(=www-data)) Overrides image's default www-data user id to match a host user id. IMPORTANT: id must not already be in use inside the container! (Make sure it is different to PIHOLE_UID if you are using that, also)
+  #    - WEB_GID=$PGID                                       # (Default=33(=www-data)) Overrides image's default www-data group id to match a host group id. IMPORTANT: id must not already be in use inside the container! (Make sure it is different to PIHOLE_GID if you are using that, also)
+  #    # DNSMASQ_USER was not available when previously trying to resolve permissions issue
+  #    #- DNSMASQ_USER=root                                  # (Default=pihole(=999)) Allows changing the user that FTLDNS runs as. Default: pihole, some systems such as Synology NAS may require you to change this to root
+  #    ### DEPRECIATED VARIABLES (only listed those we used previously)
+  #    #- ServerIP=$PIHOLE_SERVERIP                          # Depreciated - replaced by FTLCONF_LOCAL_IPV4
+  #  #secrets:
+  #    #- pihole_webpassword
+  #  labels:
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+  #    #----------- TRAEFIK LABELS -----------#
+  #    - "traefik.enable=true"
+  #    ## HTTP Routers
+  #    - "traefik.http.routers.pihole-rtr.entrypoints=https"
+  #    - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.$DOMAINNAME0`)"
+  #    ## Middlewares     
+  #    - "traefik.http.routers.pihole-rtr.middlewares=chain-authelia@file,pihole-add-admin"
+  #    - "traefik.http.middlewares.pihole-add-admin.addPrefix.prefix=/admin"
+  #    ## HTTP Services
+  #    - "traefik.http.routers.pihole-rtr.service=pihole-svc"
+  #    - "traefik.http.services.pihole-svc.loadbalancer.server.port=80"
+
+
+  ## Pihole Exporter (to Prometheus) - import Pihole metrics
+  ## https://github.com/eko/pihole-exporter
+  ## 20220109: Upgraded from image built on 20210612 (per Portainer image details - can't find image tag in repo) to v0.1.1
+  ## 20220722: Upgraded from v0.1.1 to v0.3.0
+  #pihole-exporter-prometheus:
+  #  image: ekofr/pihole-exporter:latest
+  #  container_name: pihole-exporter-prometheus
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  networks:
+  #    - default
+  #  #ports:
+  #    # Don't need to expose if on same network as prometheus
+  #    #- $PIHOLE_EXPORTER_PROMETHEUS_PORT:9617
+  #  environment:
+  #    - PIHOLE_HOSTNAME=pihole #192.168.0.229
+  #    - PIHOLE_PASSWORD=
+  #    - INTERVAL=30s
+  #    - PORT=9617
+  #  labels:
+  #    - org.label-schema.group=monitoring
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+
+  ## TasmoAdmin - Admin GUI for Tasmota devices
+  # This service is no longer needed, we reverted flashed Shellys back to stock firmware. 
+  #tasmoadmin:
+  #  image: raymondmm/tasmoadmin
+  #  container_name: tasmoadmin
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  networks:
+  #    - default
+  #    - t2_proxy
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  ports:
+  #    - $TASMOADMIN_PORT:80
+  #  volumes:
+  #    - $DOCKER_DIR/tasmoadmin/data:/data
+  #  labels:
+  #    - org.label-schema.group=home-auto
+  #    #----------- TRAEFIK LABELS -----------#
+  #    - "traefik.enable=true"
+  #    ## HTTP Routers
+  #    - "traefik.http.routers.tasmoadmin-rtr.entrypoints=https"
+  #    - "traefik.http.routers.tasmoadmin-rtr.rule=Host(`tasmoadmin.$DOMAINNAME0`)"
+  #    - "traefik.http.routers.tasmoadmin-rtr.tls=true"
+  #    ## Middlewares
+  #    - "traefik.http.routers.tasmoadmin-rtr.middlewares=chain-authelia@file"
+  #    ## HTTP Services
+  #    - "traefik.http.routers.tasmoadmin-rtr.service=tasmoadmin-svc"
+  #    - "traefik.http.services.tasmoadmin-svc.loadbalancer.server.port=80"
+
+#  # Pushgateway (by Prometheus) - allow ephemeral and batch jobs to push data to Prometheus
+#  # Originally from dockprom stack (https://github.com/stefanprodan/dockprom)
+#  # expose their metrics to Prometheus
+#  # https://github.com/prometheus/pushgateway
+#  # Releases: https://hub.docker.com/r/prom/pushgateway
+#  # Releases: https://github.com/prometheus/pushgateway/releases
+#  # 20220109: Existing tag v1.4.2 remains the latest ('master' will get bleeding edge)
+#  # 20220722: Upgraded from v1.4.2 to v1.4.3
+#  pushgateway:
+#    image: prom/pushgateway:v1.4.3
+#    container_name: pushgateway
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      - default
+#      - t2_proxy
+#    ports:
+#      - $PUSHGATEWAY_PORT:9091
+#    labels:
+#      - org.label-schema.group=monitoring
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      - "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.pushgateway-rtr.entrypoints=https"
+#      - "traefik.http.routers.pushgateway-rtr.rule=Host(`pushgateway.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.pushgateway-rtr.middlewares=chain-no-auth@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.pushgateway-rtr.service=pushgateway-svc"
+#      - "traefik.http.services.pushgateway-svc.loadbalancer.server.port=9091"
+
+
+
+#  # Scrypted - Integrate Any Camera With Any NVR/Assistant
+#  # https://github.com/koush/scrypted
+#  # Default docker-compose: https://github.com/koush/scrypted/blob/main/install/docker/docker-compose.yml
+#  scrypted:
+#    image: koush/scrypted
+#    container_name: scrypted
+#    restart: unless-stopped
+#    networks:
+#      - t2_proxy
+#    ports:
+#      - $SCRYPTED_PORT:10443
+#    devices:
+#      - /dev/dri:/dev/dri # for hardware acceleration
+#      # uncomment below as necessary.
+#      # zwave usb serial device
+#      #  - /dev/ttyACM0:/dev/ttyACM0
+#      # all usb devices, such as coral tpu
+#      #  - /dev/bus/usb:/dev/bus/usb
+#      # coral PCI devices
+#      - /dev/apex_0:/dev/apex_0
+#      #- /dev/apex_1:/dev/apex_1
+#    environment: 
+#      - SCRYPTED_SECURE_PORT=10443
+#      #- SCRYPTED_INSECURE_PORT=
+#      # Watchtower updates - see default scrypted docker-compose: https://github.com/koush/scrypted/blob/main/install/docker/docker-compose.yml
+#      #- SCRYPTED_WEBHOOK_UPDATE_AUTHORIZATION=Bearer SET_THIS_TO_SOME_RANDOM_TEXT
+#      #- SCRYPTED_WEBHOOK_UPDATE=http://localhost:10444/v1/update
+#      # nvidia support
+#      # - NVIDIA_VISIBLE_DEVICES=all
+#      # - NVIDIA_DRIVER_CAPABILITIES=all
+#    #runtime: nvidia
+#    volumes:
+#      - $DOCKER_DIR/scrypted/data:/server/volume
+#      # uncomment the following lines to expose Avahi, an mDNS advertiser.
+#      # make sure Avahi is running on the host machine, otherwise this will not work.
+#      #- /var/run/dbus:/var/run/dbus
+#      #- /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket
+#    # logging is noisy and will unnecessarily wear on flash storage.
+#    # scrypted has per device in memory logging that is preferred.
+#    logging:
+#        driver: "json-file"
+#        options:
+#            max-size: "10m"
+#            max-file: "10"
+#    labels:
+#      - org.label-schema.group=home-auto
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.scrypted-rtr.entrypoints=https"
+#      - "traefik.http.routers.scrypted-rtr.rule=Host(`scrypted.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.scrypted-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.scrypted-rtr.service=scrypted-svc"
+#      - "traefik.http.services.scrypted-svc.loadbalancer.server.port=10443"
+#      - "traefik.http.services.scrypted-svc.loadbalancer.server.scheme=https"
+
+
+
+#  # ring-mqtt
+#  # Create RTSP and MQQT output from Ring Doorbell
+#  # https://github.com/tsightler/ring-mqtt/wiki/Installation-(Docker)
+#  # BEFORE RUNNING MAKE SURE THE CONFIG.JSON FILE EXISTS
+#  ring-mqtt:
+#    container_name: ring-mqtt
+#    image: tsightler/ring-mqtt
+#    restart: unless-stopped
+#    networks:
+#      - default
+#    #ports:
+#    #  - $RING_MQTT_RSTP_PORT:8554                # Enable RTSP port for external media player access
+#    volumes:
+#      - $DOCKER_DIR/ring-mqtt/data:/data          # Mapping of local folder to provide persistent storage
+#    logging:                                      #limit logs to 10m and 3 files
+#      options:
+#        max-size: 10m
+#        max-file: "3"
+
+#  # Cloudflare DDNS - Dynamic DNS Updater
+#  cf-ddns:
+#    container_name: cf-ddns
+#    image: oznu/cloudflare-ddns
+#    restart: unless-stopped # Set always if expecting WAN IP to change regularly
+#    networks:
+#      - default
+#    security_opt:
+#      - no-new-privileges:true
+#    environment:
+#      #- API_KEY=$CLOUDFLARE_API_TOKEN # Can be defined in .env
+#      - API_KEY_FILE=/run/secrets/cloudflare_api_token
+#      - ZONE=$DOMAINNAME0
+#      - PROXIED="true" # Need to set 'true' or status will defulat to false if DNS updated.
+#      - RRTYPE=A
+#      - DELETE_ON_STOP="false"
+#      - DNS_SERVER=1.1.1.1
+#      - CRON=* */6 * * * # Default = every 5 min
+#    secrets:
+#      - cloudflare_api_token
+
+
+
+#  # Organizr - Unified Frontend
+#  organizr:
+#    container_name: organizr
+#    image: organizr/organizr:latest
+#    restart: unless-stopped
+#    networks:
+#      - t2_proxy
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - "$ORGANIZR_PORT:80"
+#    volumes:
+#      - $DOCKER_DIR/organizr/config:/config
+#    environment:
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#      - fpm=true
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.organizr-rtr.entrypoints=https"
+#      #- "traefik.http.routers.organizr-rtr.rule=Host(`$DOMAINNAME0`) || Host(`www.$DOMAINNAME0`)"
+#      - "traefik.http.routers.organizr-rtr.rule=Host(`organizr.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.organizr-rtr.middlewares=chain-basic-auth@file"
+#      #- "traefik.http.routers.organizr-rtr.middlewares=organizr-redirect@docker,chain-basic-auth@file"
+#      # Redirect non-www to www middleware
+#      #- "traefik.http.middlewares.organizr-redirect.redirectregex.regex=^https?://$DOMAINNAME0/(.*)"
+#      #- "traefik.http.middlewares.organizr-redirect.redirectregex.replacement=https://www.$DOMAINNAME0/$${1}"
+#      #- "traefik.http.middlewares.organizr-redirect.redirectregex.permanent=true"
+#      ## HTTP Services
+#      - "traefik.http.routers.organizr-rtr.service=organizr-svc"
+#      - "traefik.http.services.organizr-svc.loadbalancer.server.port=80"
+
+
+#  # qDirStat - Directory Statistics
+#  qdirstat:
+#    image: jlesage/qdirstat:latest
+#    container_name: qdirstat
+#    restart: unless-stopped
+#    networks:
+#      - t2_proxy
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - "$QDIRSTAT_PORT:5800"
+#    volumes:
+#      - /home:/data/home:ro
+#      - $DOCKER_DIR/qdirstat/config:/config
+#      - $DOCKER_DIR:/data/docker:ro
+#    environment:
+#      USER_ID: $PUID
+#      GROUP_ID: $PGID
+#      UMASK: 002
+#      TZ: $TZ
+#      KEEP_APP_RUNNING: 1
+#      CLEAN_TMP_DIR: 1
+#      DISPLAY_WIDTH: 1600
+#      DISPLAY_HEIGHT: 960
+#      VNC_PASSWORD: $QDIRSTAT_VNC_PASSWD
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.qdirstat-rtr.entrypoints=https"
+#      - "traefik.http.routers.qdirstat-rtr.rule=Host(`qdirstat.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.qdirstat-rtr.middlewares=chain-oauth@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.qdirstat-rtr.service=qdirstat-svc"
+#      - "traefik.http.services.qdirstat-svc.loadbalancer.server.port=5800"
+
+
+#  # Adminer - resource-light SQL DB GUI
+#  # https://hub.docker.com/_/adminer/
+#  # https://github.com/TimWolla/docker-adminer
+#  adminer:
+#    container_name: adminer
+#    image: adminer
+#    restart: unless-stopped
+#    networks:
+#      - default
+#    #links:
+#    #  - mariadb:db # Don't think this is actually needed given we're on same network as mariadb
+#    ports:
+#      - $ADMINER_PORT:8080
+#    volumes:
+#      - $DOCKER_DIR/adminer/data/plugins-enabled:/var/www/html/plugins-enabled
+#    environment:
+#      #- ADMINER_PLUGINS='login-servers'
+#      - ADMINER_DESIGN="nette"
+#      - ADMINER_DEFAULT_SERVER=mariadb
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.adminer-rtr.entrypoints=https"
+#      - "traefik.http.routers.adminer-rtr.rule=Host(`adminer.$DOMAINNAME0`)"
+#      ## Middlewares     
+#      - "traefik.http.routers.adminer-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.adminer-rtr.service=adminer-svc"
+#      - "traefik.http.services.adminer-svc.loadbalancer.server.port=8080"    
+
+
+#  # USING COLLABORA INSTEAD
+#  # OnlyOffice - Nextcloud Document Editor
+#  # https://helpcenter.onlyoffice.com/installation/docs-community-install-docker.aspx
+#  # Revert to tag ':5.4.2.46' if not free for home use any longer
+#  onlyoffice:
+#    image: onlyoffice/documentserver
+#    container_name: onlyoffice
+#    restart: unless-stopped
+#    networks:
+#      - default # To acces Nextcloud
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - "$ONLYOFFICE_PORT:80"
+#    environment:
+#      - USE_UNAUTHORIZED_STORAGE=true # Set to true if using self-signed certs for storage server e.g. Nextcloud
+#    volumes:
+#      - $DOCKERLOG_DIR/onlyoffice/data:/var/log/onlyoffice
+#      - $DOCKER_DIR/onlyoffice/DocumentServer/data/data:/var/www/onlyoffice/Data
+#      - $DOCKER_DIR/onlyoffice/DocumentServer/data/lib:/var/lib/onlyoffice
+#      - $DOCKER_DIR/onlyoffice/DocumentServer/data/db:/var/lib/postgresql
+#      # Only needed if error RE "Error while downloading the document file to be converted." when config in NC.
+#      # First copy default.json to host with:
+#      # docker cp onlyoffice:/etc/onlyoffice/documentserver/default.json /Docker/onlyoffice/DocumentServer/data/etc/default.json
+#      # Change "rejectUnauthorized": false
+#      #- $DOCKER_DIR/onlyoffice/DocumentServer/data/etc/default.json:/etc/onlyoffice/documentserver/default.json
+#    labels:
+#      ## Exclude Watchtower
+#      - "com.centurylinklabs.watchtower.enable=false"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.onlyoffice-rtr.entrypoints=https"
+#      - "traefik.http.routers.onlyoffice-rtr.rule=Host(`onlyoffice.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.onlyoffice-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.onlyoffice-rtr.service=onlyoffice-svc"
+#      - "traefik.http.services.onlyoffice-svc.loadbalancer.server.port=80"
+
+
+
+
+
+
+#  # Caddy - open source web server/proxy with automatic HTTPS 
+#  # Originally from dockprom stack (https://github.com/stefanprodan/dockprom)
+#  # Used to proxy dockprom stack but functionality now done by Traefik in our configuration.
+#  # https://hub.docker.com/_/caddy
+#  # https://caddyserver.com/
+#  caddy:
+#    image: caddy:2.3.0
+#    container_name: caddy
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      - monitor-net
+#    ports:
+#      - "7000:3000"
+#      - "7001:9090"
+#      - "7002:9093"
+#      - "7003:9091"
+#      - "7004:8080"
+#      #- "$GRAFANA_PORT:3000"
+#      #- "$PROMETHEUS_PORT:9090"
+#      #- "$ALERTMANAGER_PORT:9093"
+#      #- "$PUSHGATEWAY_PORT:9091"
+#      #- "$CADVISOR_PORT:8080"
+#    volumes:
+#      - ./caddy:/etc/caddy
+#    labels:
+#      - org.label-schema.group=monitoring
+#    #environment:
+#    #  - ADMIN_USER=$CADDY_ADMIN_USER
+#    #  - ADMIN_PASSWORD=$CADDY_ADMIN_PASSWORD
+#    #  - ADMIN_PASSWORD_HASH=$CADDY_ADMIN_PASSWORD_HASH
+
+
+
+#  # Alertmanager (by Prometheus) - handles alerts from Prometheus
+#  # Originally from dockprom stack (https://github.com/stefanprodan/dockprom)
+#  # https://github.com/prometheus/alertmanager
+#  # We don't need to send any alerts using Alertmanager
+#  # Using Grafana's alerting functionality
+#  alertmanager:
+#    image: prom/alertmanager:v0.23.0
+#    container_name: alertmanager
+#    restart: unless-stopped
+#    networks:
+#      - monitor-net
+#    #  - default
+#    #  - t2_proxy
+#    #ports:
+#      #- 7002:9093
+#      #- $ALERTMANAGER_PORT:9090
+#    volumes:
+#      - ./Docker/alertmanager/data:/etc/alertmanager
+#    command:
+#      - '--config.file=/etc/alertmanager/config.yml'
+#      - '--storage.path=/alertmanager'
+#  labels:
+#    - org.label-schema.group=monitoring
+#    ## Exclude From Watchtower Auto-Update But Notify On New Image
+#    - "com.centurylinklabs.watchtower.monitor-only=true"
+#    ##----------- TRAEFIK LABELS -----------#
+#    # Enable t2_proxy network above too
+#    - "traefik.enable=true"
+#    ## HTTP Routers
+#    - "traefik.http.routers.alertmanager-rtr.entrypoints=https"
+#    - "traefik.http.routers.alertmanager-rtr.rule=Host(`alertmanager.$DOMAINNAME0`)"
+#    ## Middlewares
+#    - "traefik.http.routers.alertmanager-rtr.middlewares=chain-no-auth@file"
+#    ## HTTP Services
+#    - "traefik.http.routers.alertmanager-rtr.service=alertmanager-svc"
+#    - "traefik.http.services.alertmanager-svc.loadbalancer.server.port=9093"
+
+
+
+
+#  ### MISSING SOME KEY METRICS RELATED TO CURRENT SESSION ###
+#  # Transmission Exporter (to Prometheus) - import Transmission metrics
+#  # https://github.com/metalmatze/transmission-exporter
+#  transmission-exporter-prometheus:
+#    image: metalmatze/transmission-exporter
+#    container_name: transmission-exporter-prometheus
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      - default
+#    ports:
+#      - $TRANSMISSION_EXPORTER_PROMETHEUS_PORT:19091
+#    environment:
+#      - TRANSMISSION_USERNAME=$TRANSMISSION_USERNAME
+#      - TRANSMISSION_PASSWORD=$TRANSMISSION_PASSWORD
+#      - TRANSMISSION_ADDR=$TRANSMISSION_API_URL # Use VPN container IP and transmission port if on same network
+#    labels:
+#      - org.label-schema.group=monitoring
+
+#  ### DIDN'T WORK ###
+#  # Transmission Exporter (to InfluxDB) - import Transmission metrics
+#  # https://github.com/cheeseandcereal/transmission_influxdb_exporter
+#  transmission-exporter-influxdb:
+#    image: cheeseandcereal/transmission_influxdb_exporter
+#    container_name: transmission-exporter-influxdb
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      - default
+#    volumes:
+#      - $DOCKER_DIR/transmission-exporter-influxdb/data/config.json:/usr/src/app/config.json
+#    labels:
+#      - org.label-schema.group=monitoring
+
+
+
+
+#  ### USING LINUXSERVER.IO IMAGE NOW ###
+#  # LibreSpeed - Test speed to/from server
+#  # https://hub.docker.com/r/adolfintel/speedtest
+#  # https://github.com/librespeed/speedtest
+#  librespeed:
+#    container_name: librespeed
+#    image: adolfintel/speedtest
+#    restart: unless-stopped
+#    networks:
+#      - t2_proxy
+#      #- default
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - $LIBRESPEED_PORT:8080
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.librespeed-rtr.entrypoints=https"
+#      - "traefik.http.routers.librespeed-rtr.rule=Host(`librespeed.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.librespeed-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.librespeed-rtr.service=librespeed-svc"
+#      - "traefik.http.services.librespeed-svc.loadbalancer.server.port=8080"
+
+
+#  ### USING LIBRESPEED INSTEAD ###
+#  # OpenSpeedTest - Test speed to/from server
+#  # https://github.com/michellabbe/docker-openspeedtest
+#  # https://hub.docker.com/r/openspeedtest/latest
+#  openspeedtest:
+#    container_name: openspeedtest
+#    image: openspeedtest/latest
+#    #image: mlabbe/openspeedtest
+#    restart: unless-stopped
+#    networks:
+#      - t2_proxy
+#      #- default
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - $OPENSPEEDTEST_PORT:3000
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.openspeedtest-rtr.entrypoints=https"
+#      - "traefik.http.routers.openspeedtest-rtr.rule=Host(`openspeedtest.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.openspeedtest-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.openspeedtest-rtr.service=openspeedtest-svc"
+#      - "traefik.http.services.openspeedtest-svc.loadbalancer.server.port=3000"
+
+
+#  ### USING CALIBRE INSTEAD ###
+#  # Calibre-web - eBook library
+#  # https://docs.linuxserver.io/images/docker-calibre-web
+#  # Touch log file before first use:
+#  #   touch /var/log/docker/calibre-web/calibre-web.log
+#  calibre-web:
+#    image: lscr.io/linuxserver/calibre-web
+#    container_name: calibre-web
+#    restart: unless-stopped
+#    networks:
+#      - t2_proxy
+#      #- default
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - $CALIBRE_WEB_PORT:8083
+#    volumes:
+#      - $DOCKER_DIR/calibre-web/data:/config
+#      - $DOCKERLOG_DIR/calibre-web/calibre-web.log:/config/calibre-web.log
+#      - $MEDIA_DIR/Books/calibre_library:/books
+#    environment:
+#      - DOCKER_MODS=$LINUXSERVER_MODS|linuxserver/calibre-web:calibre
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.calibre-web-rtr.entrypoints=https"
+#      - "traefik.http.routers.calibre-web-rtr.rule=Host(`calibre-web.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.calibre-web-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.calibre-web-rtr.service=calibre-web-svc"
+#      - "traefik.http.services.calibre-web-svc.loadbalancer.server.port=8083"
+
+
+
+#  # UNMS - Ubiquity Network Management System
+#  # Given own LAN IP via macvlan network.
+#  # Traefik routers/middleware/services below are likely useless since Ubiquity 
+#  # adds port numbers to all requests and responses so devices need to be able
+#  # to communicate on FQDN:PORT or IP:PORT.
+#  # Service works fine but no added value snce we are not a fully ubnt network.
+#  # Also drives resource use WAY up
+#  unms:
+#    container_name: unms
+#    image: nico640/docker-unms
+#    restart: unless-stopped
+#    networks:
+#      t2_proxy:
+#      lan_net:
+#        ipv4_address: $MACVLAN_UNMS_IP # Specify IP address on macvlan network
+#    security_opt:
+#      - no-new-privileges:true
+#    #ports:
+#      # A dedicated macvlan IP means port mapping does not have any effect.
+#      # All ports are accessible on dedicated IP and no ports on docker host
+#      # are mapped.
+#      #- "$UNMS_HTTP_PORT:80"
+#      #- "$UNMS_HTTPS_PORT:443"
+#      #- "$NETFLOW_PORT:2055/udp" # Netflow
+#    volumes:
+#      - $DOCKER_DIR/unms/data:/config
+#      - $DOCKERLOG_DIR/unms:/config/unms/logs
+#    environment:
+#      - TZ=$TZ
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.unms-rtr.entrypoints=https"
+#      - "traefik.http.routers.unms-rtr.rule=Host(`unms.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.unms-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.unms-rtr.service=unms-svc"
+#      - "traefik.http.services.unms-svc.loadbalancer.server.port=443"
+#      # Below line resolves error: http sent to https
+#      - "traefik.http.services.unms-svc.loadbalancer.server.scheme=https"
+
+
+
+#  ### USING ALT DASHBOARD ###
+#  # Flame - Server Dashboard
+#  # https://github.com/pawelmalak/flame
+#  # Can use these lables to add containers to dashboard automatically (turn on docker integration in settings)
+#  #    - flame.type=application
+#  #    - flame.name=Dashy
+#  #    - flame.url=https://dashy.$DOMAINNAME0
+#  #    - flame.icon=monitor-dashboard
+#  flame:
+#    container_name: flame
+#    image: pawelmalak/flame
+#    restart: unless-stopped
+#    networks:
+#      - t2_proxy
+#      #- default
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - "$FLAME_PORT:5005"
+#    volumes:
+#      - $DOCKER_DIR/flame/data:/app/data
+#      - /var/run/docker.sock:/var/run/docker.sock # optional but required for Docker label integration
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.flame-rtr.entrypoints=https"
+#      - "traefik.http.routers.flame-rtr.rule=Host(`flame.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.flame-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.flame-rtr.service=flame-svc"
+#      - "traefik.http.services.flame-svc.loadbalancer.server.port=5005"
+#      #----------- TRAEFIK LABELS -----------#
+#      - flame.type=application
+#      - flame.name=Flame;ERX
+#      - flame.url=https://flame.$DOMAINNAME0;https://erx.$DOMAINNAME0
+#      - flame.icon=fire;router
+
+
+
+#  # Nextcloud - Self Hosted Dropbox
+#  # 'touch' log file before first use:
+#  #    touch /var/log/docker/nextcloud/nextcloud.log
+#  nextcloud-official:
+#    image: nextcloud
+#    container_name: nextcloud-official
+#    restart: unless-stopped
+#    # Shouldn't need links since on the same network but useful when testing config
+#    #links:
+#    #  - mariadb:mariadb
+#    networks:
+#      - t2_proxy
+#      #- default
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - $NEXTCLOUD_OFFICIAL_PORT:80 # GUI/API
+#      #- $COLLABORA_PORT:9980 # Collabora
+#    environment:
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#      # Autoconfig variables can be added below or GUI config can be used or config.yml directly edited - only needed on first run!
+#      #- SQLITE_DATABASE=/var/www/html/config/nextcloud.sqlite
+#      #- NEXTCLOUD_ADMIN_USER=$NEXTCLOUD_ADMIN_USER
+#      #- NEXTCLOUD_ADMIN_PASSWORD=$NEXTCLOUD_ADMIN_PASSWORD
+#      - NEXTCLOUD_TRUSTED_DOMAINS=$DOMAINNAME0
+#      - APACHE_DISABLE_REWRITE_IP=1
+#      - TRUSTED_PROXIES=172.16.0.0/12 192.168.0.0/24 192.168.90.0/24
+#      #- SMTP_HOST=$EMAIL_SMTP_URL
+#      #- SMTP_SECURE=tls
+#      #- SMTP_PORT=$EMAIL_SMTP_TLS_PORT
+#      #- SMTP_AUTHTYPE=LOGIN
+#      #- SMTP_NAME=$EMAIL_SMTP_USER
+#      #- MAIL_FROM_ADDRESS=$EMAIL_SMTP_SENDER
+#      #- MAIL_DOMAIN=
+#      #- SMTP_PASSWORD_FILE=/run/secrets/email_smtp_password
+#      # Decided to move to SQLite based install
+#      #- DB_TYPE=mysql # Default = sqlite3
+#      #- MYSQL_HOST=$NEXTCLOUD_DB_HOST # Only needed for initial setup - edit config.yml after this if amendment needed
+#      #- MYSQL_DATABASE_FILE=/run/secrets/mysql_nextcloud_db
+#      #- MYSQL_USER_FILE=/run/secrets/mysql_nextcloud_user
+#      #- MYSQL_PASSWORD_FILE=/run/secrets/mysql_nextcloud_password
+#    volumes:
+#      - $BACKUP_DIR/Current/Nextcloud-wonderfall:/var/www/html/data
+#      - $DOCKER_DIR/nextcloud/data-official/nextcloud:/var/www/html
+#      - $DOCKER_DIR/nextcloud/data-official/config:/var/www/html/config
+#      - $DOCKER_DIR/nextcloud/data-official/apps:/var/www/html/custom_apps
+#      - $DOCKER_DIR/nextcloud/data-official/themes:/var/www/html/themes
+#      - $DOCKERLOG_DIR/nextcloud/nextcloud.log:/data/nextcloud.log
+#    #secrets:
+#      #- email_smtp_password
+#      #- mysql_nextcloud_db
+#      #- mysql_nextcloud_user
+#      #-  mysql_nextcloud_password
+#    labels:
+#      ## Exclude From Watchtower Auto-Update But Notify On New Image
+#      - "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.nextcloud-official-rtr.entrypoints=https"
+#      - "traefik.http.routers.nextcloud-official-rtr.rule=Host(`nc-official.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.nextcloud-official-rtr.middlewares=chain-nextcloud@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.nextcloud-official-rtr.service=nextcloud-official-svc"
+#      - "traefik.http.services.nextcloud-official-svc.loadbalancer.server.port=80"
+#      - "traefik.http.services.nextcloud-official-svc.loadbalancer.server.scheme=https"
+
+
+#  # Nextcloud - Self Hosted Dropbox
+#  # 'touch' log file before first use:
+#  #    touch /var/log/docker/nextcloud/nextcloud.log
+#  nextcloud-linuxserver:
+#    image: lscr.io/linuxserver/nextcloud
+#    container_name: nextcloud-linuxserver
+#    restart: unless-stopped
+#    # Shouldn't need links since on the same network but useful when testing config
+#    #links:
+#    #  - mariadb:mariadb
+#    networks:
+#      - t2_proxy
+#      #- default
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - $NEXTCLOUD_LINUXSERVER_PORT:443 # GUI/API
+#      #- $COLLABORA_PORT:9980 # Collabora
+#    environment:
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#    volumes:
+#      - $BACKUP_DIR/Current/Nextcloud-linuxserver:/data
+#      - $DOCKER_DIR/nextcloud/data-linuxserver:/config
+#      - $DOCKERLOG_DIR/nextcloud/nextcloud.log:/data/nextcloud.log
+#    labels:
+#      ## Exclude From Watchtower Auto-Update But Notify On New Image
+#      - "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.nextcloud-linuxserver-rtr.entrypoints=https"
+#      - "traefik.http.routers.nextcloud-linuxserver-rtr.rule=Host(`nc-linuxserver.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.nextcloud-linuxserver-rtr.middlewares=chain-nextcloud@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.nextcloud-linuxserver-rtr.service=nextcloud-linuxserver-svc"
+#      - "traefik.http.services.nextcloud-linuxserver-svc.loadbalancer.server.port=443"
+#      - "traefik.http.services.nextcloud-linuxserver-svc.loadbalancer.server.scheme=https"
+
+
+#  # Nextcloud - Self Hosted Dropbox
+#  # 'touch' log file before first use.
+#  #    touch /var/log/docker/nextcloud/nextcloud.log
+#  nextcloud:
+#    image: ghcr.io/wonderfall/nextcloud
+#    container_name: nextcloud
+#    restart: unless-stopped
+#    # Shouldn't need links since on the same network but useful when testing config
+#    #links:
+#    #  - mariadb:mariadb
+#    networks:
+#      - t2_proxy
+#      #- default # TO access mariadb if using SQL backend
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - $NEXTCLOUD_PORT:8888 # GUI/API
+#      #- $COLLABORA_PORT:9980 # Collabora - previously we 'linked' collabora to NC container network
+#    environment:
+#      - UID=$PUID 
+#      - GID=$PGID
+#      # Only needed for initial setup - edit config.yml after this if amendment needed
+#      - MEMORY_LIMIT=256M # Default = 512M
+#      - CRON_MEMORY_LIMIT=512M # Default = 1G
+#      - UPLOAD_MAX_SIZE=10G # Default = 10G
+#      - APC_SHM_SIZE=128M # Default = 128M
+#      - CRON_PERIOD=5m # Default = 5m
+#      - DOMAIN=$DOMAINNAME0 # Default = localhost
+#      # Decided to move to SQLite based install
+#      - DB_TYPE=mysql # Default = sqlite3
+#      - DB_NAME=$NEXTCLOUD_DB_NAME
+#      - DB_USER=$NEXTCLOUD_DB_USER # Only needed for initial setup - edit config.yml after this if amendment needed
+#      - DB_PASSWORD=$NEXTCLOUD_DB_PASSWORD # Only needed for initial setup - edit config.yml after this if amendment needed
+#      - DB_HOST=$NEXTCLOUD_DB_HOST # Only needed for initial setup - edit config.yml after this if amendment needed
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#      - $BACKUP_DIR/Current/Nextcloud:/data
+#      - $DOCKER_DIR/nextcloud/data/config:/nextcloud/config
+#      - $DOCKER_DIR/nextcloud/data/apps:/nextcloud/apps2
+#      - $DOCKER_DIR/nextcloud/data/themes:/nextcloud/themes
+#      - $DOCKERLOG_DIR/nextcloud/nextcloud.log:/data/nextcloud.log
+#    labels:
+#      ## Exclude From Watchtower Auto-Update But Notify On New Image
+#      - "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.nextcloud-rtr.entrypoints=https"
+#      - "traefik.http.routers.nextcloud-rtr.rule=Host(`nc.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.nextcloud-rtr.middlewares=chain-nextcloud@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.nextcloud-rtr.service=nextcloud-svc"
+#      - "traefik.http.services.nextcloud-svc.loadbalancer.server.port=8888"
+#      - "traefik.http.services.nextcloud-svc.loadbalancer.server.scheme=https"
+
+
+
+#  # sFlow-RT - get sFlow details from ERX
+#  # https://hub.docker.com/r/sflow/prometheus
+#  sflow-rt:
+#    image: sflow/prometheus
+#    container_name: sflow-rt
+#    restart: unless-stopped
+#    networks:
+#      - default # For prometheus scrape
+#    volumes:
+#      - $DOCKER_DIR/sflow-rt/data/geolite/GeoLite2-Country.mmdb:/resources/config/GeoLite2-Country.mmdb
+#    ports:
+#      - $SFLOWRT_PORT:8008
+#      - $SFLOW_PORT:6343/udp
+#    command:
+#      - -Dsnmp.ifname=yes
+#      - -Dgeo.country=/resources/config/GeoLite2-Country.mmdb
+#    labels:
+#      - org.label-schema.group=monitoring
+#      ## Exclude Watchtower
+#      #- "com.centurylinklabs.watchtower.enable=false"
+
+
+
+
+
+#  # Guacozy - Guacd Alt Client - HTML5 based
+#  # https://guacozy.readthedocs.io/en/latest/
+#  # Defulat user/pass: admin/admin - or set below
+#  guacozy:
+#    image: guacozy/guacozy-server
+#    container_name: guacozy
+#    restart: always
+#    depends_on:
+#      - guacd
+#      #- mariadb # Forces re-start of mariadb if we have this defined.
+#    networks:
+#      - t2_proxy
+#      - default # To be able to talk to guacd
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      #- "10080:80"
+#      #- "$GUACOZY_PORT_HTTP:80"
+#      - "$GUACOZY_PORT:443"
+#    volumes:
+#      - $DOCKER_DIR/guacozy/data/db.sqlite3:/app/db.sqlite3
+#      - $DOCKER_DIR/guacozy/data/guacozy_server/settings.py:/app/guacozy_server/settings.py
+#    environment:
+#      - SUPERUSER_NAME=$GUACOZY_USER
+#      - SUPERUSER_PASSWORD=$GUACOZY_PASSWORD
+#      - SUPERUSER_EMAIL=$MYEMAIL
+#      - DEBUG=false
+#    labels:
+#      - org.label-schema.group=external
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.guacozy-rtr.entrypoints=https"
+#      - "traefik.http.routers.guacozy-rtr.rule=Host(`guacozy.$DOMAINNAME0`)"
+#      ## Middlewares
+#      #- "traefik.http.routers.guacozy-rtr.middlewares=chain-authelia@file,add-guacozy"
+#      #- "traefik.http.middlewares.add-guacozy.addPrefix.prefix=/guacozy"
+#      - "traefik.http.routers.guacozy-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.guacozy-rtr.service=guacozy-svc"
+#      - "traefik.http.services.guacozy-svc.loadbalancer.server.port=443"
+#      - "traefik.http.services.guacozy-svc.loadbalancer.server.scheme=https"
+
+#  # WHEN NOT RUNNING - FREE UP DEDICATED IP ADDRESS
+#  # TVHeadend - IPTV / DVR service
+#  # https://github.com/linuxserver/docker-tvheadend
+#  # https://docs.linuxserver.io/images/docker-tvheadend
+#  # https://tvheadend.org/
+#  tvheadend:
+#    image: lscr.io/linuxserver/tvheadend
+#    container_name: tvheadend
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      t2_proxy:
+#      #default:
+#      lan_net:
+#        ipv4_address: $MACVLAN_UNIFI_IP # Specify IP address on macvlan network
+#    #network_mode: host # Using macvlan instead
+#    #ports:
+#      # A dedicated macvlan IP means port mapping does not have any effect.
+#      # All ports are accessible on dedicated IP and no ports on docker host
+#      # are mapped.
+#      #- $TVHEADEND_PORT_GUI:9981 # WebUI
+#      #- $TVHEADEND_PORT_HTSP:9982 # HTSP server port
+#      #- $TVHEADEND_PORT_DNLA:1900/udp # DNLA port - used for multicast when using IPTV. Can't just map port, it won't work
+#                                       # must use host network mode to allow multicast. Use macvaln instead. 
+#    devices:
+#      - /dev/dri:/dev/dri # for hardware transcoding
+#      #- /dev/dvb:/dev/dvb # if you have a DVB card
+#    environment: 
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#    volumes:
+#      - $DOCKER_DIR/tvheadend/data:/config
+#      - $TVHEADEND_DIR:/scratchpad
+#      - $TVHEADEND_DIR/recordings:/recordings
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.tvheadend-rtr.entrypoints=https"
+#      - "traefik.http.routers.tvheadend-rtr.rule=Host(`tvheadend.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.tvheadend-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.tvheadend-rtr.service=tvheadend-svc"
+#      - "traefik.http.services.tvheadend-svc.loadbalancer.server.port=9981"
+
+
+  # Telly
+  #docker create \
+  #--name=$NAME \
+  #--restart="unless-stopped" \
+  #--mac-address="02:42:ac:11:1a:12" \
+  #-e TZ="Europe/London" \
+  #-e 'TELLY_IPTV_PLAYLIST'='https://gratisiptv.com/dl/us-gratisiptvm3u-2019-02-02-2.m3u' \
+  #`#-e TELLY_IPTV_STREAMS=1` \
+  #`#-e TELLY_FILTER_REGEX='.*UK.*'` \
+  #-p '6077:6077/tcp' \
+  #-v '/tmp/telly':'/tmp':'rw' \
+  #`# ------- Traefik Proxy Section -------` \
+  #-l "traefik.enable=false" \
+  #-l "traefik.port=6077" \
+  #-l "traefik.frontend.rule=Host:$NAME.$FQDN" \
+  #`# -------------------------------------` \
+  #tellytv/telly:dev-ffmpeg --web.base-address=localhost:6077
+
+
+
+#  # ErsatzTV - create 'live TV' channels from your media
+#  # https://ersatztv.org/user-guide/install/
+#  # https://hub.docker.com/r/jasongdove/ersatztv
+#  ersatztv:
+#    image: jasongdove/ersatztv:develop-vaapi # vaapi should enable hardware transcoding (Intel Quick Sync)
+#    container_name: ersatztv
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      - t2_proxy
+#      #- default
+#    ports:
+#      - $ERSATZ_PORT:8409
+#    devices:
+#      - /dev/dri:/dev/dri # for hardware transcoding
+#    environment:
+#      - TZ=$TZ
+#    volumes:
+#      - $DOCKER_DIR/ersatztv/data:/root/.local/share/ersatztv
+#      - $MEDIA_DIR:/media:ro
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.ersatztv-rtr.entrypoints=https"
+#      - "traefik.http.routers.ersatztv-rtr.rule=Host(`ersatztv.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.ersatztv-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.ersatztv-rtr.service=ersatztv-svc"
+#      - "traefik.http.services.ersatztv-svc.loadbalancer.server.port=8409"
+
+      
+#  # Emby - plex alternative
+#  # https://emby.media/docker-server.html
+#  # https://hub.docker.com/r/emby/embyserver
+#  # https://hub.docker.com/r/linuxserver/emby
+#  # https://docs.linuxserver.io/images/docker-emby
+#  emby:
+#    image: lscr.io/linuxserver/emby
+#    container_name: emby
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      - t2_proxy
+#      #- default
+#    ports:
+#      - $EMBY_PORT_HTTP:8096 # 8096 is default for HTTP traffic. You can change this in the dashboard.
+#      #- $EMBY_PORT_HTTPS:8920 # 8920 is default for HTTPS traffic. You can change this in the dashboard.
+#      #- $EMBY_PORT_DNLA:1900/udp # 1900 is for DNLA discovery, can't change. Also used by Plex/Jellyfin/Unifi/etc so prioritise preferred service
+#      #- $EMBY_PORT_DISCOVERY:7359/udp # 7359 is for auto discovery.
+#    devices:
+#      - /dev/dri:/dev/dri # for hardware transcoding
+#    environment: 
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#    volumes:
+#      - $DOCKER_DIR/emby/data:/config
+#      - $DOCKERLOG_DIR/emby:/config/logs
+#      - $MEDIA_DIR/Video:/data/Video:ro
+#      - $MEDIA_DIR/Audio:/data/Music:ro
+#      - $MEDIA_DIR/Pictures:/data/Pictures:ro
+#      - $SCRATCHPAD_DIR:/data/scratchpad:ro
+#    labels:
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.emby-rtr.entrypoints=https"
+#      - "traefik.http.routers.emby-rtr.rule=Host(`emby.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.emby-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.emby-rtr.service=emby-svc"
+#      - "traefik.http.services.emby-svc.loadbalancer.server.port=8096"
+
+
+#  # https://github.com/kevalpatel2106/octopus-consumption-exporter
+#  octopusenergy-exporter:
+#    container_name: octopusenergy-exporter
+#    image: ghcr.io/kevalpatel2106/octopus-consumption-exporter:latest
+#    restart: unless-stopped
+#    networks:
+#        default:
+#    environment:
+#      INFLUX_DB_NAME: octopusenergy 
+#      INFLUX_DB_HOST: influxdb            # Won't accept Victoria Metrics Agent as an endpoint
+#      INFLUX_DB_PORT: 8086
+#      OCTOPUS_API_KEY: $OCTOPUS_API_KEY
+#      ELECTRICITY_MPAN: $OCTOPUS_ELECTRICITY_MPAN
+#      ELECTRICITY_SERIAL_NO: $OCTOPUS_ELECTRICITY_SERIAL_NO
+#      GAS_MPAN: $OCTOPUS_GAS_MPAN
+#      GAS_SERIAL_NO: $OCTOPUS_GAS_SERIAL_NO
+#      VOLUME_CORRECTION_FACTOR:  1.02264   # Can get from latest bill
+#      SERIES_START_DATE: "2020-11-01"      # YYYY-MM-DD. Default = yesterday. Smart meter installed Nov 2020 so tried that date for initial data retreival but didn't work
+
+
+#  # Home Assistant COnfigurator - edit config files from within web interface
+#  # https://github.com/CausticLab/hass-configurator-docker
+#  hass-configurator:
+#    container_name: hass-configurator
+#    image: "causticlab/hass-configurator-docker:latest"
+#    restart: unless-stopped
+#    ports:
+#      - "$HASS_CONFIGURATOR_PORT:3218"
+#    networks:
+#      default:
+#      t2_proxy:
+#    environment:   
+#      HC_BASEPATH: /hass-config
+#      HC_ENFORCE_BASEPATH: true
+#      # Create a Long-Lived Access Token
+#      HC_HASS_API: https://ha-test.$DOMAINNAME0/api
+#      HASS_WS_API: wss://ha-test.$DOMAINNAME0/api/websocket
+#      HC_HASS_API_PASSWORD: $HOMEASSISTANT_TOKEN
+#      HC_IGNORE_SSL: true      
+#      HC_ALLOWED_NETWORKS: 192.168.0.0/24,192.168.64.0/18 # "127.0.0.1,192.168.0.0/16"    # Set list of networks that should be allowed to access Configurator
+#      HC_ALLOWED_DOMAINS: $DOMAINNAME0   # List of allowed domains
+#      #HC_USERNAME: XXXX   # HA username if setup with basic auth
+#      #HC_PASSWORD: XXXX   # HA password if setup with basic auth (also accepts sha256 version of password with prefix e.g. "{sha256}xxxx" )
+#      HC_DIRSFIRST: true   # SHow directories at top of file list instead of art of A-Z listing
+#      PUID: $PUID
+#      PGID: $PGID
+#      TZ: $TZ
+#    volumes:
+#      #- "./data/configurator-config:/config"   # Optional 'settings.conf' config file can be stored here - using env vars instead
+#      - $DOCKER_DIR/home-assistant-test/config:/hass-config
+#    labels:
+#      - org.label-schema.group=home-auto
+#      ## Exclude From Watchtower Auto-Update But Notify On New Image
+#      - "com.centurylinklabs.watchtower.enable=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.hass-configurator-rtr.entrypoints=https"
+#      - "traefik.http.routers.hass-configurator-rtr.rule=Host(`hass-configurator.$DOMAINNAME0`)"
+#      ## Middlewares
+#      #- "traefik.http.routers.hass-configurator-rtr.middlewares=chain-basic-auth@file" 
+#      #- "traefik.http.routers.hass-configurator-rtr.middlewares=chain-no-auth@file"
+#      - "traefik.http.routers.hass-configurator-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.hass-configurator-rtr.service=hass-configurator-svc"
+#      - "traefik.http.services.hass-configurator-svc.loadbalancer.server.port=3218"
+
+
+#  # COULDN'T GET WORKING PROPERLY
+#  # SEE ALT CONFIG IN OPTIONAL.YML
+#  # Aria2 - Download Manager
+#  # Aria2 + AriaNg + Filebrowser (+ rclone)
+#  # https://github.com/wahyd4/aria2-ariang-docker
+#  # Access at:
+#  #   https://aria2.$DOMAINNAME0
+#  #   https://aria2.$DOMAINNAME0/files
+#  #   https://aria2.$DOMAINNAME0/rclone
+#  # Default creds: FileBrowser - admin/admin & rclone - user/password
+#  # Before 1st run - copy some config files from container:
+#  #   docker run -d --rm --name aria2 wahyd4/aria2-ui:latest
+#  #   docker cp aria2:/app/filebrowser.db /storage/Docker/aria2/data/app/filebrowser.db
+#  #   docker cp aria2:/app/conf/aria2.conf /storage/Docker/aria2/data/app/conf/aria2.conf
+#  #   docker cp aria2:/app/conf/aria2.session /storage/Docker/aria2/data/app/conf/aria2.session
+#  #   docker stop aria2; docker rm -f -v aria2
+#  aria2:
+#    image: wahyd4/aria2-ui:latest
+#    container_name: aria2
+#    restart: unless-stopped
+#    networks:
+#      - t2_proxy
+#      #- default
+#    environment:
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - ENABLE_AUTH=false                           # Enable/disable basic auth - we have AUthelia in front of this
+#      #- ARIA2_USER=admin                            # If basic auth enabled
+#      #- ARIA2_PWD=$ARIA_PWD                         # If basic auth enabled
+#      - RPC_SECRET=$ARIA_RPC_SECRET                  # RPC secret (for API access?) 
+#      #- DOMAIN=https://aria2.$DOMAINNAME0      # if https then image's Caddy proxy tries to pull Let's Encrypt certs
+#      - ARIA2_SSL=false
+#      #- ARIA2_EXTERNAL_PORT=443                     # (default: 80)
+#      - CADDY_LOG_LEVEL=ERROR                       # (Default: info) User WARN or ERROR to reduce logs
+#      # If using rclone, place rclone.conf in /app/conf, or
+#      # config using base64 string: cat /app/conf/rclone.conf | base64
+#      #- RCLONE_CONFIG_BASE64=                       
+#    ports:
+#      - $ARIA_PORT:80
+#    volumes:
+#      - $DOWNLOAD_DIR/_aria2:/data                  # Download directory
+#      # File Browser settings database, make sure you make a empty file first on your host.
+#      - /storage/Docker/aria2/data/app/filebrowser.db:/app/filebrowser.db
+#      # Without /app/conf, download progress lost if container restarts
+#      # Should contain: aria1.conf and aria2.session (+ optional rclone.conf)
+#      - /storage/Docker/aria2/data/app/conf:/app/conf
+#      # <local_path>:/app/conf/key # The folder which stores Aria2 SSL certificate and key
+#    labels:
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=true"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.aria2-rtr.entrypoints=https"
+#      - "traefik.http.routers.aria2-rtr.rule=Host(`aria2.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.aria2-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.aria2-rtr.service=aria2-svc"
+#      - "traefik.http.services.aria2-svc.loadbalancer.server.port=80"
+
+
+
+  # Image does not correctly retrieve metrics when using a free tier.
+  # See 'monitoring' host compose file and Obsidian notes for more details.
+  ## Cloudflare Exporter
+  ## https://github.com/lablabs/cloudflare-exporter
+  ## Grafana dashboard here: https://grafana.com/grafana/dashboards/13133
+  #cloudflare-exporter:
+  #  image: ghcr.io/lablabs/cloudflare_exporter
+  #  container_name: cloudflare-exporter
+  #  restart: unless-stopped
+  #  networks:
+  #    - default # To let Prometheus access
+  #  ports:
+  #    - $CLOUDFLARE_EXPORTER_PORT:18080 # Changed port via env var below (default: 8080)
+  #  environment:
+  #    # Can authenticate with either CF email + Global API Key (this gives service FULL access to our CF configuration)
+  #    # or authenticate with specifically created API token with limited scope (Analytics:Read; Account.Account Analytics:Read; Account Settings:Read)
+  #    # Obviously prefer the limited access option!!
+  #    #- CF_API_EMAIL=$CLOUDFLARE_EMAIL                  # Only needed if using email + global key authentication
+  #    #- CF_API_KEY=$CLOUDFLARE_GLOBAL_API               # Only needed if using email + global key authentication
+  #    - CF_API_TOKEN=$CLOUDFLARE_EXPORTER_API_TOKEN     # Comment out if using email + global key authentication
+  #    - FREE_TIER=false                                  # Select only metrics included in free tier (default:false)
+  #    - LISTEN=0.0.0.0:18080                            # Change port to server metrics (default: 8080)
+  #    #- METRICS_PATH=/metrics                          # Change metrics path (default: /metrics)
+  #    #- SCRAPE_DELAY=300                               # Change frequency of scrape from CF in seconds (default: 300)
+  #    #- CF_BATCH_SIZE=10                               # CF request zones batch size, from 1-10 (default: 10)
+  #    #- CF_ZONES=                                      # (Optional) cloudflare zones to export, comma delimited list of zone ids. If not set, all zones from account are exported
+  #    #- CF_EXCLUDE_ZONES=                              # (Optional) cloudflare zones to exclude, comma delimited list of zone ids. If not set, no zones from account are excluded
+  #  labels:
+  #    - org.label-schema.group=monitoring
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+# NOW RUNNING AS SERVICE ON PIHOLE
+#  # CLOUDFLARED - Setup secure tunnels to Cloudflare to access service in our home network without
+#  # needing a static external IP, and without needing any firewall ports opened/forwarded.
+#  # Sites are made available by including the site details in the config file at:
+#  #     /storage/Docker/cloudflared/data/home-services-locally-managed/config.yml
+#  # After adding / updating this file, restart the cloudflared service. 
+#  # And remember to add a DNS record in Cloudflare to route traffic to the tunnelled site - there is
+#  # a command documented at the top of the config file to create the DNS record from the CLI.
+#  # https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/
+#  # https://github.com/cloudflare/cloudflared
+#  cloudflared:
+#    container_name: cloudflared
+#    image: cloudflare/cloudflared:latest
+#    restart: always
+#    networks:
+#      - t2_proxy
+#      - default
+#    ports:
+#      - $CLOUDFLARED_METRICS:$CLOUDFLARED_METRICS
+#    environment:
+#      - TUNNEL_METRICS=0.0.0.0:$CLOUDFLARED_METRICS
+#    volumes:
+#      - $DOCKER_DIR/cloudflared/data/home-services-locally-managed/:/etc/cloudflared/
+#      #- $DOCKERLOG_DIR/cloudflared:/var/log/cloudflared  # Also enable in config file if required.
+#    command: 'tunnel run' # --metrics 127.0.0.1:60123 # --config /etc/cloudflared/config.yml 
+#    labels:
+#      - org.label-schema.group=external
+#      #------------- WATCHTOWER -------------#
+#      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+
+#  # Obsidian
+#  # https://docs.linuxserver.io/images/docker-obsidian
+#  obsidian:
+#    container_name: obsidian
+#    image: lscr.io/linuxserver/obsidian:latest
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    #devices:
+#    #  - /dev/dri:/dev/dri #optional
+#    security_opt:
+#      - seccomp:unconfined #optional
+#    networks:
+#      - t2_proxy
+#      - default
+#    ports:
+#      - "$OBSIDIAN_HTTP_PORT:3000"
+#      - "$OBSIDIAN_HTTPS_PORT:3001"
+#    environment:
+#      #- DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#    volumes:
+#      - $BACKUP_DIR/Current/Nextcloud/ryan/files/Obsidian:/obsidian-vault
+#    labels:
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.obsidian-rtr.entrypoints=https"
+#      - "traefik.http.routers.obsidian-rtr.rule=Host(`obsidian.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.obsidian-rtr.middlewares=chain-no-auth@file" 
+#      ## HTTP Services
+#      - "traefik.http.routers.obsidian-rtr.service=obsidian-svc"
+#      - "traefik.http.services.obsidian-svc.loadbalancer.server.port=3000"
+
+
+
+#  # Pi.Alert
+#  # https://github.com/jokob-sk/Pi.Alert
+#  # Before first run, create pialert folders:
+#  #   mkdir -p /storage/Docker/pialert/{config,db}
+#  pialert:
+#    container_name: pialert
+#    image: "jokobsk/pi.alert:latest"      
+#    #network_mode: "host"        
+#    networks:
+#      t2_proxy:
+#      #lan_net:
+#      #  ipv4_address: $MACVLAN_PIALERT_IP # Specify IP address on macvlan network
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#    volumes:
+#      - $DOCKER_DIR/pialert/config:/home/pi/pialert/config
+#      - $DOCKER_DIR/pialert/db:/home/pi/pialert/db      
+#      # (optional) useful for debugging if you have issues setting up the container
+#      #- $DOCKERLOG_DIR/pialert:/home/pi/pialert/front/log
+#      # (Optional) if using pihole method to ID new devices
+#      - $DOCKER_DIR/pihole/data/etc/pihole/pihole-FTL.db:/etc/pihole/pihole-FTL.db:ro
+#      - $DOCKER_DIR/pihole/data/etc/pihole/dhcp.leases:/etc/pihole/dhcp.leases:ro
+#    environment:
+#      - TZ=$TZ      
+#      - HOST_USER_ID=$PUID
+#      - HOST_USER_GID=$PGID
+#      - PORT=$PIALERT_PORT
+#    ports:
+#      - "$PIALERT_PORT:20211"
+#    labels:
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      - "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.pialert-rtr.entrypoints=https"
+#      - "traefik.http.routers.pialert-rtr.rule=Host(`pialert.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.pialert-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.pialert-rtr.service=pialert-svc"
+#      - "traefik.http.services.pialert-svc.loadbalancer.server.port=$PIALERT_PORT"
+
+
+
+## GraphQL Exporter
+## https://github.com/ricardbejarano/graphql_exporter
+#graphql-exporter:
+#  image: quay.io/ricardbejarano/graphql_exporter:latest
+#  container_name: graphql-exporter
+#  restart: unless-stopped
+#  #logging: *default-logging    # Logging now defined globally in daemon.json
+#  ports:
+#    - $GRAPHQL_EXPORTER_PORT:9199
+#  networks:
+#    - default # To let Prometheus access
+#  labels:
+#    - org.label-schema.group=monitoring
+#    #------------- WATCHTOWER -------------#
+#    ## Exclude from Watchtower updates
+#    #- "com.centurylinklabs.watchtower.enable=false"
+#    ## Exclude From Watchtower updates - Notify On New Image
+#    - "com.centurylinklabs.watchtower.monitor-only=true"
