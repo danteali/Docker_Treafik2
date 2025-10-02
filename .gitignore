@@ -27,6 +27,8 @@ _env*
 *.ipcheck
 **/temp.sh
 *.bak
+*.pem
+*.key
 #----------
 **/macvlan_docker.sh
 **/vm_macvlan_docker.sh
@@ -48,5 +50,6 @@ _env*
 **/portainer/data/portainer.db
 **/*crontab
 **/frigate/data/config/config.yml
+**/frigate/data/config/config-20240420-systemsyntax.yml
 #-----------------------------
 

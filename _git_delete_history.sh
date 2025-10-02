@@ -14,9 +14,9 @@
 # You should really consider any sensitive info pushed to github to be 
 # compromised but this script will delete it from github anyway 
 
-FILE=$1
-
-cp $1 /tmp/$FILE
+FILE="$1"
+FILENAME=$(basename ${FILE})
+cp "$1" "/tmp/${FILENAME}"
 
 #FILTER_BRANCH_SQUELCH_WARNING=1 suppressed warning message:
 #WARNING: git-filter-branch has a glut of gotchas generating mangled history
@@ -28,4 +28,4 @@ cp $1 /tmp/$FILE
          
 FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch --force --index-filter "git rm --cached --ignore-unmatch $FILE" --prune-empty --tag-name-filter cat -- --all
 git push origin --force --all
-mv /tmp/$FILE $1
+mv "/tmp/${FILENAME}" "$1"
