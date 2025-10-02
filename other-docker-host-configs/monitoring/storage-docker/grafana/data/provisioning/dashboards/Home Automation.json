@@ -1,0 +1,6879 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "home-automation",
+    "url": "/d/7Nqpoj-ik/home-automation",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General-Old",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    },
+    "publicDashboardAccessToken": "",
+    "publicDashboardUid": "",
+    "publicDashboardEnabled": false
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "W_4Ss6Dnk"
+          },
+          "enable": false,
+          "expr": "layzspa_rebootdate",
+          "iconColor": "purple",
+          "name": "Spa Power On",
+          "textFormat": "Lay-Z-Spa Power On",
+          "titleFormat": "Lay-Z-Spa Power On",
+          "useValueForTime": "on"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [
+      {
+        "asDropdown": true,
+        "icon": "external link",
+        "includeVars": true,
+        "keepTime": true,
+        "tags": [
+          "production"
+        ],
+        "targetBlank": false,
+        "title": "Switch Dashboard...",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      }
+    ],
+    "liveNow": false,
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "panels": [],
+        "title": "'Master' Charts - for copying & customising",
+        "type": "row"
+      },
+      {
+        "gridPos": {
+          "h": 9,
+          "w": 22,
+          "x": 0,
+          "y": 1
+        },
+        "id": 94,
+        "libraryPanel": {
+          "uid": "fIuFyIkVk"
+        }
+      },
+      {
+        "gridPos": {
+          "h": 4,
+          "w": 12,
+          "x": 0,
+          "y": 10
+        },
+        "id": 97,
+        "libraryPanel": {
+          "uid": "Q3Vu6Sz4k"
+        }
+      },
+      {
+        "collapsed": true,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 14
+        },
+        "id": 23,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "Temperature",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 20,
+                  "gradientMode": "opacity",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "celsius"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/.*Humidity.*/"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.axisPlacement",
+                      "value": "right"
+                    },
+                    {
+                      "id": "unit",
+                      "value": "percent"
+                    },
+                    {
+                      "id": "custom.axisLabel",
+                      "value": "Humidity"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 20,
+              "x": 0,
+              "y": 15
+            },
+            "id": 25,
+            "interval": "10m",
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_climate_current_temperature_celsius{friendly_name=\"Living Room\"}",
+                "interval": "",
+                "legendFormat": "{{friendly_name}} Temperature",
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_climate_target_temperature_celsius{friendly_name=\"Living Room\"}",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "{{friendly_name}} Temperature - Target",
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_humidity_percent{friendly_name=\"Living Room Humidity\"}\n",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_humidity_percent{friendly_name=\"OpenWeatherMap Humidity\"}",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "D"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_temperature_celsius{entity=\"sensor.openweathermap_temperature\"}",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "F"
+              }
+            ],
+            "title": "Climate",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "max": 100,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-red"
+                    },
+                    {
+                      "color": "semi-dark-yellow",
+                      "value": 10
+                    },
+                    {
+                      "color": "dark-green",
+                      "value": 30
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 22,
+              "w": 4,
+              "x": 20,
+              "y": 15
+            },
+            "id": 27,
+            "options": {
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showThresholdLabels": false,
+              "showThresholdMarkers": true,
+              "text": {}
+            },
+            "pluginVersion": "9.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_battery_percent",
+                "hide": true,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "{__name__=~\"ha.*battery.*\"}",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "B"
+              }
+            ],
+            "title": "Battery Levels",
+            "type": "gauge"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "continuous-GrYlRd"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "celsius"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 20,
+              "x": 0,
+              "y": 26
+            },
+            "id": 29,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 11
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "9.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_temperature_celsius",
+                "hide": true,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_unit_celsius",
+                "hide": true,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "{__name__=~\"ha.*temperature.*\"}",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "{__name__=~\"ha.*unit_celsius.*\"}",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "D"
+              }
+            ],
+            "title": "Temperatures",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "continuous-GrYlRd"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 20,
+              "x": 0,
+              "y": 37
+            },
+            "id": 87,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {
+                "titleSize": 11
+              },
+              "textMode": "auto"
+            },
+            "pluginVersion": "9.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_temperature_celsius",
+                "hide": true,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_unit_celsius",
+                "hide": true,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "{__name__=~\"ha.*humidity.*\"}",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "{{friendly_name}}",
+                "refId": "C"
+              }
+            ],
+            "title": "Humidity",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "continuous-YlRd"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "Temperature",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 5,
+                  "gradientMode": "scheme",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineInterpolation": "smooth",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "celsius"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/.*Humidity.*/"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.axisPlacement",
+                      "value": "right"
+                    },
+                    {
+                      "id": "unit",
+                      "value": "percent"
+                    },
+                    {
+                      "id": "custom.axisLabel",
+                      "value": "Humidity"
+                    },
+                    {
+                      "id": "custom.fillOpacity",
+                      "value": 0
+                    },
+                    {
+                      "id": "custom.drawStyle",
+                      "value": "line"
+                    },
+                    {
+                      "id": "custom.lineInterpolation",
+                      "value": "smooth"
+                    },
+                    {
+                      "id": "custom.lineStyle",
+                      "value": {
+                        "dash": [
+                          15,
+                          10
+                        ],
+                        "fill": "dash"
+                      }
+                    },
+                    {
+                      "id": "custom.gradientMode",
+                      "value": "none"
+                    },
+                    {
+                      "id": "color",
+                      "value": {
+                        "mode": "continuous-BlPu"
+                      }
+                    },
+                    {
+                      "id": "custom.fillOpacity",
+                      "value": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 13,
+              "w": 24,
+              "x": 0,
+              "y": 48
+            },
+            "id": 84,
+            "interval": "10m",
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true,
+                "sortBy": "Min",
+                "sortDesc": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_temperature_celsius{entity=~\"$ha_entities\"} !=0",
+                "hide": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{friendly_name}} Temperature",
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_unit_celsius{entity=~\"$ha_entities\"} !=0",
+                "hide": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_climate_current_temperature_celsius !=0",
+                "hide": false,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "Temp - Nest ({{entity}})",
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "ha_sensor_temperature_celsius{entity=\"sensor.openweathermap_temperature\"} !=0",
+                "hide": false,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "Temp - Outside: OpenWeatherMap ({{entity}})",
+                "refId": "E"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "{__name__=~\"ha.*temperature.*\", entity=~\"$ha_entities\"}",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Temp - {{friendly_name}} ({{entity}})",
+                "refId": "D"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "exemplar": true,
+                "expr": "{__name__=~\"ha.*humidity.*\", entity=~\"$ha_entities\"}",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Humidity - {{friendly_name}} ({{entity}})",
+                "refId": "F"
+              }
+            ],
+            "title": "Temperature & Humidity (Entity Filter)",
+            "type": "timeseries"
+          }
+        ],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Home Assistant",
+        "type": "row"
+      },
+      {
+        "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 15
+        },
+        "id": 86,
+        "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Power Costs",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: Octograph (& Octopus API via curl into NodeExporter for pricing)",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "stepAfter",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "always",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "decimals": 4,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "kwatth"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": ".*m³.*"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "decimals",
+                  "value": 3
+                },
+                {
+                  "id": "unit",
+                  "value": "m3"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 22,
+          "x": 0,
+          "y": 16
+        },
+        "id": 95,
+        "interval": "30m",
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "sum_over_time(electricity_consumption[$interval_octo:30m]) offset -30m",
+            "hide": false,
+            "interval": "$interval_octo",
+            "legendFormat": "Electricity Consumption - kWh (Octograph)",
+            "range": true,
+            "refId": "Electric"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "sum_over_time(gas_consumption[$interval_octo:30m]) offset -30m",
+            "hide": true,
+            "interval": "$interval_octo",
+            "legendFormat": "Gas Consumption - m³",
+            "range": true,
+            "refId": "Gas"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "sum_over_time(gas_consumption[$interval_octo:30m]) offset -30m * $gas_cal_value * $gas_vol_correction / 3.6",
+            "hide": false,
+            "interval": "$interval_octo",
+            "legendFormat": "Gas Consumption - kWh",
+            "range": true,
+            "refId": "Gas-kWh"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "increase(shellyem_0_total[$__rate_interval])/1000",
+            "hide": true,
+            "interval": "$interval_shelly",
+            "legendFormat": "Electricity Consumption - kWh (ShellyEM)",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeShift": "1d/d",
+        "title": "Octopus Energy - Consumption (per $interval_octo)",
+        "transformations": [],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: Octopus API via curl -> NodeExporter",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 3,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "currencyGBP"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 2,
+          "x": 22,
+          "y": 16
+        },
+        "id": 90,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "exemplar": false,
+            "expr": "avg_over_time(node_octopus_energy_standingcharge_electricity_pence[$__interval]) / 100",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "Electricity - Standing Charge (per day)",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "avg_over_time(node_octopus_energy_unitrate_electricity_pence[$__interval]) / 100",
+            "hide": false,
+            "legendFormat": "Electricity - Unit Rate (per kWh)",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "avg_over_time(node_octopus_energy_standingcharge_gas_pence[$__interval]) / 100",
+            "hide": false,
+            "legendFormat": "Gas - Standing Charge (per day)",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "avg_over_time(node_octopus_energy_unitrate_gas_pence[$__interval]) / 100",
+            "hide": false,
+            "legendFormat": "Gas - Unit Rate (per kWh)",
+            "range": true,
+            "refId": "D"
+          }
+        ],
+        "title": "Electricity & Gas Pricing",
+        "type": "stat"
+      },
+      {
+        "collapsed": true,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 25
+        },
+        "id": 21,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 3,
+              "x": 0,
+              "y": 5
+            },
+            "id": 89,
+            "options": {
+              "content": "<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\">\n<tbody>\n<tr>\n<td style=\"width: 3.66975%; text-align: left;\" colspan=\"2\"><strong>Consumption in kWh</strong></td>\n</tr>\n<tr>\n<td style=\"width: 3.66975%; text-align: center;\">&nbsp;</td>\n<td style=\"width: 96.3303%;\">Meter Reading <em>(in m&sup3;)</em></td>\n</tr>\n<tr>\n<td style=\"width: 3.66975%; text-align: center;\">x</td>\n<td style=\"width: 96.3303%;\">Volumetric Correction<em> (pressure/temp)</em></td>\n</tr>\n<tr>\n<td style=\"width: 3.66975%; text-align: center;\">x</td>\n<td style=\"width: 96.3303%;\">Calorific Value <em>(energy in each m&sup3;)</em></td>\n</tr>\n<tr>\n<td style=\"width: 3.66975%; text-align: center;\">&divide;</td>\n<td style=\"width: 96.3303%;\">3.6 <em>(convert from joules)</em></td>\n</tr>\n</tbody>\n</table>",
+              "mode": "html"
+            },
+            "pluginVersion": "9.1.2",
+            "title": "Gas Calculations",
+            "type": "text"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "description": "Source: Octograph (& Octopus API via curl into NodeExporter for pricing)",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "decimals": 4,
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    }
+                  ]
+                },
+                "unit": "currencyGBP"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*Consumption.*"
+                  },
+                  "properties": [
+                    {
+                      "id": "decimals",
+                      "value": 3
+                    },
+                    {
+                      "id": "unit",
+                      "value": "none"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*Cost"
+                  },
+                  "properties": [
+                    {
+                      "id": "decimals",
+                      "value": 2
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*Days.*"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "days"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 0
+                    },
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "super-light-yellow",
+                        "mode": "fixed"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*Total Cost"
+                  },
+                  "properties": [
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "dark-red",
+                        "mode": "fixed"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "Gas Consumption.*"
+                  },
+                  "properties": [
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "light-purple",
+                        "mode": "fixed"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*Consumption Cost"
+                  },
+                  "properties": [
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "dark-purple",
+                        "mode": "fixed"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*Standing Charge Cost"
+                  },
+                  "properties": [
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "dark-yellow",
+                        "mode": "fixed"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 9,
+              "x": 3,
+              "y": 5
+            },
+            "id": 98,
+            "options": {
+              "colorMode": "background",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "sum"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "9.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "present_over_time(node_octopus_energy_standingcharge_gas_pence[1d:30m])",
+                "hide": false,
+                "interval": "1d",
+                "legendFormat": "Days",
+                "range": true,
+                "refId": "Days"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "avg_over_time(node_octopus_energy_standingcharge_electricity_pence[1d:12h] / 100) offset -3d",
+                "hide": false,
+                "interval": "1d",
+                "legendFormat": "Electric - Standing Charge Cost",
+                "range": true,
+                "refId": "ElectricStanding"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "sum_over_time(electricity_consumption[1d:30m]) offset -2d",
+                "hide": false,
+                "interval": "1d",
+                "legendFormat": "Electricity Consumption - kWh",
+                "range": true,
+                "refId": "Electric"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "avg_over_time(node_octopus_energy_unitrate_electricity_pence[1d:12h] / 100) offset -3d",
+                "hide": false,
+                "interval": "1d",
+                "legendFormat": "Electric - Per kWh (Unit Charge)",
+                "range": true,
+                "refId": "ElectricPerUnit"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "avg_over_time(node_octopus_energy_standingcharge_gas_pence[1d:12h] / 100) offset -3d",
+                "hide": false,
+                "interval": "1d",
+                "legendFormat": "Gas - Standing Charge Cost",
+                "range": true,
+                "refId": "GasStanding"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "sum_over_time(gas_consumption[1d:30m]) offset -2d",
+                "hide": false,
+                "interval": "1d",
+                "legendFormat": "Gas Consumption - m³",
+                "range": true,
+                "refId": "Gas"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "sum_over_time(gas_consumption[1d:30m]) offset -2d * $gas_cal_value * $gas_vol_correction / 3.6",
+                "hide": false,
+                "interval": "1d",
+                "legendFormat": "Gas Consumption - kWh",
+                "range": true,
+                "refId": "Gas-kWh"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "avg_over_time(node_octopus_energy_unitrate_gas_pence[1d:12h] / 100) offset -3d",
+                "hide": false,
+                "interval": "1d",
+                "legendFormat": "Gas - Per kWh (Unit Charge)",
+                "range": true,
+                "refId": "GasPerUnit"
+              }
+            ],
+            "timeShift": "1d/d",
+            "title": "Octopus Energy - Consumption & Cost (per day)",
+            "transformations": [
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "Gas - Consumption Cost",
+                  "binary": {
+                    "left": "Gas Consumption - kWh",
+                    "operator": "*",
+                    "reducer": "sum",
+                    "right": "Gas - Per kWh (Unit Charge)"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  }
+                }
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "Electricity - Consumption Cost",
+                  "binary": {
+                    "left": "Electricity Consumption - kWh",
+                    "operator": "*",
+                    "reducer": "sum",
+                    "right": "Electric - Per kWh (Unit Charge)"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  }
+                }
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "Electricity - Total Cost",
+                  "mode": "reduceRow",
+                  "reduce": {
+                    "include": [
+                      "Electric - Standing Charge Cost",
+                      "Electricity - Consumption Cost"
+                    ],
+                    "reducer": "sum"
+                  }
+                }
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "Gas - Total Cost",
+                  "mode": "reduceRow",
+                  "reduce": {
+                    "include": [
+                      "Gas - Consumption Cost",
+                      "Gas - Standing Charge Cost"
+                    ],
+                    "reducer": "sum"
+                  },
+                  "replaceFields": false
+                }
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "Total Cost",
+                  "mode": "reduceRow",
+                  "reduce": {
+                    "include": [
+                      "Electricity - Total Cost",
+                      "Gas - Total Cost"
+                    ],
+                    "reducer": "sum"
+                  }
+                }
+              },
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Electric - Per kWh (Unit Charge)": true,
+                    "Electric - Standing Charge Cost": true,
+                    "Electricity - Consumption Cost": true,
+                    "Electricity - Total Cost": true,
+                    "Electricity Consumption - kWh": true,
+                    "Gas - Per kWh (Unit Charge)": true,
+                    "Time": true,
+                    "Total Cost": true
+                  },
+                  "indexByName": {
+                    "Days": 1,
+                    "Electric - Per kWh (Unit Charge)": 4,
+                    "Electric - Standing Charge Cost": 2,
+                    "Electricity - Consumption Cost": 10,
+                    "Electricity - Total Cost": 11,
+                    "Electricity Consumption - kWh": 3,
+                    "Gas - Consumption Cost": 9,
+                    "Gas - Per kWh (Unit Charge)": 8,
+                    "Gas - Standing Charge Cost": 5,
+                    "Gas - Total Cost": 13,
+                    "Gas Consumption - kWh": 7,
+                    "Gas Consumption - m³": 6,
+                    "Time": 0,
+                    "Total Cost": 12
+                  },
+                  "renameByName": {}
+                }
+              }
+            ],
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "decimals": 3,
+                "mappings": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "text": "N/A"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "currencyGBP"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*Days.*"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "Days"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 2,
+              "x": 18,
+              "y": 5
+            },
+            "id": 37,
+            "interval": "1d",
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "none",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "sum"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "value"
+            },
+            "pluginVersion": "9.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "builder",
+                "expr": "present_over_time(node_octopus_energy_standingcharge_gas_pence[$__interval])",
+                "hide": false,
+                "legendFormat": "Days",
+                "range": true,
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "builder",
+                "expr": "node_octopus_energy_standingcharge_gas_pence / 100",
+                "hide": false,
+                "legendFormat": "Standing Charge",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "influxdb",
+                  "uid": "Nd4vW5K7k"
+                },
+                "groupBy": [
+                  {
+                    "params": [
+                      "$__interval"
+                    ],
+                    "type": "time"
+                  },
+                  {
+                    "params": [
+                      "none"
+                    ],
+                    "type": "fill"
+                  }
+                ],
+                "hide": true,
+                "measurement": "gas",
+                "orderByTime": "ASC",
+                "policy": "default",
+                "query": "SELECT sum(\"consumption\") FROM \"gas\" WHERE $timeFilter",
+                "rawQuery": false,
+                "refId": "A",
+                "resultFormat": "time_series",
+                "select": [
+                  [
+                    {
+                      "params": [
+                        "consumption"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "sum"
+                    },
+                    {
+                      "params": [
+                        "*11.21*2.62/100"
+                      ],
+                      "type": "math"
+                    }
+                  ]
+                ],
+                "tags": []
+              }
+            ],
+            "timeShift": "1d/d",
+            "title": "Gas Cost - Standing Charge",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "decimals": 2,
+                "mappings": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "text": "N/A"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "currencyGBP"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 3,
+              "w": 4,
+              "x": 20,
+              "y": 5
+            },
+            "id": 39,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "none",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "sum"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "9.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "influxdb",
+                  "uid": "Nd4vW5K7k"
+                },
+                "groupBy": [
+                  {
+                    "params": [
+                      "$__interval"
+                    ],
+                    "type": "time"
+                  },
+                  {
+                    "params": [
+                      "none"
+                    ],
+                    "type": "fill"
+                  }
+                ],
+                "measurement": "gas",
+                "orderByTime": "ASC",
+                "policy": "default",
+                "query": "SELECT sum(\"cost\")/100 FROM \"gas\" WHERE $timeFilter",
+                "rawQuery": false,
+                "refId": "A",
+                "resultFormat": "time_series",
+                "select": [
+                  [
+                    {
+                      "params": [
+                        "cost"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "sum"
+                    },
+                    {
+                      "params": [
+                        " / 100"
+                      ],
+                      "type": "math"
+                    }
+                  ]
+                ],
+                "tags": []
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "builder",
+                "expr": "gas_unit_charge / 100",
+                "hide": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "B"
+              }
+            ],
+            "title": "Gas UNIT Usage Cost in Interval",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "Nd4vW5K7k"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "decimals": 4,
+                "mappings": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "text": "N/A"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "currencyGBP"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 3,
+              "w": 4,
+              "x": 20,
+              "y": 8
+            },
+            "id": 41,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "none",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "sum"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "9.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "influxdb",
+                  "uid": "Nd4vW5K7k"
+                },
+                "groupBy": [
+                  {
+                    "params": [
+                      "$__interval"
+                    ],
+                    "type": "time"
+                  },
+                  {
+                    "params": [
+                      "none"
+                    ],
+                    "type": "fill"
+                  }
+                ],
+                "measurement": "electricity",
+                "orderByTime": "ASC",
+                "policy": "default",
+                "query": "SELECT sum(\"total_cost\")  / sum(\"consumption\") / 100 FROM \"electricity\" WHERE $timeFilter GROUP BY time($__interval) fill(none)",
+                "rawQuery": true,
+                "refId": "A",
+                "resultFormat": "time_series",
+                "select": [
+                  [
+                    {
+                      "params": [
+                        "total_cost"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "sum"
+                    },
+                    {
+                      "params": [
+                        " / 100"
+                      ],
+                      "type": "math"
+                    }
+                  ]
+                ],
+                "tags": []
+              }
+            ],
+            "title": "Gas effective unit cost (/ m^3)",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "Nd4vW5K7k"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "decimals": 2,
+                "mappings": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "text": "N/A"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "currencyGBP"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 3,
+              "w": 3,
+              "x": 21,
+              "y": 11
+            },
+            "id": 43,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "none",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "sum"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "9.1.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "influxdb",
+                  "uid": "Nd4vW5K7k"
+                },
+                "groupBy": [
+                  {
+                    "params": [
+                      "$__interval"
+                    ],
+                    "type": "time"
+                  },
+                  {
+                    "params": [
+                      "none"
+                    ],
+                    "type": "fill"
+                  }
+                ],
+                "measurement": "electricity",
+                "orderByTime": "ASC",
+                "policy": "default",
+                "query": "SELECT sum(\"total_cost\")/100 FROM \"gas\" WHERE $timeFilter",
+                "rawQuery": false,
+                "refId": "A",
+                "resultFormat": "time_series",
+                "select": [
+                  [
+                    {
+                      "params": [
+                        "total_cost"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "sum"
+                    },
+                    {
+                      "params": [
+                        " / 100"
+                      ],
+                      "type": "math"
+                    }
+                  ]
+                ],
+                "tags": []
+              }
+            ],
+            "title": "Gas cost (total)",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "description": "Source: Consumption=Octopus; Cost=Octopus\nOctopus reports every 24hrs so we can only start with previous day's readings to compare.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "fillOpacity": 80,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineWidth": 1,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*kWh"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "kwatth"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 13,
+              "w": 9,
+              "x": 0,
+              "y": 12
+            },
+            "id": 45,
+            "options": {
+              "barRadius": 0,
+              "barWidth": 0.97,
+              "groupWidth": 0.7,
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "orientation": "auto",
+              "showValue": "auto",
+              "stacking": "none",
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              },
+              "xField": "Time",
+              "xTickLabelRotation": 0,
+              "xTickLabelSpacing": 0
+            },
+            "pluginVersion": "8.2.3",
+            "targets": [
+              {
+                "alias": "Influx - Consumption",
+                "datasource": {
+                  "type": "influxdb",
+                  "uid": "Nd4vW5K7k"
+                },
+                "groupBy": [
+                  {
+                    "params": [
+                      "$__interval"
+                    ],
+                    "type": "time"
+                  },
+                  {
+                    "params": [
+                      "null"
+                    ],
+                    "type": "fill"
+                  }
+                ],
+                "hide": true,
+                "measurement": "gas",
+                "orderByTime": "ASC",
+                "policy": "default",
+                "refId": "InfluxCunsumption",
+                "resultFormat": "time_series",
+                "select": [
+                  [
+                    {
+                      "params": [
+                        "consumption"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "last"
+                    }
+                  ]
+                ],
+                "tags": []
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "sum_over_time(gas_consumption[$__interval:30m])",
+                "format": "heatmap",
+                "hide": false,
+                "interval": "$interval_octo",
+                "legendFormat": "Gas - m³",
+                "range": true,
+                "refId": "m^3"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "day_of_week(timestamp(gas_consumption))",
+                "hide": true,
+                "legendFormat": "DOW",
+                "range": true,
+                "refId": "DOW"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "builder",
+                "expr": "",
+                "hide": false,
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "timeShift": "1d/d",
+            "title": "Gas Used",
+            "transformations": [
+              {
+                "disabled": true,
+                "id": "seriesToColumns",
+                "options": {
+                  "byField": "DOW"
+                }
+              },
+              {
+                "disabled": true,
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "DOW": false,
+                    "Time {name=\"DOW\"}": false
+                  },
+                  "indexByName": {},
+                  "renameByName": {}
+                }
+              }
+            ],
+            "type": "barchart"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "description": "Source: Octograph\n(based on per day calcs)",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "text": "N/A"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "m3"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*kWh.*"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "kwatth"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 2,
+              "x": 22,
+              "y": 14
+            },
+            "id": 33,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "none",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "sum"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "value"
+            },
+            "pluginVersion": "9.1.2",
+            "targets": [
+              {
+                "alias": "Influx - m³",
+                "datasource": {
+                  "type": "influxdb",
+                  "uid": "Nd4vW5K7k"
+                },
+                "groupBy": [
+                  {
+                    "params": [
+                      "$__interval"
+                    ],
+                    "type": "time"
+                  },
+                  {
+                    "params": [
+                      "none"
+                    ],
+                    "type": "fill"
+                  }
+                ],
+                "hide": false,
+                "measurement": "gas",
+                "orderByTime": "ASC",
+                "policy": "default",
+                "query": "SELECT sum(\"consumption\") FROM \"gas\" WHERE $timeFilter GROUP BY time(1d,-1h) fill(linear)",
+                "rawQuery": true,
+                "refId": "InfluxConsumption",
+                "resultFormat": "time_series",
+                "select": [
+                  [
+                    {
+                      "params": [
+                        "consumption"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "sum"
+                    }
+                  ]
+                ],
+                "tags": []
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum_over_time(gas_consumption[1d:30m]) offset -2d",
+                "hide": false,
+                "instant": false,
+                "interval": "1d",
+                "legendFormat": "m³",
+                "range": true,
+                "refId": "m³"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum_over_time(gas_consumption[1d:30m]) offset -2d * $gas_cal_value * $gas_vol_correction / 3.6",
+                "hide": false,
+                "instant": false,
+                "interval": "1d",
+                "legendFormat": "kWh",
+                "range": true,
+                "refId": "kWh"
+              }
+            ],
+            "timeShift": "1d/d",
+            "title": "Gas used",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "datasource",
+              "uid": "-- Mixed --"
+            },
+            "description": "Source: Octograph\n(based on per day calcs)",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "text": "N/A"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "m3"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*kWh.*"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "kwatth"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*Cost.*"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "currencyGBP"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 6,
+              "w": 3,
+              "x": 21,
+              "y": 18
+            },
+            "id": 93,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "none",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "sum"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "text": {},
+              "textMode": "auto"
+            },
+            "pluginVersion": "9.1.2",
+            "targets": [
+              {
+                "alias": "Influx - m³",
+                "datasource": {
+                  "type": "influxdb",
+                  "uid": "Nd4vW5K7k"
+                },
+                "groupBy": [
+                  {
+                    "params": [
+                      "$__interval"
+                    ],
+                    "type": "time"
+                  },
+                  {
+                    "params": [
+                      "none"
+                    ],
+                    "type": "fill"
+                  }
+                ],
+                "hide": true,
+                "measurement": "gas",
+                "orderByTime": "ASC",
+                "policy": "default",
+                "query": "SELECT sum(\"consumption\") FROM \"gas\" WHERE $timeFilter GROUP BY time(1d,-1h) fill(linear)",
+                "rawQuery": true,
+                "refId": "InfluxConsumption",
+                "resultFormat": "time_series",
+                "select": [
+                  [
+                    {
+                      "params": [
+                        "consumption"
+                      ],
+                      "type": "field"
+                    },
+                    {
+                      "params": [],
+                      "type": "sum"
+                    }
+                  ]
+                ],
+                "tags": []
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum_over_time(gas_consumption[1d:30m]) offset -2d",
+                "hide": false,
+                "instant": false,
+                "interval": "1d",
+                "legendFormat": "m³",
+                "range": true,
+                "refId": "m³"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum_over_time(gas_consumption[1d:30m]) offset -2d * $gas_cal_value * $gas_vol_correction / 3.6",
+                "hide": false,
+                "instant": false,
+                "interval": "1d",
+                "legendFormat": "kWh",
+                "range": true,
+                "refId": "kWh"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "W_4Ss6Dnk"
+                },
+                "editorMode": "code",
+                "expr": "avg_over_time(node_octopus_energy_unitrate_gas_pence[1d:12h] / 100) !=0",
+                "hide": false,
+                "interval": "1d",
+                "legendFormat": "Avg Cost",
+                "range": true,
+                "refId": "Cost"
+              }
+            ],
+            "timeShift": "1d/d",
+            "title": "Gas used",
+            "transformations": [],
+            "type": "stat"
+          }
+        ],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Energy Supply - Gas",
+        "type": "row"
+      },
+      {
+        "collapsed": false,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 26
+        },
+        "id": 83,
+        "panels": [],
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "refId": "A"
+          }
+        ],
+        "title": "Energy Supply - Electricity",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 80,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 8,
+          "x": 0,
+          "y": 27
+        },
+        "id": 47,
+        "options": {
+          "legend": {
+            "calcs": [
+              "sum"
+            ],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "Cumulative Sum",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": false,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                },
+                {
+                  "params": [],
+                  "type": "cumulative_sum"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "sum(increase(shellyem_0_total[$__interval]))",
+            "hide": true,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Total Cumulative Power (over Full Time Range)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 4000,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "light-green",
+                  "value": 500
+                },
+                {
+                  "color": "light-yellow",
+                  "value": 750
+                },
+                {
+                  "color": "light-orange",
+                  "value": 1000
+                },
+                {
+                  "color": "dark-orange",
+                  "value": 1250
+                },
+                {
+                  "color": "light-red",
+                  "value": 1500
+                },
+                {
+                  "color": "dark-red",
+                  "value": 2000
+                }
+              ]
+            },
+            "unit": "watt"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 4,
+          "x": 8,
+          "y": 27
+        },
+        "id": 49,
+        "options": {
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "last"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "text": {}
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": true,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_power"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "shellyem_0_power",
+            "hide": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Power Now",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-GrYlRd"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 80,
+              "gradientMode": "scheme",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watt"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 27
+        },
+        "id": 51,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "Power",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": true,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_power"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "shellyem_0_power",
+            "hide": false,
+            "legendFormat": "Power (Shelly EM)",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "timeFrom": "24h",
+        "title": "Instantaneous Power (last 24h)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "watth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 0,
+          "y": 32
+        },
+        "id": 53,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "vertical",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value"
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "ShellyEM",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "alias": "Octopus",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "Nd4vW5K7k"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": true,
+            "measurement": "electricity",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "B",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "consumption"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "sum"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "ShellyEM: Total Power for Interval",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "tRkyjH57z"
+        },
+        "description": "Source: ShellyEM\nExcluding Standing Charge of 21.17p/day",
+        "fieldConfig": {
+          "defaults": {
+            "decimals": 2,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-orange",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "currencyGBP"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 4,
+          "y": 32
+        },
+        "id": 59,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "ShellyEM Use",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "1h"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                },
+                {
+                  "params": [
+                    " / 1000"
+                  ],
+                  "type": "math"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "ShellyEM: Cost for Unit Usage in Interval (Est)",
+        "transformations": [
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "Cost",
+              "binary": {
+                "left": "ShellyEM Use",
+                "operator": "*",
+                "reducer": "sum",
+                "right": "0.161"
+              },
+              "mode": "binary",
+              "reduce": {
+                "reducer": "sum"
+              },
+              "replaceFields": true
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "tRkyjH57z"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "decimals": 2,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 250
+                }
+              ]
+            },
+            "unit": "volt"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 8,
+          "y": 35
+        },
+        "id": 65,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "vertical",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_voltage"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Voltage",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: Octopus",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "watth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 0,
+          "y": 36
+        },
+        "id": 55,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "vertical",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value"
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "ShellyEM",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": true,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "alias": "Octopus",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "Nd4vW5K7k"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": false,
+            "measurement": "electricity",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "B",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "consumption"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "sum"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Octopus: Total Power for Interval",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "Nd4vW5K7k"
+        },
+        "description": "Source: Octopus\nExcluding Standing Charge of 21.17p/day",
+        "fieldConfig": {
+          "defaults": {
+            "decimals": 2,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-orange",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "currencyGBP"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 4,
+          "y": 36
+        },
+        "id": 61,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "Octopus Cost",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "Nd4vW5K7k"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "none"
+                ],
+                "type": "fill"
+              }
+            ],
+            "measurement": "electricity",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "cost"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "sum"
+                },
+                {
+                  "params": [
+                    " / 100"
+                  ],
+                  "type": "math"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Octopus: UNIT Usage Cost in Interval",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-GrYlRd"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 80,
+              "gradientMode": "scheme",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watt"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 36
+        },
+        "id": 73,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "Power",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": true,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_power"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "shellyem_0_power",
+            "hide": false,
+            "legendFormat": "Power (ShellyEM)",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Instantaneous Power (Full Time Range)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "Nd4vW5K7k"
+        },
+        "description": "Source: Octopus\nIncluding Standing Charge of 21.17p/day",
+        "fieldConfig": {
+          "defaults": {
+            "decimals": 2,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-red",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "currencyGBP"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 0,
+          "y": 40
+        },
+        "id": 57,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "Octopus Cost",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "Nd4vW5K7k"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "none"
+                ],
+                "type": "fill"
+              }
+            ],
+            "measurement": "electricity",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "total_cost"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "sum"
+                },
+                {
+                  "params": [
+                    " / 100"
+                  ],
+                  "type": "math"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Octopus: Total Cost in Interval",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "Nd4vW5K7k"
+        },
+        "description": "Source: Octopus",
+        "fieldConfig": {
+          "defaults": {
+            "decimals": 4,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-yellow",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "currencyGBP"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 4,
+          "y": 40
+        },
+        "id": 63,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "Octopus Cost",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "Nd4vW5K7k"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "none"
+                ],
+                "type": "fill"
+              }
+            ],
+            "measurement": "electricity",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "query": "SELECT (sum(\"total_cost\") / sum(\"consumption\"))/100 FROM \"electricity\" WHERE $timeFilter ",
+            "rawQuery": true,
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "total_cost"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "sum"
+                },
+                {
+                  "params": [
+                    " / 100"
+                  ],
+                  "type": "math"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Octopus: Effective Unit Cost",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "tRkyjH57z"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "displayName": "Hourly Average",
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 8,
+          "y": 40
+        },
+        "id": 67,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value"
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "1h"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Hourly Average",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "tRkyjH57z"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "displayName": "Daily Average",
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 2,
+          "x": 10,
+          "y": 40
+        },
+        "id": 69,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value"
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "24h"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Daily Average",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: Consumption=ShellyEM; Cost=Octopus\nOctopus reports every 24hrs so we can only start with previous day's readings to compare.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "bars",
+              "fillOpacity": 80,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": 10800000,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "kwatth"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Price"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "unit",
+                  "value": "currencyGBP"
+                },
+                {
+                  "id": "custom.lineInterpolation",
+                  "value": "linear"
+                },
+                {
+                  "id": "custom.drawStyle",
+                  "value": "line"
+                },
+                {
+                  "id": "custom.barAlignment",
+                  "value": 0
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Cost"
+              },
+              "properties": [
+                {
+                  "id": "custom.gradientMode",
+                  "value": "opacity"
+                },
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "unit",
+                  "value": "currencyGBP"
+                },
+                {
+                  "id": "custom.lineInterpolation",
+                  "value": "linear"
+                },
+                {
+                  "id": "custom.drawStyle",
+                  "value": "line"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 44
+        },
+        "id": 77,
+        "interval": "30m",
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.3",
+        "targets": [
+          {
+            "alias": "Consumption",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": false,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                },
+                {
+                  "params": [
+                    " / 1000"
+                  ],
+                  "type": "math"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "alias": "Price",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "Nd4vW5K7k"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": false,
+            "measurement": "electricity",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "query": "SELECT last(\"total_cost\") FROM \"electricity\" WHERE $timeFilter GROUP BY time(30m) fill(null)",
+            "rawQuery": false,
+            "refId": "B",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "total_cost"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [
+                    " / 100"
+                  ],
+                  "type": "math"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Energy Used & Cost",
+        "transformations": [
+          {
+            "disabled": true,
+            "id": "calculateField",
+            "options": {
+              "alias": "Cost",
+              "binary": {
+                "left": "Consumption",
+                "operator": "*",
+                "reducer": "sum",
+                "right": "Price"
+              },
+              "mode": "binary",
+              "reduce": {
+                "reducer": "sum"
+              },
+              "replaceFields": false
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-BlPu"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 80,
+              "gradientMode": "scheme",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "amp"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 45
+        },
+        "id": 71,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "Power",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": false,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_power"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                },
+                {
+                  "params": [
+                    " / 240"
+                  ],
+                  "type": "math"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "shellyem_0_power / 240",
+            "hide": false,
+            "legendFormat": "Current (ShellyEM)",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "timeFrom": "24h",
+        "title": "Instantaneous Current (last 24h)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: Octopus & ShellyEM\nOctopus reports every 24hrs so we can only start with previous day's readings to compare. Octopus reading lag 1hr behind ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 1,
+              "drawStyle": "bars",
+              "fillOpacity": 80,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": 10800000,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watth"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Octopus"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "left"
+                },
+                {
+                  "id": "custom.lineInterpolation",
+                  "value": "stepAfter"
+                },
+                {
+                  "id": "custom.drawStyle",
+                  "value": "bars"
+                },
+                {
+                  "id": "custom.barAlignment",
+                  "value": -1
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#E0B400",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 53
+        },
+        "hideTimeOverride": false,
+        "id": 75,
+        "interval": "30m",
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.3",
+        "targets": [
+          {
+            "alias": "ShellyEM",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "30m"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": false,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "alias": "Octopus",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "Nd4vW5K7k"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "30m"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": false,
+            "measurement": "electricity",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "B",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "consumption"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "first"
+                },
+                {
+                  "params": [
+                    "*1000"
+                  ],
+                  "type": "math"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Electricity Consumption - ShellyEM vs Octopus Consumption",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-BlPu"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 80,
+              "gradientMode": "scheme",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "amp"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 53
+        },
+        "id": 119,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "9.1.2",
+        "targets": [
+          {
+            "alias": "Power",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": true,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_power"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                },
+                {
+                  "params": [
+                    " / 240"
+                  ],
+                  "type": "math"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "shellyem_0_power / 240",
+            "hide": false,
+            "legendFormat": "Current (ShellyEM)",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Instantaneous Current (Full Time Range)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: Octopus & ShellyEM\nOctopus reports every 24hrs so we can only start with previous day's readings to compare. Octopus reading lag 1hr behind ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "axisSoftMin": 0,
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 80,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "stepBefore",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": 10800000,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "decimals": 3,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 61
+        },
+        "hideTimeOverride": false,
+        "id": 103,
+        "interval": "30m",
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.3",
+        "targets": [
+          {
+            "alias": "ShellyEM",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "30m"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": true,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "InfluxShelly",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "alias": "Octo-Inf2",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "Nd4vW5K7k"
+            },
+            "hide": true,
+            "query": "SELECT sum(\"consumption\") * 1000 FROM \"electricity\" WHERE $timeFilter GROUP BY time($__interval,-30m) fill(linear) ",
+            "rawQuery": true,
+            "refId": "InfluxElectricity",
+            "resultFormat": "time_series"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "increase(interpolate(shellyem_0_total)[$__interval]) offset -30m",
+            "hide": false,
+            "interval": "30m",
+            "legendFormat": "Shelly",
+            "range": true,
+            "refId": "Shelly"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "sum_over_time(electricity_consumption[$__interval:30m] offset -30m) *1000",
+            "hide": false,
+            "interval": "30m",
+            "legendFormat": "Octopus",
+            "range": true,
+            "refId": "Electricity"
+          }
+        ],
+        "title": "Electricity Consumption - ShellyEM vs Octopus Consumption",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-YlRd"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "scheme",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 61
+        },
+        "id": 79,
+        "interval": "1h",
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.3",
+        "targets": [
+          {
+            "alias": "ShellyEM",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "1h"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "linear"
+                ],
+                "type": "fill"
+              }
+            ],
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "query": "SELECT difference(last(\"0_total\")) FROM \"shellyem\" WHERE $timeFilter GROUP BY time(1h) fill(linear)",
+            "rawQuery": false,
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "increase(shellyem_0_total[$__rate_interval])",
+            "hide": false,
+            "legendFormat": "Energy (ShellyEM)",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "timeFrom": "24h",
+        "title": "Energy By Hour (last 24h)",
+        "transformations": [],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-YlRd"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "scheme",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 69
+        },
+        "id": 120,
+        "interval": "1h",
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.3",
+        "targets": [
+          {
+            "alias": "ShellyEM",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "1h"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "linear"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": true,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "query": "SELECT difference(last(\"0_total\")) FROM \"shellyem\" WHERE $timeFilter GROUP BY time(1h) fill(linear)",
+            "rawQuery": false,
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "increase(shellyem_0_total[$__rate_interval])",
+            "hide": false,
+            "legendFormat": "Energy (ShellyEM)",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Energy By Hour (Full Time Range)",
+        "transformations": [],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Source: ShellyEM",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-YlRd",
+              "seriesBy": "last"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 1,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "scheme",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watt"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 77
+        },
+        "id": 81,
+        "interval": "1d",
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.3",
+        "targets": [
+          {
+            "alias": "ShellyEM",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "tRkyjH57z"
+            },
+            "groupBy": [
+              {
+                "params": [
+                  "1d"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "previous"
+                ],
+                "type": "fill"
+              }
+            ],
+            "hide": true,
+            "measurement": "shellyem",
+            "orderByTime": "ASC",
+            "policy": "default",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "0_total"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "last"
+                },
+                {
+                  "params": [],
+                  "type": "difference"
+                }
+              ]
+            ],
+            "tags": []
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "increase(shellyem_0_total[$__interval])",
+            "hide": false,
+            "legendFormat": "Energy (ShellyEM)",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Energy By Day (Full Time Range)",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 85
+        },
+        "id": 117,
+        "panels": [],
+        "title": "Misc Energy Monitoring",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "description": "(may not be 100% accurate - not clear if all MQTT messages parsed by HA)",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watt"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 15,
+          "w": 24,
+          "x": 0,
+          "y": 86
+        },
+        "id": 115,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "ha_sensor_power_w{entity=~\"$ha_entities\"} !=0",
+            "legendFormat": "{{friendly_name}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "ha_test_sensor_power_w{entity=~\"$ha_test_entities\"} !=0",
+            "hide": false,
+            "legendFormat": "{{friendly_name}}",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Home Assistant Power Metrics (Entity Filter)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "description": "(may not be 100% accurate - not clear if all MQTT messages parsed by HA)",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-YlRd"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "bars",
+              "fillOpacity": 85,
+              "gradientMode": "hue",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "kwatt"
+          },
+          "overrides": [
+            {
+              "__systemRef": "hideSeriesFrom",
+              "matcher": {
+                "id": "byNames",
+                "options": {
+                  "mode": "exclude",
+                  "names": [
+                    "Switch & Energy Monitor (Shelly1PM 04) Energy"
+                  ],
+                  "prefix": "All except:",
+                  "readOnly": true
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 15,
+          "w": 24,
+          "x": 0,
+          "y": 101
+        },
+        "id": 118,
+        "interval": "1h",
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "increase(ha_sensor_energy_kwh{entity=~\"$ha_entities\"}[$__rate_interval]) != 0",
+            "legendFormat": "{{friendly_name}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "ha_test_sensor_energy_kwh{entity=~\"$ha_test_entities\"} !=0",
+            "hide": true,
+            "legendFormat": "{{friendly_name}}",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Home Assistant 'Energy' Entities (Entity Filter) - Per Hour (Full Time Range)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "description": "Metrics from MQTT -> VMAgent via Node Red flow\n\nEnergy metric is in Watt Minutes - divide by 60 to get Wh.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Wh (1 hour)"
+              },
+              "properties": [
+                {
+                  "id": "custom.barAlignment",
+                  "value": 0
+                },
+                {
+                  "id": "custom.drawStyle",
+                  "value": "bars"
+                },
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "energy"
+              },
+              "properties": [
+                {
+                  "id": "custom.drawStyle",
+                  "value": "bars"
+                },
+                {
+                  "id": "custom.barAlignment",
+                  "value": 0
+                },
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 116
+        },
+        "id": 122,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "shelly1PM04_power",
+            "legendFormat": "Power",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "avg_over_time(shelly1PM04_power[1h])",
+            "hide": false,
+            "legendFormat": "Power Avg Over Time",
+            "range": true,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "sum_over_time(increase(shelly1PM04_energy)[$__interval]) / 60",
+            "hide": false,
+            "interval": "1h",
+            "legendFormat": "energy",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "sum_over_time(shelly1PM04_power[$__interval])/(count_over_time(shelly1PM04_power[1m])*60)",
+            "hide": false,
+            "interval": "1h",
+            "legendFormat": "Wh (1 hour)",
+            "range": true,
+            "refId": "C"
+          }
+        ],
+        "title": "Shelly (1PM #04) Power Monitor",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 124
+        },
+        "id": 107,
+        "panels": [],
+        "title": "Lay-Z-Spa Hot Tub",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "stepAfter",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 125
+        },
+        "id": 109,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "9.0.6",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "layzspa_heater",
+            "legendFormat": "Heater",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "layzspa_heating + 2",
+            "hide": false,
+            "legendFormat": "Active Heating",
+            "range": true,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "layzspa_filter + 4",
+            "hide": false,
+            "legendFormat": "Pump",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "layzspa_air + 6",
+            "hide": false,
+            "legendFormat": "Bubbles",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Spa Functions",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "kwatth"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": ".*Cost.*"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "unit",
+                  "value": "currencyGBP"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 125
+        },
+        "id": 111,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean",
+              "variance",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "remove_resets(layzspa_kwh)",
+            "legendFormat": "kWh",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "remove_resets(layzspa_cost) / 100",
+            "hide": false,
+            "legendFormat": "Cost (est)",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "increase(layzspa_kwh[1h])*avg(node_octopus_energy_unitrate_electricity_pence)/100",
+            "hide": true,
+            "legendFormat": "Cost2",
+            "range": true,
+            "refId": "D"
+          }
+        ],
+        "title": "Spa KWH",
+        "transformations": [],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "W_4Ss6Dnk"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "stepAfter",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "decimals": 1,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 133
+        },
+        "id": 113,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "layzspa_temp",
+            "legendFormat": "Actual Temp",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "layzspa_target",
+            "hide": false,
+            "legendFormat": "Target Temp",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "builder",
+            "expr": "ha_sensor_temperature_celsius{entity=\"sensor.openweathermap_temperature\"}",
+            "hide": false,
+            "legendFormat": "Air Temp",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "W_4Ss6Dnk"
+            },
+            "editorMode": "code",
+            "expr": "ha_input_number_state_celsius{entity=\"input_number.layzspa_min_temp\"}",
+            "hide": false,
+            "legendFormat": "Min Temp (Home Assistant)",
+            "range": true,
+            "refId": "D"
+          }
+        ],
+        "title": "Spa Temperature",
+        "type": "timeseries"
+      }
+    ],
+    "refresh": false,
+    "schemaVersion": 37,
+    "style": "dark",
+    "tags": [
+      "energy",
+      "influxdb",
+      "octopus",
+      "octograph",
+      "home assistant",
+      "home automation",
+      "production"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "automation.commute_update_morning_home_to_work_sensor",
+            "value": "automation.commute_update_morning_home_to_work_sensor"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "W_4Ss6Dnk"
+          },
+          "definition": "label_values(entity)",
+          "hide": 2,
+          "includeAll": false,
+          "label": "Entity",
+          "multi": false,
+          "name": "entity",
+          "options": [],
+          "query": {
+            "query": "label_values(entity)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "alexa.amazon.co.uk",
+            "value": "alexa.amazon.co.uk"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "W_4Ss6Dnk"
+          },
+          "definition": "label_values(domain)",
+          "hide": 2,
+          "includeAll": false,
+          "label": "Domain",
+          "multi": false,
+          "name": "domain",
+          "options": [],
+          "query": {
+            "query": "label_values(domain)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": [
+              "sensor.z2m_tuya_temp01_humidity",
+              "sensor.z2m_tuya_temp01_temperature",
+              "sensor.z2m_tuya_temp02_humidity",
+              "sensor.z2m_tuya_temp02_temperature",
+              "sensor.z2m_tuya_temp03_humidity",
+              "sensor.z2m_tuya_temp03_temperature",
+              "sensor.z2m_tuya_temp04_humidity",
+              "sensor.z2m_tuya_temp04_temperature"
+            ],
+            "value": [
+              "sensor.z2m_tuya_temp01_humidity",
+              "sensor.z2m_tuya_temp01_temperature",
+              "sensor.z2m_tuya_temp02_humidity",
+              "sensor.z2m_tuya_temp02_temperature",
+              "sensor.z2m_tuya_temp03_humidity",
+              "sensor.z2m_tuya_temp03_temperature",
+              "sensor.z2m_tuya_temp04_humidity",
+              "sensor.z2m_tuya_temp04_temperature"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "W_4Ss6Dnk"
+          },
+          "definition": "label_values(ha_entity_available{entity!~\"device.*|automation.*\",entity=~\".*humidity.*|.*temperature.*|climate.*|.*power.*|.*energy.*|.*consumption.*\"}, entity)",
+          "description": "List of entities for filtering some data elements below (see variable definition for exclusions)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Home Assistant Entities",
+          "multi": true,
+          "name": "ha_entities",
+          "options": [],
+          "query": {
+            "query": "label_values(ha_entity_available{entity!~\"device.*|automation.*\",entity=~\".*humidity.*|.*temperature.*|climate.*|.*power.*|.*energy.*|.*consumption.*\"}, entity)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": [
+              "sensor.z2m_tuya_temp01_humidity",
+              "sensor.z2m_tuya_temp01_temperature",
+              "sensor.z2m_tuya_temp02_humidity",
+              "sensor.z2m_tuya_temp02_temperature",
+              "sensor.z2m_tuya_temp03_humidity",
+              "sensor.z2m_tuya_temp03_temperature",
+              "sensor.z2m_tuya_temp04_humidity",
+              "sensor.z2m_tuya_temp04_temperature",
+              "sensor.shelly1pm_02_kids_toilet_power",
+              "sensor.shelly1pm_03_garden_wall_power",
+              "sensor.shelly1pm_02_kids_toilet_energy",
+              "sensor.shelly1pm_03_garden_wall_energy",
+              "sensor.shelly1pm_04_power_monitor_power",
+              "sensor.shelly1pm_04_power_monitor_energy"
+            ],
+            "value": [
+              "sensor.z2m_tuya_temp01_humidity",
+              "sensor.z2m_tuya_temp01_temperature",
+              "sensor.z2m_tuya_temp02_humidity",
+              "sensor.z2m_tuya_temp02_temperature",
+              "sensor.z2m_tuya_temp03_humidity",
+              "sensor.z2m_tuya_temp03_temperature",
+              "sensor.z2m_tuya_temp04_humidity",
+              "sensor.z2m_tuya_temp04_temperature",
+              "sensor.shelly1pm_02_kids_toilet_power",
+              "sensor.shelly1pm_03_garden_wall_power",
+              "sensor.shelly1pm_02_kids_toilet_energy",
+              "sensor.shelly1pm_03_garden_wall_energy",
+              "sensor.shelly1pm_04_power_monitor_power",
+              "sensor.shelly1pm_04_power_monitor_energy"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "W_4Ss6Dnk"
+          },
+          "definition": "label_values(ha_test_entity_available{entity!~\"device.*|automation.*\",entity=~\".*humidity.*|.*temperature.*|climate.*|.*power.*|.*energy.*|.*consumption.*\"}, entity)",
+          "description": "List of entities for filtering some data elements below (see variable definition for exclusions)",
+          "hide": 2,
+          "includeAll": true,
+          "label": "Home Assistant Entities (Test Instance)",
+          "multi": true,
+          "name": "ha_test_entities",
+          "options": [],
+          "query": {
+            "query": "label_values(ha_test_entity_available{entity!~\"device.*|automation.*\",entity=~\".*humidity.*|.*temperature.*|climate.*|.*power.*|.*energy.*|.*consumption.*\"}, entity)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "39.6",
+            "value": "39.6"
+          },
+          "description": "Energy in each m^3 of gas - appears to stay constant year-round. Used to convert m^3 meter readings to kWh. [Get from latest bill]",
+          "hide": 0,
+          "label": "(Gas) Calorific Value ",
+          "name": "gas_cal_value",
+          "options": [
+            {
+              "selected": true,
+              "text": "39.6",
+              "value": "39.6"
+            }
+          ],
+          "query": "39.6",
+          "skipUrlSync": false,
+          "type": "textbox"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "1.02264",
+            "value": "1.02264"
+          },
+          "description": "Adjustment to correct for pressure/temperature - appears to stay consistent year-round (get from last bill)",
+          "hide": 0,
+          "label": "(Gas) Volumetric Correction",
+          "name": "gas_vol_correction",
+          "options": [
+            {
+              "selected": true,
+              "text": "1.02264",
+              "value": "1.02264"
+            }
+          ],
+          "query": "1.02264",
+          "skipUrlSync": false,
+          "type": "textbox"
+        },
+        {
+          "auto": true,
+          "auto_count": 30,
+          "auto_min": "30m",
+          "current": {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          "hide": 0,
+          "label": "Octopus Interval",
+          "name": "interval_octo",
+          "options": [
+            {
+              "selected": false,
+              "text": "auto",
+              "value": "$__auto_interval_interval_octo"
+            },
+            {
+              "selected": true,
+              "text": "30m",
+              "value": "30m"
+            },
+            {
+              "selected": false,
+              "text": "1h",
+              "value": "1h"
+            },
+            {
+              "selected": false,
+              "text": "2h",
+              "value": "2h"
+            },
+            {
+              "selected": false,
+              "text": "3h",
+              "value": "3h"
+            },
+            {
+              "selected": false,
+              "text": "4h",
+              "value": "4h"
+            },
+            {
+              "selected": false,
+              "text": "6h",
+              "value": "6h"
+            },
+            {
+              "selected": false,
+              "text": "12h",
+              "value": "12h"
+            },
+            {
+              "selected": false,
+              "text": "1d",
+              "value": "1d"
+            },
+            {
+              "selected": false,
+              "text": "2d",
+              "value": "2d"
+            },
+            {
+              "selected": false,
+              "text": "7d",
+              "value": "7d"
+            },
+            {
+              "selected": false,
+              "text": "14d",
+              "value": "14d"
+            },
+            {
+              "selected": false,
+              "text": "30d",
+              "value": "30d"
+            }
+          ],
+          "query": "30m,1h,2h,3h,4h,6h,12h,1d,2d,7d,14d,30d",
+          "queryValue": "",
+          "refresh": 2,
+          "skipUrlSync": false,
+          "type": "interval"
+        },
+        {
+          "auto": true,
+          "auto_count": 30,
+          "auto_min": "30m",
+          "current": {
+            "selected": false,
+            "text": "30m",
+            "value": "30m"
+          },
+          "hide": 0,
+          "label": "Shelly Interval",
+          "name": "interval_shelly",
+          "options": [
+            {
+              "selected": false,
+              "text": "auto",
+              "value": "$__auto_interval_interval_shelly"
+            },
+            {
+              "selected": true,
+              "text": "30m",
+              "value": "30m"
+            },
+            {
+              "selected": false,
+              "text": "1h",
+              "value": "1h"
+            },
+            {
+              "selected": false,
+              "text": "2h",
+              "value": "2h"
+            },
+            {
+              "selected": false,
+              "text": "3h",
+              "value": "3h"
+            },
+            {
+              "selected": false,
+              "text": "4h",
+              "value": "4h"
+            },
+            {
+              "selected": false,
+              "text": "6h",
+              "value": "6h"
+            },
+            {
+              "selected": false,
+              "text": "12h",
+              "value": "12h"
+            },
+            {
+              "selected": false,
+              "text": "1d",
+              "value": "1d"
+            },
+            {
+              "selected": false,
+              "text": "2d",
+              "value": "2d"
+            },
+            {
+              "selected": false,
+              "text": "7d",
+              "value": "7d"
+            },
+            {
+              "selected": false,
+              "text": "14d",
+              "value": "14d"
+            },
+            {
+              "selected": false,
+              "text": "30d",
+              "value": "30d"
+            }
+          ],
+          "query": "30m,1h,2h,3h,4h,6h,12h,1d,2d,7d,14d,30d",
+          "queryValue": "",
+          "refresh": 2,
+          "skipUrlSync": false,
+          "type": "interval"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-8d",
+      "to": "now-1d"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ]
+    },
+    "timezone": "",
+    "title": "Home Automation",
+    "uid": "7Nqpoj-ik",
+    "weekStart": ""
+  }
+}

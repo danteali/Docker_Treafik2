@@ -1,0 +1,27 @@
+{
+  "id": 5,
+  "uid": "P4169E866C3094E38",
+  "orgId": 1,
+  "name": "VictoriaMetrics",
+  "type": "prometheus",
+  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "access": "proxy",
+  "url": "http://victoriametrics:8428",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": true,
+  "jsonData": {
+    "defaultEditor": "code",
+    "disableMetricsLookup": false,
+    "httpMethod": "POST",
+    "manageAlerts": false,
+    "prometheusType": "Prometheus"
+  },
+  "secureJsonFields": {},
+  "version": 4,
+  "readOnly": false,
+  "apiVersion": ""
+}

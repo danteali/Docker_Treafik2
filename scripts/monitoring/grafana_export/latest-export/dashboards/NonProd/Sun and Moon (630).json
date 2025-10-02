@@ -1,0 +1,323 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "sun-and-moon-630",
+    "url": "/d/AfHKnzcnz/sun-and-moon-630",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 56,
+    "folderUid": "fb2b30e2-66d0-4c15-9ba9-464d36c4b5c0",
+    "folderTitle": "NonProd",
+    "folderUrl": "/dashboards/f/fb2b30e2-66d0-4c15-9ba9-464d36c4b5c0/nonprod",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        },
+        {
+          "datasource": {
+            "type": "fetzerch-sunandmoon-datasource",
+            "uid": "P64382691D9610877"
+          },
+          "enable": false,
+          "iconColor": "rgb(238, 139, 9)",
+          "name": "Sunrise / Sunset",
+          "query": "sunrise,sunset"
+        },
+        {
+          "datasource": {
+            "type": "fetzerch-sunandmoon-datasource",
+            "uid": "P64382691D9610877"
+          },
+          "enable": false,
+          "iconColor": "rgba(255, 96, 96, 1)",
+          "name": "Noon",
+          "query": "solarNoon"
+        },
+        {
+          "datasource": {
+            "type": "fetzerch-sunandmoon-datasource",
+            "uid": "P64382691D9610877"
+          },
+          "enable": false,
+          "iconColor": "rgb(21, 101, 224)",
+          "name": "Moonrise / Moonset",
+          "query": "moonrise,moonset"
+        },
+        {
+          "datasource": {
+            "type": "fetzerch-sunandmoon-datasource",
+            "uid": "P64382691D9610877"
+          },
+          "enable": false,
+          "iconColor": "rgb(98, 164, 0)",
+          "name": "Golden Hour",
+          "query": "goldenHour"
+        }
+      ]
+    },
+    "description": "This dashboard demonstrates the usage of the Sun and Moon Datasource Plugin.",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 630,
+    "graphTooltip": 0,
+    "id": 13,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "fetzerch-sunandmoon-datasource",
+          "uid": "P64382691D9610877"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*illumination.*/"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                }
+              ]
+            },
+            {
+              "__systemRef": "hideSeriesFrom",
+              "matcher": {
+                "id": "byNames",
+                "options": {
+                  "mode": "exclude",
+                  "names": [
+                    "Sun altitude",
+                    "Moon altitude",
+                    "Moon illumination"
+                  ],
+                  "prefix": "All except:",
+                  "readOnly": true
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 15,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "fetzerch-sunandmoon-datasource",
+              "uid": "P64382691D9610877"
+            },
+            "refId": "A",
+            "target": "sun_altitude"
+          },
+          {
+            "datasource": {
+              "type": "fetzerch-sunandmoon-datasource",
+              "uid": "P64382691D9610877"
+            },
+            "hide": false,
+            "refId": "B",
+            "target": "moon_altitude"
+          },
+          {
+            "datasource": {
+              "type": "fetzerch-sunandmoon-datasource",
+              "uid": "P64382691D9610877"
+            },
+            "hide": false,
+            "refId": "C",
+            "target": "moon_illumination"
+          },
+          {
+            "datasource": {
+              "type": "fetzerch-sunandmoon-datasource",
+              "uid": "P64382691D9610877"
+            },
+            "hide": false,
+            "refId": "D",
+            "target": "moon_azimuth"
+          },
+          {
+            "datasource": {
+              "type": "fetzerch-sunandmoon-datasource",
+              "uid": "P64382691D9610877"
+            },
+            "hide": false,
+            "refId": "E",
+            "target": "sun_azimuth"
+          }
+        ],
+        "title": "Sun & Moon Position",
+        "type": "timeseries"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [
+      "sun",
+      "moon",
+      "plugin",
+      "grafana"
+    ],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-7d",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ]
+    },
+    "timezone": "browser",
+    "title": "Sun and Moon (630)",
+    "uid": "AfHKnzcnz",
+    "weekStart": ""
+  }
+}

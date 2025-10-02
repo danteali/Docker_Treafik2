@@ -1,0 +1,97 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: Evaluated every 5 min
+      folder: Alerts
+      interval: 5m
+      rules:
+        - uid: f636e7cb-d289-4a8e-bfa5-d2ccb968bb8c
+          title: Disk Space Used (Windows)
+          condition: Threshold
+          data:
+            - refId: UsedSpace
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: P4169E866C3094E38
+              model:
+                editorMode: code
+                expr: max by (host_system,hardware) (ohm_hdd_load_percent{sensor="Used Space"})
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: UsedSpace
+            - refId: Reduce
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: UsedSpace
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: Reduce
+                settings:
+                    mode: dropNN
+                type: reduce
+            - refId: Threshold
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 95
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: Reduce
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: Threshold
+                type: threshold
+          dashboardUid: de66b236-f52d-4a5b-9538-b27e99991992
+          panelId: 41
+          noDataState: OK
+          execErrState: OK
+          for: 5m
+          annotations:
+            __dashboardUid__: de66b236-f52d-4a5b-9538-b27e99991992
+            __panelId__: "41"
+            description: |-
+                Used disk space critical - above configured threshold
+                • Host: {{ $labels.host_system }}
+                • Hardware: {{ $labels.hardware }}
+            summary: (Windows) Used Disk Space Above Threshold - {{ $labels.hardware }} on {{ $labels.host_system }}
+          isPaused: false

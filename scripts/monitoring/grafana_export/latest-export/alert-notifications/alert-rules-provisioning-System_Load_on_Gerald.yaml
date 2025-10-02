@@ -1,0 +1,145 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: Evaluated every 1 min
+      folder: Alerts
+      interval: 1m
+      rules:
+        - uid: b511643b-ad50-431d-8f1c-67afa0d2128c
+          title: System Load on Gerald
+          condition: LoadPerCoreThreshold
+          data:
+            - refId: Load
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: P4169E866C3094E38
+              model:
+                datasource:
+                    type: prometheus
+                    uid: P4169E866C3094E38
+                editorMode: code
+                expr: avg_over_time(node_load1{host_system="gerald"}[$__rate_interval]) * 100 / on(instance) group_left sum by (instance)(irate(node_cpu_seconds_total{host_system="gerald"}[$__rate_interval]))
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: Load
+            - refId: Cores
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: P4169E866C3094E38
+              model:
+                datasource:
+                    type: prometheus
+                    uid: P4169E866C3094E38
+                editorMode: code
+                expr: count(count(node_cpu_seconds_total{host_system="gerald"}) by (cpu))
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: Cores
+            - refId: RawLoadThreshold
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 95
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - E
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: Load
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: RawLoadThreshold
+                type: threshold
+            - refId: LoadPerCore
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: $Load / $Cores
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: LoadPerCore
+                type: math
+            - refId: LoadPerCoreThreshold
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 80
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: LoadPerCore
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: LoadPerCoreThreshold
+                type: threshold
+          dashboardUid: a13b0560-dd0c-4620-a56b-d0d4ffdcd963
+          panelId: 324
+          noDataState: Alerting
+          execErrState: OK
+          for: 3m
+          annotations:
+            __dashboardUid__: a13b0560-dd0c-4620-a56b-d0d4ffdcd963
+            __panelId__: "324"
+            description: System load exceeds defined threshold.
+            summary: System Load on Gerald (main Proxmox host) exceeds threshold.
+          labels:
+            emergency: "true"
+            webhook-nodered: "true"
+          isPaused: false

@@ -1,0 +1,25 @@
+{
+  "id": 8,
+  "uid": "e92d8bf8-272a-4234-9eb6-871fbfefe0df",
+  "orgId": 1,
+  "name": "InfluxDB",
+  "type": "influxdb",
+  "typeLogoUrl": "public/app/plugins/datasource/influxdb/img/influxdb_logo.svg",
+  "access": "proxy",
+  "url": "http://192.168.0.222:8086",
+  "user": "admin",
+  "database": "",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": false,
+  "jsonData": {
+    "dbName": "varken"
+  },
+  "secureJsonFields": {
+    "password": true
+  },
+  "version": 14,
+  "readOnly": false,
+  "apiVersion": ""
+}

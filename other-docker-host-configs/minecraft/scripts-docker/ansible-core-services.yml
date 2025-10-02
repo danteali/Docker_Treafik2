@@ -1,0 +1,263 @@
+version: "3.8"
+
+########################### SYNTAX PREFERENCES
+# For lists (environment, ports, etc) we will try to use
+# arrays instead of lists of key-value pairs i.e. 
+# DO THIS...
+#    environment:
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+# NOT THIS...
+#    environment:
+#      DOCKER_MODS: "$LINUXSERVER_MODS"
+#      PUID: "$PUID"
+#
+# To standardise our file somewhat, aim for order of keys below. 
+#  service:
+#    image
+#    cont_name
+#    restart
+#    security_opt:
+#    depends_on:
+#    privileged: true
+#    network
+#    port
+#    devices:
+#    environment
+#    volumes
+#    secrets
+#    command
+#    labels
+
+########################### NETWORKS
+networks:
+  t2_proxy:
+    name: t2_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $TRAEFIK_NET
+          gateway: $TRAEFIK_GATEWAY
+  socket_proxy:
+    name: socket_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $SOCKET_PROXY_NET
+          gateway: $SOCKET_PROXY_GATEWAY
+  # Docker will use the same default network for all compose files in
+  # the same directory. It will use the settings of the first network
+  # created even of othere compose files try to set the default to a
+  # different subnet.
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $DEFAULT_COMPOSE_NET
+          gateway: $DEFAULT_COMPOSE_GATEWAY
+
+########################### SERVICES
+services:
+
+  # Docker Socket Proxy - Security Enchanced Proxy for Docker Socket
+  # Switche'd to Linuxserver.io images as can be sure it will bewell maintained.
+  #     https://docs.linuxserver.io/images/docker-socket-proxy
+  # Designed as drop in replacement for tecnativa's image:
+  #     https://www.github.com/Tecnativa/docker-socket-proxy
+  #     https://hub.docker.com/r/tecnativa/docker-socket-proxy
+  # Most containers that would normally connect to a mounted docker.sock can have their endpoint 
+  # overridden using the DOCKER_HOST environment variable if they do not offer the option in their
+  # configuration; it should typically be pointed to tcp://socket-proxy:2375.
+  socket-proxy:
+    container_name: socket-proxy
+    image: lscr.io/linuxserver/socket-proxy:latest
+    restart: always
+    networks:
+      socket_proxy:
+        ipv4_address: $SOCKET_PROXY_IP # You can specify a static IP
+    privileged: true
+    ports:
+    # - "127.0.0.1:2375:2375" # Port 2375 should only ever get exposed to the internal network.
+     - "$SOCKET_PROXY_PORT:2375"  # Exposed so that proxy can be queried from other hosts.
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock   # Optionally make this read only by appending ':ro'
+    # We can also optionally make the container read-only and to run from temp filesystem
+    read_only: true
+    tmpfs:
+      - /run
+    #labels:
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+    environment:
+      - TZ=$TZ
+      # Linuxserver.io Mods not supported on this image
+      #- DOCKER_MODS=$DOCKER_MODS
+      # Variables match the URL prefix (i.e. AUTH blocks access to /auth/* parts of the API, etc.).
+      #   0 to revoke access.
+      #   1 to grant access.
+      - LOG_LEVEL=info # (optional)  Possible values are: debug, info, notice, warning, err, crit, alert and emerg. Defaults to info.
+      ## Granted by Default
+      - EVENTS=1 # (optional)  /events
+      - PING=1 # (optional)  /_ping
+      - VERSION=1 # (optional)  /version
+      ## Security critical (Disabled by Default)
+      - AUTH=0 # (optional)  /auth
+      - SECRETS=0 # (optional)  /secrets
+      - POST=1 # (optional)  When set to 0, only GET and HEAD operations are allowed, making API access read-only.
+      ## Needed For Some Services
+      - CONTAINERS=1 # (optional)  /containers
+      - IMAGES=1 # (optional)  /images
+      - NETWORKS=1 # (optional)  /networks
+      - INFO=1 # (optional)  /info
+      - SERVICES=1 # (optional)  /services
+      - TASKS=1 # (optional)  /tasks
+      - VOLUMES=1 # (optional)  /volumes
+      ## Not Needed
+      - ALLOW_START=0 # (optional) /containers/{id}/start - This option will work even if POST=0
+      - ALLOW_STOP=0 # (optional)  /containers/{id}/stop - This option will work even if POST=0
+      - ALLOW_RESTARTS=0 # (optional)  /containers/{id}/stop, /containers/{id}/restart, and /containers/{id}/kill - This option will work even if POST=0
+      - BUILD=0 # (optional)  /build
+      - COMMIT=0 # (optional)  /commit
+      - CONFIGS=0 # (optional)  /configs
+      - DISABLE_IPV6=0 # (optional)  Set to 1 to prevent binding to the IPv6 interface for legacy systems that cannot support IPv6.
+      - DISTRIBUTION=0 # (optional)  /distribution
+      - EXEC=0 # (optional)  /exec & /containers/{id}/exec
+      - NODES=0 # (optional)  /nodes
+      - PLUGINS=0 # (optional)  /plugins
+      - SESSION=0 # (optional)  /session
+      - SWARM=0 # (optional)  /swarm
+      - SYSTEM=0 # (optional)  /system
+
+  # Portainer - WebUI for Containers
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    restart: always
+    # '-H' command sets up environment using socket-proxy or docker socket endpoint
+    # Not required as can be manually configured in GUI
+    command: -H $DOCKER_SOCKET_PROXY
+    #command: -H unix:///var/run/docker.sock
+    #depends_on:
+    #  - socket-proxy
+    networks:
+      - default
+      - t2_proxy
+      - socket_proxy
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      #- /var/run/docker.sock:/var/run/docker.sock # Can use Docker Socket Proxy instead for improved security
+      - $DOCKER_DIR/portainer/data:/data # Change to local directory if you want to save/transfer config locally
+    ports:
+      - "$PORTAINER_PORT_HTTP:9000" # Old GUI port, now 9443. Believe still works if needed, for backwards compatibility.
+      - "$PORTAINER_PORT_HTTPS:9443"
+      # Use for edge agent connections if we have any.
+      #    Use --tunnel-port flag to tell edge agent what mapped host port to connect to.
+      - "$PORTAINER_PORT_EDGE_AGENT_HOST:8000"
+    environment:
+      - TZ=$TZ
+    labels:
+      - org.label-schema.group=external
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.portainer-minecraft-rtr.entrypoints=https"
+      - "traefik.http.routers.portainer-minecraft-rtr.rule=Host(`portainer-minecraft.$DOMAINNAME0`)"
+      ## Middlewares
+      #- "traefik.http.routers.portainer-minecraft-rtr.middlewares=chain-basic-auth@file" 
+      - "traefik.http.routers.portainer-minecraft-rtr.middlewares=chain-no-auth@file"
+      #- "traefik.http.routers.portainer-minecraft-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.portainer-minecraft-rtr.service=portainer-minecraft-svc"
+      - "traefik.http.services.portainer-minecraft-svc.loadbalancer.server.port=9443"
+      - "traefik.http.services.portainer-minecraft-svc.loadbalancer.server.scheme=https"
+
+  # PORTAINER AGENT
+  # For other local systems we want to manage in central Portainer instance.
+  # If port 9001 is not accessible on remote system, consider Edge Agent instead.
+  # https://docs.portainer.io/admin/environments/add/docker/agent
+  # Intentionally minimal docker definition for running on remote systems without
+  # any additional services/networks/etc
+  portainer_agent:
+    container_name: portainer_agent
+    image: portainer/agent
+    restart: always
+    networks:
+      - default
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "$PORTAINER_AGENT_PORT:9001" 
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/lib/docker/volumes:/var/lib/docker/volumes"
+    #labels:
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # WatchTower - Automatic Docker Container Updates
+  # Note available labels:
+  ## Exclude From Watchtower Auto-Update But Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+  ## Exclude Watchtower
+  #   - "com.centurylinklabs.watchtower.enable=false"
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    networks:
+      - default
+      - socket_proxy
+    #volumes:
+      #- /var/run/docker.sock:/var/run/docker.sock # Preferrably Docker Socket Proxy instead for improved security
+    environment:
+      - DOCKER_HOST=$DOCKER_SOCKET_PROXY
+      #- WATCHTOWER_RUN_ONCE=true # Uncomment to try update immediately and exit - set restart to 'no' above
+      - TZ=$TZ
+      - WATCHTOWER_INCLUDE_STOPPED="true" # Will also include created and exited containers.
+      - WATCHTOWER_NO_STARTUP_MESSAGE="true"
+      - WATCHTOWER_SCHEDULE=* 0 10 * * 4
+      - WATCHTOWER_CLEANUP="true" # Remove old images after updating
+      - WATCHTOWER_REMOVE_VOLUMES="true" # Use this option to force new volumes to be populated as containers are updated.
+      - WATCHTOWER_DEBUG=false
+      - WATCHTOWER_NOTIFICATIONS_LEVEL=info # Default = Info [panic, fatal, error, warn, info, debug, trace]
+      - WATCHTOWER_NOTIFICATIONS=slack email   # Don't know why we don't need to list Discord but it works fine without it.
+      - WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL=$SLACK_WEBHOOK_WATCHTOWER
+      - WATCHTOWER_NOTIFICATION_URL=$DISCORD_WEBHOOK_WATCHTOWER
+      - WATCHTOWER_NOTIFICATION_EMAIL_FROM=$EMAIL_SMTP_SENDER
+      - WATCHTOWER_NOTIFICATION_EMAIL_TO=$EMAIL_SMTP_RECIPIENT
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER=$EMAIL_SMTP_URL
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=$EMAIL_SMTP_TLS_PORT
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER=$EMAIL_SMTP_USER
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=$EMAIL_SMTP_PASS
+      - WATCHTOWER_NOTIFICATION_EMAIL_DELAY=30
+
+  # Docker Event Monitor (DEM)
+  # https://bitbucket.org/quaideman/dem/src/master/
+  # https://hub.docker.com/r/quaide/dem
+  dem:
+    image: quaide/dem
+    container_name: dem
+    restart: unless-stopped
+    networks:
+      - default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $DOCKER_DIR/dem/data/conf.yml:/app/conf.yml
+    #labels:
+      #------------- WATCHTOWER -------------#
+      # Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      # Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"

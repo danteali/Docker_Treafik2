@@ -1,0 +1,12 @@
+# These entries will be turned into '--include' arguments for rdiff-backup.
+# Don't add leading '/' as this will be prepended when list is parsed.
+# Script dynamically looks for ';world' folders and adds to include list
+#   - looks for 'level.dat' files to confirm world directory.
+
+**yml
+**yaml
+**json
+server.properties
+plugins
+mods
+config

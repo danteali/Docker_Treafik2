@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  playit:
+    image: ghcr.io/playit-cloud/playit-agent:latest
+    container_name: playit
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - SECRET_KEY=$PLAYIT_SECRET_KEY_TUNNEL1
+      #- SECRET_KEY=$PLAYIT_SECRET_KEY_TUNNEL2
+    labels:
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Exclude From Watchtower updates - Notify On New Image
+      ##- "com.centurylinklabs.watchtower.monitor-only=true"
+

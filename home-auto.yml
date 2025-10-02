@@ -1,0 +1,336 @@
+version: "3.8"
+
+# Only start a subset of services with:
+#docker-compose -f minecraft.yml mc_itzg_fabric_117_Epicland 
+
+########################### NETWORKS
+networks:
+  t2_proxy:
+    name: t2_proxy
+    external: true  # Will not try to re-create and will look for existing network
+    #driver: bridge
+    #ipam:
+    #  config:
+    #    - subnet: $TRAEFIK_NET
+    #      gateway: $TRAEFIK_GATEWAY
+  lan_net:
+    name: lan_net
+    external: true  # Will not try to re-create and will look for existing network
+    #driver: macvlan
+    #driver_opts:
+    #  parent: $MACVLAN_NIC
+    #ipam:
+    #  config:
+    #    - subnet: $MACVLAN_NET
+    #      gateway: $MACVLAN_GATEWAY
+    #      ip_range: $MACVLAN_RANGE
+    #      # Don't believe we need to reserve address for host as can
+    #      # route to host's LAN IP in host routing rules instead of
+    #      # having to reserve IP.
+    #      aux_addresses:
+    #        host1: $MACVLAN_HOST
+  # Docker will use the same default network for all compose files in
+  # the same directory. It will use the settings of the first network
+  # created even of othere compose files try to set the default to a
+  # different subnet.
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $DEFAULT_COMPOSE_NET
+          gateway: $DEFAULT_COMPOSE_GATEWAY
+
+########################### COMMON SETTINGS ('EXTENDS')
+
+#x-logging: 
+#      &default-logging
+#      options:
+#        # For default json-file driver
+#        #max-size: "50m"
+#        #max-file: "1"
+#        # For local driver when journald enabled
+#        # Now defined globally in /etc/docker/daemon.json
+#        cache-max-size: "50m"
+#        cache-max-file: "1"
+
+########################### SERVICES
+services:
+# All services / apps go below this line
+
+
+  # Home Assistent - Home Automation Management
+  # There is a monthly release cycle. Worth checking release notes for breaking changes.
+  # https://www.home-assistant.io/blog/categories/release-notes/
+  # Previously did manual updates but got very far behind so new instance created Sept 22
+  # which we will allow to update automatically to see how that works instead.
+  # Previous instance is in optional.yaml file named home-assistant-old
+  # Note: Retained IP address from testing this configuration. 
+  # touch /var/log/docker/home-assistant/home-assistant.log
+  # sudo chown root:root /var/log/docker/home-assistant/home-assistant.log
+  home-assistant:
+    image: ghcr.io/home-assistant/home-assistant:latest
+    container_name: home-assistant
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+        default:
+        t2_proxy:
+        lan_net:
+          ipv4_address: $MACVLAN_HOMEASSISTANT_IP # Specify IP address on macvlan network
+    privileged: true
+    #ports:
+      # A dedicated macvlan IP means port mapping does not have any effect.
+      # All ports are accessible on dedicated IP and no ports on docker host
+      # are mapped.
+      # Traefik will still redirect FQDN to container through proxy network.
+    volumes:
+      - $DOCKER_DIR/home-assistant/config:/config
+      - $SCRATCHPAD_DIR:/scratchpad
+      - $DOCKERLOG_DIR/home-assistant/home-assistant.log:/config/home-assistant.log
+      - /etc/localtime:/etc/localtime:ro          
+      - /run/dbus:/run/dbus:ro
+      #- /dev/bus/usb:/dev/bus/usb
+    devices:
+    # Tried passing Bluetooth device to HA - couldn't get working (yet) - maybe after Linux update
+    #  - /dev/bus/usb/002/06
+      - /dev/bus/usb/002/003:/dev/bus/usb/002/003
+    #  - /dev/bus/usb:/dev/bus/usb
+    labels:
+      - org.label-schema.group=home-auto,external
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=true"
+      # Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.home-assistant-rtr.entrypoints=https"
+      - "traefik.http.routers.home-assistant-rtr.rule=Host(`ha.$DOMAINNAME0`)"
+      - "traefik.http.routers.home-assistant-rtr.tls=true"
+      - "traefik.http.routers.home-assistant-rtr.priority=99"
+      ## Webhook Bypass
+      - "traefik.http.routers.home-assistant-webhook-rtr.entrypoints=https"
+      - "traefik.http.routers.home-assistant-webhook-rtr.rule=Host(`ha.$DOMAINNAME0`) && PathPrefix(`/api/webhook`)"
+      - "traefik.http.routers.home-assistant-webhook-rtr.tls=true"
+      - "traefik.http.routers.home-assistant-webhook-rtr.priority=100"
+      ## Middlewares
+      - "traefik.http.routers.home-assistant-webhook-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.home-assistant-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.home-assistant-webhook-rtr.service=home-assistant-svc"
+      - "traefik.http.routers.home-assistant-rtr.service=home-assistant-svc"
+      - "traefik.http.services.home-assistant-svc.loadbalancer.server.port=8123"
+
+
+
+
+  # NodeRed - GUI-Based Automation Management
+  node-red:
+    image: nodered/node-red:latest # Jan 23 - allowed update to 'latest', previously on 3.0.2
+    container_name: node-red
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+        default:
+        t2_proxy:
+        lan_net:
+          ipv4_address: $MACVLAN_NODERED_IP # Specify IP address on macvlan network
+    security_opt:
+      - no-new-privileges:true
+    #ports:
+      # A dedicated macvlan IP means port mapping does not have any effect.
+      # All ports are accessible on dedicated IP and no ports on docker host
+      # are mapped.
+      # Traefik will still redirect FQDN to container through proxy network.
+      #- $NODERED_PORT:1880
+      #- $NODERED_ALEXA_PROXY_PORT:3456
+    volumes:
+      - $DOCKER_DIR/node-red/data:/data
+      - $SCRATCHPAD_DIR/nodered:/files
+    environment:
+      - TZ=$TZ
+    labels:
+      - org.label-schema.group=home-auto #,external # Dec 24: Disabled 'external' access when moving to cloudflared tunnels
+      ## Exclude From Watchtower Auto-Update But Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.node-red-rtr.entrypoints=https"
+      - "traefik.http.routers.node-red-rtr.rule=Host(`node-red.$DOMAINNAME0`)"
+      - "traefik.http.routers.node-red-rtr.tls=true"
+      - "traefik.http.routers.node-red-rtr.priority=99"
+      ## Webhook Bypass
+      - "traefik.http.routers.node-red-webhook-rtr.entrypoints=https"
+      - "traefik.http.routers.node-red-webhook-rtr.rule=Host(`node-red.$DOMAINNAME0`) && PathPrefix(`/webhook`)"
+      - "traefik.http.routers.node-red-webhook-rtr.tls=true"
+      - "traefik.http.routers.node-red-webhook-rtr.priority=100"
+      ## Middlewares
+      - "traefik.http.routers.node-red-webhook-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.node-red-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.node-red-webhook-rtr.service=node-red-svc"
+      - "traefik.http.routers.node-red-rtr.service=node-red-svc"
+      - "traefik.http.services.node-red-svc.loadbalancer.server.port=1880"
+
+
+
+  # Mosquitto - MQTT Broker
+  # Create config file before first use
+  # Confirm: chmod 770 /storage/Docker/eclipse-mosquitto/data/data/mosquitto.db
+  eclipse-mosquitto:
+    image: eclipse-mosquitto
+    container_name: eclipse-mosquitto
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - $ECLIPSEMOSQUITTO_HTTP_PORT:1883 #http
+      - $ECLIPSEMOSQUITTO_WEBSOCKET_PORT:9001 #websockets
+      #- $ECLIPSEMOSQUITTO_HTTP_PORT:8883 #https
+    volumes:
+      - $DOCKER_DIR/eclipse-mosquitto/data/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - $DOCKER_DIR/eclipse-mosquitto/data/data/:/mosquitto/data/
+      - $DOCKERLOG_DIR/eclipse-mosquitto/:/mosquitto/log/
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    labels:
+      - org.label-schema.group=home-auto
+      ## Exclude From Watchtower Auto-Update But Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.eclipse-mosquitto-rtr.entrypoints=https"
+      - "traefik.http.routers.eclipse-mosquitto-rtr.rule=Host(`eclipse-mosquitto.$DOMAINNAME0`)"
+      - "traefik.http.routers.eclipse-mosquitto-rtr.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.eclipse-mosquitto-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.eclipse-mosquitto-rtr.service=eclipse-mosquitto-svc"
+      - "traefik.http.services.eclipse-mosquitto-svc.loadbalancer.server.port=1883"
+
+
+
+  # Zigbee2MQTT - Allow Zigbee devices to talk to MQTT
+  zigbee2mqtt:
+    image: koenkk/zigbee2mqtt:latest
+    container_name: zigbee2mqtt
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+      - t2_proxy
+    #privileged: true # For USB auto-discovery
+    #user: 1000:1000 # optional to run as specific user/group inside container.
+    #group-add: docker # optional to run as specific user/group inside container.
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - $ZIGBEE2MQTT_PORT:11121
+    volumes:
+      - $DOCKER_DIR/zigbee2mqtt/data:/app/data
+      - $DOCKERLOG_DIR/zigbee2mqtt:/app/data/log
+      # Herdsman convertors already exist in container. Only download/map latest ones if using newest image doesn't help.
+      #- $DOCKER_DIR/zigbee2mqtt/data/zigbee-herdsman-converters:/app/node_modules/zigbee-herdsman-converters
+      # SHouldn't need latest homeassistant.ts but just in case, it can be pulled and mounted with:
+      #- $DOCKER_DIR/zigbee2mqtt/data/lib/extension/homeassistant.ts:/app/lib/extension/homeassistant.ts
+      # For USB auto-discovery alongside privileged=true above
+      #- /run/udev:/run/udev:ro
+    devices:
+      # Can use script at /home/ryan/scripts/usb-enumerate/usb-enumerate.sh to find correct USB device
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    environment:
+      - TZ=$TZ
+    labels:
+      - org.label-schema.group=home-auto
+      ## Exclude From Watchtower Auto-Update But Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.zigbee2mqtt-rtr.entrypoints=https"
+      - "traefik.http.routers.zigbee2mqtt-rtr.rule=Host(`zigbee2mqtt.$DOMAINNAME0`)"
+      - "traefik.http.routers.zigbee2mqtt-rtr.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.zigbee2mqtt-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.zigbee2mqtt-rtr.service=zigbee2mqtt-svc"
+      - "traefik.http.services.zigbee2mqtt-svc.loadbalancer.server.port=11121"
+
+
+
+  # Visual Studio Code
+  # On-line editor which can be used to edit Home Assistant config files
+  # https://hub.docker.com/r/linuxserver/code-server
+  # https://github.com/linuxserver/docker-code-server
+  # https://docs.linuxserver.io/images/docker-code-server
+  # https://github.com/stecky/docker-mods/tree/code-server-home-assistant
+  # https://community.home-assistant.io/t/install-vscode-visual-studio-code-as-a-separate-docker-container
+  # Before first run, copy (not touch) /etc/sysctl.conf from container to local storage and add line to increase inotify/watcher max.:
+  #   sudo mkdir /storage/Docker/vscode/data/etc
+  #   sudo docker cp vscode:/etc/sysctl.conf /storage/Docker/vscode/data/etc/
+  #   echo "" | sudo tee -a /storage/Docker/vscode/data/etc/sysctl.conf
+  #   echo "fs.inotify.max_user_watches=524288" | sudo tee -a /storage/Docker/vscode/data/etc/sysctl.conf
+  vscode:
+    image: lscr.io/linuxserver/code-server
+    container_name: vscode
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+      - t2_proxy
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - DEFAULT_WORKSPACE=/config/workspace #optional
+      - DOCKER_MODS=$LINUXSERVER_MODS # |linuxserver/mods:code-server-python3|ghcr.io/stecky/mods:code-server-home-assistant # Adds some HA specific extensions
+      #- HOMEASSISTANT_URL=http://home-assistant-test:8123 # Used by stecky's mod
+      #- HOMEASSISTANT_TOKEN=$HOMEASSISTANT_TOKEN # Used by stecky's mod
+      #- PASSWORD=password #optional
+      #- HASHED_PASSWORD= #optional
+      #- SUDO_PASSWORD=password #optional
+      #- SUDO_PASSWORD_HASH= #optional
+      #- PROXY_DOMAIN=mc-guinness.co.uk #optional
+    volumes:
+      - $DOCKER_DIR/vscode/data/config:/config
+      - $DOCKER_DIR/vscode/data/etc/sysctl.conf:/etc/sysctl.conf
+      - $DOCKER_DIR/home-assistant/config:/config/workspace
+      - $DOCKERLOG_DIR/vscode:/config/data/logs
+      - $USER_DIR:/storage/home
+      # OPTIONAL
+      # If adding optional extra directories to enable file editing, add these to VS Code Settings -> Watcher Exclude
+      # or inotify will display errors in VS Code since too many files to watch for updates. I just added root dir: /storage/**
+      - $DOCKER_DIR:/storage/Docker
+      #- /:/storage/all:ro
+    ports:
+      - "$VSCODE_PORT:8443"
+    labels:
+      #- org.label-schema.group=home-auto,sablier
+      - org.label-schema.group=home-auto
+      #------------- WATCHTOWER -------------#
+      ## Exclude From Watchtower Auto-Update But Notify On New Image
+      - "com.centurylinklabs.watchtower.enable=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      #- sablier.group=testing     # Don't really know how this works alongside or instead of service names in middleware. 
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.vscode-rtr.entrypoints=https"
+      - "traefik.http.routers.vscode-rtr.rule=Host(`vscode.$DOMAINNAME0`)"
+      ## Middlewares
+      #- "traefik.http.routers.vscode-rtr.middlewares=chain-basic-auth@file" 
+      #- "traefik.http.routers.vscode-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.vscode-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.vscode-rtr.service=vscode-svc"
+      - "traefik.http.services.vscode-svc.loadbalancer.server.port=8443"

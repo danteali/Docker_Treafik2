@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#
+# This script reports host temp
+#
+#
+# Example telegraf.conf input:
+#
+# 
+# [[inputs.exec]]
+#   commands = ["/usr/local/bin/crush-temp-cpu"]
+#   name_override = "crush_temp"
+#   data_format = "value"
+#   data_type = "float"
+
+sensors | sed -rn 's/.*Package id 0:\s+([^ ]+).*/\1/p' | sed 's/^.//' | sed  's/..$//'

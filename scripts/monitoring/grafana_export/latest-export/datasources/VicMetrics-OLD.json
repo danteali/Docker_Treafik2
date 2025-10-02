@@ -1,0 +1,24 @@
+{
+  "id": 6,
+  "uid": "aa52df09-be08-41a5-910b-352de1171b42",
+  "orgId": 1,
+  "name": "VicMetrics-OLD",
+  "type": "prometheus",
+  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "access": "proxy",
+  "url": "http://192.168.0.10:8428",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": false,
+  "jsonData": {
+    "httpMethod": "POST",
+    "manageAlerts": false
+  },
+  "secureJsonFields": {},
+  "version": 3,
+  "readOnly": false,
+  "apiVersion": ""
+}

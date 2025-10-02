@@ -1,0 +1,104 @@
+
+###################################################################
+# TELEGRAF
+###################################################################
+
+- source_labels: [db]
+  regex: "telegraf"
+  target_label: "job"
+  replacement: "telegraf"
+
+# Drop some unneccassry labels from telegraf metrics.
+# They just fill up useless space in storage.
+- action: labeldrop
+  regex: "traefik.http.+"
+- action: labeldrop
+  regex: "io.hass.+"
+- action: labeldrop
+  regex: "com.docker.docker.compose.container-number"
+- action: labeldrop
+  regex: "com.docker.docker.compose.oneoff"
+- action: labeldrop
+  regex: "com.docker.docker.compose.project"
+- action: labeldrop
+  regex: "com.docker.compose.config-hash"
+- action: labeldrop
+  regex: "org.label-schema.docker.dockerfile"
+- action: labeldrop
+  regex: "org.label-schema.vcs-type"
+- action: labeldrop
+  regex: "org.label-schema.description"
+- action: labeldrop
+  regex: "org.label-schema.vcs-ref"
+- action: labeldrop
+  regex: "org.label-schema.vcs-url"
+- action: labeldrop
+  regex: "org.opencontainers.image.description"
+- action: labeldrop
+  regex: "com.docker.extension.additional-urls"
+- action: labeldrop
+  regex: "com.docker.extension.detailed-description"
+- action: labeldrop
+  regex: "com.docker.extension.publisher-url"
+- action: labeldrop
+  regex: "com.docker.extension.screenshots"
+
+###################################################################
+# MINECRAFT ROUTER
+###################################################################
+
+- source_labels: [db]
+  regex: "minecraft"
+  target_label: "job"
+  replacement: "mc-router"
+
+###################################################################
+# NODE RED
+###################################################################
+
+- source_labels: [db]
+  regex: "nodered"
+  target_label: "job"
+  replacement: "nodered"
+
+###################################################################
+# OCTOGRAPH
+###################################################################
+
+- source_labels: [db]
+  regex: "octopus"
+  target_label: "job"
+  replacement: "octograph"
+
+# Don't need the metrics for values which I have provided in config file.
+#' These are also availablee via other metrics which we pull from the API and pass
+
+- if: '{__name__=~"electricity_cost"}'
+  action: drop
+- if: '{__name__=~"electricity_standing_charge"}'
+  action: drop
+- if: '{__name__=~"electricity_total_cost"}'
+  action: drop
+- if: '{__name__=~"electricity_unit_charge"}'
+  action: drop
+- if: '{__name__=~"gas_cost"}'
+  action: drop
+- if: '{__name__=~"gas_standing_charge"}'
+  action: drop
+- if: '{__name__=~"gas_total_cost"}'
+  action: drop
+- if: '{__name__=~"gas_unit_charge"}'
+  action: drop
+
+###################################################################
+# REPLACE PROBLEMATIC CHARACTERS
+###################################################################
+
+# Grafana doesn't like dots or dashes in label names
+- action: labelmap_all
+  regex: '\.'
+  replacement: "_"
+- action: labelmap_all
+  regex: "-"
+  replacement: "_"
+

@@ -1,0 +1,1654 @@
+# Reload Victoria Metrics config targets by visiting:
+# https://victoriametrics.mc-guinness.co.uk/-/reload
+# Or run:
+# curl https://victoriametrics.mc-guinness.co.uk/-/reload
+# curl -X POST http://localhost:8428/-/reload
+
+# When next re-creating the full data set, remove the lines
+# external_labels:
+#   monitor: 'docker-host-alpha' 
+# They are adding labels to all metrics with no added value.
+# Deleting without refreshing full dataset would double the
+# number of time series as a new series would be logged for
+# each metric without the label.
+
+
+##############################################
+###        DROPPING METRICS / LABELS       ###
+##############################################
+# https://valyala.medium.com/how-to-use-relabeling-in-prometheus-and-victoriametrics-8b90fc22c4b2
+#
+# Review incoming metrics and drop what we don't need...
+# - look at metrics themselves to see if there are any we would never use and drop.
+# - prepare Grafana dashboard and compare used metrics to scraped matrics and drop unused metrics.
+# - look at the cardinality explorer in VMUI to explore any labels we don't need and drop.
+#      # Drop metrics named XXXX*
+#      - if: '{__name__=~"XXXX.*"}'
+#        action: drop
+#      # Drop label 'XXXX*'
+#      - action: labeldrop
+#        regex: "XXXX.*"
+#
+# After defining metrics to be dropped, we can delete the timeseries for that metric with e.g.
+# - View metric to confirm query is correct:
+#     curl -G 'http://192.168.0.222:8428/api/v1/series' --data-urlencode 'match[]={__name__=~"velocity_jvm_threads_peak"}' | jq
+# - Delete metric:
+#     curl -G 'http://192.168.0.222:8428/api/v1/admin/tsdb/delete_series' --data-urlencode 'match[]={__name__=~"velocity_jvm_threads_peak"}' | jq
+# - View metric again to confirm deletion.
+#
+# However sometimes there are too many individual metrics to delete so we can delete all metrics
+# from the job to start fresh for that data source:
+# - List metrics matching job name to confirm query is correct:
+#     curl -G 'http://localhost:8428/api/v1/series' --data-urlencode 'match[]={job="minecraft-velocity-exporter"}' | jq
+# - Delete all job's metrics:
+#     curl -G 'http://192.168.0.222:8428/api/v1/admin/tsdb/delete_series' --data-urlencode  'match[]={job="minecraft-velocity-exporter"}' | jq
+# - List metrics again to confirm deletion.
+#   
+#
+# METRICS REVIEWED, DASHBOARDS UPDATED + VM DB UPDATED TO REFLECT METRIC CHANGES
+# - Cadvisor
+# - Crowdsec - some metrics not used but trivial amount
+# - Deluge
+# - Frigate
+# - Healthchecks
+# - Home Assistant (dropped stuff via HA's configuration.yaml) - reviewed and some metrics added to Home Auto dash
+# - Minecraft
+# - NodeExporter
+# - OhmGraphite
+# - Pihole
+# - Proxmox
+# - SNMP Exporter - only dashboard metrics exported using snmp.yml (and generator.yml)
+# - Traefik
+# - Unifi Poller
+# - Varken - uses InfluxDB, can't adjust collected metrics easily.
+# - VMAgent Ingested metrics
+#
+# VMAGENT & VM API IMPORT METRICS - ALL REVIEWED AND CHARTS CREATED
+# - LayZSpa [VMAgent] - only sending required metrics from Node Red
+# - Minecraft Router [VMAgent] - all metrics used.
+# - Octograph [VMAgent] - dropped labels/metrics defined in vmagent global-relabel.yaml
+# - ShellyEM [VMAgent] - only sending required metrics from Node Red
+# - Backups (VM API Import - from inside respective backup scripts)
+# - Directory Sizes (VM API Import - crontab job on all hosts via Ansible)
+# - Docker Info - Custom (VM API Import - crontab job on all hosts via Ansible)
+# - ISP Speedtest (VM API Import - crontab job on main Proxmox host)
+# - LM Sensors (VM API Import - crontab job on all hosts via Ansible)
+# - Octopus Energy Prices (VM API Import - crontab job on Monitoring host)
+# - Smartmon (VM API Import - crontab job on all hosts via Ansible)
+#
+# EXPORTERS NEEDED / TO INVESTIGATE
+# - Network Stats (VM API Import - crontab job on all hosts via Ansible) : DISABLED - not reviewed
+# - Telegraf - not using currently
+# - PBS Exporter
+#    - https://github.com/rare-magma/pbs-exporter
+# - Cloudflare
+# - wmi-exporter : Prometheus developed Windows exporter
+# - Blackbox Exporter : local and internet speed tests
+#    - https://github.com/maxandersen/internet-monitoring
+#    - https://github.com/prometheus/blackbox_exporter
+#    - https://prometheus.io/docs/guides/multi-target-exporter/
+#
+# Need to figure out how to review vmagent metrics properly.
+
+
+
+###################################################################
+# GLOBAL CONFIG
+###################################################################
+
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  #external_labels:
+  #    monitor: 'docker-host-alpha'
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+#rule_files:
+#  - "alert.rules"
+
+
+###################################################################
+# GLOBAL METRIC RELABELLING
+###################################################################
+
+metric_relabel_configs:
+
+  # Drop certain Go metrics which are common to multiple jobs but are not used in our Go dashboard
+  # DIDN'T WORK - THINK IT CAN'T DROP THEM SINCE THEY ARE GENERATED BY VM NOT SCRAPED.
+  - if: '{__name__=~"go_gc_duration_seconds_count"}'
+    action: drop
+  - if: '{__name__=~"go_gc_duration_seconds_sum"}'
+    action: drop
+  - if: '{__name__=~"go_gc_gogc_percent"}'
+    action: drop
+  - if: '{__name__=~"go_gc_gomemlimit_bytes"}'
+    action: drop
+  - if: '{__name__=~"go_memstats_alloc_bytes"}'
+    action: drop
+  - if: '{__name__=~"go_memstats_heap_objects"}'
+    action: drop
+  - if: '{__name__=~"go_memstats_stack_inuse_bytes"}'
+    action: drop
+  - if: '{__name__=~"go_sched_gomaxprocs_threads"}'
+    action: drop
+
+###################################################################
+# SCRAPEING TARGETS
+###################################################################
+
+scrape_configs:
+
+###################################################################
+# VMAGENT
+###################################################################
+
+  - job_name: 'vmagent'
+    scrape_interval: 15s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['vmagent:8429']
+        labels:
+          host_system: 'monitoring'  
+
+###################################################################
+# PROMETHEUS
+# Used when running Prometheus alongside Victoria Metrics and
+# pulling Prometheus metrics into VM
+###################################################################
+
+#  - job_name: 'prometheus'
+#    #scrape_interval: 10s
+#    static_configs:
+#      - targets: ['localhost:9090']
+#        labels:
+#          host_system: 'monitoring'
+
+
+###################################################################
+# NODEEXPORTER
+###################################################################
+
+  - job_name: 'nodeexporter'
+    scrape_interval: 10s
+    static_configs:
+      - targets: [ '192.168.0.222:9100' ] # Docker: [ 'nodeexporter:9100' ]
+        labels:
+          host_system: 'monitoring'
+      - targets: [ '192.168.0.10:9100' ]
+        labels:
+          host_system: 'crush'
+      - targets: [ '192.168.0.12:9100' ]
+        labels:
+          host_system: 'gerald'
+      - targets: [ '192.168.0.13:9100' ]
+        labels:
+          host_system: 'becky'
+      - targets: [ '192.168.0.223:9100' ]
+        labels:
+          host_system: 'pihole'
+      - targets: [ '192.168.0.221:9100' ]
+        labels:
+          host_system: 'frigate'
+      - targets: [ '192.168.0.24:9100' ]
+        labels:
+          host_system: 'Proxmox - Test'
+      - targets: [ '192.168.0.11:9100' ]
+        labels:
+          host_system: 'marlin'
+      - targets: [ '192.168.0.82:9100' ]
+        labels:
+          host_system: 'sv06'
+      - targets: [ '192.168.0.224:9100' ]
+        labels:
+          host_system: 'obico'
+      - targets: [ '192.168.0.225:9100' ]
+        labels:
+          host_system: 'minecraft'
+      - targets: [ '100.101.210.90:9100' ]  #'pi-backup-ts.bengal-catfish.ts.net:9100'
+        labels:
+          host_system: 'pi-backup'
+      - targets: [ '192.168.0.220:9100' ]
+        labels:
+          host_system: 'opnsense'
+      #- targets: ['nodeexporter:9100']
+      #- targets:
+      #  - nodeexporter:9100  # Main NAS host
+      #  - 192.168.0.12:9100  # Main Proxmox host
+      #  - 192.168.0.24:9100  # Test Proxmox host
+    metric_relabel_configs:
+      # ================ DROP METRICS ================
+      - if: '{__name__=~"node_zfs.*"}'
+        action: drop
+      # process context switches
+      - if: '{__name__=~"node_context_switches_total"}'
+        action: drop
+      # Interrupts
+      - if: '{__name__=~"node_intr_total"}'
+        action: drop
+      # Something to do with cooling but data unclear
+      - if: '{__name__=~"node_cooling_device.*"}'
+        action: drop
+      # Motherboard Info
+      - if: '{__name__=~"node_dmi_info.*"}'
+        action: drop
+      # Entropy Available for Random Number Generator
+      - if: '{__name__=~"node_entropy.*"}'
+        action: drop
+      # File Descriptors 
+      - if: '{__name__=~"node_filefd.*"}'
+        action: drop
+      # Process forks
+      - if: '{__name__=~"node_forks.*"}'
+        action: drop
+      # pressure stall statistics from /proc/pressure/
+      - if: '{__name__=~"node_pressure_.*"}'
+        action: drop
+      # Softnet statistics from /proc/net/softnet_stat
+      - if: '{__name__=~"node_softnet_.*"}'
+        action: drop
+      # ================ DROP LABELS ================
+      ## Drop label 'id'
+      #- action: labeldrop
+      #  regex: "id"
+      
+
+###################################################################
+# CADVISOR
+# Metric list: https://github.com/google/cadvisor/blob/master/docs/storage/prometheus.md
+###################################################################
+
+  - job_name: 'cadvisor'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['192.168.0.10:7004']
+        labels:
+          host_system: 'crush'
+      - targets: ['cadvisor:8080']
+        labels:
+          host_system: 'monitoring'
+      - targets: ['192.168.0.221:7004']
+        labels:
+          host_system: 'frigate'
+      - targets: ['192.168.0.224:7004']
+        labels:
+          host_system: 'obico'
+      - targets: ['192.168.0.225:7004']
+        labels:
+          host_system: 'minecraft'
+      - targets: [ '100.101.210.90:7004' ]  #'pi-backup-ts.bengal-catfish.ts.net:7004'
+        labels:
+          host_system: 'pi-backup'
+    metric_relabel_configs:
+    # Drop 'info' labels from all but one metric
+    - if: '{__name__!~"container_start_time_seconds"}'
+      action: labeldrop
+      regex: "container_label_com_docker_compose_project_config_files"
+    - if: '{__name__!~"container_start_time_seconds"}'
+      action: labeldrop
+      regex: "container_label_org_label_schema_group"
+    - if: '{__name__!~"container_start_time_seconds"}'
+      action: labeldrop
+      regex: "container_label_traefik_enable"
+    - if: '{__name__!~"container_start_time_seconds"}'
+      action: labeldrop
+      regex: "id"
+    # Drop metrics
+    - if: '{__name__=~"container_tasks_state"}'
+      action: drop
+
+
+###################################################################
+# TRAEFIK
+###################################################################
+
+  - job_name: 'traefik'
+    #scrape_interval: 10s
+    honor_labels: true
+    static_configs:
+      - targets: ['192.168.0.10:9998']
+        labels:
+          host_system: 'crush'
+    metric_relabel_configs:
+    # Drop metrics
+    - if: '{__name__=~"traefik_config_.*"}'
+      action: drop
+    - if: '{__name__=~"traefik_entrypoint_requests_tls_total"}'
+      action: drop
+    - if: '{__name__=~"traefik_router_requests_tls_total"}'
+      action: drop
+    - if: '{__name__=~"traefik_service_requests_tls_total"}'
+      action: drop
+
+###################################################################
+# PROXMOX
+###################################################################
+
+  # SCRAPE INDIVIDUAL EXPORTER INSTANCES ON PVE HOSTS (targets field)
+  # The exporter can pull metrics from any PVE instance if we supply it's target IP
+  # The metrics can be accessed at e.g.
+  #   http://192.168.0.12:9221/pve?target=192.168.0.12
+  # We only need to pull metrics from one node in a cluster as the metrics from any node in the 
+  # cluster will be identical.
+  # We have setup the exporter on all nodes but set the system service as disabled on the nodes
+  # we are not pulling from: 
+  #    systemctl stop prometheus-pve-exporter
+  #    systemctl disabled prometheus-pve-exporter
+  #- job_name: 'pve'
+  #  static_configs:
+  #    - targets: ['192.168.0.12:9221'] # Main NAS host
+  #      labels:
+  #        host_system: 'gerald'
+  #    # ONLY ADD ONE NODE FROM ANY CLUSTER AS IT EXPOSES METRICS FOR ALL NODES
+  #    #- targets: ['192.168.0.13:9221'] # Router host
+  #    #  labels:
+  #    #    host_system: 'becky'
+  #    #- targets: ['192.168.0.24:9221']  # TEST INSTANCE (old HTPC)
+  #    #  labels:
+  #    #    host_system: 'test-pve'
+  #  metrics_path: /pve
+  #  params:
+  #    module: [default]
+  #  metric_relabel_configs:
+  #  # Drop label 'pid'
+  #  #- action: labeldrop
+  #  #  regex: "pid"
+  #  # Drop specific metrics
+  #  - if: '{__name__=~"pve_onboot_status"}'
+  #    action: drop
+  #  - if: '{__name__=~"pve_version_info"}'
+  #    action: drop
+
+  # SCRAPE MULTIPLE TARGETS USING ONE EXPORTER INSTANCE (__address__ replacement field)
+  # PVE Exporter running on 'monitoring' localhost
+  # If querying multiple PVE instances, they must all use the same username/password
+  # which is defined in Exporter env vars.
+  - job_name: 'pve'
+    static_configs:
+      # ONLY ADD ONE NODE FROM ANY CLUSTER AS IT EXPOSES METRICS FOR ALL NODES
+      - targets: ['192.168.0.12'] # Main NAS host
+        labels:
+          host_system: 'gerald'
+      #- targets: ['192.168.0.13'] # Main NAS host
+      #  labels:
+      #    host_system: 'becky'
+    metrics_path: /pve
+    #params:
+    #  module: [default]
+    #  cluster: ['1']
+    #  node: ['1']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.0.222:9221  # PVE exporter on localhost
+    metric_relabel_configs:
+    # Drop label 'pid'
+    #- action: labeldrop
+    #  regex: "pid"
+    # Drop specific metrics
+    - if: '{__name__=~"pve_onboot_status"}'
+      action: drop
+    - if: '{__name__=~"pve_version_info"}'
+      action: drop
+    - if: '{__name__=~"pve_ha_state"}'
+      action: drop
+    - if: '{__name__=~"pve_lock_state"}'
+      action: drop
+
+
+###################################################################
+# PROXMOX BACKUP SERVER (PBS) EXPORTER
+###################################################################
+
+  # SCRAPING EXPORTER INSTANCES ON EACH PBS HOST
+  - job_name: 'pbs'
+    #honor_timestamps: true
+    scrape_interval: 1m
+    #scrape_timeout: 10s
+    metrics_path: /metrics
+    #scheme: http
+    static_configs:
+      # SCRAPE ALL PBS TARGETS
+      - targets: ['192.168.0.222:10019'] # Main NAS host
+        labels:
+          host_system: 'gerald'
+      - targets: ['192.168.0.222:10020'] # Main NAS host
+        labels:
+          host_system: 'becky'
+    metric_relabel_configs:
+    # Drop label 'pid'
+    #- action: labeldrop
+    #  regex: "pid"
+    # Drop specific metrics
+    - if: '{__name__=~"pbs_host_cpu_usage"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_disk_available"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_disk_total"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_disk_used"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_io_wait"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_load1"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_load15"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_load5"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_memory_free"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_memory_total"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_memory_used"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_swap_free"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_swap_total"}'
+      action: drop
+    - if: '{__name__=~"pbs_host_swap_used"}'
+      action: drop
+    - if: '{__name__=~"pbs_up"}'
+      action: drop
+    - if: '{__name__=~"pbs_version"}'
+      action: drop
+
+
+
+###################################################################
+# ZFS EXPORTER
+###################################################################
+# Added relabelling rule to split the default dataset name up into a discrete dataset name ('filesystem') and a snapshot name ('name'):
+# - Current default metric: `zfs_dataset_logical_used_bytes{name="rpool/application@zrepl_20220407_154137_000",pool="rpool",type="snapshot"} 0`
+# - Relabelled metric: `zfs_dataset_logical_used_bytes{name="zrepl_20220407_154137_000",filesystem="rpool/application",pool="rpool",type="snapshot"} 0`
+
+  - job_name: zfs_exporter
+    static_configs:
+      - targets: [192.168.0.13:9134] 
+        labels:
+          host_system: 'becky'
+    metrics_path: /metrics
+    metric_relabel_configs:
+      - source_labels: ['name']
+        regex: ^([^@]*).*$
+        target_label: filesystem
+        replacement: ${1}
+      - source_labels: ['name']
+        regex: ^.*:.._(.*)$
+        target_label: snapshot_type
+        replacement: ${1}
+
+###################################################################
+# SNMP EXPORTER
+###################################################################
+  # Example scrape config from: https://github.com/prometheus/snmp_exporter
+
+  # The exporter pulls metrics from a target endpoint if the target is passed to the exporter's 
+  # URL as a query. e.g. http://192.168.0.222:9116/metrics?target=192.168.0.1 
+  # The Prometheus configuration is complex but it takes the target SNMP endpoints and uses 
+  # `relabel_configs` to set the target address and ask the exporter to pull the metrics.
+  # See: https://prometheus.io/docs/guides/multi-target-exporter/
+
+  - job_name: 'snmp'
+    static_configs:
+      - targets:
+        - 192.168.0.1
+        - 192.168.0.2
+        - 192.168.0.3
+    metrics_path: /snmp
+    params:
+      auth: [public_v2]
+      module: [edgerouter]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: snmp-exporter:9116  # The SNMP exporter's real hostname:port.
+      # Change module for specific SNMP targets
+      - source_labels: [__param_target]
+        regex: "192.168.0.2|192.168.0.3"
+        target_label: "__param_module"
+        replacement: "unifi"
+      # Add label for Exporter module
+      - source_labels: [__param_module]
+        target_label: "module"
+        replacement: "$1"
+      # Add new label to metrics since we can't use our usual target host_system label with this job's workaround.
+      - target_label: "host_system"
+        replacement: "monitoring"
+    metric_relabel_configs:
+      # Add smpt_ to metric names
+      - source_labels: [__name__]
+        target_label: "__name__"
+        replacement: "snmp_$1"
+
+  - job_name: 'snmp_exporter'
+    static_configs:
+      - targets: ['192.168.0.222:9116'] # Main NAS host
+        labels:
+          host_system: 'monitoring'
+    metrics_path: /metrics
+
+###################################################################
+# NETFLOW EXPORTER
+###################################################################
+
+  - job_name: 'netflow'
+    static_configs:
+      - targets: ['netflow-exporter:9438']
+        labels:
+          host_system: 'monitoring'
+
+###################################################################
+# TORRENTS - DELUGE / TRANSMISSION
+###################################################################
+  
+  - job_name: 'deluge'
+    #scrape_interval: 10s
+    honor_labels: true
+    static_configs:
+      - targets: ['192.168.0.10:9354']
+        labels:
+          host_system: 'crush'
+    metric_relabel_configs:
+      # Drop label 'pid'
+      #- action: labeldrop
+      #  regex: "pid"
+      # Drop specific metrics
+      - if: '{__name__=~"deluge_config_.*"}'
+        action: drop
+      - if: '{__name__=~"deluge_info"}'
+        action: drop
+      # Some metric subsets have a large number of metrics so not practical to add a drop rule individually
+      # But we can't add a regex rule to select all except 1 or 2 metrics since VM doesn't recognise ?! in regex
+      # So need to temporarily rename the ones we want to keep so they don't get caught by the drop rule.
+      - source_labels: [__name__]
+        regex: "(deluge_libtorrent_dht_dht_bytes_in_total|deluge_libtorrent_dht_dht_bytes_out_total|deluge_libtorrent_dht_dht_nodes|deluge_libtorrent_dht_dht_peers)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_libtorrent_disk_disk_read_time_total|deluge_libtorrent_disk_disk_write_time_total)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_libtorrent_net_recv_payload_bytes_total|deluge_libtorrent_net_sent_payload_bytes_total)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_libtorrent_peer_num_peers_connected)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_libtorrent_ses_num_incoming_pex_total|deluge_libtorrent_ses_num_outgoing_pex_total)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_libtorrent_utp_num_utp_connected)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_torrent_completed_time)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_torrent_done_total)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_torrent_num_peers|deluge_torrent_num_seeds)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_torrent_time_added)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_torrent_total_peers|deluge_torrent_total_seeds)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_torrent_uploaded_total)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(deluge_torrents|deluge_torrents_by_label)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - if: '{__name__=~"deluge_libtorrent_.*"}'
+        action: drop
+      - if: '{__name__=~"deluge_torrent_.*"}'
+        action: drop
+      - if: '{__name__=~"deluge_torrents_.*"}'
+        action: drop
+      # Re-rename the metrics renamed above to get rid of initial temporary rename.
+      - source_labels: [__name__]
+        regex: "keepmetric_(.*)"
+        target_label: "__name__"
+        replacement: "$1"
+
+#  - job_name: 'transmission'
+#    #scrape_interval: 10s
+#    honor_labels: true
+#    static_configs:
+#      - targets: ['192.168.0.10:19091']
+#        labels:
+#          host_system: 'crush'
+
+###################################################################
+# HEALTHCHECKS.IO
+###################################################################
+# https://healthchecks.io/docs/configuring_prometheus/
+
+# Default syntax below but changed to that we could have all metrics under the same job.
+#  - job_name: 'healthchecks-availability'
+#    scrape_interval: 5s
+#    scheme: https
+#    metrics_path: /projects/7e29bcd0-229a-4928-987c-aabfd2988148/metrics/D-j_l2Ls2emo0HXKZgVaBd89jQNV7eHL
+#    static_configs:
+#    - targets: ['healthchecks.io']
+
+  - job_name: 'healthchecks-io'
+    scrape_interval: 60s   # 60s is recommended by healthchecks
+    #scheme: https
+    #metrics_path: /projects/7e29bcd0-229a-4928-987c-aabfd2988148/metrics/D-j_l2Ls2emo0HXKZgVaBd89jQNV7eHL  # Availability Monitoring Account
+    #metrics_path: /projects/f942b3e6-1525-4aa5-a8d2-242ddab75dfe/metrics/lHkvCY9oRQCuBcXnKX7qs0weXO3UUXXh  # Adhoc Monitoring Account
+    static_configs:
+      - targets: ['https://healthchecks.io:443/projects/7e29bcd0-229a-4928-987c-aabfd2988148/metrics/D-j_l2Ls2emo0HXKZgVaBd89jQNV7eHL']
+        labels:
+          account: 'availability'
+      - targets: ['http://192.168.0.222:8000/projects/5d5ccf1e-2fa5-4038-ade2-e692405f6dbe/metrics/hcr_sqOdUJwXgpx1XLvVOFw9YGPRCgHP']
+        labels:
+          account: 'backup-success'
+      # Second external healthchecks.io account closed
+      #- targets: ['https://healthchecks.io:443/projects/f942b3e6-1525-4aa5-a8d2-242ddab75dfe/metrics/lHkvCY9oRQCuBcXnKX7qs0weXO3UUXXh']
+      #  labels:
+      #    account: 'adhoc'
+      
+
+###################################################################
+# PIHOLE
+###################################################################
+  
+  - job_name: 'pihole'
+    #scrape_interval: 10s
+    static_configs:
+      - targets: ['192.168.0.223:9617']
+        labels:
+          host_system: 'pihole'
+      # On same docker network host as prometheus
+      #- targets: ['pihole-exporter-prometheus:9617']
+      #  labels:
+      #    host_system: 'crush'
+    metrics_path: /metrics
+
+
+###################################################################
+# UNIFI POLLER
+###################################################################
+  
+  - job_name: 'unifipoller'
+    scrape_interval: 30s
+    static_configs:
+      #- targets: ['192.168.0.10:9130'] 
+      #  labels:
+      #    host_system: 'crush'
+      - targets: ['unpoller:9130'] 
+        labels:
+          host_system: 'monitoring'
+    metric_relabel_configs:
+      # Drop label 'pid'
+      #- action: labeldrop
+      #  regex: "pid"
+      # Drop specific metrics
+      - if: '{__name__=~"unifipoller_build_info"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_client_receive_packets_total"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_client_transfer_rate_bytes"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_client_transmit_packets_total"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_d_.*"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_data_mpdu_transmit_bytes_total"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_dns_latency_average_seconds"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_mac_filter_rejects_total"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_receive_goodbyes"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_receive_latency_minimum_seconds"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_satisfaction_.*"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_goodbyes"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_latency_minimum_seconds"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_latency_moving_avg_seconds"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_latency_moving_count"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_latency_moving_max_seconds"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_latency_moving_min_seconds"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_latency_moving_total"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_power"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_retries_combined_total"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_rts_retries_total"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_device_vap_transmit_total"}'
+        action: drop
+#      # Some metric subsets have a large number of metrics so not practical to add a drop rule individually
+#      # But we can't add a regex rule to select all except 1 or 2 metrics since VM doesn't recognise ?! in regex
+#      # So need to temporarily rename the ones we want to keep so they don't get caught by the drop rule.
+      - source_labels: [__name__]
+        regex: "(unifipoller_device_bytes_total)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_device_cpu_utilization_ratio)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_device_info)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_device_load_average.*)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_device_memory_utilization_ratio)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_device_radio_channel_utilization_receive_ratio)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_device_radio_channel_utilization_transmit_ratio)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_device_radio_stations)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_device_stations)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_device_uptime_seconds)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_site_receive_rate_bytes)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - source_labels: [__name__]
+        regex: "(unifipoller_site_transmit_rate_bytes)"
+        target_label: "__name__"
+        replacement: "keepmetric_$1"
+      - if: '{__name__=~"unifipoller_device_.*"}'
+        action: drop
+      - if: '{__name__=~"unifipoller_site_.*"}'
+        action: drop
+#      # Re-rename the metrics renamed above to get rid of initial temporary rename.
+      - source_labels: [__name__]
+        regex: "keepmetric_(.*)"
+        target_label: "__name__"
+        replacement: "$1"
+
+
+###################################################################
+# HOME ASSISTANT
+###################################################################
+  
+  - job_name: "home-assistant"
+    scrape_interval: 60s
+    metrics_path: /api/prometheus
+    ## Legacy api password
+    #params:
+    #  api_password: ['PASSWORD']
+    # Long-Lived Access Token
+    authorization:
+      #credentials: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjMjMzMGRlYmVmNzI0NDhkYTM1Yzc2ZTE3ZTNjOWEwMiIsImlhdCI6MTYzNjIzMTM1NiwiZXhwIjoxOTUxNTkxMzU2fQ.uaEErJw1lNGxsiHQcZ0XbE2A7TM_tk1IuE6kjMeVlpA"
+      credentials: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI0NzY1ZGJiYWU2Zjg0YzY5YWIwMTU2ODMxNTIwZjMwMSIsImlhdCI6MTY1ODMxNTM5MSwiZXhwIjoxOTczNjc1MzkxfQ.AQNKo9SjcpdtLY1QeV6fAZkZVfmbsK4lJwkraVbP4As"
+    scheme: http
+    static_configs:
+      - targets: ['192.168.0.230:8123']
+        labels:
+          host_system: 'crush'
+
+  #- job_name: "home-assistant-test"
+  #  scrape_interval: 15s
+  #  metrics_path: /api/prometheus
+  #  ## Legacy api password
+  #  #params:
+  #  #  api_password: ['PASSWORD']
+  #  # Long-Lived Access Token
+  #  authorization:
+  #    credentials: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI0NzY1ZGJiYWU2Zjg0YzY5YWIwMTU2ODMxNTIwZjMwMSIsImlhdCI6MTY1ODMxNTM5MSwiZXhwIjoxOTczNjc1MzkxfQ.AQNKo9SjcpdtLY1QeV6fAZkZVfmbsK4lJwkraVbP4As"
+  #  scheme: http
+  #  static_configs:
+  #    - targets: ['192.168.0.10:8124']
+  #      labels:
+  #        host_system: 'crush'
+
+
+###################################################################
+# CROWDSEC
+###################################################################
+
+  # Assuming VM and crowdsec on same docker network
+  - job_name: 'crowdsec'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['192.168.0.10:6060/metrics']
+        labels:
+          host_system: 'crush'
+      - targets: ['192.168.0.12:6060/metrics']
+        labels:
+          host_system: 'gerald'
+      - targets: ['192.168.0.13:6060/metrics']
+        labels:
+          host_system: 'becky'
+      - targets: ['192.168.0.1:6060/metrics']
+        labels:
+          host_system: 'opnsense'
+      - targets: ['192.168.0.220:6060/metrics']
+        labels:
+          host_system: 'opnsense-temp'
+      # If on same docker network, metrics port does not need published...
+      # If not on same docker network, need to expose the metrics port...
+      #- targets: ['http://192.168.0.10:6060/metrics']
+
+  ## WSL test instance
+  #- job_name: 'crowdsec-WSL'
+  #  scrape_interval: 30s
+  #  static_configs:
+  #    - targets: ['http://192.168.0.20:6060/metrics']
+  #      labels:
+  #        host_system: 'WSL'
+
+
+###################################################################
+# FRIGATE
+###################################################################
+
+  # Assuming VM and frigate exporter on same docker network  
+  - job_name: "frigate-exporter-prometheus"
+    static_configs:
+      #- targets: ['frigate-exporter-prometheus:9100/metrics']
+      #  labels:
+      #    host_system: 'crush'
+      - targets: ['http://192.168.0.221:9101/metrics']
+        labels:
+          host_system: 'frigate'
+    metric_relabel_configs:
+      # Drop label 'pid'
+      - action: labeldrop
+        regex: "pid"
+      # Drop specific metrics
+      - if: '{__name__=~"frigate_service_info"}'
+        action: drop
+      - if: '{__name__=~"frigate_service_uptime_seconds"}'
+        action: drop
+      - if: '{__name__=~"frigate_service_last_updated_timestamp"}'
+        action: drop
+      - if: '{__name__=~"frigate_detection_enabled"}'
+        action: drop
+      - if: '{__name__=~"frigate_detection_start"}'
+        action: drop
+      # Expected this metric to provide info on each storage type but only shows two entries for '/' so can't
+      # map to other storage metrics 'storage' labels.
+      - if: '{__name__=~"frigate_storage_mount_type_info"}'
+        action: drop
+
+
+
+###################################################################
+# OHMGRAPHITE
+###################################################################
+  
+  # WINDOWS OHMGRAPHITE SOURCES
+  - job_name: 'ohmgraphite'
+    static_configs:
+      - targets: [ '192.168.0.20:19999' ]
+        labels:
+          host_system: 'Desktop-Ryan'
+      - targets: [ '192.168.0.34:19999' ]
+        labels:
+          host_system: 'Desktop-James'
+      - targets: [ '192.168.0.32:19999' ]
+        labels:
+          host_system: 'Desktop-Jenna'
+      - targets: [ '192.168.0.28:19999' ]
+        labels:
+          host_system: 'Laptop-Matebook'
+      - targets: [ '192.168.0.21:19999' ]
+        labels:
+          host_system: 'Laptop-HP'
+      - targets: [ '192.168.0.22:19999' ]
+        labels:
+          host_system: 'Laptop-Lenovo'
+#      - targets: [ '192.168.0.XXX:19999' ]
+#        labels:
+#          host_system: 'Laptop-Jenna'
+#      - targets: ['192.168.0.XXX:19999']
+#        labels:
+#          host_system: 'Laptop-Matebook'
+#      - targets: ['192.168.0.XXX:19999']
+#        labels:
+#          host_system: 'Laptop-Jen'
+#      - targets: ['192.168.0.XXX:19999']
+#        labels:
+#          host_system: 'LaptopHP'
+    metric_relabel_configs:
+      # Drop label 'pid'
+      #- action: labeldrop
+      #  regex: "pid"
+      # Drop specific metrics
+      - if: '{__name__=~"ohm_cpu_factor"}'
+        action: drop
+      - if: '{__name__=~"ohm_gpuati_factor"}'
+        action: drop
+      - if: '{__name__=~"ohm_gpuati_volts"}'
+        action: drop
+      - if: '{__name__=~"ohm_superio_control_percent"}'
+        action: drop
+
+
+
+
+
+###################################################################
+# KLIPPER
+###################################################################
+
+  # Klipper exporter service
+  - job_name: "klipper-exporter"
+    scrape_interval: 5s
+    metrics_path: /metrics
+    static_configs:
+      - targets: [ 'klipper-exporter:9101' ] # host where the klipper-exporter is running
+
+  # The exporter pulls metrics from a target endpoint if the target is passed to the exporter's 
+  # URL as a query. e.g. 
+  # http://192.168.0.222:9101/probe?modules=process_stats&modules=network_stats&modules=system_info&modules=job_queue&modules=directory_info&modules=printer_objects&modules=history&target=192.168.0.83:7125
+  # The Prometheus configuration is complex but it takes the target Klipper endpoints and uses 
+  # `relabel_configs` to set the target address and ask the exporter to pull the metrics.
+
+  # Klipper instances
+  - job_name: "klipper"
+    scrape_interval: 5s
+    metrics_path: /probe
+    static_configs:
+      - targets: [ '192.168.0.82:7125' ] # SV06
+    params:
+      modules: [ 
+        'process_stats',
+        'network_stats',
+        'system_info',
+        'job_queue',
+        'directory_info',
+        'printer_objects',
+        'history'
+      ]
+    # Enable API Key authentication.
+    # Only set one of `credentials` or `credentials_file`
+    # authorization:
+    #   type: APIKEY
+    #   credentials: '<apikey>'
+    #   credentials_file: `/path/to/private/apikey.txt`
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: klipper-exporter:9101 # host where the klipper-exporter is running
+    metric_relabel_configs:
+#      # Drop label 'pid'
+#      #- action: labeldrop
+#      #  regex: "pid"
+      # Drop specific metrics
+      - if: '{__name__=~"klipper_mcu_awake"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_clock_frequency"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_invalid_bytes"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_read_bytes"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_ready_bytes"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_receive_seq"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_retransmit_bytes"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_retransmit_seq"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_rto"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_rttvar"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_send_seq"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_srtt"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_stalled_bytes"}'
+        action: drop
+      - if: '{__name__=~"klipper_mcu_write_bytes"}'
+        action: drop
+      - if: '{__name__=~"klipper_network_bandwidth"}'
+        action: drop
+      - if: '{__name__=~"klipper_network_rx_packets"}'
+        action: drop
+      - if: '{__name__=~"klipper_network_tx_packets"}'
+        action: drop
+      - if: '{__name__=~"klipper_print_file_position"}'
+        action: drop
+      - if: '{__name__=~"klipper_toolhead_estimated_print_time"}'
+        action: drop
+      - if: '{__name__=~"klipper_toolhead_print_time"}'
+        action: drop
+#      - if: '{__name__=~"klipper_gcode_extrude_factor"}'
+#        action: drop
+#      - if: '{__name__=~"klipper_gcode_position_e"}'
+#        action: drop
+#      - if: '{__name__=~"klipper_gcode_position_x"}'
+#        action: drop
+#      - if: '{__name__=~"klipper_gcode_position_y"}'
+#        action: drop
+#      - if: '{__name__=~"klipper_gcode_position_z"}'
+#        action: drop
+#      - if: '{__name__=~"klipper_gcode_speed_factor"}'
+#        action: drop
+#      - if: '{__name__=~"klipper_gcode_speed"}'
+#        action: drop
+
+
+###################################################################
+# TDARR EXPORTER
+###################################################################
+
+  - job_name: 'tdarr'
+    static_configs:
+      - targets: ['192.168.0.10:8267']
+        labels:
+          host_system: 'crush'
+    #metric_relabel_configs:
+      # Drop label 'pid'
+      #- action: labeldrop
+      #  regex: "pid"
+      # Drop specific metrics
+      #- if: '{__name__=~"klipper_gcode_extrude_factor"}'
+      #  action: drop
+
+
+###################################################################
+# EXPORTARRS
+###################################################################
+
+  - job_name: 'sonarr-exportarr'
+    scrape_interval: 60s
+    static_configs:
+      - targets: ['192.168.0.10:9707']
+        labels:
+          host_system: 'crush'
+    #metric_relabel_configs:
+      # Drop label 'pid'
+      #- action: labeldrop
+      #  regex: "pid"
+      # Drop specific metrics
+      #- if: '{__name__=~"klipper_gcode_extrude_factor"}'
+      #  action: drop
+
+  - job_name: 'radarr-exportarr'
+    scrape_interval: 60s
+    static_configs:
+      - targets: ['192.168.0.10:9708']
+        labels:
+          host_system: 'crush'
+    #metric_relabel_configs:
+      # Drop label 'pid'
+      #- action: labeldrop
+      #  regex: "pid"
+      # Drop specific metrics
+      #- if: '{__name__=~"klipper_gcode_extrude_factor"}'
+      #  action: drop
+
+  - job_name: 'prowlarr-exportarr'
+    scrape_interval: 60s
+    static_configs:
+      - targets: ['192.168.0.10:9710']
+        labels:
+          host_system: 'crush'
+    #metric_relabel_configs:
+      # Drop label 'pid'
+      #- action: labeldrop
+      #  regex: "pid"
+      # Drop specific metrics
+      #- if: '{__name__=~"klipper_gcode_extrude_factor"}'
+      #  action: drop
+      
+  - job_name: 'bazarr-exportarr'
+    scrape_interval: 60s
+    static_configs:
+      - targets: ['192.168.0.10:9712']
+        labels:
+          host_system: 'crush'
+    #metric_relabel_configs:
+      # Drop label 'pid'
+      #- action: labeldrop
+      #  regex: "pid"
+      # Drop specific metrics
+      #- if: '{__name__=~"klipper_gcode_extrude_factor"}'
+      #  action: drop
+
+
+
+###################################################################
+# MINECRAFT
+###################################################################
+
+#====================================================
+### VELOCITY EXPORTER
+#====================================================
+
+  - job_name: "minecraft-velocity-exporter"
+    static_configs:      
+      - targets: [ '192.168.0.225:9985' ]
+        labels:
+          instance: 'velocity'
+    metric_relabel_configs:
+      # Drop label 'pid'
+      #- action: labeldrop
+      #  regex: "pid"
+      # Drop specific metrics
+      - if: '{__name__=~"velocity_jvm_gc_collection_seconds_count"}'
+        action: drop
+      - if: '{__name__=~"velocity_jvm_gc_collection_seconds_sum"}'
+        action: drop
+      - if: '{__name__=~"velocity_jvm_threads_daemon"}'
+        action: drop
+      - if: '{__name__=~"velocity_jvm_threads_deadlocked"}'
+        action: drop
+      - if: '{__name__=~"velocity_jvm_threads_deadlocked_monitor"}'
+        action: drop
+      - if: '{__name__=~"velocity_jvm_threads_peak"}'
+        action: drop
+      - if: '{__name__=~"velocity_jvm_threads_started_total"}'
+        action: drop
+      - if: '{__name__=~"velocity_online_player_latency_count"}'
+        action: drop
+      - if: '{__name__=~"velocity_online_player_latency_created"}'
+        action: drop
+      - if: '{__name__=~"velocity_online_player_latency_sum"}'
+        action: drop
+      - if: '{__name__=~"velocity_player_chats_created"}'
+        action: drop
+      - if: '{__name__=~"velocity_player_connects_created"}'
+        action: drop
+      - if: '{__name__=~"velocity_player_disconnects_created"}'
+        action: drop
+      - if: '{__name__=~"velocity_server_list_pings_created"}'
+        action: drop
+
+#====================================================
+### FABRIC EXPORTER MOD
+#====================================================
+  - job_name: "minecraft-fabric-exporter"
+    static_configs:
+      - targets: [ '192.168.0.225:35584' ]
+        labels:
+          instance: 'lobby'
+      - targets: [ '192.168.0.225:35585' ]
+        labels:
+          instance: 'world1'
+      - targets: [ '192.168.0.225:35586' ]
+        labels:
+          instance: 'hermit8'
+      - targets: [ '192.168.0.225:35587' ]
+        labels:
+          instance: 'epicland'          
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        target_label: "__name__"
+        replacement: "minecraft_FE_$1"
+      # Drop label 'pid'
+      #- action: labeldrop
+      #  regex: "pid"
+      # Drop specific metrics
+      - if: '{__name__=~"jvm_buffer_pool_capacity_bytes"}'
+        action: drop
+      - if: '{__name__=~"jvm_buffer_pool_used_buffers"}'
+        action: drop
+      - if: '{__name__=~"jvm_buffer_pool_used_bytes"}'
+        action: drop
+      - if: '{__name__=~"jvm_classes_currently_loaded"}'
+        action: drop
+      - if: '{__name__=~"jvm_classes_loaded_total"}'
+        action: drop
+      - if: '{__name__=~"jvm_classes_unloaded_total"}'
+        action: drop
+      - if: '{__name__=~"jvm_info"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_bytes_committed"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_bytes_init"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_objects_pending_finalization"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_pool_allocated_bytes_created"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_pool_allocated_bytes_total"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_pool_bytes_committed"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_pool_bytes_init"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_pool_bytes_max"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_pool_bytes_used"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_pool_collection_committed_bytes"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_pool_collection_init_bytes"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_pool_collection_max_bytes"}'
+        action: drop
+      - if: '{__name__=~"jvm_memory_pool_collection_used_bytes"}'
+        action: drop
+
+#      - targets: [ '192.168.0.10:7700' ]
+#        labels:
+#          instance: 'Test'
+#      - targets: [ '192.168.0.10:7700' ]
+#        labels:
+#          instance: 'Test'
+#      - targets: [ '192.168.0.10:7701' ]
+#        labels:
+#          instance: 'Epicland'
+#      - targets: [ '192.168.0.10:7702' ]
+#        labels:
+#          instance: 'Testing-Superflat'
+#      - targets: [ '192.168.0.10:7703' ]
+#        labels:
+#          instance: 'DaddyJames'
+#      - targets: [ '192.168.0.10:7710' ]
+#        labels:
+#          instance: 'DonutMountain'
+#      - targets: [ '192.168.0.10:7704' ]
+#        labels:
+#          instance: 'Hermitcraft4'
+#      - targets: [ '192.168.0.10:7705' ]
+#        labels:
+#          instance: 'Hermitcraft5'
+#      - targets: [ '192.168.0.10:7706' ]
+#        labels:
+#          instance: 'Hermitcraft6'
+#      - targets: [ '192.168.0.10:7707' ]
+#        labels:
+#          instance: 'Hermitcraft7'
+#      - targets: [ '192.168.0.10:7708' ]
+#        labels:
+#          instance: 'Hermitcraft8'
+#      - targets: [ '192.168.0.10:7709' ]
+#        labels:
+#          instance: 'Hermitcraft9'
+
+#  - job_name: 'fabric-epicland'
+#    static_configs:
+#      - targets: ['mc-fabric-epicland:25585']
+#  - job_name: 'fabric-Testing_Superflat'
+#    static_configs:
+#      - targets: ['mc-fabric-testingsuperflat:25585']
+#  - job_name: 'fabric-DaddyJames'
+#    static_configs:
+#      - targets: ['mc-fabric-daddyjames:25585']
+#  - job_name: 'fabric-Hermitcraft4'
+#    static_configs:
+#      - targets: ['mc-fabric-Hermitcraft4:25585']
+#  - job_name: 'fabric-Hermitcraft5'
+#    static_configs:
+#      - targets: ['mc-fabric-Hermitcraft5:25585']
+#  - job_name: 'fabric-Hermitcraft6'
+#    static_configs:
+#      - targets: ['mc-fabric-Hermitcraft6:25585']
+#  - job_name: 'fabric-Hermitcraft7'
+#    static_configs:
+#      - targets: ['mc-fabric-Hermitcraft7:25585']
+#  - job_name: 'fabric-Hermitcraft7'
+#    static_configs:
+#      - targets: ['mc-fabric-Hermitcraft8:25585']
+
+
+#====================================================
+### SERVERSTATS MOD - ONE SCRAPE JOB MULTIPLE TARGETS
+#====================================================
+#
+## Also see commented out old serverstats configs below.
+## We have merged into one job with multiple targets instead.
+#
+#  - job_name: "minecraft-serverstats"
+#    static_configs:
+#      - targets: [ '192.168.0.10:7920' ]
+#        labels:
+#          instance: 'Test'
+#      - targets: [ '192.168.0.10:7900' ]
+#        labels:
+#          instance: 'Epicland'
+#      - targets: [ '192.168.0.10:7901' ]
+#        labels:
+#          instance: 'Testing-Superflat'
+#      - targets: [ '192.168.0.10:7902' ]
+#        labels:
+#          instance: 'DaddyJames'
+#      - targets: [ '192.168.0.10:7910' ]
+#        labels:
+#          instance: 'DonutMountain'
+#      - targets: [ '192.168.0.10:7904' ]
+#        labels:
+#          instance: 'Hermitcraft4'
+#      - targets: [ '192.168.0.10:7905' ]
+#        labels:
+#          instance: 'Hermitcraft5'
+#      - targets: [ '192.168.0.10:7906' ]
+#        labels:
+#          instance: 'Hermitcraft6'
+#      - targets: [ '192.168.0.10:7907' ]
+#        labels:
+#          instance: 'Hermitcraft7'
+#      - targets: [ '192.168.0.10:7908' ]
+#        labels:
+#          instance: 'Hermitcraft8'
+#      - targets: [ '192.168.0.10:7909' ]
+#        labels:
+#          instance: 'Hermitcraft9'
+#    metric_relabel_configs:
+#      - source_labels: [__name__]
+#        target_label: "__name__"
+#        replacement: "minecraft_SS_$1"
+#      # Drop metrics
+#      - if: '{__name__=~"minecraft_SS_gc"}'
+#        action: drop
+#  
+#  ## PREVIOUS TARGET DEFINITION - STILL ONE JOB WITH MULTIPLE TARGETS
+#  ## Couldn't retain this version since monitoring now on different system so can't use
+#  ## internal docker network hostnames to reference servers.
+#  ## In this case instance labels were also created dynamically from target names using relabel 
+#  ## rules below. This also didn't allow any flexibility to diverge from service name. 
+#  #- job_name: "minecraft-serverstats"
+#  #  static_configs:
+#  #    - targets:
+#  #        - "mc-fabric-epicland:8000"
+#  #        - "mc-fabric-testingsuperflat:8000"
+#  #        - "mc-fabric-daddyjames:8000"
+#  #        - "mc-fabric-Hermitcraft4:8000"
+#  #        - "mc-fabric-Hermitcraft5:8000"
+#  #        - "mc-fabric-Hermitcraft6:8000"
+#  #        - "mc-fabric-Hermitcraft7:8000"
+#  #        - "mc-fabric-Hermitcraft8:8000"
+#  #  metric_relabel_configs:
+#  #    - source_labels: [instance]
+#  #      regex: "^mc-fabric-(.*):.+"
+#  #      target_label: "instance"
+#  #      replacement: "$1"
+#  #    # Drop metrics
+#  #    - if: '{__name__=~"minecraft_SS_gc"}'
+#  #      action: drop
+#
+#  ### SERVERSTATS MOD - SEPARATE SCRAPE JOBS
+#  ### REQUIRES CONFIG PER SERVER (ONLY ONE RETAINED FOR REFERENCE)
+#  #- job_name: "fabric-SS-epicland"
+#  #  static_configs:
+#  #    - targets:
+#  #        - "mc-fabric-epicland:8000"
+#  #  metric_relabel_configs:
+#  #    - source_labels: [__name__]
+#  #      target_label: "__name__"
+#  #      replacement: "minecraft_SS_$1"
+#  #    - source_labels: [instance]
+#  #      regex: "^mc-fabric-(.*):.+"
+#  #      target_label: "instance"
+#  #      replacement: "$1"
+
+#====================================================
+### UNIFIEDMETRICS MOD
+#====================================================
+
+# Decided to use Fabric Exporter for metrics.
+
+#  - job_name: "minecraft-unifiedmetrics"
+#    static_configs:
+#      - targets: [ '192.168.0.10:7800' ]
+#        labels:
+#          instance: 'Test'
+#      - targets: [ '192.168.0.10:7801' ]
+#        labels:
+#          instance: 'Epicland'
+#      - targets: [ '192.168.0.10:7802' ]
+#        labels:
+#          instance: 'Testing-Superflat'
+#      - targets: [ '192.168.0.10:7803' ]
+#        labels:
+#          instance: 'DaddyJames'
+#      - targets: [ '192.168.0.10:7810' ]
+#        labels:
+#          instance: 'DonutMountain'
+#      - targets: [ '192.168.0.10:7804' ]
+#        labels:
+#          instance: 'Hermitcraft4'
+#      - targets: [ '192.168.0.10:7805' ]
+#        labels:
+#          instance: 'Hermitcraft5'
+#      - targets: [ '192.168.0.10:7806' ]
+#        labels:
+#          instance: 'Hermitcraft6'
+#      - targets: [ '192.168.0.10:7807' ]
+#        labels:
+#          instance: 'Hermitcraft7'
+#      - targets: [ '192.168.0.10:7808' ]
+#        labels:
+#          instance: 'Hermitcraft8'
+#      - targets: [ '192.168.0.10:7809' ]
+#        labels:
+#          instance: 'Hermitcraft9'
+#    metric_relabel_configs:
+#      - source_labels: [__name__]
+#        target_label: "__name__"
+#        replacement: "minecraft_UM_$1"
+#      # Drop metrics
+#      #- if: '{__name__=~"minecraft_SS_gc"}'
+#      #  action: drop
+
+#  - job_name: 'fabric-UM-Hermitcraft4'
+#    static_configs:
+#      - targets: ['mc-fabric-Hermitcraft4:9970']
+#  - job_name: 'sflow-rt-analyzer'
+#    metrics_path: /prometheus/analyzer/txt
+#    static_configs:
+#      - targets: ['sflow-rt:8008']
+#  - job_name: 'sflow-rt-metrics'
+#    metrics_path: /prometheus/metrics/ALL/ALL/txt
+#    static_configs:
+#      - targets: ['sflow-rt:8008']
+#  - job_name: 'sflow-rt-flow-src-dst-bps'
+#    metrics_path: /app/prometheus/scripts/export.js/flows/ALL/txt
+#    static_configs:
+#      - targets: ['sflow-rt:8008']
+#    params:
+#      metric: ['ip_src_dst_bps']
+#      key: ['ipsource','ipdestination']
+#      label: ['src','dst']
+#      value: ['bytes']
+#      scale: ['8']
+#      minValue: ['1000']
+#      maxFlows: ['100']
+
+
+#####################################################################
+### TELEGRAF
+#####################################################################
+##  
+##  # TELEGRAF METRICS
+##  - job_name: 'telegraf'
+##    static_configs:
+##      - targets: ['192.168.0.10:9273']  
+##        labels:
+##          host_system: 'crush'
+##      - targets: ['telegraf:9273']  
+##        labels:
+##          host_system: 'monitoring'
+##    #metric_relabel_configs:
+##    # Drop label 'pid'
+##    #- action: labeldrop
+##    #  regex: "pid"
+##    # Drop specific metrics
+##    #- if: '{__name__=~"frigate_service_info"}'
+##    #  action: drop
+
+
+###################################################################
+# TAILSCALE
+###################################################################
+  
+  #- job_name: 'tailscale'
+  #  #scrape_interval: 15s
+  #  static_configs:
+  #    - targets: ['192.168.0.1:65511']
+  #      labels:
+  #        host_system: 'erx'
+  #  metrics_path: /debug/metrics
+
+  
+###################################################################
+# CLOUDFLARE
+###################################################################
+
+#------------------------------------------------------------------
+# CLOUDFLARED DNS & TUNNELS
+#------------------------------------------------------------------
+
+  - job_name: 'cloudflared'
+    scrape_interval: 15s
+    metrics_path: /metrics
+    static_configs:
+      #- targets: ['192.168.0.10:60123']
+      #  labels:
+      #    host_system: 'crush'  
+      # Merged cloudflared config from docker container into pihole's existing tunnel which was
+      # originally used just for DNS upstream but is now used for all services. 
+      - targets: ['192.168.0.223:60123']
+        labels:
+          host_system: 'pihole'  
+      # Also add targets for backup pihole instances once we know their details.
+
+#------------------------------------------------------------------
+# CLOUDFLARE DASHBOARD
+#------------------------------------------------------------------
+
+#  # No free tier metrics available using ghcr.io/lablabs/cloudflare_exporter
+#  - job_name: 'cloudflare-exporter'
+#    scrape_interval: 15s
+#    metrics_path: /metrics
+#    static_configs:
+#      - targets: ['cloudflare-exporter:18080']
+#        labels:
+#          host_system: 'monitoring'
+#
+#  # Uses graphql-exporter image to query Cloudflare's graphql api:
+#  # https://github.com/ricardbejarano/graphql_exporter
+#  # 'bearer_token' is an API token generated from Cloudflare dashboard with limited scope:
+#  #   Analytics:Read; Account.Account Analytics:Read; Account Settings:Read
+#  # Could probably manage with fewer permissions but using same token we generated with permissions
+#  # for pervious cloudflare-exporter image.
+#  #- job_name: 'graphql-cloudflare'
+#    scrape_interval: 1m
+#    metrics_path: "/query"
+#    bearer_token: "Wn4CfFPssayqwlMWCZ9soE55x35xMzwrAz2smllk"
+#    params:
+#      endpoint: ["https://api.cloudflare.com/client/v4/graphql"]
+#      query:
+#        - |
+#          {
+#            viewer {
+#              zones(filter: {zoneTag: $zoneTag}) {
+#                httpRequests1hGroups(limit: 1, filter: {datetime_geq: "{{ Now "-1h" }}"}) {
+#                  dimensions {
+#                    datetime
+#                  }
+#                  sum {
+#                    bytes
+#                    cachedBytes
+#                    cachedRequests
+#                    requests
+#                  }
+#                }
+#              }
+#            }
+#          }
+#      zoneTag: ["020e28b5ce14bb099d4d9b301044243f"]  # a GraphQL query variable
+#    static_configs:
+#      - targets: ["192.168.0.10:9199"]  # graphql_exporter address:port
+#        labels:
+#          host_system: 'crush'
+
+
+
+
+
+
+
+
+###################################################################
+# PUSHGATEWAY
+###################################################################
+#
+#  - job_name: 'pushgateway'
+#    #scrape_interval: 10s
+#    honor_labels: true
+#    static_configs:
+#      - targets: ['pushgateway:9091']
+#        labels:
+#          host_system: 'monitoring'
+
+
+
+
+#VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+# ALERTING - ALERT MANAGER  (KEEP AT BOTTOM OF FILE)
+#VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+
+#alerting:
+#  alertmanagers:
+#  - scheme: http
+#    static_configs:
+#    - targets:
+#      - 'alertmanager:9093'
+#
+#  - job_name: 'nginx'
+#    scrape_interval: 10s
+#    static_configs:
+#      - targets: ['nginxexporter:9113']
+#
+#  - job_name: 'aspnetcore'
+#    scrape_interval: 10s
+#    static_configs:
+#      - targets: ['eventlog-proxy:5000', 'eventlog:5000']
+

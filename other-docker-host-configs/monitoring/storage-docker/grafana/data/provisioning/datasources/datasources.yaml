@@ -1,0 +1,60 @@
+# Configuration file version
+apiVersion: 1
+
+# List of data sources to delete from the database.
+deleteDatasources:
+  - name: Graphite
+    orgId: 1
+
+datasources:
+  - name: InfluxDB_varken_plex
+    orgId: 1
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    database: varken
+    basicAuth: false
+    withCredentials: false
+    isDefault: false
+    editable: true
+  - name: MetaQueries
+    orgId: 1
+    type: goshposh-metaqueries-datasource
+    access: proxy
+    basicAuth: false
+    withCredentials: false
+    isDefault: false
+    editable: true
+  - name: Sun and Moon
+    orgId: 1
+    type: fetzerch-sunandmoon-datasource
+    access: proxy
+    basicAuth: false
+    withCredentials: false
+    isDefault: false
+    jsonData:
+      latitude: 55.88902
+      longitude: -3.63468
+    editable: true
+  - name: Utils
+    orgId: 1
+    type: grafana-simple-json-datasource
+    access: proxy
+    url: https://grafana-utils.vercel.app
+    basicAuth: false
+    withCredentials: false
+    isDefault: false
+    editable: true
+  - name: VictoriaMetrics
+    orgId: 1
+    type: prometheus
+    access: proxy
+    url: http://victoriametrics:8428
+    basicAuth: false
+    withCredentials: false
+    isDefault: true
+    jsonData:
+      disableMetricsLookup: false
+      httpMethod: POST
+      prometheusType: Prometheus
+    editable: true

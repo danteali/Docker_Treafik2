@@ -1,0 +1,21 @@
+{
+  "id": 15,
+  "uid": "aexucnxp3mm0wa",
+  "orgId": 1,
+  "name": "retrodaredevil-wildgraphql-datasource",
+  "type": "retrodaredevil-wildgraphql-datasource",
+  "typeLogoUrl": "public/plugins/retrodaredevil-wildgraphql-datasource/img/logo.svg",
+  "access": "proxy",
+  "url": "",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": false,
+  "jsonData": {},
+  "secureJsonFields": {},
+  "version": 1,
+  "readOnly": false,
+  "apiVersion": ""
+}

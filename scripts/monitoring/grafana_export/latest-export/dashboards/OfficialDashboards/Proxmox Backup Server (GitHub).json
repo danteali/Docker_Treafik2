@@ -1,0 +1,2962 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "proxmox-backup-server-github",
+    "url": "/d/f7655ccc-6245-4786-a575-79218b10d1a9/proxmox-backup-server-github",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 38,
+    "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+    "folderTitle": "OfficialDashboards",
+    "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/officialdashboards",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "id": 157,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 0,
+          "y": 0
+        },
+        "id": 16,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "pbs_host_uptime{host_system=~\"$pbs_host_system\"}",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "{{host_system}}",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          }
+        ],
+        "title": "Uptime",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "transparent",
+              "mode": "fixed"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "mode": "gradient",
+                "type": "color-background"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Last Snapshot"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "dateTimeAsIso"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "transparent",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Verified?"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "0": {
+                          "color": "red",
+                          "index": 0,
+                          "text": "NOK"
+                        },
+                        "1": {
+                          "color": "green",
+                          "index": 1,
+                          "text": "OK"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Datastore"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "transparent",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "VM ID"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "transparent",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "VM name"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "transparent",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*(bytes)/"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decbytes"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*%.*/"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                },
+                {
+                  "id": "color"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 0.6
+                      },
+                      {
+                        "color": "red",
+                        "value": 0.9
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 20,
+          "x": 4,
+          "y": 0
+        },
+        "id": 20,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "Datastore"
+            }
+          ]
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_snapshot_vm_last_timestamp{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"} * 1000) by (host_system,datastore,vm_id,vm_name)",
+            "format": "table",
+            "instant": false,
+            "range": true,
+            "refId": "last-snapshot"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_snapshot_vm_last_verify{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "verify-status"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_size{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "datastore-size"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_available{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "datastore-avail"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_used{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "datastore-used"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_used{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name) / sum(pbs_size{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "datastore-perc"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_snapshot_count{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "snapshot-count-datastore"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_snapshot_vm_count{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "snapshot-count-vm"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_host_cpu_usage{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "host-cpu"
+          }
+        ],
+        "title": "Snapshot overview",
+        "transformations": [
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Value #A": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #B": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #C": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #datastore-avail": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #datastore-perc": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #datastore-size": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #datastore-used": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #host-cpu": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #last-snapshot": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #snapshot-count-datastore": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #snapshot-count-vm": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #verify-status": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "datastore": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "host_system": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "namespace": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "vm_id": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "vm_name": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "includeByName": {},
+              "indexByName": {
+                "Value #A (lastNotNull)": 4,
+                "Value #B (lastNotNull)": 5,
+                "datastore": 2,
+                "namespace": 3,
+                "vm_id": 0,
+                "vm_name": 1
+              },
+              "renameByName": {
+                "Value #A (lastNotNull)": "Last snapshot",
+                "Value #B (lastNotNull)": "Verify state",
+                "Value #datastore-avail (lastNotNull)": "Datastore Available (bytes)",
+                "Value #datastore-perc (lastNotNull)": "Datastore Used (%)",
+                "Value #datastore-size (lastNotNull)": "Datastore Size (bytes)",
+                "Value #datastore-used (lastNotNull)": "Datastore Used (bytes)",
+                "Value #host-cpu (lastNotNull)": "Host CPU %",
+                "Value #last-snapshot (lastNotNull)": "Last Snapshot",
+                "Value #snapshot-count-datastore (lastNotNull)": "# Snapshots - Datastore",
+                "Value #snapshot-count-vm (lastNotNull)": "# Snapshots - VM",
+                "Value #verify-status (lastNotNull)": "Verified?",
+                "datastore": "Datastore",
+                "host_system": "PBS Host",
+                "namespace": "Namespace",
+                "vm_id": "VM ID",
+                "vm_name": "VM name"
+              }
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "fields": {},
+              "sort": [
+                {
+                  "desc": false,
+                  "field": "Verify state"
+                }
+              ]
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 4,
+          "x": 0,
+          "y": 4
+        },
+        "id": 17,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_snapshot_count{job=\"pbs\", host_system=~\"$pbs_host_system\"})",
+            "instant": false,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Snapshots",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 8
+        },
+        "id": 13,
+        "panels": [],
+        "title": "Snapshots",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 15,
+          "w": 4,
+          "x": 0,
+          "y": 9
+        },
+        "id": 27,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "vm_name"
+            }
+          ]
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_snapshot_vm_count{job=\"pbs\", host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\"}) by (vm_name)",
+            "format": "table",
+            "instant": false,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Snapshots by VM",
+        "transformations": [
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Value": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "datastore": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "groupby"
+                },
+                "host_system": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "namespace": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "vm_name": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "includeByName": {},
+              "indexByName": {
+                "Value (lastNotNull)": 1,
+                "host_system": 2,
+                "vm_name": 0
+              },
+              "renameByName": {
+                "Value (lastNotNull)": "Snapshot count",
+                "datastore": "Datastore",
+                "host_system": "PBS Host",
+                "namespace": "Namespace",
+                "vm_name": "VM Name"
+              }
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "fields": {},
+              "sort": [
+                {
+                  "field": "VM Name"
+                }
+              ]
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 15,
+          "w": 4,
+          "x": 4,
+          "y": 9
+        },
+        "id": 14,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "pbs_snapshot_count{job=\"pbs\", host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\"}",
+            "format": "table",
+            "instant": false,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Total Snapshots by Namespace",
+        "transformations": [
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Value": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "datastore": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "groupby"
+                },
+                "namespace": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {
+                "Value (lastNotNull)": 2,
+                "datastore": 1,
+                "namespace": 0
+              },
+              "renameByName": {
+                "Value (lastNotNull)": "Snapshot count",
+                "datastore": "Datastore",
+                "namespace": "Namespace"
+              }
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "fields": {},
+              "sort": [
+                {
+                  "field": "Namespace"
+                }
+              ]
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Last Snapshot"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "dateTimeAsIsoNoDateIfToday"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/.*%.*/"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 0.6
+                      },
+                      {
+                        "color": "red",
+                        "value": 0.8
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Verified?"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "0": {
+                          "color": "dark-red",
+                          "index": 0,
+                          "text": "NOK"
+                        },
+                        "1": {
+                          "color": "dark-green",
+                          "index": 1,
+                          "text": "OK"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 16,
+          "x": 8,
+          "y": 9
+        },
+        "id": 26,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "frameIndex": 0,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "vm_name"
+            }
+          ]
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_snapshot_vm_count{job=\"pbs\", host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (datastore,vm_id,vm_name,host_system)",
+            "format": "table",
+            "instant": false,
+            "legendFormat": "snap-count",
+            "range": true,
+            "refId": "snap-count"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_snapshot_vm_last_timestamp{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"} * 1000) by (datastore,vm_id,vm_name,host_system)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "last-snapshot",
+            "range": true,
+            "refId": "last-snapshot"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_snapshot_vm_last_verify{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "verify-status",
+            "range": true,
+            "refId": "verify-status"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_used{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name) / sum(pbs_size{host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (host_system,datastore,vm_id,vm_name)",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "datastore-perc",
+            "range": true,
+            "refId": "datastore-perc"
+          }
+        ],
+        "title": "Snapshot count by VM",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "VM name": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #datastore-perc": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #last-snapshot": {
+                  "aggregations": [
+                    "max"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #snap-count": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #verify-status": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "datastore": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "host_system": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "last-snapshot": {
+                  "aggregations": [
+                    "max"
+                  ],
+                  "operation": "aggregate"
+                },
+                "local-becky-2T-ds0": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "vm_id": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "vm_name": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "includeByName": {},
+              "indexByName": {
+                "Value (lastNotNull)": 4,
+                "datastore": 2,
+                "host_system": 3,
+                "vm_id": 0,
+                "vm_name": 1
+              },
+              "renameByName": {
+                "Value #datastore-perc (lastNotNull)": "Size Used %",
+                "Value #last-snapshot (max)": "Last Snapshot",
+                "Value #snap-count (lastNotNull)": "Snapshot Count",
+                "Value #verify-status (lastNotNull)": "Verified?",
+                "Value (lastNotNull)": "Snapshot count",
+                "datastore": "Datastore",
+                "host_system": "PBS Host",
+                "vm_id": "VM ID",
+                "vm_name": "VM name"
+              }
+            }
+          },
+          {
+            "id": "partitionByValues",
+            "options": {
+              "fields": [
+                "VM name"
+              ],
+              "keepFields": false,
+              "naming": {
+                "asLabels": false
+              }
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "fields": {},
+              "sort": [
+                {
+                  "desc": false,
+                  "field": "PBS Host"
+                }
+              ]
+            }
+          },
+          {
+            "disabled": true,
+            "id": "groupingToMatrix",
+            "options": {
+              "columnField": "datastore",
+              "emptyValue": "empty",
+              "rowField": "vm_id",
+              "valueField": "Value (lastNotNull)"
+            }
+          },
+          {
+            "disabled": true,
+            "id": "groupToNestedTable",
+            "options": {
+              "fields": {
+                "Value": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ]
+                },
+                "vm_id": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "vm_name": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              },
+              "showSubframeHeaders": true
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 17
+        },
+        "id": 24,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "frameIndex": 3,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "vm_name"
+            }
+          ]
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(pbs_snapshot_vm_count{job=\"pbs\", host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\", vm_name=~\"$pbs_guest\"}) by (datastore,vm_id,vm_name,host_system)",
+            "format": "table",
+            "instant": false,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Snapshot count by VM",
+        "transformations": [
+          {
+            "disabled": true,
+            "id": "sortBy",
+            "options": {
+              "fields": {},
+              "sort": [
+                {
+                  "desc": false,
+                  "field": "datastore"
+                }
+              ]
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Value": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "datastore": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "host_system": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "local-becky-2T-ds0": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "vm_id": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "vm_name": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "includeByName": {},
+              "indexByName": {
+                "Value (lastNotNull)": 4,
+                "datastore": 2,
+                "host_system": 3,
+                "vm_id": 0,
+                "vm_name": 1
+              },
+              "renameByName": {
+                "Nested frames": "ddd",
+                "Value (lastNotNull)": "Snapshot count",
+                "datastore": "Datastore",
+                "host_system": "PBS Host",
+                "vm_id": "VM ID",
+                "vm_name": "VM name"
+              }
+            }
+          },
+          {
+            "id": "groupToNestedTable",
+            "options": {
+              "fields": {
+                "VM ID": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "VM name": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ]
+                },
+                "Value (lastNotNull)": {
+                  "aggregations": []
+                },
+                "vm_id": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "vm_name": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              },
+              "showSubframeHeaders": true
+            }
+          },
+          {
+            "disabled": true,
+            "id": "groupingToMatrix",
+            "options": {
+              "columnField": "datastore",
+              "emptyValue": "empty",
+              "rowField": "vm_id",
+              "valueField": "Value (lastNotNull)"
+            }
+          },
+          {
+            "disabled": true,
+            "id": "rowsToFields",
+            "options": {
+              "mappings": [
+                {
+                  "fieldName": "datastore",
+                  "handlerKey": "field.name"
+                }
+              ]
+            }
+          },
+          {
+            "disabled": true,
+            "id": "partitionByValues",
+            "options": {
+              "fields": [
+                "vm_id"
+              ],
+              "keepFields": false,
+              "naming": {
+                "asLabels": false
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 24
+        },
+        "id": 12,
+        "panels": [],
+        "title": "Datastore",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Used, %"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 1
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Available"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Size"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Used"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 100
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 25
+        },
+        "id": 11,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "pbs_available{job=\"pbs\", host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\"}",
+            "format": "table",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "builder",
+            "expr": "pbs_size{job=\"pbs\", host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\"}",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "builder",
+            "expr": "pbs_used{job=\"pbs\", host_system=~\"$pbs_host_system\", datastore=~\"$pbs_datastore\"}",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "C"
+          }
+        ],
+        "title": "Datastore Usage",
+        "transformations": [
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Value #A": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #B": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "Value #C": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                },
+                "datastore": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "host_system": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "instance": {
+                  "aggregations": []
+                },
+                "job": {
+                  "aggregations": []
+                }
+              }
+            }
+          },
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "Used, %",
+              "binary": {
+                "left": "Value #C (lastNotNull)",
+                "operator": "/",
+                "reducer": "sum",
+                "right": "Value #B (lastNotNull)"
+              },
+              "mode": "binary",
+              "reduce": {
+                "reducer": "sum"
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "Value #A (lastNotNull)": "Available",
+                "Value #B (lastNotNull)": "Size",
+                "Value #C (lastNotNull)": "Used",
+                "datastore": "Datastore"
+              }
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "fields": {},
+              "sort": [
+                {
+                  "field": "datastore"
+                }
+              ]
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 33
+        },
+        "id": 6,
+        "panels": [
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percentunit"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 26
+            },
+            "id": 1,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "pbs_host_cpu_usage{job=\"pbs\",host_system=~\"$pbs_host_system\"}",
+                "instant": false,
+                "legendFormat": "usage",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "CPU Usage",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 26
+            },
+            "id": 2,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "pbs_host_load1{job=\"pbs\",host_system=~\"$pbs_host_system\"}",
+                "instant": false,
+                "legendFormat": "1m load average",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "pbs_host_load5{job=\"pbs\",host_system=~\"$pbs_host_system\"}",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "5m load average",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "pbs_host_load15{job=\"pbs\",host_system=~\"$pbs_host_system\"}",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "15m load average",
+                "range": true,
+                "refId": "C"
+              }
+            ],
+            "title": "Load Average",
+            "type": "timeseries"
+          }
+        ],
+        "title": "CPU",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 34
+        },
+        "id": 7,
+        "panels": [
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "hue",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "normal"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "bytes"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/.*%.*/"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.axisPlacement",
+                      "value": "right"
+                    },
+                    {
+                      "id": "unit",
+                      "value": "percentunit"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 18,
+              "x": 0,
+              "y": 50
+            },
+            "id": 3,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "builder",
+                "expr": "pbs_host_memory_used{job=\"pbs\", host_system=~\"$pbs_host_system\"}",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{host_system}} - memory used",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "pbs_host_memory_free{job=\"pbs\", host_system=~\"$pbs_host_system\"}",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{host_system}} - memory free",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "sum(pbs_host_memory_used{job=\"pbs\", host_system=~\"$pbs_host_system\"}) by (host_system) / (sum(pbs_host_memory_total{job=\"pbs\", host_system=~\"$pbs_host_system\"}) by (host_system))",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{host_system}} - memory used %",
+                "range": true,
+                "refId": "C"
+              }
+            ],
+            "title": "Memory Usage",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "decimals": 1,
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-green",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-orange",
+                      "value": 80
+                    },
+                    {
+                      "color": "semi-dark-red",
+                      "value": 90
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 6,
+              "x": 18,
+              "y": 50
+            },
+            "id": 4,
+            "options": {
+              "minVizHeight": 75,
+              "minVizWidth": 75,
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showThresholdLabels": false,
+              "showThresholdMarkers": true,
+              "sizing": "auto"
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "pbs_host_memory_used{job=\"pbs\", host_system=~\"$pbs_host_system\"} / pbs_host_memory_total{job=\"pbs\", host_system=~\"$pbs_host_system\"} * 100",
+                "instant": false,
+                "legendFormat": "{{host_system}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Memory Usage",
+            "type": "gauge"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "hue",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "normal"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "bytes"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/.*%.*/"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.axisPlacement",
+                      "value": "right"
+                    },
+                    {
+                      "id": "unit",
+                      "value": "percentunit"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 18,
+              "x": 0,
+              "y": 58
+            },
+            "id": 18,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "sum(pbs_host_swap_used{job=~\"pbs\", host_system=~\"$pbs_host_system\"}) by (host_system)",
+                "instant": false,
+                "legendFormat": "{{host_system}} - swap used",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "sum(pbs_host_swap_free{job=~\"pbs\", host_system=~\"$pbs_host_system\"}) by (host_system)",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{host_system}} - swap free",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "sum(pbs_host_swap_used{job=~\"pbs\", host_system=~\"$pbs_host_system\"}) by (host_system) / sum(pbs_host_swap_total{job=~\"pbs\", host_system=~\"$pbs_host_system\"}) by (host_system)",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{host_system}} - swap used %",
+                "range": true,
+                "refId": "C"
+              }
+            ],
+            "title": "Swap Usage",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "decimals": 1,
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-green",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-orange",
+                      "value": 80
+                    },
+                    {
+                      "color": "semi-dark-red",
+                      "value": 90
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 6,
+              "x": 18,
+              "y": 58
+            },
+            "id": 19,
+            "options": {
+              "minVizHeight": 75,
+              "minVizWidth": 75,
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showThresholdLabels": false,
+              "showThresholdMarkers": true,
+              "sizing": "auto"
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "pbs_host_swap_used{job=~\"pbs\", host_system=~\"$pbs_host_system\"} / pbs_host_swap_total{job=~\"pbs\", host_system=~\"$pbs_host_system\"} * 100",
+                "instant": false,
+                "legendFormat": "{{host_system}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Swap Usage",
+            "type": "gauge"
+          }
+        ],
+        "title": "Memory",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 35
+        },
+        "id": 8,
+        "panels": [
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "max": 1,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percentunit"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 11,
+              "x": 0,
+              "y": 51
+            },
+            "id": 5,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "pbs_host_io_wait{host_system=~\"$pbs_host_system\"}",
+                "instant": false,
+                "legendFormat": "{{host_system}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Disk I/O Delay",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "bytes"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/.*%.*/"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.axisPlacement",
+                      "value": "right"
+                    },
+                    {
+                      "id": "unit",
+                      "value": "percentunit"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 7,
+              "x": 11,
+              "y": 51
+            },
+            "id": 9,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "10.0.3",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "sum(pbs_host_disk_used{job=\"pbs\", host_system=~\"$pbs_host_system\"}) by (host_system)",
+                "format": "time_series",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{host_system}} - used",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "sum(pbs_host_disk_available{job=\"pbs\", host_system=~\"$pbs_host_system\"}) by (host_system)",
+                "format": "time_series",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{host_system}} - free",
+                "range": true,
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "pbs_host_disk_used{job=~\"pbs\", host_system=~\"$pbs_host_system\"} / pbs_host_disk_total{job=~\"pbs\",host_system=~\"$pbs_host_system\"}",
+                "format": "time_series",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{host_system}} - used %",
+                "range": true,
+                "refId": "D"
+              }
+            ],
+            "title": "Root Disk Space Usage",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "decimals": 1,
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-green",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-orange",
+                      "value": 80
+                    },
+                    {
+                      "color": "semi-dark-red",
+                      "value": 90
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 6,
+              "x": 18,
+              "y": 51
+            },
+            "id": 10,
+            "options": {
+              "minVizHeight": 75,
+              "minVizWidth": 75,
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showThresholdLabels": false,
+              "showThresholdMarkers": true,
+              "sizing": "auto"
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "pbs_host_disk_used{job=~\"pbs\", host_system=~\"$pbs_host_system\"} / pbs_host_disk_total{job=~\"pbs\",host_system=~\"$pbs_host_system\"} * 100",
+                "instant": false,
+                "legendFormat": "{{host_system}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Root Disk Space Usage",
+            "type": "gauge"
+          }
+        ],
+        "title": "Disk",
+        "type": "row"
+      }
+    ],
+    "refresh": "30s",
+    "schemaVersion": 39,
+    "tags": [
+      "proxmox"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(pbs_host_uptime,host_system)",
+          "description": "PBS instance",
+          "hide": 0,
+          "includeAll": true,
+          "label": "PBS Host",
+          "multi": false,
+          "name": "pbs_host_system",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(pbs_host_uptime,host_system)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "192.168.0.222:10019",
+            "value": "192.168.0.222:10019"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(pbs_host_uptime,instance)",
+          "description": "Not using for queries since using docker image on 'monitoring' host for Exporter - all instance IP addresses are therefore the same (only port differs. \nUsing host_system instead (label applied by prometheus.yaml depending on scrape target. ",
+          "hide": 2,
+          "includeAll": false,
+          "label": "PBS Instance",
+          "multi": false,
+          "name": "pbs_instance",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(pbs_host_uptime,instance)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": "",
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(pbs_size{host_system=~\"$pbs_host_system\"},datastore)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "PBS Datastore",
+          "multi": false,
+          "name": "pbs_datastore",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(pbs_size{host_system=~\"$pbs_host_system\"},datastore)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(pbs_snapshot_vm_count{datastore=~\"$pbs_datastore\"},vm_name)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "PBS Backup Guest",
+          "multi": false,
+          "name": "pbs_guest",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(pbs_snapshot_vm_count{datastore=~\"$pbs_datastore\"},vm_name)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Proxmox Backup Server (GitHub)",
+    "uid": "f7655ccc-6245-4786-a575-79218b10d1a9",
+    "weekStart": ""
+  }
+}

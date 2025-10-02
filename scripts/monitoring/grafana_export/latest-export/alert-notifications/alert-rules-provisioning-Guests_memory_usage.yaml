@@ -1,0 +1,102 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: Evaluated every 5 min
+      folder: Alerts
+      interval: 5m
+      rules:
+        - uid: cb4e9a30-d6be-4007-995e-c3464e391f33
+          title: Guests memory usage
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 300
+                to: 0
+              datasourceUid: P4169E866C3094E38
+              model:
+                datasource:
+                    type: prometheus
+                    uid: P4169E866C3094E38
+                editorMode: code
+                expr: (pve_memory_usage_bytes / pve_memory_size_bytes * on(id, instance) group_left(name, type) pve_guest_info) and on(id, instance) pve_up == 1
+                format: time_series
+                instant: true
+                interval: ""
+                intervalFactor: 4
+                intervalMs: 15000
+                legendFormat: '{{name}} ({{type}})'
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 300
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: B
+                type: reduce
+            - refId: C
+              relativeTimeRange:
+                from: 300
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.95
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          dashboardUid: b88c0ae7-ec18-4bda-8314-05a487f44508
+          panelId: 5
+          noDataState: OK
+          execErrState: OK
+          for: 5m
+          annotations:
+            __dashboardUid__: b88c0ae7-ec18-4bda-8314-05a487f44508
+            __panelId__: "5"
+            description: |-
+                Proxmox guest RAM use is high - review Proxmox memory allocation and adjust if required.
+                • Host: {{ $labels.host_system }}
+                • ID: {{ $labels.id }}
+                • Name: {{ $labels.name }}
+            summary: Proxmox guest RAM usage critical - {{ $labels.name }} ({{ $labels.id }}) on {{ $labels.host_system }}
+          isPaused: false

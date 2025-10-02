@@ -1,0 +1,929 @@
+version: "3.8"
+
+########################### NOTES
+
+# Migrated all from old NAS configuration.
+
+# Might be using non-default ports but retaining ports used
+# when in use on old NAS.
+
+# All systems should have Node Exporter installed (bare-metal or docker)
+
+# TO DO BEFORE MIGRATION COMPLETE
+# - Figure out how to ingest textfiles in nodexporter on separate host
+#   Or push from other systems directly to VM.
+# - Setup smartmon textfile ingest on all hosts (create ansible role)
+# - Map NFS volume for nodexporter textfiles from crush
+# - Hardcode .env vars in this file
+# - Copy service config files to LXC
+# - Remove dependence on telegraf
+# - Configure varken to connect to crush services
+# - Import VM datasources one by one and drop unneeded metrics/labels
+
+########################### NETWORKS
+networks:
+#  t2_proxy:
+#    name: t2_proxy
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 192.168.90.0/24
+#          gateway: 192.168.90.1
+#  lan_net:
+#    name: lan_net
+#    driver: macvlan
+#    driver_opts:
+#      parent: eth0
+#    ipam:
+#      config:
+#        - subnet: 192.168.0.0/24
+#          gateway: 192.168.0.1
+#          ip_range: 192.168.0.224/29
+#          # Don't believe we need to reserve address for host as can
+#          # route to host's LAN IP in host routing rules instead of
+#          # having to reserve IP.
+#          aux_addresses:
+#            host1: 192.168.0.224
+#  # Docker will use the same default network for all compose files in
+#  # the same directory. It will use the settings of the first network
+#  # created even of othere compose files try to set the default to a
+#  # different subnet.
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.89.0/24
+          gateway: 192.168.89.1
+
+########################### SECRETS
+# If passed to container in 'secrets' key, the secrets
+# files are saved inside containers at /run/secrets/<name>
+secrets:
+  influxdb_admin_password:
+    file: /root/scripts/docker/_secrets/influxdb_admin_password
+  grafana_password:
+    file: /root/scripts/docker/_secrets/grafana_password
+  email_smtp_password_grafana: # Required for Authelia email notifier, Grafana
+    file: /root/scripts/docker/_secrets/email_smtp_password_grafana
+
+
+########################### COMMON SETTINGS
+
+#x-logging: 
+#      &default-logging
+#      options:
+#        # For default json-file driver
+#        #max-size: "50m"
+#        #max-file: "1"
+#        # For local driver when journald enabled
+#        # Now defined globally in /etc/docker/daemon.json
+#        cache-max-size: "50m"
+#        cache-max-file: "1"
+
+
+########################### SERVICES
+services:
+# All services / apps go below this line
+
+  #############################
+  ###     INFRASTRUCTURE    ###
+  #############################
+
+  # VICTORIA METRICS - COLLECT AND STORE METRICS AS TIME SERIES DATA
+  # Essentially a drop in replacement for Prometheus but better CPU/RAW/disk usage
+  # https://hub.docker.com/r/victoriametrics/victoria-metrics/
+  # https://github.com/VictoriaMetrics/VictoriaMetrics/
+  # https://github.com/VictoriaMetrics/VictoriaMetrics/#prometheus-setup
+  # https://docs.victoriametrics.com/
+  # 20220722: Using 'latest' tag to allow updates as recommended by docs.
+  #           Version as of now is 1.79.0
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:latest
+    container_name: victoriametrics
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - default
+      #- t2_proxy
+    ports:
+      - 8428:8428
+    #user: root # Instead set 'data' dir ownership to chown -R 65534:6553
+    volumes:
+      # Uses Prometehus config to scrape same targets
+      - /storage/Docker/victoriametrics/data/config/prometheus.yml:/prometheus_config/prometheus.yml:ro
+      - /storage/Docker/victoriametrics/data/data:/victoria-metrics-data
+    command:
+      - '-promscrape.config=/prometheus_config/prometheus.yml'
+      - '-promscrape.config.strictParse=false' # Ignore some Prometheus-only fields in yml instead of throwing error
+      - '-retentionPeriod=1y' # Default = 1m
+      - '-selfScrapeInterval=15s'
+      - '-maxLabelsPerTimeseries=50' # (default 30) Increase as a number of metrics breaching limit
+      - '-promscrape.suppressScrapeErrors' # Don't output errors constantly due to unavailable targets (see /targets page even if scrape errors logging is suppressed)
+      - '-memory.allowedBytes=2147483648' # 2147483648=2Gb. Otherwise default is to use 60% of available memory!
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      ##----------- TRAEFIK LABELS -----------#
+      #- "traefik.enable=true"
+      ### HTTP Routers
+      #- "traefik.http.routers.victoriametrics-rtr.entrypoints=https"
+      #- "traefik.http.routers.victoriametrics-rtr.rule=Host(`victoriametrics.$DOMAINNAME0`)"
+      ### Middlewares
+      #- "traefik.http.routers.victoriametrics-rtr.middlewares=chain-authelia@file"
+      ### HTTP Services
+      #- "traefik.http.routers.victoriametrics-rtr.service=victoriametrics-svc"
+      #- "traefik.http.services.victoriametrics-svc.loadbalancer.server.port=8428"
+
+  # VICTORIA METRICS - VMAGENT
+  # Small agent to collect and manipulate metrics before passing tO Victoria Metrics
+  # Useful for InfluxDB in particular as allows relabelling rules
+  # https://docs.victoriametrics.com/vmagent.html
+  # https://hub.docker.com/r/victoriametrics/vmagent/tags
+  # 20220722: Using 'latest' tag to allow updates as recommended by docs.
+  #           Version as of now is 1.79.0
+  vmagent:
+    image: victoriametrics/vmagent:latest
+    container_name: vmagent
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - default
+      #- t2_proxy
+    ports:
+      - 8429:8429
+    #user: root # Instead set 'data' dir ownership to chown -R 65534:6553
+    volumes:
+      # Uses Prometehus config to scrape same targets
+      #- /storage/Docker/prometheus/data/config/prometheus.yml:/prometheus_config/prometheus.yml:ro #If using to scrape prometheus data
+      - /storage/Docker/vmagent/data/global-relabel.yaml:/global-relabel.yaml
+    command:
+      #- '-promscrape.config=/prometheus_config/prometheus.yml' # Point to a prometheus config file - already config'd directly in VicMetrics
+      #- '-promscrape.config.strictParse=false' # Ignore some Prometheus-only fields in yml instead of throwing error
+      #- '-remoteWrite.urlRelabelConfig=' # Can be independently defned for each remoteWrite.url' (e.g. to only send specific portion of data to an endpoint)
+      - '-memory.allowedBytes=536870912' # 536870912=0.5Gb. Otherwise default is to use 60% of available memory!
+      - '-remoteWrite.relabelConfig=/global-relabel.yaml'
+      - '-remoteWrite.url=http://victoriametrics:8428/api/v1/write' # Where to push ingested data
+      #- '-remoteWrite.relabelDebug' # Debug relabelling rules - prevents forwarding to endpoint!!!!
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      ##----------- TRAEFIK LABELS -----------#
+      #- "traefik.enable=true"
+      ### HTTP Routers
+      #- "traefik.http.routers.vmagent-rtr.entrypoints=https"
+      #- "traefik.http.routers.vmagent-rtr.rule=Host(`vmagent.$DOMAINNAME0`)"
+      ### Middlewares
+      #- "traefik.http.routers.vmagent-rtr.middlewares=chain-no-auth@file"   # Easily allow other clients to push to agent without authentication
+      ### HTTP Services
+      #- "traefik.http.routers.vmagent-rtr.service=vmagent-svc"
+      #- "traefik.http.services.vmagent-svc.loadbalancer.server.port=8429"
+
+  # GRAFANA - DASHBOARD FOR MULTIPLE DATASOURCES
+  # Originally from dockprom stack (https://github.com/stefanprodan/dockprom)
+  # https://grafana.com/docs/grafana/latest/installation/docker/
+  # Releases: https://hub.docker.com/r/grafana/grafana/tags
+  # Releases: https://github.com/grafana/grafana/releases
+  # 20220109: Existing tag 8.3.3 remains the latest
+  # Make sure correct permissions are set:
+  #   sudo chown -R 472 /storage/Docker/grafana/data
+  #   sudo chown -R 472:472 /var/log/docker/grafana
+  # Set DB permissions - from docker log output
+  #   sudo chmod 640 /storage/Docker/grafana/data/data/grafana.db
+  # 20220721: Updated from 8.3.3 to 9.0.4
+  # 20220727: Updated from 9.0.4 to 9.0.5
+  # 20220803: Updated from 9.0.5 to 9.0.6
+  # 20220905: Updated from 9.0.6 to 9.1.2
+  # 20230817: Updated from 9.1.2 to 10.0.3
+  # 20230924: Updated from 10.0.3 to 10.1.2
+  # 20240914: Updated from 10.1.2 to 11.2.0
+  grafana:
+    image: grafana/grafana:11.2.0 # In future this image may need amended to 'grafana/grafana-oss:tag'
+    container_name: grafana
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - default
+      #- t2_proxy
+    ports:
+      - 7000:3000
+    volumes:
+      # PROVISIONING FILES FOR INITIAL SETUP. COMMENT OUT AFTER SETUP OR GRAFANA WILL ALWAYS RECONFIGURE ANY CHANGES TO MATCH THESE.
+      #- /storage/Docker/grafana/data/provisioning/datasources:/etc/grafana/provisioning/datasources
+      #- /storage/Docker/grafana/data/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - /storage/Docker/grafana/data/data:/var/lib/grafana # Set permissions on host volume: sudo chown -R 472 data
+      - /var/log/docker/grafana:/var/log/grafana
+    environment:
+      ## Append '__FILE' to any variable to point at file containing variable e.g. secrets
+      - GF_LOG_MODE=console file  # Default = 'console file'
+      - GF_LOG_LEVEL=warn # Either "debug", "info", "warn", "error", "critical", default is "info"
+      - GF_SECURITY_ADMIN_USER=admin    
+      # Only needed for initial plugin installs, or updates
+      - GF_INSTALL_PLUGINS=grafana-worldmap-panel,grafana-clock-panel,grafana-piechart-panel,blackmirror1-singlestat-math-panel,natel-discrete-panel,yesoreyeram-boomtable-panel,zuburqan-parity-report-panel,blackmirror1-statusbygroup-panel,flant-statusmap-panel,vonage-status-panel,grafana-simple-json-datasource,grafana-strava-datasource,yesoreyeram-infinity-datasource,retrodaredevil-wildgraphql-datasource
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=goshposh-metaqueries-datasource,flant-statusmap-panel,vonage-status-panel
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_SKIP_VERIFY=true
+      - GF_SMTP_FROM_NAME=Grafana Bot
+      - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_password
+      - GF_SMTP_PASSWORD__FILE=/run/secrets/email_smtp_password_grafana
+      - GF_SMTP_HOST=$GRAFANA_SMTP_HOST
+      - GF_SMTP_USER=$GRAFANA_SMTP_USER
+      - GF_SMTP_FROM_ADDRESS=$GRAFANA_SMTP_SENDER
+      #- GF_PATHS_DATA=/var/lib/grafana # (Default: /var/lib/grafana) https://grafana.com/docs/grafana/next/setup-grafana/configure-docker/#default-paths
+      # To make URLs in notifications refer to a proper endpoint
+      - GF_SERVER_ROOT_URL=https://grafana.$DOMAINNAME0
+      # For image capture settings see: https://grafana.com/docs/grafana/latest/alerting/images-in-notifications/
+      # And env var docs: https://grafana.com/docs/grafana/next/setup-grafana/configure-grafana/#override-configuration-with-environment-variables
+      #- GF_LOG_FILTERS=rendering:debug
+      - GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE=true
+      - GF_RENDERING_SERVER_URL=http://grafana-renderer:8081/render # Uncomment if using image rendering service below
+      - GF_RENDERING_CALLBACK_URL=http://grafana:3000/ # Uncomment if using image rendering service below
+      - GF_UNIFIED_ALERTING_SCREENSHOTS_UPLOAD_EXTERNAL_IMAGE_STORAGE=false # Set 'true' if uploading to GCS, AWS, Azure, etc
+      #- GF_PATHS_TEMP_DATA_LIFETIME=24h # (Default=24h) If UPLOAD_EXTERNAL_IMAGE_STORAGE=false then delete local disk images after this period
+      # Play with concurrency settings if performance issues noted
+      #- GF_UNIFIED_ALERTING_SCREENSHOTS_MAX_CONCURRENT_SCREENSHOTS=5 # (Default=5 maybe?) Max number of screenshots that can be taken at the same time
+      #- GF_PLUGIN_GRAFANA_IMAGE_RENDERER_RENDERING_CLUSTERING_MAX_CONCURRENCY=5 # (Default=5) Max # browser pages that can execute concurrently
+      #- GF_RENDERING_CONCURRENT_RENDER_REQUEST_LIMIT=30 # (Default=30) Max number of concurrent requets to render endpoint
+      #- GF_RENDERING_CLUSTERING_MAX_CONCURRENCY=5 # (Default = 5) Max number of concurrent renders.     
+      # Disable login form / enable anon login- enable if comfortable with only AUthelia protection, or if issues viewing Grafana content in other apps.
+      #- GF_AUTH_BASIC_ENABLED=false
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      # On fresh install, if we tried to set this then we got stuck at loading page and dlog error: failed to get org by name: McGuinness
+      # May need to manually create an Org in the GUI then set this if needed.
+      #- GF_AUTH_ANONYMOUS_ORG_NAME="Main Org."
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_PANELS_ENABLE_ALPHA=true
+    secrets:
+      - grafana_password
+      - email_smtp_password_grafana 
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      ##----------- TRAEFIK LABELS -----------#
+      #- "traefik.enable=true"
+      ### HTTP Routers
+      #- "traefik.http.routers.grafana-rtr.entrypoints=https"
+      #- "traefik.http.routers.grafana-rtr.rule=Host(`grafana.$DOMAINNAME0`)"
+      ### Middlewares
+      #- "traefik.http.routers.grafana-rtr.middlewares=chain-authelia@file"
+      ### HTTP Services
+      #- "traefik.http.routers.grafana-rtr.service=grafana-svc"
+      #- "traefik.http.services.grafana-svc.loadbalancer.server.port=3000"
+
+  # RENDERING SERVICE FOR GRAFANA
+  # https://grafana.com/grafana/plugins/grafana-image-renderer/
+  # Releases: https://github.com/grafana/grafana-image-renderer/releases
+  # 20220109: Existing tag 3.3.0 remains the latest
+  # 20220722: Upgraded from 3.3.0 to 3.5.0
+  # 20220905: Upgraded from 3.5.0 to 3.6.1
+  # 20230818: Upgraded from 3.6.1 to 3.7.2
+  # 20230924: Upgraded from 3.7.2 to 3.8.2
+  # 20240914: Upgraded from 3.8.2 to 3.11.5
+  grafana-renderer:
+    image: grafana/grafana-image-renderer:3.11.5
+    container_name: grafana-renderer
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - default
+    # Only needed if running outside network
+    #ports:
+    #  - $GRAFANA_RENDER_PORT:8081
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+  # Healthchecks - Self-hosted version of healthchecks.io
+  # We will retain our external healthchecks.io account to monitor systems being up. 
+  # https://docs.linuxserver.io/images/docker-healthchecks  
+  # Ping endpoint with:
+  #   curl -m 10 --retry 5 http://192.168.0.222:8000/ping/02fd8f03-686d-41f6-8005-2ebb7b3cfd59
+  #   curl -m 10 --retry 5 https://healthchecks.DOMAINNAME0/ping/02fd8f03-686d-41f6-8005-2ebb7b3cfd59
+  healthchecks:
+    container_name: healthchecks
+    image: lscr.io/linuxserver/healthchecks:latest
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+      #- t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 8000:8000   # Web UI
+      - 2525:2525   # Port for inbound SMTP pings
+    volumes:
+      - /storage/Docker/healthchecks/config:/config
+    environment:
+      # Standard linuxserver.io variables
+      - DOCKER_MODS=linuxserver/mods:universal-tshoot|linuxserver/mods:universal-apprise
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      # Image specific variables
+      - SITE_ROOT=https://healthchecks.DOMAINNAME0   # The site's top-level URL and the port it listens to if different than 80 or 443 (e.g., https://healthchecks.example.com:8000).
+      - SITE_NAME=Self Hosted Healthchecks  # The site's name (e.g., "Example Corp HealthChecks").
+      - SUPERUSER_EMAIL=$HEALTHCHECKS_SUPERUSER_EMAIL   # Superuser email.
+      - SUPERUSER_PASSWORD=$HEALTHCHECKS_SUPERUSER_PASSWORD   # Superuser password - same password as healthchecks.io account
+      - ALLOWED_HOSTS=192.168.0.222,healthchecks.DOMAINNAME0,monitoring,monitoring.DOMAINNAME0 # (optional) A comma-separated list of valid hostnames for the server. Default is the domain portion of SITE_ROOT.
+      - APPRISE_ENABLED=True # (optional) Set to True to enable the Apprise integration (https://github.com/caronc/apprise).
+      - CSRF_TRUSTED_ORIGINS= # (optional) A list of trusted origins for unsafe requests (e.g. POST). Defaults to the value of SITE_ROOT.
+      - DEBUG=False # (optional) Set to False to disable. Debug mode relaxes CSRF protections and increases logging verbosity but should be disabled for production instances as it will impact performance and security.
+      - DEFAULT_FROM_EMAIL=$HEALTHCHECKS_EMAIL_SMTP_SENDER # (optional) 
+      - EMAIL_HOST=$HEALTHCHECKS_EMAIL_SMTP_URL # (optional)
+      - EMAIL_PORT=$HEALTHCHECKS_EMAIL_SMTP_TLS_PORT # (optional)
+      - EMAIL_HOST_USER=$HEALTHCHECKS_EMAIL_SMTP_USER # (optional)
+      - EMAIL_HOST_PASSWORD=$HEALTHCHECKS_EMAIL_SMTP_PASS # (optional)
+      - EMAIL_USE_TLS=True # (optional) Use TLS for SMTP (True or False).
+      - INTEGRATIONS_ALLOW_PRIVATE_IPS=True # (optional) Defaults to False. Set to True to allow integrations to connect to private IP addresses.
+      - PING_EMAIL_DOMAIN= # (optional) The domain to use for generating ping email addresses. Defaults to localhost.
+      - RP_ID= # (optional) If using webauthn for 2FA set this to match your Healthchecks domain. Webauthn will only work over https.
+      - SECRET_KEY= # (optional) A secret key used for cryptographic signing. Will generate a random value if one is not supplied and save it to /config/local_settings.py.
+      - SITE_LOGO_URL=https://www.flaticon.com/free-icon/health-check_10459850 # (optional) Full URL to custom site logo.
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      #- "traefik.enable=true"
+      ### HTTP Routers
+      #- "traefik.http.routers.healthchecks-rtr.entrypoints=https"
+      #- "traefik.http.routers.healthchecks-rtr.rule=Host(`healthchecks.DOMAINNAME0`)"
+      ### Middlewares
+      ##- "traefik.http.routers.healthchecks-rtr.middlewares=chain-basic-auth@file" 
+      #- "traefik.http.routers.healthchecks-rtr.middlewares=chain-no-auth@file"
+      ##- "traefik.http.routers.healthchecks-rtr.middlewares=chain-authelia@file"
+      ### HTTP Services
+      #- "traefik.http.routers.healthchecks-rtr.service=healthchecks-svc"
+      #- "traefik.http.services.healthchecks-svc.loadbalancer.server.port=9443"
+      #- "traefik.http.services.healthchecks-svc.loadbalancer.server.scheme=https"
+
+
+#-----------------------------------------------------------------------------------------------------------
+
+  #############################
+  ###       EXPORTERS       ###
+  #############################
+
+  # OCTOGRAPH - PULL ENERGY STATS FROM OCTOPUS
+  # https://github.com/stevenewey/octograph
+  # Releases: https://hub.docker.com/r/jackyaz/octograph/tags
+  # 20220109: Only a 'latest' tag available so using it, added to docker hub on 1st Jan 2022.
+  #           Prob best to use anyway in case API changes so it should hopefully stay up to date.
+  # Copy example config file from container with (run container without vol mounted):
+  # docker cp octograph:/octograph/config/example-octograph.ini /storage/Docker/octograph/data/
+  # Updates metrics at 5 past midnight.
+  octograph:
+    image: jackyaz/octograph:latest
+    container_name: octograph
+    restart: unless-stopped
+    networks:
+      - default 
+    volumes:
+      - /storage/Docker/octograph/data:/octograph/config
+      - /var/log/docker/octograph:/octograph/config/logs
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # UNIFI POLLER - MONITOR UNIFI DEVICES (NOT EDGEROUTER)
+  # https://unpoller.com/docs/install/dockercompose
+  # Releases:
+  # Releases:
+  # 20220109: Existing v2.1.3 is the latest numbered image from '9 months ago'.
+  #           There is a 'master_linux_amd64' from 7 months ago but will stick with numbered.
+  # 20230819: Updated from 2.1.3 to v2.8.1 & image name changed from 'golift/unifi-poller' to 'ghcr.io/unpoller/unpoller'
+  # 20231004: Updated from 2.8.1 to v2.9.2
+  unpoller:
+    image: ghcr.io/unpoller/unpoller:v2.9.2
+    container_name: unpoller
+    restart: unless-stopped
+    networks:
+      - default # For prometheus scrape
+      #- t2_proxy # Add to this network to allow use of 'unifi' hostname in controller URL instead of IP address.
+    ports:
+      - 9130:9130
+    environment:
+      - UP_INFLUXDB_DISABLE=true
+      - UP_POLLER_DEBUG=false
+      - UP_UNIFI_DYNAMIC=false
+      - UP_PROMETHEUS_HTTP_LISTEN=0.0.0.0:9130
+      - UP_PROMETHEUS_NAMESPACE=unifipoller
+      - UP_UNIFI_CONTROLLER_0_USER=admin
+      - UP_UNIFI_CONTROLLER_0_PASS=$UP_UNIFI_CONTROLLER_0_PASS # Escape any $ with another $. 
+      - UP_UNIFI_CONTROLLER_0_SAVE_ALARMS=true
+      - UP_UNIFI_CONTROLLER_0_SAVE_ANOMALIES=true
+      - UP_UNIFI_CONTROLLER_0_SAVE_DPI=true
+      - UP_UNIFI_CONTROLLER_0_SAVE_EVENTS=true
+      - UP_UNIFI_CONTROLLER_0_SAVE_IDS=true
+      - UP_UNIFI_CONTROLLER_0_SAVE_SITES=true
+      - UP_UNIFI_CONTROLLER_0_URL=https://192.168.0.227:8443
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # SNMP EXPORTER
+  # https://github.com/prometheus/snmp_exporter
+  snmp-exporter:
+    image: prom/snmp-exporter
+    container_name: snmp-exporter
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - default
+    # Only needed if accessing outside docker network
+    ports:
+      - 9116:9116
+    volumes:
+      - /storage/Docker/snmp-exporter/data/snmp.yml:/snmp.yml:ro
+    command:
+      - --config.file=/snmp.yml
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+  # NETFLOW EXPORTER
+  # https://github.com/hatamiarash7/NetFlow-Exporter
+  netflow-exporter:
+    image: hatamiarash7/netflow-exporter
+    container_name: netflow-exporter
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - default
+    # Only needed if accessing outside docker network
+    ports:
+      - 9438:9438   # Prometheus metrics
+      - 2055:2055/udp   # Push netflow metrics from netflow server to this port
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+
+#-----------------------------------------------------------------------------------------------------------
+
+  #############################
+  ###         INFLUX        ###
+  #############################
+
+  # INFLUXDB - DATABASE FOR SENSOR DATA
+  # Before first run, create config file with:
+  # docker run --rm influxdb influxd print-config > /storage/Docker/influxdb/data/config/influxdb.conf
+  # Set DOCKER_INFLUXDB_INIT_MODE=setup at first run to generate user account detailed using env vars.
+  # Releases: https://hub.docker.com/_/influxdb?tab=tags
+  # Releases: https://github.com/influxdata/influxdb/releases
+  # 20220109: moved from 1.8 to 1.8.10
+  influxdb:
+    image: influxdb:1.8.10 # Latest v1 release.
+    container_name: influxdb
+    restart: unless-stopped
+    networks:
+      - default
+      #- t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 8086:8086
+    volumes:
+      - /storage/Docker/influxdb/data/data:/var/lib/influxdb
+      - /storage/Docker/influxdb/data/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+    secrets:
+      # Only use this section if using secrets files as specified in secrets block above.
+      # Secrets are saved inside container in /run/secrets/<name>
+      - influxdb_admin_password
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      ##----------- TRAEFIK LABELS -----------#
+      #- "traefik.enable=true"
+      ### HTTP Routers
+      #- "traefik.http.routers.influxdb-rtr.entrypoints=https"
+      #- "traefik.http.routers.influxdb-rtr.rule=Host(`influxdb.DOMAINNAME0`)"
+      ### Middlewares
+      #- "traefik.http.routers.influxdb-rtr.middlewares=chain-no-auth@file"
+      ### HTTP Services
+      #- "traefik.http.routers.influxdb-rtr.service=influxdb-svc"
+      #- "traefik.http.services.influxdb-svc.loadbalancer.server.port=8086"
+
+  # CHRONOGRAF - GUI FOR INFLUXDB ADMIN
+  # InfluxDB now has a GUI so no need for Chronograf any longer.
+  # Releases: https://github.com/influxdata/chronograf/releases
+  # 20220109: Existing tag 1.9.1 remains latest
+  # 20220722: Upgraded from 1.9.1 to 1.9.4
+  chronograf:
+    container_name: chronograf
+    image: chronograf:1.9.4
+    restart: unless-stopped
+    command: 
+      - --influxdb-url=http://influxdb:8086
+    networks:
+      #- t2_proxy
+      - default
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /storage/Docker/chronograf/data:/var/lib/chronograf
+    ports:
+      - 8087:8888
+    environment:
+      - TZ=Europe/London
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      ##----------- TRAEFIK LABELS -----------#
+      #- "traefik.enable=true"
+      ### HTTP Routers
+      #- "traefik.http.routers.chronograf-rtr.entrypoints=https"
+      #- "traefik.http.routers.chronograf-rtr.rule=Host(`chronograf.DOMAINNAME0`)"
+      ### Middlewares
+      #- "traefik.http.routers.chronograf-rtr.middlewares=chain-authelia@file"
+      ### HTTP Services
+      #- "traefik.http.routers.chronograf-rtr.service=chronograf-svc"
+      #- "traefik.http.services.chronograf-svc.loadbalancer.server.port=8888"
+
+
+# KLIPPER
+# https://github.com/scross01/prometheus-klipper-exporter
+# https://github.com/scross01/prometheus-klipper-exporter/blob/main/example/docker-compose.yml
+# https://grafana.com/grafana/dashboards/18467-klipper-dashboard/
+
+  klipper-exporter:
+    container_name: klipper-exporter
+    #hostname: klipper-exporter
+    image: ghcr.io/scross01/prometheus-klipper-exporter:latest
+    restart: unless-stopped
+    networks:
+      #- t2_proxy
+      - default
+    security_opt:
+      - no-new-privileges:true
+    # Expose doesn't open ports externally but does allow comms between containers on same host
+    #expose:
+    #  - 9101
+    ports:
+      - 9101:9101
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      ##----------- TRAEFIK LABELS -----------#
+      #- "traefik.enable=true"
+      ### HTTP Routers
+      #- "traefik.http.routers.klipper-exporter-rtr.entrypoints=https"
+      #- "traefik.http.routers.klipper-exporter-rtr.rule=Host(`klipper-exporter.DOMAINNAME0`)"
+      ### Middlewares
+      #- "traefik.http.routers.klipper-exporter-rtr.middlewares=chain-authelia@file"
+      ### HTTP Services
+      #- "traefik.http.routers.klipper-exporter-rtr.service=klipper-exporter-svc"
+      #- "traefik.http.services.klipper-exporter-svc.loadbalancer.server.port=9101"
+
+
+  # PVE EXPORTER
+  # https://github.com/prometheus-pve/prometheus-pve-exporter
+  # If monitoring multiple PVE instances then set PVE Exporter username and password for each to the same value.
+  # Get metrics for specific target with this URL syntax:
+  #   http://192.168.0.222:9221/pve?target=192.168.0.13&cluster=1&node=1
+  pve-exporter:
+    image: prompve/prometheus-pve-exporter:latest
+    container_name: pve-exporter
+    restart: unless-stopped
+    networks:
+      #- t2_proxy
+      - default
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "9221:9221"
+    # Optional config file if preferred instead of environment variables
+    #volumes:
+    #  - /storage/Docker/pve-exporter/data/pve.yml:/etc/prometheus/pve.yml
+    environment:
+      # If the PVE_USER environment variable exists, then configuration is taken
+      # from the environment instead of from the pve.yml config file. 
+      # If monitoring multiple PVE instances then set username for each to the same value.
+      - PVE_USER=pve-exporter@pve   # User name
+      # Required for password authentication:
+      # If monitoring multiple PVE instances then set password for each to the same value.
+      - PVE_PASSWORD=$PVE_PASSWORD ## User password
+      # Required for token authentication:
+      #- PVE_TOKEN_NAME=token-name
+      #- PVE_TOKEN_VALUE=token-value
+      # Optional:
+      - PVE_VERIFY_SSL=false  # Either true or false, whether or not to verify PVE tls certificate. Defaults to true.
+      #- PVE_MODULE=default  # Name of the configuration module. Defaults to default.
+    # Optional pve-exporter command args
+    command:
+      # Exposes PVE onboot status metrics
+      - --no-collector.config
+      # Exposes PVE replication info metrics
+      - --no-collector.replication
+    labels:
+      - org.label-schema.group=monitoring
+  
+
+  # PBS EXPORTER
+  # https://github.com/natrontech/pbs-exporter
+  # In future we will hopefully only need one instance of the exporter service to query
+  # multiple PBS instances. See git issue tracking progress:
+  # https://github.com/natrontech/pbs-exporter/issues/56
+  pbs-exporter-gerald:
+    #build: .
+    image: ghcr.io/natrontech/pbs-exporter:latest
+    container_name: pbs-exporter-gerald
+    user: '65534'
+    restart: unless-stopped
+    networks:
+      #- t2_proxy
+      - default
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "10019:10019" # If multiple exporter instances then change public port to avoid clashes.
+    environment:
+      - PBS_LOGLEVEL=info  # Either debug or info
+      - PBS_ENDPOINT=https://192.168.0.12:8007
+      - PBS_TIMEOUT=10s
+      - PBS_INSECURE=true
+      - PBS_USERNAME=root@pam
+      - PBS_API_TOKEN_NAME=pbs-exporter
+      - PBS_API_TOKEN=$PBS_API_TOKEN_GERALD
+      #-PBS_METRICS_PATH=/metrics
+      #-PBS_LISTEN_ADDRESS=0.0.0.0:10019
+      # We can use secret files for our API tokens if we want. 
+      # Our tokens have limited permissions so no real danger if they get exposed. 
+      #- PBS_USERNAME_FILE=/run/secrets/proxmoxbackup-username
+      #- PBS_API_TOKEN_NAME_FILE=/run/secrets/proxmoxbackup-api-token-name
+      #- PBS_API_TOKEN_FILE=/run/secrets/proxmoxbackup-api-token
+    #secrets:
+    #- proxmoxbackup-username
+    #- proxmoxbackup-api-token-name
+    #- proxmoxbackup-api-token
+    labels:
+      - org.label-schema.group=monitoring
+
+  pbs-exporter-becky:
+    #build: .
+    image: ghcr.io/natrontech/pbs-exporter:latest
+    container_name: pbs-exporter-becky
+    user: '65534'
+    restart: unless-stopped
+    networks:
+      #- t2_proxy
+      - default
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "10020:10019" # If multiple exporter instances then change public port to avoid clashes.
+    environment:
+      - PBS_LOGLEVEL=info  # Either debug or info
+      - PBS_ENDPOINT=https://192.168.0.13:8007
+      - PBS_TIMEOUT=10s
+      - PBS_INSECURE=true
+      - PBS_USERNAME=root@pam
+      - PBS_API_TOKEN_NAME=pbs-exporter
+      - PBS_API_TOKEN=$PBS_API_TOKEN_BECKY
+    labels:
+      - org.label-schema.group=monitoring
+
+# Cloudflare Exporter
+# https://github.com/lablabs/cloudflare-exporter
+# Grafana dashboard here: https://grafana.com/grafana/dashboards/13133
+#-----------------------------------------------------------
+# The 'FREE_TIER' env var doesn't work in the lablabs image.
+# See: github.com/lablabs/cloudflare-exporter/issues/32
+# We can try forks of the image:
+#     cyb3rjak3/cloudflare-exporter     DIDN'T WORK
+#     luminiss/cloudflare-exporter      DIDN'T WORK
+#-----------------------------------------------------------
+# We can instead use GraphQL queries directly from Grafana.
+# See Obsidian notes
+#-----------------------------------------------------------
+#  cloudflare-exporter:
+#    image: lablabs/cloudflare-exporter
+#    container_name: cloudflare-exporter
+#    restart: unless-stopped
+#    networks:
+#      - default # To let Prometheus access
+#    ports:
+#      - 18080:18080 # Changed port via env var below (default: 8080)
+#    environment:
+#      # Can authenticate with either CF email + Global API Key (this gives service FULL access to our CF configuration)
+#      # or authenticate with specifically created API token with limited scope (Analytics:Read; Account.Account Analytics:Read; Account Settings:Read)
+#      # Obviously prefer the limited access option!!
+#      #- CF_API_EMAIL=XXXX                              # Only needed if using email + global key authentication
+#      #- CF_API_KEY=XXXX                                # Only needed if using email + global key authentication
+#      #- CF_API_TOKEN=$CF_API_TOKEN_ANALYTICS           # Comment out if using email + global key authentication
+#      - FREE_TIER=true                                  # Select only metrics included in free tier (default:false)
+#      - LISTEN=0.0.0.0:18080                            # Change port to server metrics (default: 8080)
+#      #- METRICS_PATH=/metrics                          # Change metrics path (default: /metrics)
+#      #- SCRAPE_DELAY=300                               # Change frequency of scrape from CF in seconds (default: 300)
+#      #- CF_BATCH_SIZE=10                               # CF request zones batch size, from 1-10 (default: 10)
+#      #- CF_ZONES=$CF_ZONES                             # (Optional) cloudflare zones to export, comma delimited list of zone ids. If not set, all zones from account are exported
+#      #- CF_EXCLUDE_ZONES=                              # (Optional) cloudflare zones to exclude, comma delimited list of zone ids. If not set, no zones from account are excluded
+#    labels:
+#      - org.label-schema.group=monitoring
+#      #------------- WATCHTOWER -------------#
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+#-----------------------------------------------------------------------------------------------------------
+
+  #############################
+  ###         UNUSED        ###
+  #############################
+
+  ## SWITCHED TO A 'BARE-METAL' INSTALLATION
+  ## NODE EXPORTER (BY PROMETHEUS) - PROMETHEUS EXPORTER FOR HOST SYSTEM
+  ## Originally from dockprom stack (https://github.com/stefanprodan/dockprom)
+  ## Lots of available plugins including text file ingest.
+  ## https://github.com/prometheus/node_exporter
+  ## Releases: https://hub.docker.com/r/prom/node-exporter/tags
+  ## Releases: https://github.com/prometheus/node_exporter/releases
+  ## 20220109: Existing tag v1.3.1 remains the latest ('master' will get bleeding edge)
+  ## 20220722: Existing tag v1.3.1 remains the latest ('master' will get bleeding edge)
+  ## 20230819: Updated from v1.3.1 to 1.6.1
+  #nodeexporter:
+  #  image: prom/node-exporter:v1.6.1
+  #  container_name: nodeexporter
+  #  restart: unless-stopped
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  networks:
+  #    #- t2_proxy
+  #    - default
+  #  ports:
+  #    - 7005:9100
+  #  volumes:
+  #    - /storage/Docker/nodeexporter/textfile_collector:/var/lib/node_exporter/textfile_collector
+  #    - /proc:/host/proc:ro
+  #    - /sys:/host/sys:ro
+  #    #- /run:/host/run:ro
+  #    #- /var:/host/var:ro
+  #    - /:/rootfs:ro
+  #    #- /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket # For systemd collector
+  #  command:
+  #    - --path.procfs=/host/proc
+  #    - --path.rootfs=/rootfs
+  #    - --path.sysfs=/host/sys
+  #    - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
+  #    - --collector.textfile.directory=/var/lib/node_exporter/textfile_collector
+  #    - --no-collector.conntrack
+  #    - --no-collector.filefd
+  #    - --no-collector.softnet
+  #    #- --collector.systemd
+  #    # Normal 'node_network' doesn't grab our network interface info so enabling 'ethtool'
+  #    # To see type of data collected try: ethtool -S enp4s0
+  #    # As of Oct 21 - issues with ethtool not working properly (duplicate devices maybe???)
+  #    # Updates to ethtool pending in upcoming Node Exporter.
+  #    #- --collector.ethtool
+  #    #- --collector.ethtool.metrics-include="" # Specify metrics to include using regex
+  #    #- --collector.ethtool.device-exclude="*veth*" # Include all devices except those starting with 'veth'
+  #    #- --collector.ethtool.device-include="^enp4s0[^.+]" # Include 'enp4s0', exclude anything else
+  #  labels:
+  #    - org.label-schema.group=monitoring
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+  #    ###----------- TRAEFIK LABELS -----------#
+  #    ## Not needed unless comunicating outside docker network.
+  #    ## Enable t2_proxy network above too
+  #    #- "traefik.enable=true"
+  #    ### HTTP Routers
+  #    #- "traefik.http.routers.nodeexporter-rtr.entrypoints=https"
+  #    #- "traefik.http.routers.nodeexporter-rtr.rule=Host(`nodeexporter.DOMAINNAME0`)"
+  #    ### Middlewares
+  #    #- "traefik.http.routers.nodeexporter-rtr.middlewares=chain-no-auth@file"
+  #    ### HTTP Services
+  #    #- "traefik.http.routers.nodeexporter-rtr.service=nodeexporter-svc"
+  #    #- "traefik.http.services.nodeexporter-svc.loadbalancer.server.port=9100"
+
+  ## TELEGRAF - HOST METRICS
+  ## TRYING TO RE-CREATE MONITORING WITHOUT TELEGRAF
+  ## Releases: https://hub.docker.com/_/telegraf?tab=tags
+  ## Releases: https://github.com/influxdata/telegraf/releases
+  ## 20220109: Upgraded from 1.20.2 to 1.21.2
+  ## 20220722: Upgraded from 1.21.2 to 1.23.2
+  ## 20230819: Upgraded from 1.23.2 to 1.27.3
+  #telegraf:
+  #  container_name: telegraf
+  #  image: telegraf:1.27.3
+  #  restart: unless-stopped
+  #  networks:
+  #    - socket_proxy
+  #    - default
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  ports:
+  #     - 161:161
+  #     #- 9273:9273 # Where Prometheus metrics are published if enabled. At '/metrics' endpoint.
+  #  volumes:
+  #    - /storage/Docker/telegraf/data/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+  #    - /storage/Docker/telegraf/data/execs/crush-temp-cpu:/usr/local/bin/execs/crush-temp-cpu
+  #    - /storage/Docker/telegraf/data/execs/crush-net:/usr/local/bin/execs/crush-net
+  #    #- /storage/Docker/telegraf/data/mibs:/root/.snmp/mibs:ro
+  #    - /storage/Docker/telegraf/data/mibs:/usr/share/snmp/mibs/:ro
+  #    - /var/log/docker/telegraf:/var/log/telegraf
+  #    - /var/run/docker.sock:/var/run/docker.sock:ro # Use socket-proxy if possible
+  #    - /:/hostfs:ro
+  #    - /usr/bin/speedtest:/usr/bin/speedtest # If using telegraf exec input for speedtest (requires speedtest-cli binary - non python version)
+  #  environment:
+  #    # Required for operation...
+  #    - HOST_ETC=/hostfs/etc
+  #    - HOST_PROC=/hostfs/proc
+  #    - HOST_SYS=/hostfs/sys
+  #    - HOST_VAR=/hostfs/var
+  #    - HOST_RUN=/hostfs/run
+  #    - HOST_MOUNT_PREFIX=/hostfs
+  #    - INFLUX_SOCKET_PROXY=tcp://socket-proxy:2375
+  #    #- INFLUX_HOST=$INFLUX_HOST_SAMENET # For influx v2 listener service
+  #    #- INFLUX_TOKEN=$INFLUX_TOKEN # For influx v2 listener service
+  #    #- INFLUX_ORG=$INFLUX_ORG # For influx v2 listener service
+  #    #- INFLUX_BUCKET=telegraf # For influx v2 listener service
+  #  labels:
+  #    - org.label-schema.group=monitoring
+  #    #------------- WATCHTOWER -------------#
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+
+
+
+########################### VOLUMES
+
+# We can use NFS volumes to use our NAS as a data store.
+# e.g.
+
+#volumes:
+#  # NFS Volume
+#  crush-nfs-ne-textfile-collector:
+#    driver: local
+#    driver_opts:
+#      type: "nfs"
+#      device: ":/storage/Docker/nodeexporter/textfile_collector"
+#      # The nolock and soft options ensure that Docker does not freeze if the connection to the NFS server is lost.
+#      o: "addr=192.168.0.10,rw"
+
+# For info: Host /etc/fstab entry
+#192.168.0.10:/storage/scratchpad/frigate/ /storage/scratchpad/frigate/ nfs _netdev,soft,noatime,rsize=32768,wsize=32768 0 0 

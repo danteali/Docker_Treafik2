@@ -1,0 +1,2095 @@
+{
+  "id": 45,
+  "uid": "d481dc8c-ce5f-4f68-bf17-8a477126c749",
+  "title": "Alerts",
+  "uri": "db/alerts",
+  "url": "/dashboards/f/d481dc8c-ce5f-4f68-bf17-8a477126c749/alerts",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 56,
+  "uid": "fb2b30e2-66d0-4c15-9ba9-464d36c4b5c0",
+  "title": "NonProd",
+  "uri": "db/nonprod",
+  "url": "/dashboards/f/fb2b30e2-66d0-4c15-9ba9-464d36c4b5c0/nonprod",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 38,
+  "uid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "title": "OfficialDashboards",
+  "uri": "db/officialdashboards",
+  "url": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/officialdashboards",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 33,
+  "uid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+  "title": "Temp",
+  "uri": "db/temp",
+  "url": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/temp",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 35,
+  "uid": "c09552b0-b52e-498a-b669-dca40886ae9c",
+  "title": "ZZZ-OLD-Non-Production-&-WIP",
+  "uri": "db/zzz-old-non-production-and-wip",
+  "url": "/dashboards/f/c09552b0-b52e-498a-b669-dca40886ae9c/zzz-old-non-production-and-wip",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 36,
+  "uid": "f308bf71-fff8-4357-9a66-324aeac6cc6f",
+  "title": "ZZZ-OLD-Production",
+  "uri": "db/zzz-old-production",
+  "url": "/dashboards/f/f308bf71-fff8-4357-9a66-324aeac6cc6f/zzz-old-production",
+  "slug": "",
+  "type": "dash-folder",
+  "tags": [],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 160,
+  "uid": "aezd1bj31xjwgb",
+  "title": "_Alert List",
+  "uri": "db/alert-list",
+  "url": "/d/aezd1bj31xjwgb/alert-list",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "alerts",
+    "production"
+  ],
+  "isStarred": false,
+  "folderId": 45,
+  "folderUid": "d481dc8c-ce5f-4f68-bf17-8a477126c749",
+  "folderTitle": "Alerts",
+  "folderUrl": "/dashboards/f/d481dc8c-ce5f-4f68-bf17-8a477126c749/Alerts",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 27,
+  "uid": "MPZlkoQmk",
+  "title": "_Home (WIP)",
+  "uri": "db/home-wip",
+  "url": "/d/MPZlkoQmk/home-wip",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 35,
+  "folderUid": "c09552b0-b52e-498a-b669-dca40886ae9c",
+  "folderTitle": "ZZZ-OLD-Non-Production-&-WIP",
+  "folderUrl": "/dashboards/f/c09552b0-b52e-498a-b669-dca40886ae9c/ZZZ-OLD-Non-Production-&-WIP",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 28,
+  "uid": "r9DNEbA7z",
+  "title": "_Home_Summary_1 (WIP)",
+  "uri": "db/home-summary-1-wip",
+  "url": "/d/r9DNEbA7z/home-summary-1-wip",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "playlist-999"
+  ],
+  "isStarred": false,
+  "folderId": 35,
+  "folderUid": "c09552b0-b52e-498a-b669-dca40886ae9c",
+  "folderTitle": "ZZZ-OLD-Non-Production-&-WIP",
+  "folderUrl": "/dashboards/f/c09552b0-b52e-498a-b669-dca40886ae9c/ZZZ-OLD-Non-Production-&-WIP",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 29,
+  "uid": "COHMwxAnz",
+  "title": "_Home_Summary_2 (WIP)",
+  "uri": "db/home-summary-2-wip",
+  "url": "/d/COHMwxAnz/home-summary-2-wip",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "playlist-999"
+  ],
+  "isStarred": false,
+  "folderId": 35,
+  "folderUid": "c09552b0-b52e-498a-b669-dca40886ae9c",
+  "folderTitle": "ZZZ-OLD-Non-Production-&-WIP",
+  "folderUrl": "/dashboards/f/c09552b0-b52e-498a-b669-dca40886ae9c/ZZZ-OLD-Non-Production-&-WIP",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 108,
+  "uid": "f3f0b38d-becb-4eb1-9d6a-d815b3080700",
+  "title": "Alerts Overview",
+  "uri": "db/alerts-overview",
+  "url": "/d/f3f0b38d-becb-4eb1-9d6a-d815b3080700/alerts-overview",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "production"
+  ],
+  "isStarred": false,
+  "folderId": 45,
+  "folderUid": "d481dc8c-ce5f-4f68-bf17-8a477126c749",
+  "folderTitle": "Alerts",
+  "folderUrl": "/dashboards/f/d481dc8c-ce5f-4f68-bf17-8a477126c749/Alerts",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 127,
+  "uid": "b1a5f6fc-d253-4e4f-acdb-a0c7cfe6f01b",
+  "title": "At A Glance #1",
+  "uri": "db/at-a-glance-23-1",
+  "url": "/d/b1a5f6fc-d253-4e4f-acdb-a0c7cfe6f01b/at-a-glance-23-1",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "summary"
+  ],
+  "isStarred": false,
+  "folderId": 33,
+  "folderUid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+  "folderTitle": "Temp",
+  "folderUrl": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/Temp",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 96,
+  "uid": "ee4759ca-2b5e-4697-98cc-01a388fc64f0",
+  "title": "Cadvisor - Docker Containers",
+  "uri": "db/cadvisor-docker-containers",
+  "url": "/d/ee4759ca-2b5e-4697-98cc-01a388fc64f0/cadvisor-docker-containers",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cadvisor",
+    "docker",
+    "nodeexporter",
+    "production",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 103,
+  "uid": "a241ead3-2969-4cfa-811c-b604ce520e01",
+  "title": "Cadvisor - Docker Host & Container Overview (395)",
+  "uri": "db/cadvisor-docker-host-and-container-overview-395",
+  "url": "/d/a241ead3-2969-4cfa-811c-b604ce520e01/cadvisor-docker-host-and-container-overview-395",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 102,
+  "uid": "a4365a73-8093-4909-acec-b8dc03ffd750",
+  "title": "Cadvisor - Kubernetes cluster monitoring (315)",
+  "uri": "db/cadvisor-kubernetes-cluster-monitoring-315",
+  "url": "/d/a4365a73-8093-4909-acec-b8dc03ffd750/cadvisor-kubernetes-cluster-monitoring-315",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cadvisor",
+    "docker",
+    "kubernetes",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 46,
+  "uid": "pMEd7m0Mz2",
+  "title": "Cadvisor exporter (14282)",
+  "uri": "db/cadvisor-exporter-14282",
+  "url": "/d/pMEd7m0Mz2/cadvisor-exporter-14282",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cadvisor",
+    "docker",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 75,
+  "uid": "f5872027-337f-435f-b8d8-7df3205ab916",
+  "title": "Cadvisor exporter (14282) - Tweaked Variables",
+  "uri": "db/cadvisor-exporter-14282-tweaked-variables",
+  "url": "/d/f5872027-337f-435f-b8d8-7df3205ab916/cadvisor-exporter-14282-tweaked-variables",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cadvisor",
+    "docker",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 151,
+  "uid": "be7vq07ornk00f",
+  "title": "Cloudflare (GraphQL) DNS Analytics (22568)",
+  "uri": "db/cloudflare-graphql-dns-analytics-22568",
+  "url": "/d/be7vq07ornk00f/cloudflare-graphql-dns-analytics-22568",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 149,
+  "uid": "cdp8mrudwy1hcb",
+  "title": "Cloudflare (GraphQL) Zone Analytics (21368)",
+  "uri": "db/cloudflare-graphql-zone-analytics-21368",
+  "url": "/d/cdp8mrudwy1hcb/cloudflare-graphql-zone-analytics-21368",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cloudflare",
+    "graphql"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 150,
+  "uid": "ukV4w2J4z",
+  "title": "Cloudflare (GrqphQL) Account Analytics (21367)",
+  "uri": "db/cloudflare-grqphql-account-analytics-21367",
+  "url": "/d/ukV4w2J4z/cloudflare-grqphql-account-analytics-21367",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "Cloudflare",
+    "GraphQL"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 148,
+  "uid": "mWxtnz5Mza",
+  "title": "CloudFlare (Prometheus) API Analytics and Firewall WAF (22131)",
+  "uri": "db/d74f1401-d3d2-59f0-84f0-da6876cec002",
+  "url": "/d/mWxtnz5Mza/d74f1401-d3d2-59f0-84f0-da6876cec002",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "Cloudflare",
+    "public"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 152,
+  "uid": "V1SL92dVo",
+  "title": "Cloudflare (Prometheus) Tunnels (18020)",
+  "uri": "db/cloudflare-prometheus-tunnels-18020",
+  "url": "/d/V1SL92dVo/cloudflare-prometheus-tunnels-18020",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "Cloudflare Tunnels",
+    "cloudflared"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 147,
+  "uid": "V1SL92dVn1",
+  "title": "Cloudflare (Prometheus) Tunnels - cloudflared (17457)",
+  "uri": "db/cloudflare-prometheus-tunnels-cloudflared-17457",
+  "url": "/d/V1SL92dVn1/cloudflare-prometheus-tunnels-cloudflared-17457",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "Cloudflare Tunnels",
+    "cloudflared"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 146,
+  "uid": "mWxtnz5Mz",
+  "title": "CloudFlare (Prometheus) Zone Analytics (13133)",
+  "uri": "db/cloudflare-prometheus-zone-analytics-13133",
+  "url": "/d/mWxtnz5Mz/cloudflare-prometheus-zone-analytics-13133",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 154,
+  "uid": "cexvhxdrlo1s0f",
+  "title": "Cloudflare Account Analytics [GraphQL] (21367)",
+  "uri": "db/cloudflare-account-analytics-graphql-21367",
+  "url": "/d/cexvhxdrlo1s0f/cloudflare-account-analytics-graphql-21367",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cloudflare",
+    "graphql",
+    "production"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 153,
+  "uid": "bexvh9k64nmyof",
+  "title": "Cloudflare DNS Analytics [GraphQL] (22568)",
+  "uri": "db/cloudflare-dns-analytics-graphql-22568",
+  "url": "/d/bexvh9k64nmyof/cloudflare-dns-analytics-graphql-22568",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cloudflare",
+    "dns",
+    "production"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 143,
+  "uid": "V1SL92dVn",
+  "title": "Cloudflare Tunnels (17457)",
+  "uri": "db/cloudflare-tunnels-17457",
+  "url": "/d/V1SL92dVn/cloudflare-tunnels-17457",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "Cloudflare Tunnels",
+    "cloudflared"
+  ],
+  "isStarred": false,
+  "folderId": 33,
+  "folderUid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+  "folderTitle": "Temp",
+  "folderUrl": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/Temp",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 155,
+  "uid": "aexvi5zuyvta8d",
+  "title": "Cloudflare Zone Analytics [GraphQL] (21368)",
+  "uri": "db/cloudflare-zone-analytics-graphql-21368",
+  "url": "/d/aexvi5zuyvta8d/cloudflare-zone-analytics-graphql-21368",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cloudflare",
+    "graphql",
+    "production"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 101,
+  "uid": "e9a5dddc-01ea-4bd8-a111-45a8e5c3b378",
+  "title": "Crowdsec",
+  "uri": "db/crowdsec",
+  "url": "/d/e9a5dddc-01ea-4bd8-a111-45a8e5c3b378/crowdsec",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "crowdsec",
+    "production",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 52,
+  "uid": "6L2GdB47z2",
+  "title": "Crowdsec Details per instance (GitHub)",
+  "uri": "db/crowdsec-details-per-instance-github",
+  "url": "/d/6L2GdB47z2/crowdsec-details-per-instance-github",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "crowdsec",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 50,
+  "uid": "e7sWOBVnk2",
+  "title": "Crowdsec Insight (GitHub)",
+  "uri": "db/crowdsec-insight-github",
+  "url": "/d/e7sWOBVnk2/crowdsec-insight-github",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "crowdsec",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 53,
+  "uid": "ofdKJG37k2",
+  "title": "Crowdsec LAPI Metrics (GitHub)",
+  "uri": "db/crowdsec-lapi-metrics-github",
+  "url": "/d/ofdKJG37k2/crowdsec-lapi-metrics-github",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "crowdsec",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 47,
+  "uid": "hjmZdB4nk2",
+  "title": "Crowdsec Overview (GitHub)",
+  "uri": "db/crowdsec-overview-github",
+  "url": "/d/hjmZdB4nk2/crowdsec-overview-github",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "crowdsec",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 105,
+  "uid": "aUec179i4",
+  "title": "Deluge Metrics (16080)",
+  "uri": "db/deluge-metrics-16080",
+  "url": "/d/aUec179i4/deluge-metrics-16080",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "deluge",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 1,
+  "uid": "deqTyKKnz",
+  "title": "Docker Containers (incl Monitoring Services)",
+  "uri": "db/docker-containers-incl-monitoring-services",
+  "url": "/d/deqTyKKnz/docker-containers-incl-monitoring-services",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 36,
+  "folderUid": "f308bf71-fff8-4357-9a66-324aeac6cc6f",
+  "folderTitle": "ZZZ-OLD-Production",
+  "folderUrl": "/dashboards/f/f308bf71-fff8-4357-9a66-324aeac6cc6f/ZZZ-OLD-Production",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 107,
+  "uid": "bfcf10be-1541-482c-a902-ba48950bb425",
+  "title": "Frigate (18226)",
+  "uri": "db/frigate-18226",
+  "url": "/d/bfcf10be-1541-482c-a902-ba48950bb425/frigate-18226",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "frigate",
+    "production",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 104,
+  "uid": "89VouM14z1",
+  "title": "Frigate (18226)",
+  "uri": "db/frigate-18226",
+  "url": "/d/89VouM14z1/frigate-18226",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "frigate",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 135,
+  "uid": "CgCw8jKZz31",
+  "title": "Go Exporter Metrics (14061)",
+  "uri": "db/go-exporter-metrics-14061",
+  "url": "/d/CgCw8jKZz31/go-exporter-metrics-14061",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "go",
+    "golang",
+    "production",
+    "prometheus",
+    "self"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 133,
+  "uid": "CgCw8jKZz",
+  "title": "Go Metrics (10826)",
+  "uri": "db/go-metrics-10826",
+  "url": "/d/CgCw8jKZz/go-metrics-10826",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 132,
+  "uid": "ypFZFgvmz",
+  "title": "Go Processes (6671)",
+  "uri": "db/go-processes-6671",
+  "url": "/d/ypFZFgvmz/go-processes-6671",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 134,
+  "uid": "CgCw8jKZz3",
+  "title": "Go Runtime Exporter Quickstart and Dashboardby Grafana Labs (14061)",
+  "uri": "db/74cd46bd-08bb-5231-b804-4d5e881fa69d",
+  "url": "/d/CgCw8jKZz3/74cd46bd-08bb-5231-b804-4d5e881fa69d",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "go",
+    "golang"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 48,
+  "uid": "f594ea85-45f2-4019-b988-2d17638b5cf32",
+  "title": "Healthchecks.io (18998)",
+  "uri": "db/healthchecks-io-18998",
+  "url": "/d/f594ea85-45f2-4019-b988-2d17638b5cf32/healthchecks-io-18998",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "healthchecks.io",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 99,
+  "uid": "b6860771-e173-46d2-8d2d-70827d4ef251",
+  "title": "Healthchecks.io (18998)",
+  "uri": "db/healthchecks-io-18998",
+  "url": "/d/b6860771-e173-46d2-8d2d-70827d4ef251/healthchecks-io-18998",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "healthchecks.io",
+    "production",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 2,
+  "uid": "7Nqpoj-ik",
+  "title": "Home Automation",
+  "uri": "db/home-automation",
+  "url": "/d/7Nqpoj-ik/home-automation",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 36,
+  "folderUid": "f308bf71-fff8-4357-9a66-324aeac6cc6f",
+  "folderTitle": "ZZZ-OLD-Production",
+  "folderUrl": "/dashboards/f/f308bf71-fff8-4357-9a66-324aeac6cc6f/ZZZ-OLD-Production",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 43,
+  "uid": "de3d8dbc-8de7-4d1f-b080-b11cb4eb5492",
+  "title": "Home Automation",
+  "uri": "db/home-automation",
+  "url": "/d/de3d8dbc-8de7-4d1f-b080-b11cb4eb5492/home-automation",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 33,
+  "folderUid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+  "folderTitle": "Temp",
+  "folderUrl": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/Temp",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 3,
+  "uid": "TTZhOIPiz",
+  "title": "Host",
+  "uri": "db/host",
+  "url": "/d/TTZhOIPiz/host",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 36,
+  "folderUid": "f308bf71-fff8-4357-9a66-324aeac6cc6f",
+  "folderTitle": "ZZZ-OLD-Production",
+  "folderUrl": "/dashboards/f/f308bf71-fff8-4357-9a66-324aeac6cc6f/ZZZ-OLD-Production",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 131,
+  "uid": "b80662b1-160b-4dbc-9f74-96424da7c1d1",
+  "title": "Klipper",
+  "uri": "db/klipper",
+  "url": "/d/b80662b1-160b-4dbc-9f74-96424da7c1d1/klipper",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "3d-printer",
+    "exporter",
+    "klipper",
+    "production",
+    "prometheus",
+    "self",
+    "sv06"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 130,
+  "uid": "3kDqZop4z",
+  "title": "Klipper Dashboard (18467)",
+  "uri": "db/klipper-dashboard-18467",
+  "url": "/d/3kDqZop4z/klipper-dashboard-18467",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 129,
+  "uid": "3kDqZop4z1",
+  "title": "Klipper Dashboard (from github repo)",
+  "uri": "db/klipper-dashboard-from-github-repo",
+  "url": "/d/3kDqZop4z1/klipper-dashboard-from-github-repo",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 106,
+  "uid": "f5208ab4-dcf1-42dd-b314-a1ce38457637",
+  "title": "Media (Plex - Sonarr - Radarr - Deluge)",
+  "uri": "db/media-plex-sonarr-radarr-deluge",
+  "url": "/d/f5208ab4-dcf1-42dd-b314-a1ce38457637/media-plex-sonarr-radarr-deluge",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "deluge",
+    "influxdb",
+    "plex",
+    "production",
+    "prometheus",
+    "radarr",
+    "sonarr",
+    "transmission",
+    "varken"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 4,
+  "uid": "iTbnha5mkasdf",
+  "title": "Media (Plex - Sonarr - Radarr - Transmission)",
+  "uri": "db/media-plex-sonarr-radarr-transmission",
+  "url": "/d/iTbnha5mkasdf/media-plex-sonarr-radarr-transmission",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 36,
+  "folderUid": "f308bf71-fff8-4357-9a66-324aeac6cc6f",
+  "folderTitle": "ZZZ-OLD-Production",
+  "folderUrl": "/dashboards/f/f308bf71-fff8-4357-9a66-324aeac6cc6f/ZZZ-OLD-Production",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 145,
+  "uid": "6UU5TBqGz21",
+  "title": "Minecraft",
+  "uri": "db/minecraft",
+  "url": "/d/6UU5TBqGz21/minecraft",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "cadvisor",
+    "fabric-exporter",
+    "minecraft",
+    "nodeexporter",
+    "production",
+    "prometheus",
+    "velocity-exporter"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 5,
+  "uid": "6UU5TBqGz",
+  "title": "Minecraft",
+  "uri": "db/minecraft",
+  "url": "/d/6UU5TBqGz/minecraft",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 36,
+  "folderUid": "f308bf71-fff8-4357-9a66-324aeac6cc6f",
+  "folderTitle": "ZZZ-OLD-Production",
+  "folderUrl": "/dashboards/f/f308bf71-fff8-4357-9a66-324aeac6cc6f/ZZZ-OLD-Production",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 120,
+  "uid": "6UU5TBqGz1",
+  "title": "Minecraft - Fabric Exporter (14492)",
+  "uri": "db/minecraft-fabric-exporter-14492",
+  "url": "/d/6UU5TBqGz1/minecraft-fabric-exporter-14492",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "minecraft",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 125,
+  "uid": "a6dae038-f60e-4576-b6f8-0c124778dba3",
+  "title": "Minecraft - Fabric Exporter (14492) - Fixed Variables",
+  "uri": "db/minecraft-fabric-exporter-14492-fixed-variables",
+  "url": "/d/a6dae038-f60e-4576-b6f8-0c124778dba3/minecraft-fabric-exporter-14492-fixed-variables",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "minecraft",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 54,
+  "uid": "6UU5TBqGz2",
+  "title": "Minecraft - Old (contains ServerStats & UnifiedMetrics charts)",
+  "uri": "db/dd936875-747d-513f-8cda-5dae58e9fed7",
+  "url": "/d/6UU5TBqGz2/dd936875-747d-513f-8cda-5dae58e9fed7",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "ServerStats",
+    "fabricexporter",
+    "host",
+    "influxdb",
+    "linux",
+    "mc-router",
+    "minecraft",
+    "prometheus",
+    "unifiedmetrics",
+    "vmagent"
+  ],
+  "isStarred": false,
+  "folderId": 36,
+  "folderUid": "f308bf71-fff8-4357-9a66-324aeac6cc6f",
+  "folderTitle": "ZZZ-OLD-Production",
+  "folderUrl": "/dashboards/f/f308bf71-fff8-4357-9a66-324aeac6cc6f/ZZZ-OLD-Production",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 74,
+  "uid": "fm-_MB37z",
+  "title": "Minecraft - Server Stats (16508)",
+  "uri": "db/minecraft-server-stats-16508",
+  "url": "/d/fm-_MB37z/minecraft-server-stats-16508",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "minecraft",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 122,
+  "uid": "kU0rMsi7k",
+  "title": "Minecraft - UnifiedMetrics 0.3.x (14756)",
+  "uri": "db/minecraft-unifiedmetrics-0-3-x-14756",
+  "url": "/d/kU0rMsi7k/minecraft-unifiedmetrics-0-3-x-14756",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "minecraft",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 123,
+  "uid": "df28380a-d48b-44e8-b2ab-058670459b23",
+  "title": "Minecraft - UnifiedMetrics 0.3.x (14756) - Variables Fixed",
+  "uri": "db/7b38b4bb-9053-529b-9ef7-52b6a75ee7f0",
+  "url": "/d/df28380a-d48b-44e8-b2ab-058670459b23/7b38b4bb-9053-529b-9ef7-52b6a75ee7f0",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "minecraft",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 144,
+  "uid": "AltFNh7nz",
+  "title": "Minecraft Velocity",
+  "uri": "db/minecraft-velocity",
+  "url": "/d/AltFNh7nz/minecraft-velocity",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "bungeecord",
+    "velocity"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 11,
+  "uid": "grafana-utils",
+  "title": "Monitoring Art - Grafana utils (12975)",
+  "uri": "db/monitoring-art-grafana-utils-12975",
+  "url": "/d/grafana-utils/monitoring-art-grafana-utils-12975",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 56,
+  "folderUid": "fb2b30e2-66d0-4c15-9ba9-464d36c4b5c0",
+  "folderTitle": "NonProd",
+  "folderUrl": "/dashboards/f/fb2b30e2-66d0-4c15-9ba9-464d36c4b5c0/NonProd",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 100,
+  "uid": "a13b0560-dd0c-4620-a56b-d0d4ffdcd963",
+  "title": "Node Exporter (1860)",
+  "uri": "db/node-exporter-1860",
+  "url": "/d/a13b0560-dd0c-4620-a56b-d0d4ffdcd963/node-exporter-1860",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "linux",
+    "nodeexporter",
+    "production",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 37,
+  "uid": "rYdddlPWk1",
+  "title": "Node Exporter Full (1860)",
+  "uri": "db/node-exporter-full-1860",
+  "url": "/d/rYdddlPWk1/node-exporter-full-1860",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "nodeexporter",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 39,
+  "uid": "c7028432-dd5e-47f6-9081-31277151afed",
+  "title": "Node Exporter Full (1860) - Fixed Variables",
+  "uri": "db/node-exporter-full-1860-fixed-variables",
+  "url": "/d/c7028432-dd5e-47f6-9081-31277151afed/node-exporter-full-1860-fixed-variables",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "nodeexporter",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 58,
+  "uid": "EEQD4wv7z2",
+  "title": "Ohm Windows Desktop (11587)",
+  "uri": "db/ohm-windows-desktop-11587",
+  "url": "/d/EEQD4wv7z2/ohm-windows-desktop-11587",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "ohmgraphite",
+    "prometheus",
+    "windows"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 113,
+  "uid": "de66b236-f52d-4a5b-9538-b27e99991992",
+  "title": "Ohm Windows Desktop (11587)",
+  "uri": "db/ohm-windows-desktop-11587",
+  "url": "/d/de66b236-f52d-4a5b-9538-b27e99991992/ohm-windows-desktop-11587",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "ohmgraphite",
+    "production",
+    "prometheus",
+    "windows"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 59,
+  "uid": "a7bc762c-4610-4a3d-8b50-e112cef37d03",
+  "title": "Ohm Windows Desktop (11587) - Fixed Variables",
+  "uri": "db/ohm-windows-desktop-11587-fixed-variables",
+  "url": "/d/a7bc762c-4610-4a3d-8b50-e112cef37d03/ohm-windows-desktop-11587-fixed-variables",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "ohmgraphite",
+    "prometheus",
+    "windows"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 6,
+  "uid": "PI-Hole-Exporter",
+  "title": "PI-Hole",
+  "uri": "db/pi-hole",
+  "url": "/d/PI-Hole-Exporter/pi-hole",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "Prometheus",
+    "networking",
+    "pihole",
+    "pihole exporter",
+    "production"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 72,
+  "uid": "MIBVglomg",
+  "title": "PI-Hole Exporter (10176)",
+  "uri": "db/pi-hole-exporter-10176",
+  "url": "/d/MIBVglomg/pi-hole-exporter-10176",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "exporter",
+    "pihole",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 73,
+  "uid": "pihole-exporter",
+  "title": "PI-Hole Exporter (14283)",
+  "uri": "db/pi-hole-exporter-14283",
+  "url": "/d/pihole-exporter/pi-hole-exporter-14283",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "exporter",
+    "pihole",
+    "prometheus"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 71,
+  "uid": "Dp7Cd57Zza3",
+  "title": "Proxmox (19484)",
+  "uri": "db/proxmox-19484",
+  "url": "/d/Dp7Cd57Zza3/proxmox-19484",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "prometheus",
+    "proxmox"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 70,
+  "uid": "b88c0ae7-ec18-4bda-8314-05a487f44508",
+  "title": "Proxmox (PVE & PBS)",
+  "uri": "db/proxmox-pve-and-pbs",
+  "url": "/d/b88c0ae7-ec18-4bda-8314-05a487f44508/proxmox-pve-and-pbs",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "pbs",
+    "production",
+    "prometheus",
+    "proxmox",
+    "proxmox-backup-server"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 157,
+  "uid": "f7655ccc-6245-4786-a575-79218b10d1a9",
+  "title": "Proxmox Backup Server (GitHub)",
+  "uri": "db/proxmox-backup-server-github",
+  "url": "/d/f7655ccc-6245-4786-a575-79218b10d1a9/proxmox-backup-server-github",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "proxmox"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 68,
+  "uid": "Dp7Cd57Zza2",
+  "title": "Proxmox via Prometheus (10347)",
+  "uri": "db/proxmox-via-prometheus-10347",
+  "url": "/d/Dp7Cd57Zza2/proxmox-via-prometheus-10347",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "prometheus",
+    "proxmox"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 95,
+  "uid": "abca8f48-9cf1-4f0a-bdde-04e98cafcf71",
+  "title": "SNMP Exporter Internal Stats (12197)",
+  "uri": "db/snmp-exporter-internal-stats-12197",
+  "url": "/d/abca8f48-9cf1-4f0a-bdde-04e98cafcf71/snmp-exporter-internal-stats-12197",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "exporter",
+    "network",
+    "production",
+    "prometheus",
+    "self",
+    "snmp"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 81,
+  "uid": "M-j9hgeZz",
+  "title": "SNMP Exporter Internal Stats (12197)",
+  "uri": "db/snmp-exporter-internal-stats-12197",
+  "url": "/d/M-j9hgeZz/snmp-exporter-internal-stats-12197",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "exporter",
+    "prometheus",
+    "self",
+    "snmp"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 12,
+  "uid": "kLXTiedGz23",
+  "title": "SpeedTest",
+  "uri": "db/speedtest",
+  "url": "/d/kLXTiedGz23/speedtest",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 35,
+  "folderUid": "c09552b0-b52e-498a-b669-dca40886ae9c",
+  "folderTitle": "ZZZ-OLD-Non-Production-&-WIP",
+  "folderUrl": "/dashboards/f/c09552b0-b52e-498a-b669-dca40886ae9c/ZZZ-OLD-Non-Production-&-WIP",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 13,
+  "uid": "AfHKnzcnz",
+  "title": "Sun and Moon (630)",
+  "uri": "db/sun-and-moon-630",
+  "url": "/d/AfHKnzcnz/sun-and-moon-630",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "grafana",
+    "moon",
+    "plugin",
+    "sun"
+  ],
+  "isStarred": false,
+  "folderId": 56,
+  "folderUid": "fb2b30e2-66d0-4c15-9ba9-464d36c4b5c0",
+  "folderTitle": "NonProd",
+  "folderUrl": "/dashboards/f/fb2b30e2-66d0-4c15-9ba9-464d36c4b5c0/NonProd",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 138,
+  "uid": "d468b00e-f30c-4d03-9229-6e44be5756941",
+  "title": "Tdarr (20388)",
+  "uri": "db/tdarr-20388",
+  "url": "/d/d468b00e-f30c-4d03-9229-6e44be5756941/tdarr-20388",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "media",
+    "tdarr"
+  ],
+  "isStarred": false,
+  "folderId": 33,
+  "folderUid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+  "folderTitle": "Temp",
+  "folderUrl": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/Temp",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 137,
+  "uid": "d468b00e-f30c-4d03-9229-6e44be575694",
+  "title": "Tdarr (20388)",
+  "uri": "db/tdarr-20388",
+  "url": "/d/d468b00e-f30c-4d03-9229-6e44be575694/tdarr-20388",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 67,
+  "uid": "b83becc2-170b-4ae9-b9f5-a176892cc2fc",
+  "title": "Telegraf - conversion of 928 for VM (11051)",
+  "uri": "db/telegraf-conversion-of-928-for-vm-11051",
+  "url": "/d/b83becc2-170b-4ae9-b9f5-a176892cc2fc/telegraf-conversion-of-928-for-vm-11051",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "prometheus",
+    "telegraf"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 66,
+  "uid": "000000127",
+  "title": "Telegraf - InfluDB (928)",
+  "uri": "db/telegraf-infludb-928",
+  "url": "/d/000000127/telegraf-infludb-928",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "influxdb",
+    "telegraf"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 115,
+  "uid": "O23g2BeWk2",
+  "title": "Traefik",
+  "uri": "db/traefik",
+  "url": "/d/O23g2BeWk2/traefik",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 36,
+  "folderUid": "f308bf71-fff8-4357-9a66-324aeac6cc6f",
+  "folderTitle": "ZZZ-OLD-Production",
+  "folderUrl": "/dashboards/f/f308bf71-fff8-4357-9a66-324aeac6cc6f/ZZZ-OLD-Production",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 114,
+  "uid": "e48ba6ca-8e8b-4646-ad89-6f501fa67114",
+  "title": "Traefik (12250)",
+  "uri": "db/traefik-12250",
+  "url": "/d/e48ba6ca-8e8b-4646-ad89-6f501fa67114/traefik-12250",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "production",
+    "prometheus",
+    "traefik"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 109,
+  "uid": "qPdAviJmz",
+  "title": "Traefik (4475)",
+  "uri": "db/traefik-4475",
+  "url": "/d/qPdAviJmz/traefik-4475",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "traefik"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 110,
+  "uid": "3ipsWfViz",
+  "title": "Traefik 2 (11462)",
+  "uri": "db/traefik-2-11462",
+  "url": "/d/3ipsWfViz/traefik-2-11462",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "traefik"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 111,
+  "uid": "O23g2BeWk1",
+  "title": "Traefik 2.2 (12250)",
+  "uri": "db/traefik-2-2-12250",
+  "url": "/d/O23g2BeWk1/traefik-2-2-12250",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "traefik"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 112,
+  "uid": "n5bu_kv45",
+  "title": "Traefik Official Standalone Dashboard (17346)",
+  "uri": "db/traefik-official-standalone-dashboard-17346",
+  "url": "/d/n5bu_kv45/traefik-official-standalone-dashboard-17346",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "traefik"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 85,
+  "uid": "ff308a5b-07e9-40c3-b862-0f3b9592890f",
+  "title": "Ubiquity EdgeRouter [SNMP] (1756)",
+  "uri": "db/ubiquity-edgerouter-snmp-1756",
+  "url": "/d/ff308a5b-07e9-40c3-b862-0f3b9592890f/ubiquity-edgerouter-snmp-1756",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "edgerouter",
+    "influxdb",
+    "network",
+    "snmp",
+    "ubiquity"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 82,
+  "uid": "f72f3369-3294-4b9c-a906-de2489f68221",
+  "title": "Ubiquity EdgeRouter [SNMP] (1756)",
+  "uri": "db/ubiquity-edgerouter-snmp-1756",
+  "url": "/d/f72f3369-3294-4b9c-a906-de2489f68221/ubiquity-edgerouter-snmp-1756",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "edgerouter",
+    "network",
+    "production",
+    "prometheus",
+    "snmp",
+    "ubiquity"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 8,
+  "uid": "I9RCiR8ik",
+  "title": "Ubiquity EdgeRouter X [SNMP] (1756)",
+  "uri": "db/ubiquity-edgerouter-x-snmp-1756",
+  "url": "/d/I9RCiR8ik/ubiquity-edgerouter-x-snmp-1756",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 36,
+  "folderUid": "f308bf71-fff8-4357-9a66-324aeac6cc6f",
+  "folderTitle": "ZZZ-OLD-Production",
+  "folderUrl": "/dashboards/f/f308bf71-fff8-4357-9a66-324aeac6cc6f/ZZZ-OLD-Production",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 9,
+  "uid": "FPh5IgUmk",
+  "title": "Ubiquity UniFi Access Point [SNMP & Unpoller]",
+  "uri": "db/ubiquity-unifi-access-point-snmp-and-unpoller",
+  "url": "/d/FPh5IgUmk/ubiquity-unifi-access-point-snmp-and-unpoller",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 36,
+  "folderUid": "f308bf71-fff8-4357-9a66-324aeac6cc6f",
+  "folderTitle": "ZZZ-OLD-Production",
+  "folderUrl": "/dashboards/f/f308bf71-fff8-4357-9a66-324aeac6cc6f/ZZZ-OLD-Production",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 87,
+  "uid": "HXRDoWyWz",
+  "title": "Ubiquity UniFi AP Dashboard [SNMP] (1486)",
+  "uri": "db/ubiquity-unifi-ap-dashboard-snmp-1486",
+  "url": "/d/HXRDoWyWz/ubiquity-unifi-ap-dashboard-snmp-1486",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "Unifi",
+    "influxdb",
+    "network",
+    "snmp",
+    "ubiquity"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 88,
+  "uid": "b0209f9b-6fd4-4b7b-980a-3727e57d91dd",
+  "title": "Ubiquity UniFi AP Dashboard [SNMP] (1486)",
+  "uri": "db/ubiquity-unifi-ap-dashboard-snmp-1486",
+  "url": "/d/b0209f9b-6fd4-4b7b-980a-3727e57d91dd/ubiquity-unifi-ap-dashboard-snmp-1486",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "production",
+    "prometheus",
+    "snmp",
+    "ubiquity",
+    "unifi"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 119,
+  "uid": "abcb6817-5d38-467c-9002-cf2b3e7f6d58",
+  "title": "UniFi-Poller (GitHub)",
+  "uri": "db/unifi-poller-github",
+  "url": "/d/abcb6817-5d38-467c-9002-cf2b3e7f6d58/unifi-poller-github",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "production",
+    "prometheus",
+    "uap",
+    "unifi",
+    "unifi-poller"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 89,
+  "uid": "w3usaHLZk",
+  "title": "UniFi-Poller - Client DPI - Prometheus (from GitHub but also see 11310)",
+  "uri": "db/ac098635-97f6-5299-b128-316b715f63c6",
+  "url": "/d/w3usaHLZk/ac098635-97f6-5299-b128-316b715f63c6",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "unifi",
+    "unifi-poller"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 90,
+  "uid": "jMfvAjxWz",
+  "title": "UniFi-Poller - Client Insights - Prometheus (from GitHub but also see 11315)",
+  "uri": "db/b7738ede-015f-583b-b74e-c6caf70dfc0b",
+  "url": "/d/jMfvAjxWz/b7738ede-015f-583b-b74e-c6caf70dfc0b",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "unifi",
+    "unifi-poller"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 91,
+  "uid": "9WaGWZaZk",
+  "title": "UniFi-Poller - Network Sites - Prometheus (from GitHub but also see 11311)",
+  "uri": "db/f01568b5-3d39-5fda-8ee1-d233735f662f",
+  "url": "/d/9WaGWZaZk/f01568b5-3d39-5fda-8ee1-d233735f662f",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "unifi",
+    "unifi-poller"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 92,
+  "uid": "g5wFWqxZk",
+  "title": "UniFi-Poller - UAP Insights - Prometheus (from GitHub but also see 11314)",
+  "uri": "db/1e2389f5-2bb5-58b5-afc7-a59b0b7e3a70",
+  "url": "/d/g5wFWqxZk/1e2389f5-2bb5-58b5-afc7-a59b0b7e3a70",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "uap",
+    "unifi",
+    "unifi-poller"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 93,
+  "uid": "4Yo8IZ-Wk",
+  "title": "UniFi-Poller - USG Insights - Prometheus (from GitHub but also see 11313)",
+  "uri": "db/b79f86f1-5e49-5a83-b0dd-68dd2f9ade12",
+  "url": "/d/4Yo8IZ-Wk/b79f86f1-5e49-5a83-b0dd-68dd2f9ade12",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "unifi",
+    "unifi-poller",
+    "usg"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 94,
+  "uid": "FsfxpWaZz",
+  "title": "UniFi-Poller - USW Insights - Prometheus (from GitHub but also see 11312)",
+  "uri": "db/f32b9b40-a6e6-5533-ac65-231ef8777209",
+  "url": "/d/FsfxpWaZz/f32b9b40-a6e6-5533-ac65-231ef8777209",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "network",
+    "prometheus",
+    "unifi",
+    "unifi-poller",
+    "usw"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 97,
+  "uid": "e05ef556-9fea-4aec-9ee0-bf804ce8c873",
+  "title": "VictoriaMetrics (10229)",
+  "uri": "db/victoriametrics-10229",
+  "url": "/d/e05ef556-9fea-4aec-9ee0-bf804ce8c873/victoriametrics-10229",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "production",
+    "prometheus",
+    "self",
+    "victoriametrics",
+    "vmsingle"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 40,
+  "uid": "wNf0q_kZk",
+  "title": "VictoriaMetrics (10229)",
+  "uri": "db/victoriametrics-10229",
+  "url": "/d/wNf0q_kZk/victoriametrics-10229",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "prometheus",
+    "self",
+    "victoriametrics",
+    "vmsingle"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 159,
+  "uid": "eeyhmyr026800d",
+  "title": "VictoriaMetrics (10229) Copy - GLOBAL PROCESS METRICS",
+  "uri": "db/victoriametrics-10229-copy-global-process-metrics",
+  "url": "/d/eeyhmyr026800d/victoriametrics-10229-copy-global-process-metrics",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 33,
+  "folderUid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+  "folderTitle": "Temp",
+  "folderUrl": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/Temp",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 98,
+  "uid": "a2c4edb5-4b60-4274-b1a2-f529a2f89a7e",
+  "title": "VictoriaMetrics - vmagent (12683)",
+  "uri": "db/victoriametrics-vmagent-12683",
+  "url": "/d/a2c4edb5-4b60-4274-b1a2-f529a2f89a7e/victoriametrics-vmagent-12683",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "production",
+    "prometheus",
+    "self",
+    "victoriametrics",
+    "vmagent"
+  ],
+  "isStarred": false,
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 41,
+  "uid": "G7Z9GzMGz",
+  "title": "VictoriaMetrics - vmagent (12683)",
+  "uri": "db/victoriametrics-vmagent-12683",
+  "url": "/d/G7Z9GzMGz/victoriametrics-vmagent-12683",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "prometheus",
+    "self",
+    "victoriametrics",
+    "vmagent"
+  ],
+  "isStarred": false,
+  "folderId": 38,
+  "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+  "folderTitle": "OfficialDashboards",
+  "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/OfficialDashboards",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 44,
+  "uid": "da7bd295-47a6-4b76-aefb-0e26fecbc1f8",
+  "title": "VictoriaMetrics API Imports",
+  "uri": "db/victoriametrics-api-imports",
+  "url": "/d/da7bd295-47a6-4b76-aefb-0e26fecbc1f8/victoriametrics-api-imports",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "backup",
+    "customimports",
+    "directory-sizes",
+    "lmsensors",
+    "smart",
+    "speedtest",
+    "victoriametrics"
+  ],
+  "isStarred": false,
+  "folderId": 33,
+  "folderUid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+  "folderTitle": "Temp",
+  "folderUrl": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/Temp",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 30,
+  "uid": "cESxZJwmk",
+  "title": "Windows (WIP)",
+  "uri": "db/windows-wip",
+  "url": "/d/cESxZJwmk/windows-wip",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [],
+  "isStarred": false,
+  "folderId": 35,
+  "folderUid": "c09552b0-b52e-498a-b669-dca40886ae9c",
+  "folderTitle": "ZZZ-OLD-Non-Production-&-WIP",
+  "folderUrl": "/dashboards/f/c09552b0-b52e-498a-b669-dca40886ae9c/ZZZ-OLD-Non-Production-&-WIP",
+  "sortMeta": 0,
+  "isDeleted": false
+}
+{
+  "id": 116,
+  "uid": "fac3a25b-cf47-4874-bf34-e7c90b8b57dd",
+  "title": "zzz_Testing & Rough Working",
+  "uri": "db/zzz-testing-and-rough-working",
+  "url": "/d/fac3a25b-cf47-4874-bf34-e7c90b8b57dd/zzz-testing-and-rough-working",
+  "slug": "",
+  "type": "dash-db",
+  "tags": [
+    "testing"
+  ],
+  "isStarred": false,
+  "folderId": 33,
+  "folderUid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+  "folderTitle": "Temp",
+  "folderUrl": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/Temp",
+  "sortMeta": 0,
+  "isDeleted": false
+}

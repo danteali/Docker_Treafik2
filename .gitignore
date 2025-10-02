@@ -1,0 +1,52 @@
+# Basically ignores everything except *.start
+# A * ensures that everything will be ignored unless explicitly whitelisted
+#*
+#-----------------------------
+
+# You can whitelist files/folders with !, these will NOT be ignored.
+!.gitignore
+#-----------------------------
+
+
+# Need to again specify any ignores which would otherwise fall inside the whitelists above
+
+# Explicit Ignore - folders
+**/_archive/
+**/_secrets/
+__traefik1/*
+**/zipped_exports/
+# Ansible variables files (may contain passwords and API keys)
+**/defaults/main.yml
+#-----------------------------
+
+# Explicit Ignore - files
+.env
+_env*
+*.conf
+*.zip
+*.ipcheck
+**/temp.sh
+*.bak
+#----------
+**/macvlan_docker.sh
+**/vm_macvlan_docker.sh
+#----------
+**/crontab_monitor.alerts
+**/crontab_monitor.history
+**/crontab_monitor.warn
+#----------
+**/tmp_exporter.sh
+#----------
+**/traefik.toml
+**/api.toml
+**/defaultauth.toml
+**/external_services.toml
+**/tls.toml
+**/octograph.ini
+**/GeoLite2-City.*
+**/dem/data/conf.yml
+**/portainer/data/portainer.db
+**/*crontab
+**/frigate/data/config/config.yml
+#-----------------------------
+

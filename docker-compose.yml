@@ -1,0 +1,2952 @@
+version: "3.8"
+
+########################### SYNTAX PREFERENCES
+# For lists (environment, ports, etc) we will try to use
+# arrays instead of lists of key-value pairs i.e. 
+# DO THIS...
+#    environment:
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+# NOT THIS...
+#    environment:
+#      DOCKER_MODS: "$LINUXSERVER_MODS"
+#      PUID: "$PUID"
+#
+# To standardise our file somewhat, aim for order of keys below. 
+#  service:
+#    image
+#    cont_name
+#    restart
+#    cap_add
+#       - See here for full list: https://man7.org/linux/man-pages/man7/capabilities.7.html
+#    security_opt
+#    depends_on
+#    privileged: true
+#    network
+#    port
+#    devices:
+#    environment
+#    volumes
+#    secrets
+#    command
+#    labels
+#
+#
+# TEMPLATE:
+#  # <- commented lines with # in this position are generally not
+#      needed unless there is a specific reason
+#
+#  # Plex - Media Server
+#  # Need to create a symlink for fail2ban to read log file since it can't handle spaces:
+#  # ln -s /var/log/docker/plex/Plex\ Media\ Server.log /var/log/docker/plex/PlexMediaServer.fail2ban
+#  # Use 'fail2ban' extension so that we can avoid any logrotate automation changing file.
+#  plex:
+#    image: plexinc/pms-docker:latest
+#    container_name: plex
+#    restart: unless-stopped
+#    #logging: *default-logging    # Logging now defined globally in daemon.json
+#  #  security_opt:
+#  #    # stops container processes from gaining additional privileges, could
+#  #    # possibly cause issues but woth including unless problems noted.
+#  #    - no-new-privileges:true
+#  #  depends_on:
+#  #    # usually cause more problems than it's worth, only include if absolutely
+#  #    # necessary since can't start this service without restarting the 'parent'.
+#  #    #- socket-proxy
+#  #  privileged: true
+#    networks:
+#      - t2_proxy
+#      #- default
+#    ports:
+#      - $PLEX_PORT:32400/tcp
+#  #  devices:
+#  #    - /dev/dri:/dev/dri # for hardware transcoding
+#    environment: 
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+#      - PGID=$PGID
+#      - TZ=$TZ
+#    volumes:
+#      - $DOCKER_DIR/plex/data:/config
+#  #  secrets:
+#  #    - plex_claim
+#  #  command: # CLI arguments
+#  #    - --global.checkNewVersion=true
+#    labels:
+#      #------------- WATCHTOWER -------------#
+#      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+#      #----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ## HTTP Routers
+#      - "traefik.http.routers.plex-rtr.entrypoints=https"
+#      - "traefik.http.routers.plex-rtr.rule=Host(`plex.$DOMAINNAME0`)"
+#      ## Middlewares
+#      - "traefik.http.routers.plex-rtr.middlewares=chain-authelia@file"
+#      ## HTTP Services
+#      - "traefik.http.routers.plex-rtr.service=plex-svc"
+#      - "traefik.http.services.plex-svc.loadbalancer.server.port=32400"
+
+
+
+
+########################### NETWORKS
+networks:
+  t2_proxy:
+    name: t2_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $TRAEFIK_NET
+          gateway: $TRAEFIK_GATEWAY
+  socket_proxy:
+    name: socket_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $SOCKET_PROXY_NET
+          gateway: $SOCKET_PROXY_GATEWAY
+  lan_net:
+    name: lan_net
+    driver: macvlan
+    driver_opts:
+      parent: $MACVLAN_NIC
+    ipam:
+      config:
+        - subnet: $MACVLAN_NET
+          gateway: $MACVLAN_GATEWAY
+          ip_range: $MACVLAN_RANGE
+          # Don't believe we need to reserve address for host as can
+          # route to host's LAN IP in host routing rules instead of
+          # having to reserve IP.
+          #aux_addresses:
+          #  host1: $MACVLAN_HOST
+  # Docker will use the same default network for all compose files in
+  # the same directory. It will use the settings of the first network
+  # created even of other compose files try to set the default to a
+  # different subnet.
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $DEFAULT_COMPOSE_NET
+          gateway: $DEFAULT_COMPOSE_GATEWAY
+
+
+########################### SECRETS
+# If passed to container in 'secrets' key, the secrets
+# files are saved inside containers at /run/secrets/<name>
+secrets:
+  htpasswd:
+    file: $SECRETS_DIR/htpasswd
+  cloudflare_email:
+    file: $SECRETS_DIR/cloudflare_email
+  cloudflare_api_key: # Global API key
+    file: $SECRETS_DIR/cloudflare_api_key
+  #cloudflare_api_token:  # Scoped API token
+  #  file: $SECRETS_DIR/cloudflare_api_token
+  cloudflare_api_token_ddns:  # Scoped API token
+    file: $SECRETS_DIR/cloudflare_api_token_ddns
+  authelia_jwt_secret:
+    file: $SECRETS_DIR/authelia_jwt_secret
+  email_smtp_password: # Required for Authelia email notifier, Grafana
+    file: $SECRETS_DIR/email_smtp_password
+  # Not using the authelia mySQL, Redis, Duo integration but retain in compose file for reference
+  #authelia_session_secret: # Required for Session using Redis
+  #  file: $SECRETS_DIR/authelia_session_secret
+  #authelia_storage_mysql_password: # Required for Storage using MySQL
+  #  file: $SECRETS_DIR/authelia_storage_mysql_password
+  #authelia_duo_api_secret_key: # Required for Duo push notification
+  #  file: $SECRETS_DIR/authelia_duo_api_secret_key
+  plex_claim:
+    file: $SECRETS_DIR/plex_claim
+  mysql_root_password:
+    file: $SECRETS_DIR/mysql_root_password
+  mysql_guac_db:
+    file: $SECRETS_DIR/mysql_guac_db
+  mysql_guac_user:
+    file: $SECRETS_DIR/mysql_guac_user
+  mysql_guac_password:
+    file: $SECRETS_DIR/mysql_guac_password
+  #librespeed_password: # Couldn't get file-based password working for historic results page
+  #  file: $SECRETS_DIR/librespeed_password
+  # Couldn't get librespeed DB integration working
+  #mysql_librespeed_db:
+  #  file: $SECRETS_DIR/mysql_librespeed_db
+  #mysql_librespeed_user:
+  #  file: $SECRETS_DIR/mysql_librespeed_user
+  #mysql_librespeed_password:
+  #  file: $SECRETS_DIR/mysql_librespeed_password
+  # Using sqlite DB instead
+  #mysql_nextcloud_password:
+  #  file: $SECRETS_DIR/mysql_nextcloud_password
+  #calibre_password:
+  #  file: $SECRETS_DIR/calibre_password    # Password file not supported in Kasm based version
+  
+
+########################### COMMON SETTINGS ('EXTENDS')
+
+#x-logging: 
+#      &default-logging
+#      options:
+#        # For default json-file driver
+#        #max-size: "50m"
+#        #max-file: "1"
+#        # For local driver when journald enabled
+#        # Now defined globally in /etc/docker/daemon.json
+#        cache-max-size: "50m"
+#        cache-max-file: "1"
+
+########################### SERVICES
+services:
+# All services / apps go below this line
+
+  # Docker Socket Proxy - Security Enchanced Proxy for Docker Socket
+  # https://www.github.com/Tecnativa/docker-socket-proxy
+  # https://hub.docker.com/r/tecnativa/docker-socket-proxy
+  # Consider updating to linuxserver.io version
+  # https://docs.linuxserver.io/images/docker-socket-proxy
+  socket-proxy:
+    container_name: socket-proxy
+    image: tecnativa/docker-socket-proxy
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      socket_proxy:
+        ipv4_address: $SOCKET_PROXY_IP # You can specify a static IP
+    privileged: true
+    #ports:
+    #  - "127.0.0.1:2375:2375" # Unless specific reason, port 2375 should only ever get exposed to the internal docker host.
+    #  - "$SOCKET_PROXY_PORT:2375"  # Published so that if dockpeek running on another host, it can query docker for service info
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+    environment:
+      - LOG_LEVEL=warning # debug,info,notice,warning,err,crit,alert,emerg
+      ## Variables match the URL prefix (i.e. AUTH blocks access to /auth/* parts of the API, etc.).
+      # 0 to revoke access.
+      # 1 to grant access.
+      ## Granted by Default
+      - EVENTS=1
+      - PING=1
+      - VERSION=1
+      ## Revoked by Default, Security critical
+      - AUTH=0 
+      - SECRETS=0
+      - POST=1 # Portainer, Watchtower, Dockpeek
+      ## Not always needed
+      - BUILD=0
+      - COMMIT=0
+      - CONFIGS=0
+      - CONTAINERS=1 # Traefik, portainer, etc.
+      - DISTRIBUTION=0
+      - EXEC=0
+      - IMAGES=1 # Portainer
+      - INFO=1 # Portainer
+      - NETWORKS=1 # Portainer
+      - NODES=0
+      - PLUGINS=0
+      - SERVICES=1 # Portainer
+      - SESSION=0
+      - SWARM=0
+      - SYSTEM=0
+      - TASKS=1 # Portainer
+      - VOLUMES=1 # Portainer
+    #labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+  # TRAEFIK - REVERSE PROXY
+  # If using WSL, log files and acme.json must be stored in Linux storage, not Windows (i.e. not /mnt/c/...)
+  #   Since Windows filesystem won't allow proper control over mermissions and we need to do chmod on acme.json
+  # Touch log files & acme.json before first use:
+  #   touch /var/log/docker/traefik/traefik.log
+  #   touch /var/log/docker/traefik/access.log
+  #   touch /storage/Docker/traefik/data/acme/acme.json
+  #   chmod 600 /storage/Docker/traefik/data/acme/acme.json
+  # Updates:
+  #  - 20230819: Updated from banon 2.9.10 to 2.10.4 (3.0.0 was in beta so didn't upgrade that far)
+  #  - 20231007: 2.10.4 to 3.0
+  #              Reverted back to v2.10.4 - traefik.log showed some errors that I couldn't figure out how to fix:
+  #                 HostRegexp(`mgsquared.co.uk`, `{subdomain:[a-zA-Z0-9-]+}.mgsquared.co.uk`): error while adding rule HostRegexp: unexpected number of parameters; got 2, expected one of [1]
+  #                 Host(`ubooquity.mc-guinness.co.uk`) && PathPrefix(`/admin`,`/admin-res`,`/admin-api`): error while adding rule PathPrefix: unexpected number of parameters; got 3, expected one of [1]
+  #              Not critical issues, just rather wait for better docs or community to report.
+  #              Also remember to disable '- --providers.docker.swarmMode=false' since swarm now own provider.
+  #  - 20250202: Updated from 2.10.4 to 3.3.3 - no breaking changes.
+  #              Disable '- --providers.docker.swarmMode=false' since swarm now own provider.
+  #              In all other compose yml files, set networks to 'external: true', except for the default network.
+  #              Fix torrent compose file so that traefik proxying is via the VPN container for all services and not vis individual service definitions (individual services can not be added to t2_proxy since using VPN networking)
+  #              Some host 'rule' definition keywords depreciated e.g. 'Headers', 'HeadersRegexp'. Replaced with 'Query'. 
+  #                 See: Radarr, Sonarr
+  #              Host 'rule' syntax changed: comma separated OR rules, replaced with ||
+  #                 e.g. OLD TOML: rule = "HostSNIRegexp(`mgsquared.co.uk`, `{subdomain:[a-zA-Z0-9-]+}.mgsquared.co.uk`)"
+  #                      NEW TOML: rule = "HostSNIRegexp(`mgsquared.co.uk`) || HostSNIRegexp(`{subdomain:[a-zA-Z0-9-]+}.mgsquared.co.uk`)"
+  #                 e.g. OLD LABEL: "traefik.http.routers.ubooquity-admin-rtr.rule=Host(`ubooquity.$DOMAINNAME0`) && PathPrefix(`/admin`,`/admin-res`,`/admin-api`)"
+  #                      NEW LABEL: "traefik.http.routers.ubooquity-admin-rtr.rule=Host(`ubooquity.mc-guinness.co.uk`) && (PathPrefix(`/admin`) || PathPrefix(`/admin-res`) || PathPrefix(`/admin-api`))"
+  #                 See: tcp.routers.sni-mgsquared (file: mgsquared-co-uk.toml); http.routers.sni-mgsquared-http (file: mgsquared-co-uk.toml); Ubooquity
+  #  - 20250502: Updated from banon 3.3.3 to 3.3.6
+  traefik:
+    container_name: traefik
+    image: traefik:3.3.6 #3.3.3 #2.10.4 #brie=???, chevrotin = v2.2.x, picodon v2.3.x, livarot=2.4.x, brie=2.5.x, banon=2.9.x, saintmarcelin=2.10.x, beaufort=3.0.x
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    volumes:
+      - $DOCKER_DIR/traefik/data/rules:/rules # file provider directory
+      - $DOCKER_DIR/traefik/data/acme/acme.json:/acme.json # cert location - you must touch this file and change permissions to 600
+      - $DOCKERLOG_DIR/traefik/traefik.log:/traefik.log # for fail2ban - make sure to touch file before starting container
+      - $DOCKERLOG_DIR/traefik/access.log:/access.log # for fail2ban - make sure to touch file before starting container
+      #- /var/run/docker.sock:/var/run/docker.sock:ro # Use Docker Socket Proxy instead for improved security
+    command: # CLI arguments
+      - --global.checkNewVersion=true
+      - --global.sendAnonymousUsage=true
+      - --serverstransport.insecureskipverify=true # If set to true invalid SSL certificates are accepted for backends. e.g. ERX
+      ###### ENTRYPOINTS
+      # Define entrypoint addresses for any ports that we want Traefik to listen on.
+      # HTTP and HTTPS are pretty much mandatory if we want taffic proxied.
+      # For dashboard(api), ping, metrics(healthcheck) we can define custom ports.
+      # For metrics/ping/dash we have ALSO defined routers to access these via the https
+      # entrypoint using hostnames - see labels section below.
+      # (For dashboard(api) access via port we also need to set '--api.insecure=true' further down)
+      # Dashboard: <HOST_IP>:TRAEFIK_DASHBOARD_PORT
+      # Metrics: <HOST_IP>:TRAEFIK_METRIC_PORT/metrics
+      # Ping: <HOST_IP>:TRAEFIK_PING_PORT/ping
+      - --entryPoints.traefik.address=:$TRAEFIK_DASHBOARD_PORT
+      - --entryPoints.metrics.address=:$TRAEFIK_METRIC_PORT 
+      - --entryPoints.ping.address=:$TRAEFIK_PING_PORT 
+      - --entryPoints.http.address=:$TRAEFIK_HTTP_PORT
+      - --entryPoints.https.address=:$TRAEFIK_HTTPS_PORT
+      # Allow these IPs to set the X-Forwarded-* headers - RFC1918, Cloudflare IPs: https://www.cloudflare.com/ips/
+      - --entrypoints.https.forwardedHeaders.trustedIPs=127.0.0.1/32,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22
+      # - --entrypoints.https.http.middlewares=chain-oauth@file # Define default middlewares
+      - --entrypoints.https.http.tls.options=tls-opts@file # Define default tls options
+      # Add dns-cloudflare as default certresolver for all services. 
+      - --entrypoints.https.http.tls.certresolver=dns-cloudflare
+      # These lines define wildcard certs for this domain - if wildcard certs generated, individual certs for each subdomain are not generated
+      # when services specifying their subdomains. Individual certs will still be generated for routers defined in dynamic configuration toml files.
+      # MUST use dnsChallenge with cert resolver (see below) in order to generate wildcard certs.
+      - --entrypoints.https.http.tls.domains[0].main=$DOMAINNAME0
+      - --entrypoints.https.http.tls.domains[0].sans=*.$DOMAINNAME0
+      #- --entrypoints.https.http.tls.domains[1].main=$DOMAINNAME1 # Pulls main cert for second domain
+      #- --entrypoints.https.http.tls.domains[1].sans=*.$DOMAINNAME1 # Pulls wildcard cert for second domain
+      # ProxyProtocol runs at the TCP layer and adds some additional support for identifying the real client IP
+      # Enable this to allow the upstream Traefik to pass real IP to second Traefik instance
+      # Specify any load balancer/proxy addresses, and add proxyProtocol entry in dynamic config on 'primary' Traefik
+      #- --entryPoints.https.proxyProtocol.trustedIPs=127.0.0.1/32,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+      ####### DASHBOARD / API
+      - --api=true
+      - --api.insecure=true # MUST enable this to allow access to dashboard on HOST_IP:PORT. Otherwise only FQDN works.
+      - --api.dashboard=true
+      ####### METRICS
+      - --metrics=true
+      - --metrics.prometheus=true
+      - --metrics.prometheus.entryPoint=metrics # Enable metric access on PORT (not just router below): HOST_IP:METRIC_PORT/metrics
+      - --metrics.prometheus.buckets=0.100000, 0.300000, 1.200000, 5.000000
+      - --metrics.prometheus.addEntryPointsLabels=true # Default = true - Enable metrics on entry points.
+      - --metrics.prometheus.addrouterslabels=true # Default = false - Enable metrics on routers.
+      - --metrics.prometheus.addServicesLabels=true # Default = true - Enable metrics on services.
+      #- --metrics.prometheus.manualrouting=true # This DISABLES internal routing to metrics entrypoint/port - MUST instead use custom route to metrics
+      #- --metrics.influxdb=true # I have not tested the influx metrics
+      #- --metrics.influxdb.address=influxdb:8086 # send metrics to influxdb at this address
+      #- --metrics.influxdb.protocol=http # Default = udp
+      #- --metrics.influxdb.database=traefik # Default = "" - only used when protocol is http
+      #- --metrics.influxdb.retentionPolicy=seven_days # Default = ""
+      #- --metrics.influxdb.pushInterval=10s # Default = 10s
+      ##- --metrics.influxdb.username=$INFLUX_USERNAME # Optional, Default = ""
+      ##- --metrics.influxdb.password=$INFLUX_PASSWORD # Optional, Default = ""
+      #- --metrics.influxdb.addEntryPointsLabels=true # Default = true - Enable metrics on entry points.
+      #- --metrics.influxdb.addrouterslabels=true # Default = false - Enable metrics on routers.
+      #- --metrics.influxdb.addServicesLabels=true # Default = true - Enable metrics on services.
+      ###### PING
+      - --ping=true
+      - --ping.entryPoint=ping # Enable ping access on PORT (not just router below): HOST_IP:PING_PORT/ping
+      #- --ping.manualrouting=true # This DISABLES internal routing via ping entrypoint/port - MUST instead use custom route to ping
+      #- --pilot.token=$TRAEFIK_PILOT_TOKEN
+      ###### LOGGING
+      - --log=true
+      - --log.level=ERROR # (Default: ERROR) DEBUG, INFO, WARN, ERROR, FATAL, PANIC - use DEBUG for config work
+      - --log.filePath=/traefik.log # This disables stdout logs ('docker log') so need to check log file instead of 'docker log'
+      #- --log.format=json
+      - --accessLog=true
+      - --accessLog.filePath=/access.log
+      - --accessLog.bufferingSize=100 # Configuring a buffer of 100 lines
+      - --accessLog.filters.statusCodes=300-399,400-499,500-599
+      #- --accessLog.filters.statusCodes=100-199,200-299,300-399,400-499,500-599 # Enable all logging for detailed filtering
+        # 100-199=info;
+        # 200-299=success;
+        # 300-399=redirects;
+        # 400-499=client error;
+        # 500-599=server error
+      - --accesslog.filters.retryattempts
+      #- --accesslog.fields.defaultmode=keep # Uncomment for detailed filtering to help create new router Rules.
+      #- --accesslog.fields.headers.defaultmode=keep # Uncomment for detailed filtering to help create new router Rules.
+      #- --accesslog.format=json
+      ###### PROVIDER - DOCKER
+      - --providers.docker=true
+      #- --providers.docker.endpoint=unix:///var/run/docker.sock # Use Docker Socket Proxy instead for improved security
+      #- --providers.docker.endpoint=tcp://socket-proxy:2375
+      - --providers.docker.endpoint=$DOCKER_SOCKET_PROXY
+      # - --providers.docker.defaultrule=Host(`{{ index .Labels "com.docker.compose.service" }}.$DOMAINNAME0`) # Automatically set Host rule for services
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.network=t2_proxy
+      #- --providers.docker.swarmMode=false  # Not required in v3, swarm has it's own provider.
+      ###### PROVIDER - FILE
+      # - --providers.file.filename=/path/to/file # Load dynamic configuration from a file
+      - --providers.file.directory=/rules # Load dynamic configuration from one or more .toml or .yml files in a directory
+      - --providers.file.watch=true # Only works on top level files in the rules folder
+      ###### CERTIFICATES
+      # Disable staging certs once setup complete
+      #- --certificatesResolvers.dns-cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory # LetsEncrypt Staging Server - uncomment when testing
+      - --certificatesResolvers.dns-cloudflare.acme.email=$CLOUDFLARE_EMAIL
+      - --certificatesResolvers.dns-cloudflare.acme.storage=/acme.json
+      - --certificatesresolvers.dns-cloudflare.acme.dnschallenge=true 
+      - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare
+      - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      # By default, the provider will verify the TXT DNS challenge record before letting ACME verify.
+      # If delayBeforeCheck is greater than zero, this check is delayed for the configured duration in seconds.
+      # Useful if internal networks block external DNS queries.
+      - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.propagation.delayBeforeChecks=120
+      # Disable the DNS propagation checks before notifying ACME that the DNS challenge is ready.
+      # NOT RECOMMENDED: Increased risk of reaching Let's Encrypt's rate limits.
+      #- --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.disableChecks=true 
+      ###### PLUGINS
+      # Sablier - https://plugins.traefik.io/plugins/633b4658a4caa9ddeffda119/sablier
+      # Disabled Sablier Feb 2025 as causing issues with services not starting properly 
+      # Upgrades:
+      #  - 20231007: v1.4.0-beta.4 -> v1.4.0
+      #- --experimental.plugins.sablier.modulename=github.com/acouvreur/sablier
+      #- --experimental.plugins.sablier.version=v1.4.0
+    networks:
+      t2_proxy:
+        ipv4_address: $TRAEFIKNET_TRAEFIK_IP # You can specify a static IP explicitly or in .env file
+      socket_proxy:
+        ipv4_address: $SOCKETPROXYNET_TRAEFIK_IP # You can specify a static IP explicitly or in .env file
+    security_opt:
+      - no-new-privileges:true
+    #healthcheck:
+    #  test: ["CMD", "traefik", "healthcheck", "--ping"]
+    #  interval: 5s
+    #  retries: 3
+    ports:
+      # Can also just do e.g. 80:80
+      - target: $TRAEFIK_HTTP_PORT
+        published: $TRAEFIK_HTTP_PORT
+        protocol: tcp
+        mode: host
+      - target: $TRAEFIK_HTTPS_PORT
+        published: $TRAEFIK_HTTPS_PORT
+        protocol: tcp
+        mode: host
+      - target: $TRAEFIK_DASHBOARD_PORT
+        published: $TRAEFIK_DASHBOARD_PORT
+        protocol: tcp
+        mode: host
+      - target: $TRAEFIK_PING_PORT
+        published: $TRAEFIK_PING_PORT
+        protocol: tcp
+        mode: host
+      - target: $TRAEFIK_METRIC_PORT
+        published: $TRAEFIK_METRIC_PORT
+        protocol: tcp
+        mode: host
+    environment:
+      # SECRETS FILES - PREFERRED INSTEAD OF DEFINING VALUES IN .ENV FILE - SEE 'SECRETS' DEFINITION AT TOP
+      - TZ=$TZ
+      - CF_API_EMAIL_FILE=/run/secrets/cloudflare_email
+      - CF_API_KEY_FILE=/run/secrets/cloudflare_api_key
+      - HTPASSWD_FILE=/run/secrets/htpasswd
+      # USE THESE IF SECRETS ARE PASSED VIA .ENV FILE INSTEAD OF SECRET FILES.
+      #- CF_API_EMAIL=$CLOUDFLARE_EMAIL
+      #- CF_API_KEY=$CLOUDFLARE_API_KEY    
+      #- HTPASSWD=$HTPASSWD
+      # THESE VARIABLES ARE USED IN DYNAMIC CONFIG FILES
+      - DOMAINNAME=$DOMAINNAME0
+      - DOMAINMGSQUARED=$DOMAINNAME1
+      - AUTHELIA_PORT=$AUTHELIA_PORT
+      - TRAEFIK_TARGET_ERX=$TRAEFIK_TARGET_ERX
+      - TRAEFIK_TARGET_WEBMIN=$TRAEFIK_TARGET_WEBMIN
+      - TRAEFIK_TARGET_WLED_GARDEN_WALL=$TRAEFIK_TARGET_WLED_GARDEN_WALL
+      - TRAEFIK_TARGET_SIMPLEWEB=TRAEFIK_TARGET_SIMPLEWEB
+      - TRAEFIK_TARGET_UNIFI=$TRAEFIK_TARGET_UNIFI
+      - TRAEFIK_TARGET_UNIFI_PORTAL=$TRAEFIK_TARGET_UNIFI_PORTAL
+      - TRAEFIK_TARGET_UNMS=$TRAEFIK_TARGET_UNMS
+    secrets:
+      # Only use this section if using secrets files as specified in secrets block above.
+      # Secrets are saved inside container in /run/secrets/<name>
+      - cloudflare_email
+      - cloudflare_api_key
+      - htpasswd
+    labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      #- "autoheal=true"
+      - "traefik.enable=true"
+      # HTTP-to-HTTPS Redirect
+      - "traefik.http.routers.http-catchall.entrypoints=http"
+      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"    # Host(`$DOMAINNAME0`)
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      # Traefik API
+      - "traefik.http.routers.traefik-rtr.entrypoints=https"
+      - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME0`)"
+      - "traefik.http.routers.traefik-rtr.service=api@internal"
+      #- "traefik.http.routers.traefik-rtr.middlewares=chain-no-auth@file" 
+      - "traefik.http.routers.traefik-rtr.middlewares=chain-authelia@file" 
+      ### Healthcheck/ping
+      - "traefik.http.routers.ping.entrypoints=https"
+      - "traefik.http.routers.ping.rule=Host(`traefik.$DOMAINNAME0`) && Path(`/ping`)"
+      - "traefik.http.routers.ping.service=ping@internal"
+      #- "traefik.http.routers.ping.tls=true"
+      ### Metrics
+      - "traefik.http.routers.metrics.entrypoints=https"
+      - "traefik.http.routers.metrics.rule=Host(`traefik.$DOMAINNAME0`) && Path(`/metrics`)"
+      - "traefik.http.routers.metrics.service=prometheus@internal"
+      #- "traefik.http.routers.metrics.tls=true"
+
+# Note that we can change to different authentication by replacing the middleware(s) used e.g.
+      #- "traefik.http.routers.traefik-rtr.middlewares=middlewares-basic-auth@file" 
+      #- "traefik.http.routers.traefik-rtr.middlewares=middlewares-authelia@file" 
+      #- "traefik.http.routers.traefik-rtr.middlewares=middlewares-authelia@file,middlewares-rate-limit@file" 
+      #- "traefik.http.routers.traefik-rtr.middlewares=chain-basic-auth@file"
+      #- "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file"
+      #- "traefik.http.routers.traefik-rtr.middlewares=chain-authelia@file"
+# For Basic Auth, instead of using 'secrets' files, we can use a variable from .env file.
+# These 2 lines would replace the definition in middlewares.toml and enable us to use the .env variable
+      #- "traefik.http.middlewares.middlewares-basic-auth.basicAuth.users=$HTPASSWD"
+      #- "traefik.http.routers.traefik-rtr.middlewares=middlewares-basic-auth"
+
+
+  ## Sablier - on-demand container start/stop
+  ## DISABLED FEB 2025 - Causing issues with services not starting properly
+  ##    Traefik config files moved out of 'rules' folder to 'rules-disabled':
+  ##        sablier-services.toml
+  ##        middlewares-sablier.toml
+  ## https://github.com/acouvreur/sablier
+  ## https://acouvreur.github.io/sablier
+  ## https://plugins.traefik.io/plugins/633b4658a4caa9ddeffda119/sablier
+  ## To use Sablier, containers need to have a dynamic config defined instead of using labels for Traefik settings.
+  ## Upgrades
+  ##  - 20231007: 1.4.0-beta.4 -> 1.4.0
+  ## ALSO REMEMBER TO UPDATE VERSION IN TRAEFIK DEFINITION!!!
+  #sablier:
+  #  container_name: sablier
+  #  image: acouvreur/sablier:1.4.0
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  networks:
+  #    - t2_proxy                                          # Make sure sablier is on the Traefik network.
+  #  volumes:
+  #    - /var/run/docker.sock:/var/run/docker.sock
+  #    #- $DOCKER_DIR/sablier/data/sablier.yaml:/etc/sablier/sablier.yaml      # Mount a config file if perferred instead of env vars, dynamic middlewares or commands.
+  #    #- $DOCKER_DIR/sablier/data/my-states.json:/etc/sablier/my-states.json           # File where state is saved - see option below.
+  #  command:
+  #  # Can specify global options with commands. To view all command options run:
+  #  # docker run acouvreur/sablier start --help
+  #    - start
+  #    - --provider.name=docker                            # Provider to use to manage containers [docker swarm kubernetes] (default "docker")
+  #    #- --server.base-path="/"                           # The base path for the API (default "/")
+  #    #- --server.port=10000                              # The server port to use (default 10000)
+  #    - --sessions.default-duration=10m                    # The default session duration (default 5m0s)
+  #    - --sessions.expiration-interval=2m                 # The expiration checking interval. Higher duration gives less stress on CPU. If you only use sessions of 1h, setting this to 5m is a good trade-off. (default 20s)
+  #    #- --storage.file="/etc/sablier/my-states.json"     # File path to save the state (default stateless)
+  #                                                        # Initial log message shows use of /etc/sablier/state.json and in-container /etc/sablier/sablier.json has state.json specified.
+  #                                                        # So seems like it's trying to autosave to /etc/sablier/state.json but file is always empty.
+  #                                                        # Specifying here throws an error.
+  #                                                        # FIXED IN FUTURE RELEASES???
+  #    - --strategy.blocking.default-timeout=1m            # Default timeout used for blocking strategy (default 1m0s)
+  #    #- --strategy.dynamic.custom-themes-path=""         # Custom themes folder, will load all .html files recursively (default empty)
+  #    - --strategy.dynamic.default-refresh-frequency=2s   # Default refresh frequency in the HTML page for dynamic strategy (default 5s)
+  #    - --strategy.dynamic.default-theme=shuffle          # Default theme used for dynamic strategy (default "hacker-terminal")
+  #    - --strategy.dynamic.show-details-by-default        # Show the loading instances details by default (default true)
+  #    #- --configFile string                              # Config file path. If not defined, looks for sablier.(yml|yaml|toml) in /etc/sablier/ > $XDG_CONFIG_HOME > $HOME/.config/ and current directory
+  #    #- --logging.level string                           # The logging level. Can be one of [panic, fatal, error, warn, info, debug, trace] (default "info")
+  #  #environment:
+  #  # We can use env vars instead of commands or the dynamic middleware if preferred.
+  #  # Note that these did not apply globally properly and still needed specified in each service's sablier middleware.
+  #  # Seems like this is a known issue based on github issues so may be fixed in later versions.
+  #    #- PROVIDER_NAME=docker
+  #    #- SERVER_PORT=10000
+  #    #- SERVER_BASE_PATH=/
+  #    #- STORAGE_FILE=
+  #    #- SESSIONS_DEFAULT_DURATION=10M
+  #    #- SESSIONS_EXPIRATION_INTERVAL=1M
+  #    #- LOGGING_LEVEL=TRACE                             # Can be one of [panic, fatal, error, warn, info, debug, trace] (default "info")
+  #    #- STRATEGY_DYNAMIC_CUSTOM_THEMES_PATH=            # Custom themes folder, will load all .html files recursively (default empty)
+  #    #- STRATEGY_DYNAMIC_SHOW_DETAILS_BY_DEFAULT=TRUE   # Show instances details by default in waiting UI (default "FALSES")
+  #    #- STRATEGY_DYNAMIC_DEFAULT_THEME=SHUFFLE           # Default theme used for dynamic strategy (default "HACKER_TERMINAL")
+  #    #- STRATEGY_DYNAMIC_DEFAULT_REFRESH_FREQUENCY=5S   # Default refresh frequency in the HTML page for dynamic strategy (default 5s)
+  #    #- STRATEGY_BLOCKING_DEFAULT_TIMEOUT=1M            # Default timeout used for blocking strategy (default 1m)
+  #  labels:
+  #    - org.label-schema.group=sablier
+  #    #----------- TRAEFIK LABELS -----------#
+  #    - traefik.enable=true                              # Mandatory or won't work
+  #    ## Dynamic Middleware (we can use labels instead of the dynamic middleware file if preferred)
+  #    #- traefik.http.middlewares.dynamic-sablier.plugin.sablier.names=sablier,whoami
+  #    #- traefik.http.middlewares.dynamic-sablier.plugin.sablier.sablierUrl=http://sablier:10000
+  #    #- traefik.http.middlewares.dynamic-sablier.plugin.sablier.dynamic.sessionDuration=1m
+  #
+  ## Whoami - Testing Sablier
+  #whoami-sablier:
+  #  container_name: whoami-sablier
+  #  image: traefik/whoami
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  networks:
+  #    - t2_proxy
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  ports:
+  #    - "$WHOAMI_SABLIER_PORT:80"
+  #  #command:
+  #  # These commands are relevant only to the Traefik image
+  #  #   - --port=83                                           # Tells whoami to start listening on 83 instead of 80
+  #  #   - --name=iamfoo
+  #  labels:
+  #    - org.label-schema.group=sablier
+  #    #----------- SABLIER LABELS -----------#
+  #    # Don't need to remove the Traefik labels for Sablier use but it makes Traefik service/router
+  #    # lists tidier if we comment them out and only use the dynamic router/service definitions.
+  #    - sablier.enable=true        # MUST have this label for Sablier to work.
+  #    #- sablier.group=testing     # Don't really know how this works alongside or instead of service names in middleware. 
+  #    ##----------- TRAEFIK LABELS -----------#
+  #    #- "traefik.enable=true"
+  #    ### HTTP Routers
+  #    #- "traefik.http.routers.whoami-sablier-rtr.entrypoints=https"
+  #    #- "traefik.http.routers.whoami-sablier-rtr.rule=Host(`whoami-sablier.$DOMAINNAME0`)"
+  #    ### Middlewares
+  #    ##- "traefik.http.routers.whoami-sablier-rtr.middlewares=chain-basic-auth@file" 
+  #    ##- "traefik.http.routers.whoami-sablier-rtr.middlewares=chain-no-auth@file"
+  #    ##- "traefik.http.routers.whoami-sablier-rtr.middlewares=chain-authelia@file"
+  #    ### HTTP Services
+  #    #- "traefik.http.routers.whoami-sablier-rtr.service=whoami-sablier-svc"
+  #    #- "traefik.http.services.whoami-sablier-svc.loadbalancer.server.port=80"
+  #
+  ## Simpleweb - Testing Sablier
+  #simpleweb-sablier:
+  #  container_name: simpleweb-sablier
+  #  image: yeasy/simple-web
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  networks:
+  #    - t2_proxy
+  #  security_opt:
+  #    - no-new-privileges:true
+  #  ports:
+  #    - "$SIMPLEWEB_PORT:80"
+  #  labels:
+  #    - org.label-schema.group=sablier
+  #    #----------- SABLIER LABELS -----------#
+  #    - sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+  #    #- sablier.group=testing     # Don't really know how this works alongside or instead of service names in middleware. 
+  #    ##----------- TRAEFIK LABELS -----------#
+  #    #- "traefik.enable=true"
+  #    ### HTTP Routers
+  #    #- "traefik.http.routers.simpleweb-rtr.entrypoints=https"
+  #    #- "traefik.http.routers.simpleweb-rtr.rule=Host(`simpleweb.$DOMAINNAME0`)"
+  #    ### Middlewares
+  #    ##- "traefik.http.routers.simpleweb-rtr.middlewares=chain-basic-auth@file" 
+  #    ##- "traefik.http.routers.simpleweb-rtr.middlewares=chain-no-auth@file"
+  #    #- "traefik.http.routers.simpleweb-rtr.middlewares=chain-authelia@file"
+  #    ### HTTP Services
+  #    #- "traefik.http.routers.simpleweb-rtr.service=simpleweb-svc"
+  #    #- "traefik.http.services.simpleweb-svc.loadbalancer.server.port=80"
+
+  # Authelia (Lite) - Self-Hosted Single Sign-On and Two-Factor Authentication
+  authelia:
+    container_name: authelia
+    # Check this before upgrading: https://github.com/authelia/authelia/blob/master/BREAKING.md
+    image: authelia/authelia
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy
+      #- default
+    # No GUi at PORT and no reason to expose. Access will always be via proxed domain name.
+    #ports:
+    #  - "$AUTHELIA_PORT:$AUTHELIA_PORT"
+    volumes:
+      - $DOCKER_DIR/authelia/data/config:/config
+      - $DOCKERLOG_DIR/authelia:/logs
+    environment:
+      - TZ=$TZ
+      - AUTHELIA_JWT_SECRET_FILE=/run/secrets/authelia_jwt_secret
+      - AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE=/run/secrets/email_smtp_password # Required for Email notifier
+      - AUTHELIA_DEFAULT_REDIRECTION_URL=$AUTHELIA_DEFAULT_REDIRECTION_URL
+      - AUTHELIA_SERVER_PORT=$AUTHELIA_PORT
+      - AUTHELIA_SESSION_DOMAIN=$AUTHELIA_SESSION_DOMAIN
+      - AUTHELIA_NOTIFIER_SMTP_USERNAME=$EMAIL_SMTP_USER # Required for Email notifier
+      - AUTHELIA_NOTIFIER_SMTP_HOST=$EMAIL_SMTP_URL # Required for Email notifier
+      - AUTHELIA_NOTIFIER_SMTP_PORT=$EMAIL_SMTP_TLS_PORT # Required for Email notifier
+      - AUTHELIA_NOTIFIER_SMTP_SENDER=$EMAIL_SMTP_SENDER # Required for Email notifier
+      #- AUTHELIA_LOG_LEVEL=debug # Override config file log level = info while setting up
+      #- AUTHELIA_SESSION_SECRET_FILE=/run/secrets/authelia_session_secret # Required for Session using Redis
+      #- AUTHELIA_STORAGE_MYSQL_PASSWORD_FILE=/run/secrets/authelia_storage_mysql_password # Required for Storage using MySQL
+      #- AUTHELIA_DUO_API_SECRET_KEY_FILE=/run/secrets/authelia_duo_api_secret_key # Required for Duo push notification
+    secrets:
+      - authelia_jwt_secret
+      - email_smtp_password # Required for Email notifier
+      #- authelia_session_secret # Required for Session using Redis
+      #- authelia_storage_mysql_password # Required for Storage using MySQL
+      #- authelia_duo_api_secret_key # Required for Duo push notification
+    labels:
+      - org.label-schema.group=external
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.authelia-rtr.entrypoints=https"
+      - "traefik.http.routers.authelia-rtr.rule=Host(`authelia.$DOMAINNAME0`)"
+      - "traefik.http.routers.authelia-rtr.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.authelia-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.authelia-rtr.service=authelia-svc"
+      - "traefik.http.services.authelia-svc.loadbalancer.server.port=$AUTHELIA_PORT"
+
+
+
+  # Crowdsec - crowd-sourced IPS
+  # https://docs.crowdsec.net/docs/intro
+  # https://github.com/crowdsecurity
+  # Image Updates:
+  #  - 20231101 - switch from default untagged image to Debian image to support journald logs as input.
+  #  - 20250429 - updated from v1.5.5-debian to latest-debian
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest-debian
+    container_name: crowdsec
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - t2_proxy
+    ports:
+      - $CROWDSEC_API_PORT:8080
+      - $CROWDSEC_PROMETHEUS_EXPORT:6060
+    environment:
+      COLLECTIONS: 'crowdsecurity/linux crowdsecurity/whitelist-good-actors crowdsecurity/iptables crowdsecurity/http-cve crowdsecurity/traefik LePresidente/authelia crowdsecurity/nextcloud'
+      PARSERS: 'crowdsecurity/docker-logs crowdsecurity/geoip-enrich crowdsecurity/whitelists'
+      GID: 1000 #$PGID
+      CUSTOM_HOSTNAME: crush     # This is the name that will appear on the CrowdSec Console (web app) and machines list to identify the CrowdSec instance.
+      # Below vars are for 'secondary' machines
+      #DISABLE_LOCAL_API: true    # Only after successfully registering and validating remote agent below.
+      # For the following, check local_api_credentials.yaml after cscli lapi register (secondary machine) and cscli machine validate (on primary machine)
+      #AGENT_USERNAME: $CROWDSEC_AGENT_LOGIN_WSL_UBUNTU 
+      #AGENT_PASSWORD: $CROWDSEC_AGENT_PASSWORD_WSL_UBUNTU 
+      #LOCAL_API_URL: $CROWDSEC_CRUSH_URL 
+    volumes:
+      - /var/log:/var/log:ro
+      # in 'config.yaml', change 'log_dir: /var/cs-logs/', and 'log_media: file'
+      - $DOCKERLOG_DIR/crowdsec:/var/cs-logs
+      - $DOCKER_DIR/crowdsec/data:/var/lib/crowdsec/data
+      - $DOCKER_DIR/crowdsec/config:/etc/crowdsec 
+
+  # CROWDSEC - TRAEFIK BOUNCER
+  # https://github.com/fbonalair/traefik-crowdsec-bouncer
+  # https://hub.crowdsec.net/author/fbonalair/bouncers/traefik-crowdsec-bouncer
+  cs-bouncer-traefik:
+  # To get traefik bouncer API, run this in crowdsec container: docker exec crowdsec cscli bouncers add traefik-bouncer
+    image: docker.io/fbonalair/traefik-crowdsec-bouncer:latest
+    container_name: cs-bouncer-traefik
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - t2_proxy
+    environment:
+      GIN_MODE: release
+      CROWDSEC_BOUNCER_API_KEY: $CROWDSEC_TRAEFIK_BOUNCER
+      CROWDSEC_AGENT_HOST: crowdsec:8080
+      # For secondary server:
+      #CROWDSEC_BOUNCER_API_KEY: $CROWDSEC_TRAEFIK_BOUNCER_CRUSH_API_WSL_UBUNTU
+      #CROWDSEC_AGENT_HOST: $CROWDSEC_CRUSH_URL_TRAEFIK_BOUNCER
+    # Removed this since it allows restarting service without also restarting main crowdsec service
+    #depends_on:
+    #  - crowdsec
+
+#  # CROWDSEC - CLOUDFLARE BOUNCER
+#  # DEPRECIATED - See instead: https://docs.crowdsec.net/u/bouncers/cloudflare-workers
+#  # https://docs.crowdsec.net/docs/bouncers/cloudflare/
+#  # https://www.smarthomebeginner.com/crowdsec-cloudflare-bouncer/
+#  cs-bouncer-cloudflare:
+#    image: crowdsecurity/cloudflare-bouncer
+#    container_name: cloudflare-bouncer  
+#    restart: always 
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      - t2_proxy
+#    volumes:
+#      - $DOCKER_DIR/crowdsec/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
+
+
+  # Portainer - WebUI for Containers
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    # '-H' command not required. Used on initial config to tell Portainer which host endpoint to setup.
+    # Endpoints/environments can be configured in Portainer's settings without this too. Just create an
+    # Environment connecting to socketproxy (type = API), or connecting directly to the docker socket
+    # (type = socket).
+    #command: -H unix:///var/run/docker.sock # Can use Docker Socket Proxy instead for improved security
+    #command: -H tcp://socket-proxy:2375
+    ###command: -H $DOCKER_SOCKET_PROXY
+    #depends_on:
+    #  - socket-proxy
+    networks:
+      - t2_proxy
+      - socket_proxy
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      #- /var/run/docker.sock:/var/run/docker.sock # Can use Docker Socket Proxy instead for improved security
+      - $DOCKER_DIR/portainer/data:/data # Change to local directory if you want to save/transfer config locally
+    ports:
+      #- "$PORTAINER_PORT_HTTP:9000" # Old GUI port, now 9443. Believe still works if needed, for backwards compatibility.
+      - "$PORTAINER_PORT_HTTPS:9443"
+      # Used for edge agent connections if we have any.
+      # Use --tunnel-port flag to tell edge agent what mapped host port to connect to.
+      - "$PORTAINER_PORT_EDGE_AGENT_HOST:8000"
+    environment:
+      - TZ=$TZ
+    labels:
+      #- org.label-schema.group=external    # 11/7/24 - disabled external DNS
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.portainer-rtr.entrypoints=https"
+      - "traefik.http.routers.portainer-rtr.rule=Host(`portainer.$DOMAINNAME0`)"
+      ## Middlewares
+      #- "traefik.http.routers.portainer-rtr.middlewares=chain-basic-auth@file" 
+      #- "traefik.http.routers.portainer-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.portainer-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.portainer-rtr.service=portainer-svc"
+      - "traefik.http.services.portainer-svc.loadbalancer.server.port=9443"
+      - "traefik.http.services.portainer-svc.loadbalancer.server.scheme=https"
+
+#  # PORTAINER AGENT
+#  # For other local systems we want to manage in central Portainer instance.
+#  # If port 9001 is not accessible on remote system, consider Edge Agent instead.
+#  # https://docs.portainer.io/admin/environments/add/docker/agent
+#  # Intentionally minimal docker definition for running on remote systems without
+#  # any additional services/networks/etc
+#  portainer_agent:
+#    container_name: portainer_agent
+#    image: portainer/agent
+#    restart: always
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - "9448:9001" # Or use $PORTAINER_PORT_AGENT from .env file
+#    volumes:
+#      - "/var/run/docker.sock:/var/run/docker.sock"
+#      - "/var/lib/docker/volumes:/var/lib/docker/volumes"
+#    #labels:
+#      #------------- WATCHTOWER -------------#
+#      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+
+
+# Homarr - Self-Hosted Dashboard
+# https://homarr.dev/
+  homarr:
+    container_name: homarr
+    image: ghcr.io/homarr-labs/homarr:latest
+    restart: unless-stopped
+    networks:
+      - t2_proxy
+      - socket_proxy
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "$HOMARR_PORT:7575" # Maps to 7575
+    volumes:
+      - $DOCKERLOG_DIR/homarr:/app/log
+      - $DOCKER_DIR/homarr/data:/appdata
+    environment:
+      # SECRET_ENCRYPTION_KEY is randomly generated. Generate own key with: openssl rand -hex 32
+      - SECRET_ENCRYPTION_KEY=$HOMAR_SECRET_ENCRYPTION_KEY
+      #- /var/run/docker.sock:/var/run/docker.sock # For Docker integration
+      # To enable read-only access to the Docker socket, use the following instead:
+      #- /var/run/docker.sock:/var/run/docker.sock:ro
+      # TO use socket proxy instead of direct access to docker.sock
+      - DOCKER_HOSTNAMES=socket-proxy # Can add multiple comma separted hostnames if socket exposed e.g. DOCKER_HOSTNAMES=socket-proxy,192.168.0.222
+      - DOCKER_PORTS=2375  # Can add multiple comma separted ports e.g. DOCKER_PORTS=2375,2375
+    labels:
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.homarr-rtr.entrypoints=https"
+      #- "traefik.http.routers.homarr-rtr.rule=Host(`homarr.$DOMAINNAME0`)"
+      - "traefik.http.routers.homarr-rtr.rule=Host(`homarr.$DOMAINNAME0`) || Host(`home.$DOMAINNAME0`) || HostRegexp(`{host:.+}`)"
+      #- "traefik.http.routers.homarr-rtr.rule=Host(`homarr.$DOMAINNAME0`) || HostRegexp(`{host:.+}`)"
+      #- "traefik.http.routers.homarr-rtr.rule=Host(`homarr.$DOMAINNAME0`) || HostRegexp(`{catchall:.*}`)"
+      #- "traefik.http.routers.homarr-rtr.rule=Host(`$DOMAINNAME0`) || Host(`www.$DOMAINNAME0`) || Host(`homarr.$DOMAINNAME0`)"
+      - "traefik.http.routers.homarr-rtr.priority=1"
+      ## Middlewares
+      - "traefik.http.routers.homarr-rtr.middlewares=chain-authelia@file"
+      #- "traefik.http.routers.homarr-rtr.middlewares=homarr-redirect@docker,chain-basic-auth@file"
+      # Redirect non-www to www middleware 
+      #- "traefik.http.middlewares.homarr-redirect.redirectregex.regex=^https?://$DOMAINNAME0/(.*)"
+      #- "traefik.http.middlewares.homarr-redirect.redirectregex.replacement=https://www.$DOMAINNAME0/$${1}"
+      #- "traefik.http.middlewares.homarr-redirect.redirectregex.permanent=true"
+      ## HTTP Services
+      - "traefik.http.routers.homarr-rtr.service=homarr-svc"
+      - "traefik.http.services.homarr-svc.loadbalancer.server.port=7575"
+
+
+
+# DOCKPEEK - Automated Docker Service Dashboard
+# https://github.com/dockpeek/dockpeek
+  dockpeek:
+    container_name: dockpeek
+    image: ghcr.io/dockpeek/dockpeek:latest
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    #depends_on:
+    #  - socket-proxy
+    networks:
+      - t2_proxy
+      #- default
+      - socket_proxy
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "$DOCKPEEK_PORT:8000" # Maps to 3420
+    # Only use if connecting to local host using direct socket access, not needed if using socket-proxy.
+    #volumes:
+      #- /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      #- DOCKER_HOST=$DOCKER_SOCKET_PROXY           # Use only if connecting to localhost and no others - Connect via socket proxy
+      #- DOCKER_HOST=unix:///var/run/docker.sock    # Use only if connecting to localhost and no others - Connect directly to socket (requires volume mapping)
+      - SECRET_KEY=$DOCKPEEK_SECRET_KEY             # Required: Set a secure secret key
+      - USERNAME=admin                              # Required: Change default username  
+      - PASSWORD=$DOCKPEEK_PASSWORD                 # Required: Change default password
+      # ------------------------------------------------------------------------
+      # Docker Host - LOCALHOST
+      - DOCKER_HOST_1_NAME=crush                                     # Display name in UI
+      - DOCKER_HOST_1_URL=$DOCKER_SOCKET_PROXY                       # Local Docker socket
+      #- DOCKER_HOST_1_URL=unix:///var/run/docker.sock               # Directly socket connection (requires volume mapping)
+      # DOCKER_HOST_1_PUBLIC_HOSTNAME                                # Not needed - will use container's host IP
+      # ------------------------------------------------------------------------
+      # Docker Host - FRIGATE
+      - DOCKER_HOST_2_NAME=frigate                                   # Display name in UI
+      - DOCKER_HOST_2_URL=tcp://$HOSTIP_FRIGATE:$SOCKET_PROXY_PORT   # Host IP & published socket-proxy port
+      #- DOCKER_HOST_2_PUBLIC_HOSTNAME=vps.tailnet.ts.net            # Optional: Tailscale hostname
+      # ------------------------------------------------------------------------
+      # Docker Host - MONITORING
+      - DOCKER_HOST_3_NAME=monitoring
+      - DOCKER_HOST_3_URL=tcp://$HOSTIP_MONITORING:$SOCKET_PROXY_PORT
+      # ------------------------------------------------------------------------
+      # Docker Host - PIHOLE
+      - DOCKER_HOST_4_NAME=pihole
+      - DOCKER_HOST_4_URL=tcp://$HOSTIP_PIHOLE:$SOCKET_PROXY_PORT
+      # ------------------------------------------------------------------------
+      # Docker Host - OBICO
+      - DOCKER_HOST_5_NAME=obico
+      - DOCKER_HOST_5_URL=tcp://$HOSTIP_OBICO:$SOCKET_PROXY_PORT
+      # ------------------------------------------------------------------------
+      # Docker Host - MINECRAFT
+      - DOCKER_HOST_6_NAME=minecraft
+      - DOCKER_HOST_6_URL=tcp://$HOSTIP_MINECRAFT:$SOCKET_PROXY_PORT
+      # ------------------------------------------------------------------------
+      # Docker Host - TAILSCALE EXAMPLE
+      #- DOCKER_HOST_X_URL=tcp://100.64.1.5:2375           # Tailscale IP
+      #- DOCKER_HOST_X_NAME=Remote VPS                      # Display name in UI
+      #- DOCKER_HOST_X_PUBLIC_HOSTNAME=vps.tailnet.ts.net   # Optional: Tailscale hostname
+    labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      ##----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.dockpeek-rtr.entrypoints=https"
+      - "traefik.http.routers.dockpeek-rtr.rule=Host(`dockpeek.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.dockpeek-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.dockpeek-rtr.service=dockpeek-svc"
+      - "traefik.http.services.dockpeek-svc.loadbalancer.server.port=8000"
+
+
+  # MariaDB - MySQL Database
+  # After starting container for first time dexec and mysqladmin -u root password <password>
+  mariadb:
+    container_name: mariadb
+    image: lscr.io/linuxserver/mariadb
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      default:
+        ipv4_address: $DEFAULTNET_MARIADB_IP # You can specify a static IP
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "$MARIADB_PORT:3306"
+    volumes:
+      - $DOCKER_DIR/mariadb/data:/config
+      - $DOCKER_DIR/mariadb_backups:/backups
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - FILE__MYSQL_ROOT_PASSWORD=/run/secrets/mysql_root_password # Note FILE__ (double underscore) - Issue #127
+      - FILE__MYSQL_GUAC_DB=/run/secrets/mysql_guac_db
+      - FILE__MYSQL_GUAC_USER=/run/secrets/mysql_guac_user
+      - FILE__MYSQL_GUAC_PASSWORD=/run/secrets/mysql_guac_password
+    secrets:
+      - mysql_root_password
+      - mysql_guac_db
+      - mysql_guac_user
+      - mysql_guac_password
+      #- mysql_nextcloud_password # Using sqlite DB instead
+      #- mysql_librespeed_user # Couldn't get librespeed DB integration working
+      #- mysql_librespeed_password # Couldn't get librespeed DB integration working
+    labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+  # PHPMYAdmin - GUI for InfluxDB admin
+    # Would prefer linuxserver.io image but functionality to use secret
+    # for password using env var FILE__PMA_PASSWORD doesn't work. 
+    # (Issue raised: https://gitlab.com/Linuxserver.io/docker-phpmyadmin/-/issues/1)
+    # Reverted to official container with PMA_PASSWORD_FILE but just uncomment relevant
+    # lines below to use linuxserver.io image once fixed.  
+  phpmyadmin:
+    container_name: phpmyadmin
+    #image: lscr.io/linuxserver/phpmyadmin
+    image: phpmyadmin
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy
+      - default
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $DOCKER_DIR/phpmyadmin/data/config:/config
+    ports:
+      - "$PHPMYADMIN_PORT:80"
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS # For linuxserver.io image
+      #- PUID=$PUID # For linuxserver.io image
+      #- PGID=$PGID # For linuxserver.io image
+      #- TZ=$TZ # For linuxserver.io image
+      - PMA_USER=root
+      - PMA_HOST=mariadb
+      - PMA_PORT=$MARIADB_PORT # Port of the database server to use
+      #- FILE__PMA_PASSWORD=/run/secrets/mysql_root_password # linuxserver.io env var - doesn't work. Solution: remove trailing line break!
+      - PMA_PASSWORD_FILE=/run/secrets/mysql_root_password
+      #- PMA_PASSWORD=$PHPMYADMIN_PASS # Using .env file works but insecure
+      #- PMA_ARBITRARY=1 #optional - 1 means we can try to connect to other SQL DBs (if cred variables not provided)
+      # Optional - defines URL used to acces site.
+      # Not setting since we may access from HOST_IP:PORT
+      #- PMA_ABSOLUTE_URI=https://phpmyadmin.example.com
+    secrets:
+      - mysql_root_password
+    labels:
+      #- org.label-schema.group=sablier
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      ##----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.phpmyadmin-rtr.entrypoints=https"
+      - "traefik.http.routers.phpmyadmin-rtr.rule=Host(`phpmyadmin.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.phpmyadmin-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.phpmyadmin-rtr.service=phpmyadmin-svc"
+      - "traefik.http.services.phpmyadmin-svc.loadbalancer.server.port=80"
+
+
+  # Adminer - resource-light SQL DB GUI
+  # Replacement for phpmyadmin
+  # https://hub.docker.com/_/adminer/
+  # https://github.com/TimWolla/docker-adminer
+  # https://github.com/docker-library/docs/tree/master/adminer
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+      - t2_proxy
+    #links:
+    #  - mariadb:db # Don't think this is actually needed given we're on same network as mariadb
+    ports:
+      - $ADMINER_PORT:8080
+    #volumes:
+    #  - $DOCKER_DIR/adminer/data/plugins-enabled:/var/www/html/plugins-enabled
+    environment:
+      # See plugins list at: https://github.com/vrana/adminer/tree/master/plugins
+      #- ADMINER_PLUGINS=login-password-less tables-filter tinymce frames pretty-json-column
+      - ADMINER_DESIGN="nette"
+      - ADMINER_DEFAULT_SERVER=mariadb
+    labels:
+      #- org.label-schema.group=sablier
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.adminer-rtr.entrypoints=https"
+      - "traefik.http.routers.adminer-rtr.rule=Host(`adminer.$DOMAINNAME0`)"
+      ## Middlewares     
+      - "traefik.http.routers.adminer-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.adminer-rtr.service=adminer-svc"
+      - "traefik.http.services.adminer-svc.loadbalancer.server.port=8080"    
+
+
+  # Guacamole - Remote desktop, SSH, on Telnet on any HTML5 Browser
+  # https://hub.docker.com/r/guacamole/guacamole
+  # Create all databases and tables first
+  # Before mounting logback.xml, copy it to host:
+  # touch $DOCKER_DIR/guacamole/data/fail2ban/logback.xml
+  # & set _secrets/mysql* permissions on host to 664 or guac container user can't read content
+  guacamole:
+    image: guacamole/guacamole
+    container_name: guacamole
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    #depends_on:
+      #- guacd
+      #- mariadb # Forces re-start of mariadb if we have this defined.
+    networks:
+      - t2_proxy
+      - default # To be able to talk to guacd
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "$GUACAMOLE_PORT:8080"
+    volumes:
+      - $DOCKERLOG_DIR/guacamole:/usr/local/tomcat/logs
+    environment:
+      - GUACD_HOSTNAME=guacd
+      - TOTP_ENABLED=true
+      - API_SESSION_TIMEOUT=1440
+      - MYSQL_HOSTNAME=mariadb
+      - MYSQL_PORT=$MARIADB_PORT
+      - MYSQL_DATABASE_FILE=/run/secrets/mysql_guac_db # Set permissions on host to 664 or guac container user can't read content
+      - MYSQL_USER_FILE=/run/secrets/mysql_guac_user # Set permissions on host to 664 or guac container user can't read content
+      - MYSQL_PASSWORD_FILE=/run/secrets/mysql_guac_password # Set permissions on host to 664 or guac container user can't read content
+    secrets:
+      - mysql_guac_db
+      - mysql_guac_user
+      - mysql_guac_password
+    labels:
+      #- org.label-schema.group=sablier # Dec 24: Disabled 'external' access when moving to cloudflared tunnels
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      #- sablier.group=guacamole
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.guacamole-rtr.entrypoints=https"
+      - "traefik.http.routers.guacamole-rtr.rule=Host(`guac.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.guacamole-rtr.middlewares=chain-authelia@file,add-guacamole"
+      - "traefik.http.middlewares.add-guacamole.addPrefix.prefix=/guacamole"
+      ## HTTP Services
+      - "traefik.http.routers.guacamole-rtr.service=guacamole-svc"
+      - "traefik.http.services.guacamole-svc.loadbalancer.server.port=8080"
+
+  # Guacamole Daemon - Needed for Guacamole
+  guacd:
+    image: guacamole/guacd
+    container_name: guacd
+    restart: always
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks: # Must be on same network as guacamole
+      - default # To be able to talk to guacamole
+      - t2_proxy # don't think t2_proxy is needed.
+    security_opt:
+      - no-new-privileges:true
+    # Don't need to expose any ports for guacd since its oin same docker network as guacamole.
+    #ports:
+    #  - "4822:4822"
+    #labels:
+      #- org.label-schema.group=sablier
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      #- sablier.group=guacamole
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 4822", "||", "exit 1"]
+      interval: 5s
+      timeout: 3s
+      start_period: 1m
+      retries: 0
+
+
+  # Glances - System Information
+  # Create/download a conf file before first use, or docker will create a directory in it's place.
+  # wget https://raw.githubusercontent.com/nicolargo/glances/master/conf/glances.conf -O /storage/Docker/glances/data/glances.conf
+  glances:
+    image: nicolargo/glances:latest
+    container_name: glances
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    privileged: true # Enables glances to get info for network interfaces
+    # network_mode: host
+    networks:
+      - t2_proxy
+      - socket_proxy
+      - default     # So that Prometheus can scrape from metrics endpoint
+    #depends_on:
+    #  - socket-proxy
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - $GLANCES_PORT:61208
+      - $GLANCES_PROMETHEUS_PORT:9091 # Prometheus port can be specified in glances.conf - using default
+    pid: host
+    volumes:
+      - $DOCKER_DIR/glances/data/glances.conf:/glances/conf/glances.conf
+      #- $USER_DIR:/data/home:ro # Optional folders to monitor
+      #- $STORAGE_DIR:/data/storage:ro # Optional folders to monitor
+      #- $MEDIA_DIR:/data/media:ro # Optional folders to monitor
+      # - /var/run/docker.sock:/var/run/docker.sock:ro # Use Docker Socket Proxy instead for improved security
+      - /etc/os-release:/etc/os-release:ro  # Display host OS info instead of image's OS
+    environment:
+      #- GLANCES_OPT=-w -C /glances/conf/glances.conf
+      #- GLANCES_OPT=-C /glances/conf/glances.conf --export influxdb
+      #- GLANCES_OPT=-w --export prometheus
+      - GLANCES_OPT=-w
+      #- GLANCES_OPT=-w -d # -d = debug
+      #- DOCKER_HOST=tcp://socket-proxy:2375
+      - DOCKER_HOST=$DOCKER_SOCKET_PROXY
+    labels:
+      #- org.label-schema.group=sablier,external  # External for testing purposes mainly
+      - org.label-schema.group=external  # External for testing purposes mainly
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.glances-rtr.entrypoints=https"
+      - "traefik.http.routers.glances-rtr.rule=Host(`glances.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.glances-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.glances-rtr.service=glances-svc"
+      - "traefik.http.services.glances-svc.loadbalancer.server.port=61208"
+
+
+  # UniFi Controller - Managing UniFi Network
+  # Given own LAN IP via macvlan network.
+  # Traefik routers/middleware/services below are likely useless since Ubiquity 
+  # adds port numbers to all requests and responses so devices need to be able
+  # to communicate on FQDN:PORT or IP:PORT.
+  # Therefore probably easier/better to add service to macvlan network and only
+  # map a router for accessing GUI instead of entrypoints/rules for every port.
+  # https://help.ui.com/hc/en-us/articles/218506997-UniFi-Ports-Used
+  # UDP 3478 Port used for STUN. #REQUIRED
+  # TCP 5514 Port used for remote syslog capture.
+  # TCP 8080 Port used for device and controller communication. #REQUIRED
+  # TCP 8443 Port used for controller GUI/API as seen in a web browser #REQUIRED
+  # TCP 8880 Port used for HTTP portal redirection. #NOT REQUIRED
+  # TCP 8843 Port used for HTTPS portal redirection. #NOT REQUIRED
+  # TCP 6789 Port used for UniFi mobile speed test. #REQUIRED
+  # TCP 27117 Port used for local-bound database communication.
+  # UDP 5656-5699 Ports used by AP-EDU broadcasting. #NOT REQUIRED
+  # UDP 10001 Port used for device discovery #REQUIRED
+  # UDP 1900 Port used for "Make controller discoverable on L2 network" in controller settings.
+  unifi:
+    container_name: unifi
+    #image: jacobalberty/unifi:stable
+    image: lscr.io/linuxserver/unifi-controller
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      t2_proxy:
+      lan_net:
+        ipv4_address: $MACVLAN_UNIFI_IP # Specify IP address on macvlan network
+    security_opt:
+      - no-new-privileges:true
+    #ports:
+      # A dedicated macvlan IP means port mapping does not have any effect.
+      # All ports are accessible on dedicated IP and no ports on docker host
+      # are mapped.
+      #- "$UNIFI_COMMS_PORT:8080" # device and controller communication. #REQUIRED
+      #- "$UNIFI_GUI_PORT:8443" # GUI/API #REQUIRED
+      #- "$UNIFI_STUN_PORT_UDP:3478/udp" # STUN #REQUIRED
+      #- "$UNIFI_DISCOVERY_PORT_UDP:10001/udp" # device discovery #REQUIRED
+      #- "$UNIFI_DISCOVERYL2_PORT_UDP:1900/udp" # discoverable on L2 network #NOT REQUIRED 
+      #- "$UNIFI_MOBILESPEED_PORT:6789" # mobile speed test. #REQUIRED
+      #- "$UNIFI_PORTAL_HTTPS_PORT:8843" # Guest HTTPS portal redirection. #NOT REQUIRED
+      #- "$UNIFI_PORTAL_HTTP_PORT:8880" # Guest HTTP portal redirection. #NOT REQUIRED
+    volumes:
+      - $DOCKER_DIR/unifi/data:/config
+      - $DOCKERLOG_DIR/unifi:/config/logs
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    #cpus: 2 # CPU limit
+    mem_limit: 1024m # represents the hard memory limits
+    mem_reservation: 128m # represents the soft memory limits
+    # Alternatively setup as external app in Traefik's dynamic rules files
+    labels:
+      #- org.label-schema.group=external       
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.unifi-rtr.entrypoints=https"
+      - "traefik.http.routers.unifi-rtr.rule=Host(`unifi.$DOMAINNAME0`)"
+      #- "traefik.http.routers.unifi-portal-rtr.entrypoints=https"
+      #- "traefik.http.routers.unifi-portal-rtr.rule=Host(`portal.$DOMAINNAME0`)"
+      #- "traefik.http.routers.unifi-adopt-rtr.entrypoints=https"
+      #- "traefik.http.routers.unifi-adopt-rtr.rule=Host(`adopt.$DOMAINNAME0`)"
+      ## Middlewares     
+      - "traefik.http.routers.unifi-rtr.middlewares=chain-no-auth@file,unifi-redirect"
+      - "traefik.http.middlewares.unifi-redirect.redirectregex.regex=^https://unifi.$DOMAINNAME0:8443/(.*)"
+      - "traefik.http.middlewares.unifi-redirect.redirectregex.replacement=https://unifi.$DOMAINNAME0/$${1}"
+      #- "traefik.http.routers.unifi-portal-rtr.middlewares=chain-no-auth@file,unifi-portal-redirect"
+      #- "traefik.http.middlewares.unifi-portal-redirect.redirectregex.regex=^https://portal.$DOMAINNAME0:8843/(.*)"
+      #- "traefik.http.middlewares.unifi-portal-redirect.redirectregex.replacement=https://portal.$DOMAINNAME0/$${1}"
+      #- "traefik.http.routers.unifi-adopt-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.unifi-rtr.service=unifi-svc"
+      - "traefik.http.services.unifi-svc.loadbalancer.server.port=8443"
+      - "traefik.http.services.unifi-svc.loadbalancer.server.scheme=https"  # Resolves error: http sent to https
+      #- "traefik.http.routers.unifi-portal-rtr.service=unifi-portal-svc"
+      #- "traefik.http.services.unifi-portal-svc.loadbalancer.server.port=8843"
+      #- "traefik.http.services.unifi-portal-svc.loadbalancer.server.scheme=https"  # Resolves error: http sent to https
+      #- "traefik.http.routers.unifi-adopt-rtr.service=unifi-adopt-svc"
+      #- "traefik.http.services.unifi-adopt-svc.loadbalancer.server.port=8080"
+      
+
+  # Dozzle - Real-time Docker Log Viewer
+  dozzle:
+    image: amir20/dozzle
+    container_name: dozzle
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy
+      - socket_proxy
+      #- default
+    # Removed this since it allows restarting service without also restarting dependancy
+    #depends_on:
+    #  - socket-proxy
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "$DOZZLE_PORT:8080"
+    environment:
+      #- DOZZLE_LEVEL=info
+      #- DOZZLE_TAILSIZE=300 # depreciated
+      - DOZZLE_FILTER="status=running"
+      - DOCKER_HOST=$DOCKER_SOCKET_PROXY
+      #- DOZZLE_FILTER: "label=log_me" # limits logs displayed to containers with this label
+    # volumes:
+    #  - /var/run/docker.sock:/var/run/docker.sock # Use Docker Socket Proxy instead for improved security
+    labels:
+      #- org.label-schema.group=sablier
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.dozzle-rtr.entrypoints=https"
+      - "traefik.http.routers.dozzle-rtr.rule=Host(`dozzle.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.dozzle-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.dozzle-rtr.service=dozzle-svc"
+      - "traefik.http.services.dozzle-svc.loadbalancer.server.port=8080"
+
+
+
+  # Syncthing - File syncing across network
+  # https://docs.linuxserver.io/images/docker-syncthing
+  # Ports:
+  # 8384 Application WebUI
+  # 22000/tcp  Listening port (TCP)
+  # 22000/udp  Listening port (UDP)
+  # 21027/udp  Protocol discovery
+  syncthing:
+    image: lscr.io/linuxserver/syncthing
+    container_name: syncthing
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy
+      #- default
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - $SYNCTHING_GUI_PORT:8384 # Application WebUI
+      - $SYNCTHING_LISTEN_PORT:22000 # Listening port (TCP)
+      - $SYNCTHING_LISTEN_PORT:22000/udp # Listening port (UDP)
+      - $SYNCTHING_DISCOVERY_PORT:21027/udp #  Protocol discovery (UDP)
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID         # To give access to root-owned files for backup
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=022
+    volumes:
+      - $DOCKER_DIR/syncthing/data:/config
+      - $BACKUP_DIR:/Backup
+      - $DOCKER_DIR:/Docker
+      - $MEDIA_DIR:/Media
+      - $SCRATCHPAD_DIR:/scratchpad
+    user: root # Needed to allow syncthing to access all mounted files even if they are owned by root.
+    labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.syncthing-rtr.entrypoints=https"
+      - "traefik.http.routers.syncthing-rtr.rule=Host(`syncthing.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.syncthing-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.syncthing-rtr.service=syncthing-svc"
+      - "traefik.http.services.syncthing-svc.loadbalancer.server.port=8384"
+
+
+
+
+  # Nextcloud - Self Hosted Dropbox
+  # 'touch' log file before first use:
+  #    touch /var/log/docker/nextcloud/nextcloud.log
+  #    touch /var/log/docker/nextcloud/audit.log
+  # 20230819: Started fresh install with latest version. Previous version was too far behind and inctremental upgrades failed.
+  # 20241212: Incrmental update from 27.X.X to 30.0.4. Had errors due to versions being too far apart. Don't know how it wasn't caught earlier.
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest  #24.0.12 #25.0.4 #26.0.2 #28.0.4-ls315 #29.0.7 #30.0.4 #latest
+    container_name: nextcloud
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    # Shouldn't need links since on the same network but useful when testing config
+    #links:
+    #  - mariadb:mariadb
+    networks:
+      - t2_proxy
+      - default # For Collabora access
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - $NEXTCLOUD_PORT:443 # GUI/API
+      #- $COLLABORA_PORT:9980 # Collabora
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - NEXTCLOUD_TRUSTED_DOMAINS=192.168.0.10 nc.mc-guinness.co.uk nc.mgsquared.co.uk nextcloud.mc-guinness.co.uk
+    volumes:
+      #- $BACKUP_DIR/Current/Nextcloud-linuxserver:/data
+      - $BACKUP_DIR/Current/Nextcloud:/data
+      - $DOCKER_DIR/nextcloud/data:/config
+      - $STORAGE_DIR:/storage:ro
+      - $DOCKERLOG_DIR/nextcloud/nextcloud.log:/data/nextcloud.log
+      - $DOCKERLOG_DIR/nextcloud/nextcloud.log:/data/audit.log # Audit logging not enabled by default - see Obsidian notes (#### Logging)
+    labels:
+      #- org.label-schema.group=external # Dec 24: Disabled 'external' access when moving to cloudflared tunnels
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.nextcloud-rtr.entrypoints=https"
+      - "traefik.http.routers.nextcloud-rtr.rule=Host(`nc.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.nextcloud-rtr.middlewares=chain-nextcloud@file"
+      ## HTTP Services
+      - "traefik.http.routers.nextcloud-rtr.service=nextcloud-svc"
+      - "traefik.http.services.nextcloud-svc.loadbalancer.server.port=443"
+      - "traefik.http.services.nextcloud-svc.loadbalancer.server.scheme=https"
+
+
+
+
+
+  # LibreSpeed - Test speed to/from server
+  # https://github.com/librespeed/speedtest
+  # https://docs.linuxserver.io/images/docker-librespeed
+  # https://github.com/linuxserver/docker-librespeed
+  # https://registry.hub.docker.com/r/adolfintel/speedtest
+  librespeed:
+    container_name: librespeed
+    image: lscr.io/linuxserver/librespeed
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy
+      #- default
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - $LIBRESPEED_PORT:80
+    volumes:
+      - $DOCKER_DIR/librespeed/data:/config
+      - $DOCKERLOG_DIR/librespeed:/config/log
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - CUSTOM_RESULTS=false
+      - DB_TYPE=sqlite
+      - PASSWORD=password # to access historic results at: /results/stats.php
+      - IPINFO_APIKEY=$LIBRESPEED_IPINFO_TOKEN # Access token from ipinfo.io. Required for detailed IP information.
+      #- FILE__PASSWORD=/run/secrets/librespeed_password # Won't work for some reason
+      ## Couldn't get mySQL integration working - may be related to trailing line breaks in secrets files.
+      #- DB_TYPE=mysql
+      #- DB_HOSTNAME=mariadb
+      #- DB_PORT=3306
+      #- FILE__DB_NAME=/run/secrets/mysql_librespeed_db
+      #- FILE__DB_USERNAME=/run/secrets/mysql_librespeed_user
+      #- FILE__DB_PASSWORD=/run/secrets/mysql_librespeed_password 
+    #secrets:
+      #- librespeed_password # Couldn't get file-based password working for historic results page
+      #- mysql_librespeed_db # Couldn't get DB integration working
+      #- mysql_librespeed_user # Couldn't get DB integration working
+      #- mysql_librespeed_password # Couldn't get DB integration working
+    labels:
+      #- org.label-schema.group=external,sablier
+      - org.label-schema.group=external
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=false # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      ##----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.librespeed-rtr.entrypoints=https"
+      - "traefik.http.routers.librespeed-rtr.rule=Host(`librespeed.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.librespeed-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.librespeed-rtr.service=librespeed-svc"
+      - "traefik.http.services.librespeed-svc.loadbalancer.server.port=80"
+
+
+  # Docker-GC - Automatic Docker Garbage Collection
+  # https://github.com/clockworksoul/docker-gc-cron
+  # Create docker-gc-exclude file
+  # touch log file before first use: touch /var/log/docker/docker-gc/cron.log
+  docker-gc:
+    image: clockworksoul/docker-gc-cron:latest
+    container_name: docker-gc
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+      #- socket_proxy
+    volumes:
+      # Comment below if we can get working with socket-proxy
+      - /var/run/docker.sock:/var/run/docker.sock # Preferrably Docker Socket Proxy instead for improved security
+      - $DOCKER_DIR/docker-gc/data/docker-gc-exclude.txt:/etc/docker-gc-exclude
+      - $DOCKERLOG_DIR/docker-gc/cron.log:/var/log/cron.log
+    environment:
+      - EXCLUDE_CONTAINERS_FROM_GC="/etc/docker-gc-exclude"
+      #- CRON=0 0 0 * * ?  # Everyday at midnight. Previously 0 0 * * *
+      - CRON=0 9 * * 4  # 9am Thursdays
+      #- CRON=*/10 * * * *  # Every 10 min - used while dry-run testing
+      #- CRON=59 * * * *  # Every hour - used while dry-run testing
+      - FORCE_IMAGE_REMOVAL=0
+      - FORCE_CONTAINER_REMOVAL=0 # 
+      - GRACE_PERIOD_SECONDS=1209600 # 1 day = 86400; 5 days = 432000; 7 days = 604800, 14 days = 1209600
+      - DRY_RUN=$DOCKER_GC_DRYRUN
+      - CLEAN_UP_VOLUMES=1 # Remove dangling containers: docker volume rm $(docker volume ls -qf dangling=true)'
+      - TZ=$TZ
+      #- DOCKER_HOST=$DOCKER_SOCKET_PROXY # Preferrably Docker Socket Proxy instead for improved security
+    #labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # WatchTower - Automatic Docker Container Updates
+  # Note available labels:
+  ## Exclude From Watchtower Auto-Update But Notify On New Image
+  #    - "com.centurylinklabs.watchtower.monitor-only=true"
+  ## Exclude Watchtower
+  #   - "com.centurylinklabs.watchtower.enable=false"
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+      - socket_proxy
+    #volumes:
+      # Comment below if we can get working with socket-proxy
+      ###- /var/run/docker.sock:/var/run/docker.sock # Preferrably Docker Socket Proxy instead for improved security
+    environment:
+      #- WATCHTOWER_RUN_ONCE=true # Uncomment to try update immediately and exit - set restart to 'no' above
+      - TZ=$TZ
+      #- DOCKER_API_VERSION="1.40" # NOT REQUIRED - use if any communication issues
+      - DOCKER_HOST=$DOCKER_SOCKET_PROXY # Preferrably Docker Socket Proxy instead for improved security
+      - WATCHTOWER_INCLUDE_STOPPED="true" # Will also include created and exited containers.
+      - WATCHTOWER_NO_STARTUP_MESSAGE="true"
+      - WATCHTOWER_SCHEDULE=* 0 10 * * 4 # 10am Thursdays (for some reason watchtower has an extra '*' in cron syntax)
+      #- WATCHTOWER_SCHEDULE=* 30 12 * * * # Everyday at 12:30 (for some reason watchtower has an extra '*' in cron syntax)
+      #- WATCHTOWER_SCHEDULE=* 10 17 * * * # 5pm everyday - TESTING (for some reason watchtower has an extra '*' in cron syntax)
+      #- WATCHTOWER_SCHEDULE=* 5 * * * * # Every 5min past the hour - TESTING (for some reason watchtower has an extra '*' in cron syntax)
+      - WATCHTOWER_CLEANUP="true" # Remove old images after updating
+      - WATCHTOWER_REMOVE_VOLUMES="true" # Use this option to force new volumes to be populated as containers are updated.
+      - WATCHTOWER_DEBUG=$WATCHTOWER_DEBUG
+      - WATCHTOWER_DISABLE_CONTAINERS="ryan/dem" # Exclude these containers from updates
+      - WATCHTOWER_NOTIFICATIONS_LEVEL=info # Default = Info [panic, fatal, error, warn, info, debug, trace]
+      #- WATCHTOWER_NOTIFICATIONS=slack
+      - WATCHTOWER_NOTIFICATIONS=slack email   # Don't know why we don't need to list Discord but it works fine without it.
+      - WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL=$SLACK_WEBHOOK_DOCKER
+      - WATCHTOWER_NOTIFICATION_URL=discord://WWxFbfGlArmTZ_N54MnxQYePD6raCvAB6J2lNTLFho1mjQdzKkKa_xfqR-WGebKuqisD@1018288567249801278 # https://containrrr.dev/shoutrrr/v0.5/services/discord/
+      - WATCHTOWER_NOTIFICATION_EMAIL_FROM=$EMAIL_SMTP_SENDER
+      - WATCHTOWER_NOTIFICATION_EMAIL_TO=$MYEMAIL
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER=$EMAIL_SMTP_URL
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=$EMAIL_SMTP_TLS_PORT
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER=$EMAIL_SMTP_USER
+      - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=$EMAIL_SMTP_PASS
+      - WATCHTOWER_NOTIFICATION_EMAIL_DELAY=30
+      #- WATCHTOWER_NOTIFICATIONS=shoutrrr
+      #- WATCHTOWER_NOTIFICATION_URL="telegram://$TGRAM_BOT_TOKEN@telegram?channels=$TGRAM_CHAT_ID"
+
+
+
+
+  # Docker Event Monitor (DEM)
+  # https://bitbucket.org/quaideman/dem/src/master/
+  # https://hub.docker.com/r/quaide/dem
+  dem:
+    image: quaide/dem
+    container_name: dem
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $DOCKER_DIR/dem/data/conf.yml:/app/conf.yml
+    labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      # Exclude from Watchtower updates
+      - "com.centurylinklabs.watchtower.enable=false"
+      # Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+
+
+  # NOT REQUIRED AS NOW USING CLOUDFLARE TUNNELS TO ACCESS SLECTED SERVICES EXTERNALLY SO NO LONGER ANY NEED TO HAVE AN
+  # UP TO DATE RECORD POINTING AT OUR HOME (AND NO NEED FOR ANY FIREWALL PORT FORWARDS)
+  ## Cloudflare DDNS
+  ## Update Cloudflare DNS entry (A record) to point to current external IP address of host network.
+  ## https://hub.docker.com/r/oznu/cloudflare-ddns/
+  ## May be better to run on a schedule with crontab and docker run????
+  ##   docker run -e API_KEY=VehleIHTL_MpR8X8ckJqyyBsTLc-YpjvWg5N3MBI -e ZONE=mc-guinness.co.uk -e SUBDOMAIN=ddns oznu/cloudflare-ddns
+  ##   - run without SUBDOMAIN envvar to change root domain.
+  #cf-ddns:
+  #  container_name: cf-ddns
+  #  image: oznu/cloudflare-ddns
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  networks:
+  #    default:
+  #  environment:
+  #    #- API_KEY=$CLOUDFLARE_DDNS_TOKEN
+  #    - API_KEY_FILE=/run/secrets/cloudflare_api_token_ddns
+  #    - ZONE=mc-guinness.co.uk
+  #    - CRON=*/30 * * * * # Set custom cron schedule - defaults to every 5 min: */5 * * * *
+  #    #- SUBDOMAIN=ddns # Specify a subdamain to update. If not specified then root domain used.
+  #  #labels:
+  #    #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=true"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    #- "com.centurylinklabs.watchtower.monitor-only=true"
+  #  secrets:
+  #    - cloudflare_api_token_ddns
+
+
+  # ddclient - DDNS IP address updater
+  # https://github.com/linuxserver/docker-ddclient
+  # 20241024: Updated tag from v3.10.0-ls120 to 3.11.2
+  ddclient:
+    container_name: ddclient
+    image: lscr.io/linuxserver/ddclient:3.11.2
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - default
+    environment:
+      #- DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $DOCKER_DIR/ddclient/data:/config
+    #labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=true"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # Proxy to map host port(s) to container
+  # Makes it simpler to use Traefik for host services
+  # https://github.com/qoomon/docker-host
+  dockerhost-portproxy:
+    container_name: dockerhost-portproxy
+    image: qoomon/docker-host
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      - t2_proxy
+    labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.webmin-rtr.entrypoints=https"
+      - "traefik.http.routers.webmin-rtr.rule=Host(`webmin.$DOMAINNAME0`)"
+       ## Middlewares
+      - "traefik.http.routers.webmin-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.webmin-rtr.service=webmin-svc"
+      - "traefik.http.services.webmin-svc.loadbalancer.server.scheme=https"
+      - "traefik.http.services.webmin-svc.loadbalancer.server.port=10000"
+
+
+
+
+
+  # Plex - Media Server
+  # Need to create a symlink for fail2ban to read log file since it can't handle spaces:
+  # ln -s /var/log/docker/plex/Plex\ Media\ Server.log /var/log/docker/plex/PlexMediaServer.fail2ban
+  # Use 'fail2ban' extension so that we can avoid any logrotate automation changing file.
+  plex:
+    image: plexinc/pms-docker:latest
+    container_name: plex
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    devices:
+      - /dev/dri:/dev/dri # for hardware transcoding
+    security_opt:
+      - no-new-privileges:true
+    ### Comment out network and ports if using VPN
+    ### Access via FQDN or through VPN container's mapped ports
+    networks:
+      - t2_proxy
+      #- default
+    # Plex scheduled tasks frequently cause server temp to increase by over 25° to nearly 90° - limit CPU use to mitigate this
+    # Grafana indicates that it uses approx. 4-5 CPU cores (out of 8) when unconstrained.
+    # RESOURCE CONSTRAINTS with 'deploy' DIDN'T SEEM TO WORK PROPERLY - TEMP STILL HIGH
+    #deploy:
+    #  resources:
+    #    limits:
+    cpus: 2 # CPU limit
+    mem_limit: 2024m # represents the hard memory limits
+    mem_reservation: 512m # represents the soft memory limits
+    ports:
+      - $PLEX_PORT:32400/tcp # PMS Access # REQUIRED
+      - $PLEX_DNLA_PORT1:1900/udp # 1900 is for DNLA discovery, can't change. Also used by Plex/Jellyfin/Unifi/etc so prioritise preferred service (Turned off to test Jellyfin's DNLA)
+      - $PLEX_DNLA_PORT2:32469/tcp # DNLA server # NOT REQUIRED
+      - $PLEX_BONJOUR_PORT:5353/tcp # Older Bonojour/Avahi network # NOT REQUIRED
+      - $PLEX_DISCOVERY_PORT1:32410/udp # Local network discovery # REQUIRED
+      - $PLEX_DISCOVERY_PORT2:32412/udp # Local network discovery # REQUIRED
+      - $PLEX_DISCOVERY_PORT3:32413/udp # Local network discovery # REQUIRED
+      - $PLEX_DISCOVERY_PORT4:32414/udp # Local network discovery # REQUIRED
+      # From old config - don't think we need these any longer
+      #- "$PLEX_COMPANION_ROKU_PORT:8324/tcp" # controlling Plex for Roku via Plex Companion # NOT REQUIRED
+      #- "$PLEX_COMPANION_PORT:3005/tcp" # Local LAN control via Plex Companion
+      #- "$PLEX_WEBTOOLS_PORT:33400" # Unsupported appstore
+    ### Add network_mode if using VPN
+    #network_mode: 
+    #  service:vpn-torr
+    volumes:
+      - $DOCKER_DIR/plex/data:/config
+      #- /tmp/plex/transcode:/transcode`
+      - $DOCKER_DIR/plex/transcode:/transcode
+      - $MEDIA_DIR/Video:/data
+      - $MEDIA_DIR/Audio:/Music:ro
+      - $MEDIA_DIR/Pictures:/Pictures:ro
+      - $SCRATCHPAD_DIR:/scratchpad:ro
+      - "$DOCKERLOG_DIR/plex:/config/Library/Application Support/Plex Media Server/Logs"
+      #- $SCRATCHPAD_DIR/_IPTV:/iptv
+    hostname: $PLEX_HOSTNAME
+    environment: 
+      - TZ=$TZ
+      - HOSTNAME=$PLEX_HOSTNAME
+      - PLEX_CLAIM_FILE=/run/secrets/plex_claim
+      - PLEX_UID=$PUID
+      - PLEX_GID=$PGID
+      - ADVERTISE_IP=$PLEX_ADVERTISE_IP
+    secrets:
+      - plex_claim
+    labels:
+      - org.label-schema.group=external
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.plex-rtr.entrypoints=https"
+      - "traefik.http.routers.plex-rtr.rule=Host(`plex.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.plex-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.plex-rtr.service=plex-svc"
+      - "traefik.http.services.plex-svc.loadbalancer.server.port=32400"
+
+  ## PLEX EXPORTER - STANDALONE EXPORTER IF VARKEN FAILS
+  ## https://grafana.com/blog/2023/04/28/plexporters-energize-how-we-monitor-plex-with-grafana/
+  ## https://github.com/jsclayton/prometheus-plex-exporter
+  ## No library count metrics but axsuul/plex-media-server-exporter has count metrics
+  #plex-exporter:
+  #  image: ghcr.io/jsclayton/prometheus-plex-exporter
+  #  container_name: plex-exporter
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  networks:
+  #    - t2_proxy
+  #  ports:
+  #    - $PLEX_EXPORTER:9000 # Maps to 9706
+  #  environment:
+  #    PLEX_SERVER: http://plex:32400 # http://192.168.0.10:32400
+  #    PLEX_TOKEN: $PLEX_TOKEN
+  #  labels:
+  #    - org.label-schema.group=monitoring
+  #    #------------- WATCHTOWER -------------#
+  #    # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    #- "com.centurylinklabs.watchtower.monitor-only=true"
+  #    
+  ## PLEX EXPORTER - including library count metrics
+  ## https://github.com/axsuul/plex-media-server-exporter
+  ## Last update 2022
+  #plex-exporter-axsuul:
+  #  image: ghcr.io/axsuul/plex-media-server-exporter #:2022-11-26
+  #  #build: https://github.com/axsuul/plex-media-server-exporter
+  #  container_name: plex-exporter-axsuul
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  networks:
+  #    - t2_proxy
+  #  ports:
+  #    - $PLEX_EXPORTER_AXSUUL:9594 # Maps to 9594
+  #  environment:
+  #    PLEX_ADDR: http://plex:32400
+  #    PLEX_TOKEN: $PLEX_TOKEN
+  #    PORT: 9594
+  #    #PLEX_TIMEOUT: 10 # How long to wait for Plex Media Server to respond (default: 10s)
+  #    #PLEX_RETRIES_COUNT: 0 # How many times to retry failed Plex Media Server requests (default: 0)
+  #    #METRICS_MEDIA_COLLECTING_INTERVAL_SECONDS: 300 #How often to throttle collection of media metrics which can take longer to complete depending on how large of a library you have (default: 300)
+  #  labels:
+  #    - org.label-schema.group=monitoring
+  #    #------------- WATCHTOWER -------------#
+  #    # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+  # Tautulli - Previously PlexPy. Plex statistics and monitoring
+  # Set HTTP Root in Tautulli settings if using PathPrefix
+  # https://hub.docker.com/r/linuxserver/tautulli
+  # https://github.com/linuxserver/docker-tautulli
+  # https://docs.linuxserver.io/images/docker-tautulli
+  tautulli:
+    image: lscr.io/linuxserver/tautulli
+    container_name: tautulli
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy
+      #- default
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - $TAUTULLI_PORT:8181
+    volumes:
+      - $DOCKER_DIR/tautulli/data:/config
+      - $DOCKER_DIR/tautulli/scripts:/scripts
+      - $DOCKERLOG_DIR/plex:/logs:ro # For tautulli Plex log viewer
+      - $DOCKERLOG_DIR/tautulli:/config/logs # For tautulli's logs
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    labels:
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.tautulli-rtr.entrypoints=https"
+      - "traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.$DOMAINNAME0`)"
+      - "traefik.http.routers.tautulli-rtr.priority=99"
+      - "traefik.http.routers.tautulli-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.tautulli-rtr-bypass.rule=Host(`tautulli.$DOMAINNAME0`) && Query(`apikey=$TAUTULLI_API`)"
+      - "traefik.http.routers.tautulli-rtr-bypass.priority=100"
+       ## Middlewares
+      - "traefik.http.routers.tautulli-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.tautulli-rtr-bypass.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.tautulli-rtr.service=tautulli-svc"
+      - "traefik.http.routers.tautulli-rtr-bypass.service=tautulli-svc"
+      - "traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
+
+
+  ## KOMETA - Plex metadata manager
+  ## https://metamanager.wiki/
+  ## https://docs.linuxserver.io/images/docker-kometa
+  # Compose service doesn't recognise schedule properly - it just runs in a continuous loop.
+  # Instead using a script triggered by crontab, which runs 'docker run' command, see:
+  #   /home/ryan/scripts/docker/scripts/media/kometa.sh
+  #plex-kometa:
+  #  image: lscr.io/linuxserver/kometa:latest #kometateam/kometa
+  #  container_name: plex-kometa
+  #  restart: unless-stopped
+  #  #logging: *default-logging    # Logging now defined globally in daemon.json
+  #  networks:
+  #    - t2_proxy
+  #    #- default
+  #  volumes:
+  #    - $DOCKERLOG_DIR/kometa:/config/logs
+  #    - $DOCKER_DIR/kometa/data/config:/config
+  #    - $DOCKER_DIR/kometa/data/assets:/assets
+  #  environment:
+  #    # Kometa env vars: https://metamanager.wiki/en/latest/kometa/environmental
+  #    - DOCKER_MODS=$LINUXSERVER_MODS
+  #    - PUID=$PUID
+  #    - PGID=$PGID
+  #    - TZ=$TZ
+  #    #- KOMETA_RUN=True # Run right away
+  #    - KOMETA_RUN=False # Prevent immediate run
+  #    #- KOMETA_OVERLAYS_ONLY=True # Run overlays only
+  #    - KOMETA_RUN_LIBRARIES=Movies|TV Shows|UFC
+  #    - KOMETA_TIMES=10:30 # e.g. 06:00,18:00 # This schedule did not work. Using command flag too. 
+  #    #- KOMETA_CONFIG="/config/config.yml"
+  #  command:
+  #    - --time 10:30
+  #  #labels:
+  #    #------------- WATCHTOWER -------------#
+  #    # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+  #    ## Exclude from Watchtower updates
+  #    #- "com.centurylinklabs.watchtower.enable=false"
+  #    ## Exclude From Watchtower updates - Notify On New Image
+  #    #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # PLEX POSTERIZARR
+  # https://github.com/fscorrupt/Posterizarr
+  plex-posterizarr:
+    image: ghcr.io/fscorrupt/docker-posterizarr:latest
+    container_name: plex-posterizarr
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy 
+    volumes:
+      - $DOCKER_DIR/posterizarr/data/config:/config
+      # For now assets directory is standalone but will map to Kometa assets directory in future so that Kometa can use the generated assest directly
+      # Exclude assets directory from backups.
+      - $DOCKER_DIR/posterizarr/data/assets:/assets
+      #- $DOCKER_DIR/kometa/data/config/assets:/assets
+      # Backup assets are the original Plex images. Only used if posterizarr is triggered with `-Backup` switch.
+      # Exclude this from backups.
+      - $DOCKER_DIR/posterizarr/data/asset-backup:/asset-backup
+      - $DOCKERLOG_DIR/posterizarr/Logs:/config/Logs
+      - $DOCKERLOG_DIR/posterizarr/RotatedLogs:/config/RotatedLogs
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+      - TERM=xterm
+      - RUN_TIME=10:00 # e.g. comma separated 14:00,19:30
+    #labels:
+      #- org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+  # PLEX IMAGEMAID - Clean up old images and reduce bloat
+  # https://metamanager.wiki/en/latest/kometa/scripts/imagemaid
+  plex-imagemaid-deloat:
+    image: kometateam/imagemaid
+    container_name: plex-imagemaid-deloat
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy 
+    volumes:
+      - "$DOCKER_DIR/plex/data/Library/Application Support/Plex Media Server:/plex"
+    environment:
+      # https://metamanager.wiki/en/latest/kometa/scripts/imagemaid/#example-env-file
+      - PLEX_PATH=/plex
+      - PLEX_URL=http://plex:32400  #"http://192.168.0.10:32400"
+      - PLEX_TOKEN=$PLEX_TOKEN
+      - MODE=remove
+      - EMPTY_TRASH=True
+      - CLEAN_BUNDLES=True
+      - OPTIMIZE_DB=True
+      - DISCORD=https://discord.com/api/webhooks/1159110372360470649/_eEQfgr1GJUpHrpU6rSyo5_w8eHE0GL72ybvgijvpZzl4UNEWIqkGEUYNq5p-PYM6PsB
+      - LOG_REQUESTS=True
+      - SCHEDULE=12:00|weekly(sunday)   # https://metamanager.wiki/en/latest/kometa/scripts/imagemaid/#schedule-blocks
+    #labels:
+      #- org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+  # Tdarr - Video transcoder
+  # https://docs.tdarr.io/docs/installation/docker/run-compose
+  # https://github.com/HaveAGitGat/Tdarr
+  # Add transcode directory to exclusion list for any backup and syncing services.
+  # And add '.nobackup' file to transcode directory
+  tdarr:
+    image: ghcr.io/haveagitgat/tdarr:latest
+    container_name: tdarr
+    restart: unless-stopped
+    # Include device lines if we want the option to use quicksync for transcoding - still needs enabled in tdarr
+    devices:
+      - /dev/dri:/dev/dri
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    #network_mode: 
+    #  service:vpn-torr     # network_mode: container:vpn-torr    # network_mode: host
+    #depends_on:
+    #  - vpn-torr
+    # Defining networks while using VPN causes web interface to be inaccessible - suspect it's trying toroute through network instead of VPN
+    networks:
+      - default
+      - t2_proxy
+    # Can't publish ports if using: network_mode: "service:vpn-torr" - ports get published through VPN container
+    ports:
+      - $TDARR_GUI:8265 # webUI port
+      - $TDARR_SERVER:8266 # server port
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $DOCKER_DIR/tdarr/data/server:/app/server
+      - $DOCKER_DIR/tdarr/data/configs:/app/configs
+      - $DOCKERLOG_DIR/tdarr/logs:/app/logs      
+      - /home/ryan/scripts/docker/scripts/torrents/custom_scripts:/custom-scripts
+      # Transcode cache dir - add to backup/snapraid exlcusions, and add .nobackup file
+      - $DOCKER_DIR/tdarr/transcode:/temp
+      # Media dirs - map to same paths as sonarr/radarr
+      - $DOWNLOAD_DIR/_torrents:/downloads
+      - $MEDIA_TV_DIR:/tv
+      - $MEDIA_MOVIE_DIR:/movies
+      #- $MEDIA_MOVIE4K_DIR:/movies_4k       # Dir deleted now - all movies in the same folder  
+      - $MEDIA_VIDEO_DIR:/all_vids   
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK_SET=002
+      - serverIP=0.0.0.0 # Refers to internal server so leave as is unless running standalone node.
+      - serverPort=8266 # change if required
+      - webUIPort=8265 # change if required
+      - internalNode=true  # tdarr includes a server and node
+      - inContainer=true
+      - ffmpegVersion=6
+      - nodeName=Internal
+      #- NVIDIA_DRIVER_CAPABILITIES=all # if GPU 
+      #- NVIDIA_VISIBLE_DEVICES=all # if GPU 
+    labels:
+      #- org.label-schema.group=torrent
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.tdarr-rtr.entrypoints=https"
+      - "traefik.http.routers.tdarr-rtr.rule=Host(`tdarr.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.tdarr-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.tdarr-rtr.service=tdarr-svc"
+      - "traefik.http.services.tdarr-svc.loadbalancer.server.port=8265"
+
+
+  # TDARR EXPORTER
+  # https://github.com/homeylab/tdarr-exporter
+  tdarr-exporter:
+    image: homeylab/tdarr-exporter:latest
+    container_name: tdarr-exporter
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - default
+    # Only needed if accessing outside docker network
+    ports:
+      - $TDARR_EXPORTER:9090 # Maps to 8267 (next consecutive port after tdarr's port numbers)
+    environment:
+      - TDARR_URL=http://192.168.0.10:8265
+      #- TDARR_API_KEY=   # Only needed if tdarr authentication enabled
+      - HTTP_MAX_CONCURRENCY=3 # (default=3) Set to match number of libraries + 1
+      - LOG_LEVEL=warn # (default=info) debug, info, warn, error
+      - VERIFY_SSL=false # (default=true) Whether or not to verify ssl certificates.
+      #- PROMETHEUS_PORT=9090 # (default=9090) Which port for server to use to serve metrics
+      #- PROMETHEUS_PATH=/metrics # (default=/metrics) Which path to serve metrics on.
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+  # PhotoPrism - Self-Hosted Google Photots Alternative
+  # https://docs.photoprism.app/
+  # See compose examples: https://dl.photoprism.app/docker/
+  photoprism:
+    container_name: photoprism
+    image: photoprism/photoprism:latest
+    restart: unless-stopped  # Don't enable automatic restarts until PhotoPrism has been properly configured and tested!
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy
+      - default
+    ports:
+      - $PHOTOPRISM_PORT:2342  
+    volumes:
+      - $DOCKER_DIR/photoprism/data:/photoprism/storage
+      #- $DOCKERLOG_DIR/photoprism:/config/logs
+      - $MEDIA_DIR/Pictures:/photoprism/originals                  # Original media files (DO NOT REMOVE)
+      # - /example/family:/photoprism/originals/family                         # *Additional* media folders can be mounted like this
+      - /storage/scratchpad/PhoneImports/.PPImports_system_use:/photoprism/import  # *Optional* base folder from which files can be imported to originals
+      # Import folders for phone pics. Can't just be subfolders of imports on host or they will be deleted by Import job and
+      # then will no longer be available as targets for phone syncing. Specifically mounting in container prevents deleteion when empty.
+      - /storage/scratchpad/PhoneImports/Ryan:/photoprism/import/Ryan
+      - /storage/scratchpad/PhoneImports/Jen:/photoprism/import/Jen
+      - /storage/scratchpad/PhoneImports/James:/photoprism/import/James
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      # See: https://docs.photoprism.app/getting-started/config-options/
+      - PHOTOPRISM_UID=1000                                       # To match ryan:ryan owner of picture files
+      - PHOTOPRISM_GID=1000                                       # To match ryan:ryan owner of picture files
+      #- PHOTOPRISM_UMASK=0777                                    # Note that this is essentially the opposite to chmod syntax (Default: 0002 = rwxrwxr-x)
+      #- PHOTOPRISM_DISABLE_CHOWN=true                            # disables storage permission updates on startup - causes errors which prevent startup
+      - PHOTOPRISM_DISABLE_BACKUPS=true                           # disables photoprism backups of photos
+      - PHOTOPRISM_LOG_LEVEL=info                                 # log level: trace, debug, info, warning, error, fatal, or panic
+      - PHOTOPRISM_ADMIN_PASSWORD=password                        # Your INITIAL admin password (minimum 8 characters, username "admin") - changeable in GUI
+      - PHOTOPRISM_SITE_URL=https://photoprism.$DOMAINNAME0/      # public server URL incl http:// or https:// and /path, :port is optional
+      #- PHOTOPRISM_SITE_CAPTION=AI-Powered Photos App            # meta site caption
+      #- PHOTOPRISM_SITE_DESCRIPTION=                             # meta site description
+      #- PHOTOPRISM_SITE_AUTHOR=                                  # meta site author
+      #- PHOTOPRISM_ORIGINALS_LIMIT=5000                          # file size limit for originals in MB (increase for high-res video) [default: 1000]
+      #- PHOTOPRISM_HTTP_COMPRESSION=gzip                         # improves transfer speed and bandwidth utilization (none or gzip)
+      #- PHOTOPRISM_PUBLIC=true                                    # no authentication required (disables password protection)
+      #- PHOTOPRISM_READONLY=false                                # do not modify originals directory (reduced functionality)
+      ##### DATABASE
+      #- PHOTOPRISM_DATABASE_DRIVER=sqlite                        # SQLite is an embedded database that doesn't require a server
+      - PHOTOPRISM_DATABASE_DRIVER=mysql                          # use MariaDB 10.5+ or MySQL 8+ instead of SQLite for improved performance
+      - PHOTOPRISM_DATABASE_SERVER=mariadb:3306                   # MariaDB or MySQL database server (hostname:port)
+      - PHOTOPRISM_DATABASE_NAME=photoprism                       # MariaDB or MySQL database schema name
+      - PHOTOPRISM_DATABASE_USER=photoprism                       # MariaDB or MySQL database user name
+      - PHOTOPRISM_DATABASE_PASSWORD=db-Ooeire5813pH              # MariaDB or MySQL database user password    
+      ##### THE FOLLOWING CAN ALL BE SET IN GUI SETTINGS
+      #- PHOTOPRISM_EXPERIMENTAL=false                            # enables experimental features
+      #- PHOTOPRISM_DISABLE_WEBDAV=false                          # disables built-in WebDAV server
+      #- PHOTOPRISM_DISABLE_SETTINGS=false                        # disables settings UI and API
+      #- PHOTOPRISM_DISABLE_TENSORFLOW=false                      # disables all features depending on TensorFlow
+      #- PHOTOPRISM_DISABLE_FACES=false                           # disables facial recognition
+      #- PHOTOPRISM_DISABLE_CLASSIFICATION=false                  # disables image classification
+      #- PHOTOPRISM_DISABLE_RAW=false                             # disables indexing and conversion of RAW files
+      #- PHOTOPRISM_RAW_PRESETS=false                             # enables applying user presets when converting RAW files (reduces performance)
+      #- PHOTOPRISM_JPEG_QUALITY=85                               # image quality, a higher value reduces compression (25-100)
+      #- PHOTOPRISM_DETECT_NSFW=false                             # flag photos as private that MAY be offensive (requires TensorFlow)
+      #- PHOTOPRISM_UPLOAD_NSFW=true                              # allows uploads that MAY be offensive
+    working_dir: "/photoprism"
+    labels:
+      - org.label-schema.group=external
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.photoprism-rtr.entrypoints=https"
+      - "traefik.http.routers.photoprism-rtr.rule=Host(`photoprism.$DOMAINNAME0`)"
+      - "traefik.http.routers.photoprism-rtr.priority=90"
+      - "traefik.http.routers.photoprism-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.photoprism-rtr-bypass.rule=Host(`photoprism.$DOMAINNAME0`) && PathPrefix(`/originals`)"
+      - "traefik.http.routers.photoprism-rtr-bypass.priority=100"
+      ## Middlewares
+      - "traefik.http.routers.photoprism-rtr.middlewares=chain-no-auth@file"  #chain-authelia@file" 
+      - "traefik.http.routers.photoprism-rtr-bypass.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.photoprism-rtr.service=photoprism-svc"
+      - "traefik.http.routers.photoprism-rtr-bypass.service=photoprism-svc"
+      - "traefik.http.services.photoprism-svc.loadbalancer.server.port=2342"
+      ##### WEBDAV
+      ### HTTP Routers
+      #- "traefik.http.routers.photoprism-rtr-webdav.entrypoints=https"
+      #- "traefik.http.routers.photoprism-rtr-webdav.rule=Host(`photoprism.$DOMAINNAME0`) && PathPrefix(`/import`) && Method(`PROPFIND`, `MOVE`, `PUT`)" 
+      #- "traefik.http.routers.photoprism-rtr-webdav.priority=100"
+      ### Middlewares
+      #- "traefik.http.routers.photoprism-rtr-webdav.middlewares=chain-no-auth@file"
+      ### HTTP Services
+      #- "traefik.http.routers.photoprism-rtr-webdav.service=photoprism-svc"
+      
+
+  
+
+  # CALIBRE - eBook library
+  # As of March 23, image was moved from Guacamole backend to KASM (required full refresh of snippet).
+  # https://docs.linuxserver.io/images/docker-calibre
+  # https://github.com/linuxserver/docker-calibre
+  # Updates:
+  #  - 20231007: - Untagged release didn't work had breaking errors in log: see Obsidian troubleshooting notes for details
+  #                See Github issue (open): https://github.com/linuxserver/docker-calibre/issues/128
+  #                Latest tagged version seems to be working fine: v6.28.1-ls242
+  #              - Couple of other log warnings but not impacting functionality. See Obsidian troubleshooting notes for details.
+  # - 20250716: - Updated from v6.28.1-ls242 to v8.6.0 to align with local Calibre Portable version
+  calibre:
+    image: lscr.io/linuxserver/calibre:v8.6.0-ls344 #v6.28.1-ls242 #v6.27.0-ls239  #v6.28.0-ls241
+    container_name: calibre
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy
+      #- default
+    security_opt:
+      - no-new-privileges:true
+      #- seccomp:unconfined # optional - (Docker Engine only) required for some gui apps as syscalls are unkown to Docker.
+    ports:
+      - $CALIBRE_HTTP_PORT:8080 # http Port
+      - $CALIBRE_HTTPS_PORT:8181 # https Port
+      # For Calibre's builtin webserver frontend
+      # Would also need separate Traefik rules (e.g. see old Calibre snippet in obsolete.yml)
+      # Instead of separate subdomain, could use a AddPath e.g. /builtingui
+      #- $CALIBRE_BUILTIN_GUI_PORT:8081
+    volumes:
+      - $DOCKER_DIR/calibre/data:/config
+      - $MEDIA_DIR/Books/calibre_library:/library
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      #- CLI_ARGS=
+      #- CUSTOM_PORT=         # Change http port (default: 8080)
+      #- CUSTOM_HTTPS_PORT=   # Change https port (default: 8181)
+      #- CUSTOM_USER=         # Change HTTP Basic auth username (default: abc)
+      - PASSWORD=            # Change HTTP Basic auth password. If unset there will be no auth (default: abc)
+      #- SUBFOLDER=           # Subfolder for app if running a subfolder reverse proxy, need both slashes e.g. /subfolder/
+      #- TITLE=               # Page title in browser (default: KasmVNC Client)
+      #- FM_HOME=             # Home dir for the file manager, default "/config".
+      #- START_DOCKER=        # If false a container with privilege will not automatically start the DinD Docker setup.
+      #- DRINODE=             # If mounting /dev/dri for GPU Acceleration, allows specifying device to use e.g. /dev/dri/renderD128
+      #- PULSE_RUNTIME_PATH=/defaults  # Suggested solution to 'R_X86_64_RELATIVE' error
+    #secrets:
+    # Password file not supported in Kasm based version
+    #  - calibre_password
+    labels:
+      #- org.label-schema.group=sablier
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.calibre-kasm-rtr.entrypoints=https"
+      - "traefik.http.routers.calibre-kasm-rtr.rule=Host(`calibre.$DOMAINNAME0`)"
+      ## Middlewares
+      - "traefik.http.routers.calibre-kasm-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.calibre-kasm-rtr.service=calibre-kasm-svc"
+      - "traefik.http.services.calibre-kasm-svc.loadbalancer.server.port=8080"
+
+
+  # Kavita - Comic and Book server
+  # Old repo: https://wiki.kavitareader.com/en/install/docker-install
+  # New repo (noticed Sept 2025): https://hub.docker.com/r/jvmilazz0/kavita
+  # Also a linuxserver.io image: https://hub.docker.com/r/linuxserver/kavita
+  kavita:
+    #image: jvmilazz0/kavita:latest
+    image: lscr.io/linuxserver/kavita:latest
+    container_name: kavita
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - t2_proxy
+      #- default
+    ports:
+      - $KAVITA_PORT:5000
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $DOCKER_DIR/kavita/data:/kavita/config
+      - $DOCKERLOG_DIR/kavita:/kavita/config/logs
+      - $MEDIA_COMICS_DIR:/comics
+    labels:
+      #- org.label-schema.group=sablier
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.kavita-rtr.entrypoints=https"
+      - "traefik.http.routers.kavita-rtr.rule=Host(`kavita.$DOMAINNAME0`)"
+      - "traefik.http.routers.kavita-rtr.priority=99"
+      - "traefik.http.routers.kavita-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.kavita-rtr-bypass.rule=Host(`kavita.$DOMAINNAME0`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.kavita-rtr-bypass.priority=100"
+      ## Middlewares
+      - "traefik.http.routers.kavita-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.kavita-rtr-bypass.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.kavita-rtr.service=kavita-svc"
+      - "traefik.http.routers.kavita-rtr-bypass.service=kavita-svc"
+      - "traefik.http.services.kavita-svc.loadbalancer.server.port=5000"
+
+
+  # Ubooquity - Comic Reader
+  ubooquity:
+    container_name: ubooquity
+    image: lscr.io/linuxserver/ubooquity
+    restart: unless-stopped
+    #logging: *default-logging    # Logging now defined globally in daemon.json
+    networks:
+      - t2_proxy
+      #- default
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - $UBOOQUITY_PORT:2202
+      - $UBOOQUITY_ADMIN_PORT:2203
+    volumes:
+      - $DOCKER_DIR/ubooquity/data:/config
+      - $DOCKERLOG_DIR/ubooquity:/config/logs
+      - $MEDIA_DIR/Comics:/comic
+      # Mountpoints below defined in image DOCKERFILE. If not specified then temp volume will be created - I don't like docker managing volmes ;P
+      - $DOCKER_DIR/ubooquity/volumes/files:/files:ro
+      - $DOCKER_DIR/ubooquity/volumes/comics:/comics:ro
+      - $DOCKER_DIR/ubooquity/volumes/books:/books:ro
+    environment:
+      - DOCKER_MODS=$LINUXSERVER_MODS
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      #- MAXMEM=1024 # Optional, default = 512. Previously required to prevent OOM errors.
+    labels:
+      #- org.label-schema.group=sablier
+      #------------- WATCHTOWER -------------#
+      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- SABLIER LABELS -----------#
+      #- sablier.enable=true # SET TO 'false' AND RENEABLE TRAEFIK LABELS TO DISABLE SABLIER
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.ubooquity-rtr.entrypoints=https"
+      - "traefik.http.routers.ubooquity-rtr.rule=Host(`ubooquity.$DOMAINNAME0`)"
+      - "traefik.http.routers.ubooquity-admin-rtr.entrypoints=https"
+      # v3.3.3: Comma separated OR rules, replaced with ||
+      #- "traefik.http.routers.ubooquity-admin-rtr.rule=Host(`ubooquity.$DOMAINNAME0`) && PathPrefix(`/admin`,`/admin-res`,`/admin-api`)"
+      - "traefik.http.routers.ubooquity-admin-rtr.rule=Host(`ubooquity.$DOMAINNAME0`) && (PathPrefix(`/admin`) || PathPrefix(`/admin-res`) || PathPrefix(`/admin-api`))"
+      ## Middlewares
+      - "traefik.http.routers.ubooquity-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.ubooquity-admin-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.ubooquity-rtr.service=ubooquity-svc"
+      - "traefik.http.services.ubooquity-svc.loadbalancer.server.port=2202"
+      - "traefik.http.routers.ubooquity-admin-rtr.service=ubooquity-admin-svc"
+      - "traefik.http.services.ubooquity-admin-svc.loadbalancer.server.port=2203"
+
+
+#  ##################################################################################################
+#  ### IMMICH SERVICES
+#  ##################################################################################################
+#  # To start services bring up 
+#  #    - immich-server (this will start the DB services due to 'depends' section)
+#  #    - immich-machine-learning
+#  #
+#  # NOTES
+#  #  - Merged compose files into our main docker-compose file. See: https://immich.app/docs/install/docker-compose/
+#  #  - Merging into our main compose file means easier exposure of Immich using Traefik labels.
+#  #  - We prepended 'immich-' to the start of the service names below where they did not have it by
+#  #    default i.e. immich-redis, immich-database
+#  #    Remember to update the 'depends' section in immich-server after changing the service names.
+#  #  - We removed the 'model-cache' volume and instead used a mounted volume to ensure the cache is
+#  #    located on the SSD. This only impacts the 'immich-machine-learning' service
+#  #  - Added services to the 'default' network so they could communicate with each other. 
+#  #    And added immich-server to the t2_proxy network for Traefik.
+#  #
+#  # ENVIRONMENT VARIABLES
+#  #  - See env var details at https://immich.app/docs/install/environment-variables
+#  #  - The published Immich docker-compose files have an .env file too. The variables are detailed 
+#  #    in the Immich docs which explain which vars are used by each service, which are needed only
+#  #    for the compose file, and which are used as internal container env vars.
+#  #  - Where the var is used as an internal contain env var, we added to our main .env file (in an 
+#  #    Immich specific section) and defined in the service 'environment' section.
+#  #  - Where the var is used in multiple services (even if only for compose file values), e.g. 
+#  #    IMMICH_VERSION, we also added to our main .env file to ensure consistency.
+#  #  - If a var was onoly used for compose file values we generally replaced it with an explicit
+#  #    definition, e.g. UPLOAD_LOCATION
+#  ##################################################################################################
+#
+#  immich-server:
+#    container_name: immich_server
+#    # IMMICH_VERSION only used in compose file. Added IMMICH_VERSION to .env as shared by immich-server and immich-machine-learning services
+#    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+#    restart: unless-stopped
+#    # extends:
+#    #   file: hwaccel.transcoding.yml
+#    #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
+#    # HWACCEL TRANSCODING
+#    # Instead of 'extends' used inlined entries from: https://github.com/immich-app/immich/releases/latest/download/hwaccel.transcoding.yml
+#    # More hwaccel options are included in that file e.g. for nevc and amd
+#    devices:
+#      - /dev/dri:/dev/dri # quicksync & vaapi. Also note extra volume and env var if using WSL
+#    volumes:
+#      # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
+#      - $SCRATCHPAD_DIR/immich/uploads:/usr/src/app/upload  # Original used UPLOAD_LOCATION env var, replaced with explicit definition as env var not required as internal container env var
+#      - /etc/localtime:/etc/localtime:ro
+#      - $MEDIA_DIR/Pictures/Honeymoon:/home/user/photos1:ro
+#      #- /usr/lib/wsl:/usr/lib/wsl  # Required for qsv and vaapi hwaccel in WSL
+#    # You can find documentation for all the supported env variables at https://immich.app/docs/install/environment-variables
+#    # See note at top of immich section - merged env vars, not using .env file.
+#    #env_file:
+#    #  - .env-immich
+#    environment:
+#      # TZ, DB_PASSWORD, DB_USERNAME, DB_DATABASE_NAME were in immich .env file. They are used inside container as internal env vars. Added var to our main .env file. 
+#      - TZ=Europe/London
+#      - DB_PASSWORD=${IMMICH_DB_PASSWORD}
+#      - DB_USERNAME=${IMMICH_DB_USERNAME}
+#      - DB_DATABASE_NAME=${IMMICH_DB_DATABASE_NAME}
+#      # Prometheus metrics: https://immich.app/docs/features/monitoring#metrics
+#      - IMMICH_TELEMETRY_INCLUDE=all  # Publish all metrics. Other values available: host, api, io, repo, job
+#      #- IMMICH_TELEMETRY_EXCLUDE=  # Exlude specific metric categories. Values: host, api, io, repo, job
+#      #- IMMICH_API_METRICS_PORT=8081 # default=8081
+#      #- IMMICH_MICROSERVICES_METRICS_PORT=8082 # default=8082
+#      #- LIBVA_DRIVER_NAME=d3d12  # Required for qsv and vaapi hwaccel in WSL
+#      - IMMICH_TRUSTED_PROXIES=127.0.0.1/32,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+#      - REDIS_HOSTNAME=immich_redis
+#      #- REDIS_URL=immich_redis
+#      - DB_HOSTNAME=immich_postgres
+#      #- DB_URL=immich_postgres
+#    ports:
+#      - $IMMICH_PORT:2283
+#      - $IMMICH_METRICS_API_PORT:8081  # Maps to 2283
+#      - $IMMICH_METRICS_MICROSERVICES_PORT:8082  # Maps to 2284
+#    depends_on:
+#      - redis
+#      - database
+#    #deploy:  # https://immich.app/docs/FAQ#can-i-limit-cpu-and-ram-usage
+#    #  resources:
+#    #    limits:
+#    #      # Number of CPU threads
+#    #      cpus: '1.00'
+#    #      # Gigabytes of memory
+#    #      memory: '1G'
+#    # Use this if deploy block doesn't work:
+#    #cpus: 1 # CPU limit
+#    #mem_limit: 1G # represents the hard memory limits
+#    #mem_reservation: 256m # represents the soft memory limits
+#    healthcheck:
+#      disable: false    
+#    networks:
+#      - t2_proxy
+#      - default
+#    labels:
+#      - org.label-schema.group=external
+#      #------------- WATCHTOWER -------------#
+#      # IF BOTH LABELS ARE COMMENTED OUT THEN IMAGE WILL BE UPDATED BY WATCHTOWER.
+#      ## Exclude from Watchtower updates
+#      #- "com.centurylinklabs.watchtower.enable=false"
+#      ## Exclude From Watchtower updates - Notify On New Image
+#      #- "com.centurylinklabs.watchtower.monitor-only=true"
+#      ##----------- TRAEFIK LABELS -----------#
+#      - "traefik.enable=true"
+#      ### HTTP Routers
+#      - "traefik.http.routers.immich-rtr.entrypoints=https"
+#      - "traefik.http.routers.immich-rtr.rule=Host(`immich.$DOMAINNAME0`)"
+#      ### Middlewares
+#      - "traefik.http.routers.immich-rtr.middlewares=chain-authelia@file"
+#      ### HTTP Services
+#      - "traefik.http.routers.immich-rtr.service=immich-svc"
+#      - "traefik.http.services.immich-svc.loadbalancer.server.port=2283"
+#
+#  immich-machine-learning:
+#    container_name: immich_machine_learning
+#    # IMMICH_VERSION only used in compose file. Added IMMICH_VERSION to .env as shared by immich-server and immich-machine-learning services
+#    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+#    # For hardware acceleration, add one of -[armnn, cuda, openvino] to the image tag.
+#    # Example tag: ${IMMICH_VERSION:-release}-cuda
+#    # HWACCEL MACHINE LEARNING
+#    # Instead of 'extends' use inline entries, see: https://github.com/immich-app/immich/releases/latest/download/hwaccel.ml.yml
+#    # (We do not have any hardware currently which supports hwaccel for ML)
+#    # extends: # uncomment this section for hardware acceleration - see https://immich.app/docs/features/ml-hardware-acceleration
+#    #   file: hwaccel.ml.yml
+#    #   service: cpu # set to one of [armnn, cuda, openvino, openvino-wsl] for accelerated inference - use the `-wsl` version for WSL2 where applicable
+#    volumes:
+#      #- model-cache:/cache  # Original volume - used an ephemeral docker volume. Replaced with mounted volume to ensure cache on SSD.
+#      - $SCRATCHPAD_DIR/immich/cache:/cache
+#    # You can find documentation for all the supported env variables at https://immich.app/docs/install/environment-variables
+#    # See note at top of immich section - will explicitly specify any env vars here or in main .env file instead of using immich's .env file.
+#    #env_file:
+#    #  - .env-immich
+#    # No env vars required for this service (aside from IMMICH_VERSION for the image tag, which is defined in our .env file).
+#    restart: unless-stopped
+#    healthcheck:
+#      disable: false  
+#    networks:
+#      - default
+#
+#  redis:  
+#    container_name: immich_redis
+#    image: docker.io/redis:6.2-alpine@sha256:eaba718fecd1196d88533de7ba49bf903ad33664a92debb24660a922ecd9cac8
+#    restart: unless-stopped
+#    healthcheck:
+#      test: redis-cli ping || exit 1
+#    #ports:
+#    #  - 6379:6379
+#    networks:
+#      - default
+#
+#  # DB_PASSWORD, DB_USERNAME, DB_DATABASE_NAME, DB_DATA_LOCATION from .env file now included in our main env file.
+#  database: 
+#    container_name: immich_postgres
+#    image: docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
+#    restart: unless-stopped
+#    environment: 
+#      # DB_PASSWORD, DB_USERNAME, DB_DATABASE_NAME were in immich .env file. 
+#      #   They are not used inside container, only used in compose file as values for other env vars.
+#      #   We could explicitly define here but instead added to our main .env file as also used in immich-server service and want to ensure consistency.
+#      POSTGRES_PASSWORD: ${IMMICH_DB_PASSWORD}  #${DB_PASSWORD}
+#      POSTGRES_USER: ${IMMICH_DB_USERNAME}  #${DB_USERNAME}
+#      POSTGRES_DB: ${IMMICH_DB_DATABASE_NAME}  #${DB_DATABASE_NAME}
+#      POSTGRES_INITDB_ARGS: '--data-checksums'
+#    volumes:
+#      # Original used DB_DATA_LOCATION env var, replaced with explicit definition as env var not required as internal container env var
+#      - $DOCKER_DIR/immich/data/postgres:/var/lib/postgresql/data
+#    healthcheck:
+#      test: >-
+#        pg_isready --dbname="$${POSTGRES_DB}" --username="$${POSTGRES_USER}" || exit 1;
+#        Chksum="$$(psql --dbname="$${POSTGRES_DB}" --username="$${POSTGRES_USER}" --tuples-only --no-align
+#        --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')";
+#        echo "checksum failure count is $$Chksum";
+#        [ "$$Chksum" = '0' ] || exit 1
+#      interval: 5m
+#      start_interval: 30s
+#      start_period: 5m
+#    command: >-
+#      postgres
+#      -c shared_preload_libraries=vectors.so
+#      -c 'search_path="$$user", public, vectors'
+#      -c logging_collector=on
+#      -c max_wal_size=2GB
+#      -c shared_buffers=512MB
+#      -c wal_compression=on
+#    #ports:
+#    #  - 5432:5432
+#    networks:
+#      - default
+#
+#  ##################################################################################################
+
+
+      
+#  #====================================================================
+#  #SERVICES DOCUEMENTED IN SMARTHOMEBEGINNER GIT REPO AS OF OCT 2021
+#  #====================================================================
+#  # Traefik 2 - Reverse Proxy
+#  # Touch (create empty files) traefik.log and acme/acme.json. Set acme.json permissions to 600.
+#  # touch $DOCKER_DIR/traefik2/acme/acme.json
+#  # chmod 600 $DOCKER_DIR/traefik2/acme/acme.json
+#  # touch $DOCKER_DIR/traefik2/traefik.log
+#  traefik:
+#  # Traefik - Custom Error Pages
+#  traefik-error-pages:
+#  # Docker Socket Proxy - Security Enchanced Proxy for Docker Socket
+#  socket-proxy:
+#  # Google OAuth - Single Sign On using OAuth 2.0
+#  # https://www.smarthomebeginner.com/google-oauth-with-traefik-docker/
+#  oauth:
+#  # Authelia (Lite) - Self-Hosted Single Sign-On and Two-Factor Authentication
+#  authelia:
+#  # Portainer - WebUI for Containers
+#  portainer:
+#  # Organizr - Unified Frontend
+#  organizr:
+#  # Heimdall - Unified Frontend Alternative
+#  # Putting all services behind Oragnizr slows things down.
+#  heimdall:
+#  # Autoindex - Simple Directory Index
+#  autoindex:
+#  ############################# DATABASE
+#  # MariaDB - MySQL Database
+#  # After starting container for first time dexec and mysqladmin -u root password <password>
+#  mariadb:
+#  # InfluxDB - Database for sensor data
+#  # Create influxdb.conf
+#  influxdb:
+#  # Redis - Key-value Store
+#  redis:
+#  # phpMyAdmin - Database management
+#  # Create a new user with admin privileges. Cannot login as MySQL root for some reason.
+#  phpmyadmin:
+#  # Redis Commander - Redis Management Tool
+#  rediscommander:
+#  # Grafana - Graphical data visualization for InfluxDB data
+#  grafana:
+#  ############################# DOWNLOADERS
+#  # jDownloader - Download management
+#  jdownloader:
+#  # TransmissionBT - Torrent Downloader
+#  # ONLY ACCESSIBLE THROUGH https://domain.com/transmission/web/ if using PathPrefix
+#  transmission-vpn:
+#  # nzbget - Binary newsgrabber (NZB downloader)
+#  nzbget:
+#  ############################# INDEXERS
+#  # Jackett - Torrent proxy
+#  # Set url_base in Jackett settings if using PathPrefix
+#  jackett:
+#  # NZBHydra2 - NZB meta search
+#  hydra:
+#  ############################# PVRS
+#  # Lidarr - Music Management
+#  # Set url_base in lidarr settings if using PathPrefix
+#  lidarr:
+#  # Radarr - Movie management
+#  # Set url_base in radarr settings if using PathPrefix
+#  radarr:
+#  # Sonarr - TV Shows management
+#  # Set url_base in sonarr settings if using PathPrefix
+#  sonarr:
+#  # Readarr - Books management
+#  # Set url_base in readarr settings if using PathPrefix
+#  readarr:
+#  # Lazylibrarian  – Ebooks and Management
+#  lazylibrarian:
+#  ############################# MEDIA
+#  # Calibre-web  – Ebooks and Management (Plex of Ebooks)
+#  calibre-web:
+#  # Calibre  – Ebooks and Management (Server)
+#  calibre:
+#  # AirSonic - Music Server
+#  airsonic:
+#  # Plex - Media Server
+#  plexms:
+#  # Jellyfin - Media Server
+#  jellyfin:
+#  # Tautulli - Previously PlexPy. Plex statistics and monitoring
+#  # Set HTTP Root in Tautulli settings if using PathPrefix
+#  tautulli:
+#  # PhotoShow - Image Gallery
+#  photoshow:
+#  # Plex AutoScan - On demand/specific folder scanning for Plex
+#  autoscan:
+#  # Plex-Sync - For Syncing watched status between plex servers
+#  # Sync Plex between NUC and Synology
+#  plex-sync:
+#  ############################# MEDIA FILE MANAGEMENT
+#  # Bazarr - Subtitle Management
+#  bazarr:
+#  # Picard - Music Library Tagging and Management
+#  picard:
+#  # Handbrake - Video Conversion (Transcoding and compression)
+#  handbrake:
+#  # MKVToolNix - Video Editing (Remuxing - changing media container while keeping original source quality)
+#  mkvtoolnix:
+#  # MakeMKV - Video Editing (Ripping from Disks)
+#  makemkv:
+#  # FileBot - File renamer
+#  filebot:
+#  ############################# UTILITIES
+#  # Firefox - Web Broswer
+#  # VNC password not working - check
+#  firefox:
+#  # Glances - System Information
+#  glances:
+#  # qDirStat - Directory Statistics
+#  qdirstat:
+#  # Guacamole - Remote desktop, SSH, on Telnet on any HTML5 Browser
+#  # Create all databases and tables first
+#  guacamole:
+#  # Guacamole Daemon - Needed for Guacamole
+#  guacd:
+#  # Dozzle - Real-time Docker Log Viewer
+#  dozzle:
+#  # VSCode - VSCode Editing
+#  vscode:
+#  # StatPing - Status Page & Monitoring Server
+#  # Not adding $TZ to linuxserver/mariadb resulted in a blank page
+#  # Had to change default username admin in MariaDB
+#  statping:
+#  # APCUPSD - APC UPS Management
+#  # create the apcupsd.conf file
+#  apcupsd:
+#  ############################# MAINTENANCE
+#  # Docker-GC - Automatic Docker Garbage Collection
+#  # Create docker-gc-exclude file
+#  dockergc:
+#  # Traefik Certs Dumper - Extract LetsEncrypt Certificates - Traefik2 Compatible
+#  certdumper:
+#  # Cloudflare-Companion - Automatic CNAME DNS Creation
+#  cf-companion:
+#  # Cloudflare DDNS - Dynamic DNS Updater
+#  cf-ddns:
+#  # WatchTower - Automatic Docker Container Updates
+#  watchtower:
+#  #PyRenamer - Easily Rename Your Files
+#  pyrenamer:
+#  # UniFi Controller - Managing UniFi Network
+#  # UDP 3478 Port used for STUN. #REQUIRED
+#  # TCP 5514 Port used for remote syslog capture.
+#  # TCP 8080 Port used for device and controller communication. #REQUIRED
+#  # TCP 8443 Port used for controller GUI/API as seen in a web browser #REQUIRED
+#  # TCP 8880 Port used for HTTP portal redirection.
+#  # TCP 8843 Port used for HTTPS portal redirection.
+#  # TCP 6789 Port used for UniFi mobile speed test. #REQUIRED
+#  # TCP 27117 Port used for local-bound database communication.
+#  # UDP 5656-5699 Ports used by AP-EDU broadcasting.
+#  # UDP 10001 Port used for device discovery #REQUIRED
+#  # UDP 1900 Port used for "Make controller discoverable on L2 network" in controller settings.
+#  unifi:
+#  rclone-shb:
+#  ############################# SMART HOME
+#  # Home Assistant Core - Home Automation
+#  # Added temporarily since HASS.io (Home Assistant Supervised) on Docker has been deprecated.
+#  homeassistant:
+#  # Home Assistant Core - Home Automation
+#  # If you want Home Assistant, use the one above. This is was old setup. I am still migrating things from this one to Home Assistant Core Above.
+#  # Added temporarily since HASS.io (Home Assistant Supervised) on Docker has been deprecated.
+#  hassio:
+#  # MotionEye - Video Surveillance
+#  motioneye:
+#  # Mosquitto - MQTT Broker
+#  # Create mosquitto.conf, passwd, mosquitto.log files  and set permissions to 775 user:docker
+#  # dexec mosquitto /bin/sh -> mosquitto_passwd -b /mosquitto/config/passwd username passwd
+#  mosquitto:
+#  ########################### WEB
+#  # Nginx - Web Server
+#  nginx:
+#  # PHP - Hypertext Preprocessor
+#  php7:
+#  ########################### OBSOLETE
+#  # MiFlora MQTT Daemon - BT to MQTT Daemon for MiFlora Sensors
+#  miflora:
+#  # Varken - Monitor Plex, Sonarr, Radarr, and Other Data
+#  varken:
+#  # xTeve - IPTV proxy for Plex
+#  xteve:
+#  # Cloud IDE - Editing
+#  cloud9:
+#  # Cloud Commander - web file manager
+#  cloudcmd:
+#  # VSCode Server - VSCode Editing
+#  # WARNING: This appears to change permissions of all files to PUID:PGID
+#  code-server:
+#  # qBittorrent - Torrent downloader
+#  # Needs trailing / if using PathPrefixStrip
+#  qbittorrent:
+#  # Cloudflare DDNS - Dynamic DNS Updater
+#  cloudddns:
+#  # HA-Dockermon - Manage Docker containers in Home Assistant
+#  ha-dockermon:
+#  # Postgres - Database
+#  postgres:
+#  # Ouroboros - Automatic Docker Container Updates
+#  ouroboros:
+#  # Ombi - Media Requests
+#  ombi:
+#  # Emby - Media Server
+#  embyms:
+#  # SMTP to Telegram - Send SMTP Notifications as Telegram Message
+#  # Use case: https://github.com/htpcBeginner/docker-traefik/issues/78
+#  smtp_to_telegram:
+#  # Rclone - Google Drive Mount
+#  # https://github.com/openbridge/ob_bulkstash/issues/19
+#  # https://github.com/romancin/rclonebrowser-docker
+#  # https://github.com/romancin/rclonebrowser-docker
+#  # https://hub.docker.com/r/d2dyno/rclone-gui
+#  rclone-drive:
+#  # Rclone - Google Drive Mount
+#  rclone-crypt:
+#  # MergerFS - A featureful union filesystem
+#  mergerfs:
+#  # digikam - Photo Management
+#  digikam:
+#  # PlexTraktSync
+#  # Create Trakt Application https://github.com/Taxel/PlexTraktSync
+#  # Had to run this first before starting compose
+#  # git clone -b plexmovieagent-fixed https://github.com/Taxel/PlexTraktSync.git /home/USER/docker/apps/
+#  # sudo docker run -it --name ptsync -v /home/USER/docker/apps/PlexTraktSync:/usr/src/app -e TZ="America/New_York" --restart on-failure:2 twolaw/plextraktsync
+#  # change permissions of .env and .pytrakt.json to 600 and root:root
+#  ptsync:
+#  # Tiny Media Manager - Media and Metadata Management Tool
+#  tinymm:
+#  # SABnzbd - Binary newsgrabber (NZB downloader)
+#  # Disable SABNnzbd's built-in HTTPS support for traefik proxy to work
+#  # Needs trailing / if using PathPrefix
+#  sabnzbd:
+#  # CloudPlow - Rclone remote uploader/syncer
+#  cloudplow:

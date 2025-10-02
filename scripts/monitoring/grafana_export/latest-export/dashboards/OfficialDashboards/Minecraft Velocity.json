@@ -1,0 +1,1047 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "minecraft-velocity",
+    "url": "/d/AltFNh7nz/minecraft-velocity",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 38,
+    "folderUid": "a9931edc-3108-473d-bd1e-1ae3eb7db0d9",
+    "folderTitle": "OfficialDashboards",
+    "folderUrl": "/dashboards/f/a9931edc-3108-473d-bd1e-1ae3eb7db0d9/officialdashboards",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 144,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": "P4169E866C3094E38",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 25,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "decimals": 0,
+            "mappings": [],
+            "noValue": "0",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 12,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 4,
+        "options": {
+          "legend": {
+            "calcs": [
+              "min",
+              "max",
+              "mean",
+              "last"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.1",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (server) (velocity_online_player{proxy_name=~\"$proxy\"})",
+            "hide": false,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{server}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Online Players",
+        "type": "timeseries"
+      },
+      {
+        "datasource": "P4169E866C3094E38",
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 25,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "decimals": 0,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 12,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max",
+              "last"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "8.2.1",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "editorMode": "code",
+            "expr": "increase(velocity_player_chats_total{proxy_name=~\"$proxy\"}[1m])",
+            "hide": false,
+            "legendFormat": "chats",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": "P4169E866C3094E38",
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "increase(velocity_server_list_pings_total{proxy_name=~\"$proxy\"}[1m])",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "server list pings",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": "P4169E866C3094E38",
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "increase(velocity_player_connects_total{proxy_name=~\"$proxy\"}[1m])",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "connects",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": "P4169E866C3094E38",
+            "editorMode": "code",
+            "expr": "increase(velocity_player_kicks_total{proxy_name=~\"$proxy\"}[1m])",
+            "hide": false,
+            "legendFormat": "kicks",
+            "range": true,
+            "refId": "D"
+          },
+          {
+            "datasource": "P4169E866C3094E38",
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "increase(velocity_player_disconnects_total{proxy_name=~\"$proxy\"}[1m])",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "disconnects",
+            "range": true,
+            "refId": "F"
+          }
+        ],
+        "title": "Events per Minute",
+        "type": "timeseries"
+      },
+      {
+        "datasource": "P4169E866C3094E38",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "hue",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "smooth",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 6,
+          "x": 0,
+          "y": 12
+        },
+        "id": 5,
+        "options": {
+          "legend": {
+            "calcs": [
+              "min",
+              "max",
+              "mean",
+              "last"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.0.6",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "exemplar": false,
+            "expr": "sum by (type) (velocity_jvm_memory{type='used',proxy_name=~\"$proxy\"})",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{server_name}} used",
+            "refId": "C"
+          },
+          {
+            "datasource": "P4169E866C3094E38",
+            "exemplar": false,
+            "expr": "sum by (type) (velocity_jvm_memory{type='free',proxy_name=~\"$proxy\"})",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{server_name}} free",
+            "refId": "A"
+          }
+        ],
+        "title": "JVM Memory",
+        "type": "timeseries"
+      },
+      {
+        "datasource": "P4169E866C3094E38",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 6,
+          "x": 6,
+          "y": 12
+        },
+        "id": 11,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "9.4.3",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "exemplar": false,
+            "expr": "sum(velocity_jvm_threads_current{proxy_name=~\"$proxy\"})",
+            "interval": "",
+            "legendFormat": "TOTAL",
+            "refId": "A"
+          },
+          {
+            "datasource": "P4169E866C3094E38",
+            "exemplar": false,
+            "expr": "sum by (state) (velocity_jvm_threads_state{proxy_name=~\"$proxy\"})",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{state}}",
+            "refId": "B"
+          }
+        ],
+        "title": "Threads",
+        "type": "timeseries"
+      },
+      {
+        "datasource": "P4169E866C3094E38",
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "displayName": "",
+            "links": [],
+            "mappings": [],
+            "max": 4000000000,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 3000000000
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 3,
+          "x": 12,
+          "y": 12
+        },
+        "id": 9,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "last"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.2.0",
+        "repeat": "proxies",
+        "repeatDirection": "v",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "exemplar": false,
+            "expr": "sum(velocity_jvm_memory{type='allocated', proxy_name=~\"$proxy\"}) - scalar(sum(velocity_jvm_memory{type='free', proxy_name=~\"$proxy\"}))",
+            "instant": false,
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "$proxy RAM",
+        "type": "gauge"
+      },
+      {
+        "datasource": "P4169E866C3094E38",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 2,
+          "x": 15,
+          "y": 12
+        },
+        "id": 18,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "exemplar": false,
+            "expr": "count(count(velocity_jvm_memory{proxy_name=~\".*\"}) by (proxy_name))",
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Proxies",
+        "type": "stat"
+      },
+      {
+        "datasource": "P4169E866C3094E38",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 2,
+          "x": 17,
+          "y": 12
+        },
+        "id": 20,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "exemplar": false,
+            "expr": "velocity_managed_servers{proxy_name=~\"$proxy\"}",
+            "interval": "",
+            "legendFormat": "{{proxy_name}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Servers",
+        "type": "stat"
+      },
+      {
+        "datasource": "P4169E866C3094E38",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 2,
+          "x": 19,
+          "y": 12
+        },
+        "id": 23,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "velocity_installed_network_plugins{proxy_name=~\"$proxy\"}",
+            "interval": "",
+            "legendFormat": "{{proxy_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Plugins",
+        "type": "stat"
+      },
+      {
+        "datasource": "P4169E866C3094E38",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 3,
+          "x": 21,
+          "y": 12
+        },
+        "id": 13,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(velocity_online_player{proxy_name=~\"$proxy\"})",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "Online Player",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Player Count",
+        "type": "stat"
+      },
+      {
+        "datasource": "P4169E866C3094E38",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineWidth": 1,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              }
+            },
+            "mappings": [],
+            "max": 1000,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "ms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 9,
+          "x": 12,
+          "y": 15
+        },
+        "id": 22,
+        "options": {
+          "bucketOffset": 0,
+          "bucketSize": 20,
+          "combine": false,
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "8.2.1",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "exemplar": false,
+            "expr": "clamp_max(avg(velocity_online_player_latency > 0),1000)",
+            "interval": "",
+            "legendFormat": "average player ping",
+            "refId": "A"
+          }
+        ],
+        "title": "Ping",
+        "type": "histogram"
+      },
+      {
+        "datasource": "P4169E866C3094E38",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "noValue": "No One 💤",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 3,
+          "x": 21,
+          "y": 15
+        },
+        "id": 25,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": "P4169E866C3094E38",
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "velocity_online_player > 0",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{label_name}}",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Online Player List",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value": true,
+                "__name__": true,
+                "instance": true,
+                "job": true,
+                "name": false,
+                "proxy_name": true,
+                "quantile": true,
+                "server": false
+              },
+              "indexByName": {},
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "refresh": "5s",
+    "revision": 1,
+    "schemaVersion": 39,
+    "tags": [
+      "bungeecord",
+      "velocity"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values(velocity_managed_servers, proxy_name)",
+          "hide": 0,
+          "includeAll": true,
+          "multi": false,
+          "name": "proxy",
+          "options": [],
+          "query": {
+            "query": "label_values(velocity_managed_servers, proxy_name)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        }
+      ]
+    },
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Minecraft Velocity",
+    "uid": "AltFNh7nz",
+    "weekStart": ""
+  }
+}

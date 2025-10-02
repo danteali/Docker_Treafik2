@@ -1,0 +1,108 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: Evaluated every 5 min
+      folder: Alerts
+      interval: 5m
+      rules:
+        - uid: e040d958-a06d-4c38-b0a1-b016cfdb4796
+          title: Container RAM (Working Set) Absolute Size [excl. Minecraft]
+          condition: D
+          data:
+            - refId: B
+              relativeTimeRange:
+                from: 86400
+                to: 0
+              datasourceUid: P4169E866C3094E38
+              model:
+                datasource:
+                    type: prometheus
+                    uid: P4169E866C3094E38
+                editorMode: code
+                exemplar: true
+                expr: sum by (host_system,name) (container_memory_working_set_bytes{host_system!="minecraft",name=~".+",name!~""})
+                format: time_series
+                instant: false
+                interval: ""
+                intervalFactor: 1
+                intervalMs: 15000
+                legendFormat: '{{host_system}} - {{ name }}'
+                maxDataPoints: 43200
+                metric: container_cpu_user_seconds_total
+                range: false
+                refId: B
+                step: 10
+            - refId: A
+              relativeTimeRange:
+                from: 86400
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - A
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: A
+                settings:
+                    mode: dropNN
+                type: reduce
+            - refId: D
+              relativeTimeRange:
+                from: 86400
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 2e+09
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - D
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: D
+                type: threshold
+          dashboardUid: ee4759ca-2b5e-4697-98cc-01a388fc64f0
+          panelId: 693
+          noDataState: OK
+          execErrState: OK
+          for: 5m
+          annotations:
+            __dashboardUid__: ee4759ca-2b5e-4697-98cc-01a388fc64f0
+            __panelId__: "693"
+            description: |-
+                Container 'working set' (non-evictable) RAM use exceeds threshold set for monitoring (minecraft containers are excluded from analysis).
+                • Host: {{ $labels.host_system }}
+                • Container: {{ $labels.name }}
+            summary: Container RAM use exceeds defined threshold - {{ $labels.name }} on {{ $labels.host_system }}
+          labels:
+            webhook-nodered: "true"
+          isPaused: false

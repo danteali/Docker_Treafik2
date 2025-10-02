@@ -1,0 +1,21 @@
+{
+  "id": 4,
+  "uid": "P4B4ECDFF6FAA6F38",
+  "orgId": 1,
+  "name": "Utils",
+  "type": "grafana-simple-json-datasource",
+  "typeLogoUrl": "public/img/icn-datasource.svg",
+  "access": "proxy",
+  "url": "https://grafana-utils.vercel.app",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": false,
+  "jsonData": {},
+  "secureJsonFields": {},
+  "version": 1,
+  "readOnly": false,
+  "apiVersion": ""
+}

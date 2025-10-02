@@ -1,0 +1,208 @@
+version: "3.8"
+
+########################### NETWORKS
+networks:
+#  t2_proxy:
+#    name: t2_proxy
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 192.168.90.0/24
+#          gateway: 192.168.90.1
+#  lan_net:
+#    name: lan_net
+#    driver: macvlan
+#    driver_opts:
+#      parent: eth0
+#    ipam:
+#      config:
+#        - subnet: 192.168.0.0/24
+#          gateway: 192.168.0.1
+#          ip_range: 192.168.0.224/29
+#          # Don't believe we need to reserve address for host as can
+#          # route to host's LAN IP in host routing rules instead of
+#          # having to reserve IP.
+#          aux_addresses:
+#            host1: 192.168.0.224
+#  # Docker will use the same default network for all compose files in
+#  # the same directory. It will use the settings of the first network
+#  # created even of othere compose files try to set the default to a
+#  # different subnet.
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.89.0/24
+          gateway: 192.168.89.1
+
+########################### COMMON SETTINGS
+
+# Now defined globally in daemon.json
+#x-logging: 
+#      &default-logging
+#      options:
+#        cache-max-size: "50m"
+#        cache-max-file: "1"
+
+########################### SERVICES
+services:
+# All services / apps go below this line
+
+  # Frigate NVR
+  # https://docs.frigate.video/
+  # https://github.com/blakeblackshear/frigate
+  # 'touch' config.yml or restore existing version on host before running or a dir will be created!
+  # 20241028: Updated from 0.13.2 to 0.14.1
+  # 20250221: Updated from 0.14.1 to 0.15.0
+  # 20250610: Updated from 0.15.0 to 0.15.1
+  frigate:
+    container_name: frigate
+    image: ghcr.io/blakeblackshear/frigate:0.15.1
+    # Priv access or alternatively CAP_PERFMON needed
+    # WSL - CAP_PERFMON did not work, so using priv container.
+    privileged: true # this may not be necessary for all setups
+    cap_add:
+      - CAP_PERFMON
+      - CAP_NET_ADMIN
+      - CAP_NET_RAW
+    restart: unless-stopped
+    network_mode: host     # Note this forces all services to use default ports
+    #networks:
+    #  - default
+    #  #- t2_proxy
+    # Using detection streams for calc (1536x576 & 2x 640x480) = 12mb + 4mb = 16mb + 30mb for frigate itself = 46mb. Leaving at default 64mb for margin.
+    # Log message recommended at least 136mb
+    shm_size: "136mb" # update for your cameras based on calculation at https://docs.frigate.video/frigate/installation#calculating-required-shm-size
+#    cpus: 2 # CPU limit
+    mem_limit: 3896m # represents the hard memory limits (a bit less than the 4Gb assigned to LXC)
+    mem_reservation: 512m # represents the soft memory limits
+    devices:
+      #- /dev/bus/usb:/dev/bus/usb  # passes the USB Coral, needs to be modified for other versions
+      - /dev/apex_0:/dev/apex_0     # passes a PCIe Coral, follow driver instructions here https://coral.ai/docs/m2/get-started/#2a-on-linux
+      #- /dev/dri/renderD128        # for intel hwaccel, needs to be updated for your hardware
+      - /dev/dri:/dev/dri           # for intel hwaccel, needs to be updated for your hardware
+    #device_cgroup_rules:
+    #  - "c 226:* rmw"
+    #  - "c 120:* rmw"
+    volumes:
+      # Create target directories on SSD!!!
+      - /etc/localtime:/etc/localtime:ro
+      - /storage/Docker/frigate/data/config/:/config/
+      # For frigate DB - doesn't like being on network share. But media storage can still be on network.
+      - /storage/Docker/frigate/data/data:/frigate-db
+      # NFS volume mounted in host LXC
+      #- /storage/scratchpad/frigate:/media/frigate
+      # NFS Volume (defined in 'volume' section) - short syntax
+      # Using docker volume instead of host mount to ensure NFS vol available before starting container.
+      #- crush-nfs-frigate:/media/frigate
+      # NFS Volume - long syntax - Frigate media storage
+      - type: volume
+        source: crush-nfs-frigate
+        target: /media/frigate
+        read_only: false
+        volume:
+          # nocopy modifier is for when you are creating a volume and data already exists in the container's path,
+          # you can specify if you want that data copied when the volume is created.
+          nocopy: true
+      ## NFS Volume - Home Assistant Config (to use HA cameras as source)
+      #- type: volume
+      #  source: crush-nfs-hass
+      #  target: /hass/config
+      #  read_only: true
+      #  volume:
+      #    # nocopy modifier is for when you are creating a volume and data already exists in the container's path,
+      #    # you can specify if you want that data copied when the volume is created.
+      #    nocopy: true
+      ## tmpfs for reducing SSD wear, uses RAM
+      #- type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+      #  target: /tmp/cache
+      #  tmpfs:
+      #    size: 1000000000
+#    # IF USING NETWORK:HOST THEN PUBLISHED PORTS GET IGNORED.
+#    # Be careful with ports since we need to use default container ports if using host networking.
+#    ports:
+#      #- 5005:5000       # Web GUI - swiutching to default 500 to make consistent whether we use host networking or not.
+#      - 5000:5000       # Web GUI
+#      - 8971:8971       # Web GUI with Authorisation
+#      - 1984:1984       # go2rtc dashboard
+#      - 8554:8554       # RTSP feeds
+#      - 8555:8555/tcp   # WebRTC over tcp
+#      - 8555:8555/udp   # WebRTC over udp
+#      - 1935:1935       # RTMP feeds
+#      - 5353:5353/tcp   # mDNS to detect HomeKit devices
+#      - 5353:5353/udp   # mDNS to detect HomeKit devices
+#      - 51872:51872/tcp # mDNS to detect HomeKit devices
+#      - 51872:51872/udp # mDNS to detect HomeKit devices
+    environment:
+      FRIGATE_RTSP_PASSWORD: password
+    labels:
+      - org.label-schema.group=home-auto,external
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      #- "traefik.enable=true"
+      ### HTTP Routers
+      #- "traefik.http.routers.frigate-rtr.entrypoints=https"
+      #- "traefik.http.routers.frigate-rtr.rule=Host(`frigate.mc-guinness.co.uk`)"
+      ### Middlewares
+      ##- "traefik.http.routers.frigate-rtr.middlewares=chain-basic-auth@file" 
+      ##- "traefik.http.routers.frigate-rtr.middlewares=chain-no-auth@file"
+      #- "traefik.http.routers.frigate-rtr.middlewares=chain-authelia@file"
+      ### HTTP Services
+      #- "traefik.http.routers.frigate-rtr.service=frigate-svc"
+      #- "traefik.http.services.frigate-svc.loadbalancer.server.port=5000"
+      ##- "traefik.http.services.frigate-svc.loadbalancer.server.scheme=https"
+
+
+  # Frigate Prometheus Exporter
+  # https://github.com/bairhys/prometheus-frigate-exporter
+  # https://hub.docker.com/r/rhysbailey/prometheus-frigate-exporter
+  frigate-exporter-prometheus:
+    image: rhysbailey/prometheus-frigate-exporter
+    container_name: frigate-exporter-prometheus
+    restart: unless-stopped
+    depends_on: 
+      - frigate
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - default
+    ports:
+      # Don't need to expose if on same network as prometheus & frigate
+      - 9101:9100
+    environment:
+      - FRIGATE_STATS_URL=http://192.168.0.221:5000/api/stats #http://frigate:5000/api/stats
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      #- "com.centurylinklabs.watchtower.monitor-only=true"
+
+
+########################### VOLUMES
+
+volumes:
+  # NFS Volume - Frigate Storage
+  crush-nfs-frigate:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      device: ":/storage/scratchpad/Frigate-LXC"
+      # The nolock and soft options ensure that Docker does not freeze if the connection to the NFS server is lost.
+      o: "addr=192.168.0.10,rw"
+  ## NFS Volume - Home Assistant Config (to use HA cameras as source)
+  #crush-nfs-hass:
+  #  driver: local
+  #  driver_opts:
+  #    type: "nfs"
+  #    device: ":/storage/Docker/home-assistant/config"
+  #    # The nolock and soft options ensure that Docker does not freeze if the connection to the NFS server is lost.
+  #    o: "addr=192.168.0.10,rw"
+
+# For info: Host /etc/fstab entry
+#192.168.0.10:/storage/scratchpad/frigate/ /storage/scratchpad/frigate/ nfs _netdev,soft,noatime,rsize=32768,wsize=32768 0 0 

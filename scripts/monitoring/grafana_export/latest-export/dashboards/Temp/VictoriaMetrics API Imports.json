@@ -1,0 +1,2909 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canStar": false,
+    "canDelete": true,
+    "slug": "victoriametrics-api-imports",
+    "url": "/d/da7bd295-47a6-4b76-aefb-0e26fecbc1f8/victoriametrics-api-imports",
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 33,
+    "folderUid": "f0003a8d-61d3-44ca-a649-b4ffa1df0ed3",
+    "folderTitle": "Temp",
+    "folderUrl": "/dashboards/f/f0003a8d-61d3-44ca-a649-b4ffa1df0ed3/temp",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Metrics pushed directly to VictoriaMetrics via API commands.",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 44,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 133,
+        "panels": [],
+        "title": "Network Stats - $host_system - DISABLED)",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 1
+        },
+        "id": 129,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "currencyGBP"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 2
+            },
+            "id": 123,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean",
+                  "variance"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "octopus_energy_standingcharge_electricity_pence / 100",
+                "instant": false,
+                "legendFormat": "{{category}} - {{source}}",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "octopus_energy_standingcharge_gas_pence / 100",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{category}} - {{source}}",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "octopus_energy_unitrate_electricity_pence / 100",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{category}} - {{source}}",
+                "range": true,
+                "refId": "D"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "octopus_energy_unitrate_gas_pence / 100",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{category}} - {{source}}",
+                "range": true,
+                "refId": "E"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "octopus_energy_unitrate_day_electricity_pence / 100",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{category}} - {{source}}",
+                "range": true,
+                "refId": "F"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "octopus_energy_unitrate_night_electricity_pence / 100",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "{{category}} - {{source}}",
+                "range": true,
+                "refId": "G"
+              }
+            ],
+            "timeFrom": "14d",
+            "title": "Octopus Energy Pricing",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Octopus Energy Pricing (Monitoring LXC)",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 2
+        },
+        "id": 127,
+        "panels": [
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      1000000
+                    ],
+                    "type": "lt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "keep_state",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "ISP Download Speed <1MB/s [5 min avg] (InfluxDB)",
+              "noDataState": "keep_state",
+              "notifications": []
+            },
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "description": "",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "fixedColor": "dark-green",
+                  "mode": "shades"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 5,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": 3600000,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 2,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "dashed"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red"
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 40000000
+                    }
+                  ]
+                },
+                "unit": "binbps"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Ping Latency"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "ms"
+                    },
+                    {
+                      "id": "custom.fillOpacity",
+                      "value": 0
+                    },
+                    {
+                      "id": "custom.lineStyle",
+                      "value": {
+                        "dash": [
+                          5,
+                          3
+                        ],
+                        "fill": "dot"
+                      }
+                    },
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "dark-purple",
+                        "mode": "fixed"
+                      }
+                    },
+                    {
+                      "id": "custom.fillOpacity",
+                      "value": 0
+                    },
+                    {
+                      "id": "custom.lineWidth",
+                      "value": 3
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Ping Jitter"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "ms"
+                    },
+                    {
+                      "id": "custom.fillOpacity",
+                      "value": 0
+                    },
+                    {
+                      "id": "custom.lineStyle",
+                      "value": {
+                        "dash": [
+                          5,
+                          3
+                        ],
+                        "fill": "dot"
+                      }
+                    },
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "dark-blue",
+                        "mode": "fixed"
+                      }
+                    },
+                    {
+                      "id": "custom.fillOpacity",
+                      "value": 0
+                    },
+                    {
+                      "id": "custom.lineWidth",
+                      "value": 3
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Upload"
+                  },
+                  "properties": [
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "dark-orange",
+                        "mode": "fixed"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 12,
+              "w": 24,
+              "x": 0,
+              "y": 11
+            },
+            "id": 17,
+            "interval": "60s",
+            "options": {
+              "legend": {
+                "calcs": [
+                  "firstNotNull",
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "9.0.5",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "speedtest_download_bandwidth_bps",
+                "hide": true,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "last_over_time(Speedtest_upload_bandwidth[$__interval])",
+                "hide": true,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "last_over_time(Speedtest_ping_jitter[$__interval])",
+                "hide": true,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "last_over_time(Speedtest_ping_latency[$__interval])",
+                "hide": true,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "D"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "avg(speedtest_download_bandwidth_bps)*8",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "legendFormat": "Download",
+                "range": true,
+                "refId": "E",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "avg(speedtest_upload_bandwidth_bps) * 8",
+                "hide": false,
+                "legendFormat": "Upload",
+                "range": true,
+                "refId": "F"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "avg(speedtest_ping_jitter_ms)",
+                "hide": false,
+                "legendFormat": "Ping Jitter",
+                "range": true,
+                "refId": "G"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "avg(speedtest_ping_latency_ms)",
+                "hide": false,
+                "legendFormat": "Ping Latency",
+                "range": true,
+                "refId": "H"
+              }
+            ],
+            "title": "ISP Speedtest",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "left",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false
+                },
+                "fieldMinMax": false,
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": ".*Speed"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "gradient",
+                        "type": "gauge"
+                      }
+                    },
+                    {
+                      "id": "color",
+                      "value": {
+                        "mode": "continuous-RdYlGr"
+                      }
+                    },
+                    {
+                      "id": "unit",
+                      "value": "Bps"
+                    },
+                    {
+                      "id": "max",
+                      "value": 20000000
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/.*Size/"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "decbytes"
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "gauge"
+                      }
+                    },
+                    {
+                      "id": "max",
+                      "value": 300000000
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byRegexp",
+                    "options": "/(Latency|Jitter).*/"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "ms"
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "gauge"
+                      }
+                    },
+                    {
+                      "id": "color"
+                    },
+                    {
+                      "id": "max",
+                      "value": 250
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 18,
+              "x": 0,
+              "y": 23
+            },
+            "id": 139,
+            "interval": "5m",
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "enablePagination": true,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "Time"
+                }
+              ]
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "avg by (host_system, intf_internalip, intf_externalip, intf_name, intf_vpn, isp,server_id,server_location ,server_ip ,server_name,server_country) (speedtest_download_bandwidth_bps)",
+                "format": "table",
+                "instant": false,
+                "interval": "",
+                "legendFormat": "",
+                "queryType": "randomWalk",
+                "range": true,
+                "refId": "download"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "avg(speedtest_upload_bandwidth_bps)",
+                "format": "table",
+                "hide": false,
+                "instant": false,
+                "interval": "",
+                "legendFormat": "",
+                "range": true,
+                "refId": "upload"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "avg(speedtest_ping_latency_ms)",
+                "format": "table",
+                "hide": false,
+                "instant": false,
+                "interval": "",
+                "legendFormat": "Latency",
+                "range": true,
+                "refId": "latency_ms"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "avg(speedtest_ping_jitter_ms)",
+                "format": "table",
+                "hide": false,
+                "instant": false,
+                "interval": "",
+                "legendFormat": "Latency",
+                "range": true,
+                "refId": "jitter_ms"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "avg(speedtest_download_bandwidth_bytes)",
+                "format": "table",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "down-size"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "avg(speedtest_upload_bandwidth_bytes)",
+                "format": "table",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "up-size"
+              }
+            ],
+            "title": "Test Results",
+            "transformations": [
+              {
+                "id": "joinByField",
+                "options": {}
+              },
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": false,
+                    "host_system 1": true,
+                    "host_system 2": true,
+                    "host_system 3": true,
+                    "host_system 4": true,
+                    "host_system 5": true,
+                    "host_system 6": true,
+                    "intf_internalip": true,
+                    "intf_vpn": true,
+                    "server_country": true
+                  },
+                  "includeByName": {},
+                  "indexByName": {
+                    "Time": 0,
+                    "Value #down-size": 16,
+                    "Value #download": 12,
+                    "Value #jitter_ms": 15,
+                    "Value #latency_ms": 14,
+                    "Value #up-size": 17,
+                    "Value #upload": 13,
+                    "host_system": 1,
+                    "intf_externalip": 2,
+                    "intf_internalip": 3,
+                    "intf_name": 4,
+                    "intf_vpn": 5,
+                    "isp": 6,
+                    "server_country": 9,
+                    "server_id": 7,
+                    "server_ip": 10,
+                    "server_location": 8,
+                    "server_name": 11
+                  },
+                  "renameByName": {
+                    "Value #down-size": "Download Size",
+                    "Value #download": "Download Speed",
+                    "Value #jitter_ms": "Jitter (ms)",
+                    "Value #latency_ms": "Latency (ms)",
+                    "Value #up-size": "Upload Size",
+                    "Value #upload": "Upload Speed",
+                    "externalip": "External IP",
+                    "host_system": "Host",
+                    "interface": "Interface",
+                    "intf_externalip": "External IP",
+                    "intf_internalip": "Internal IP",
+                    "intf_name": "Interface",
+                    "intf_vpn": "VPN?",
+                    "isp": "ISP",
+                    "server_country": "Server Country",
+                    "server_id": "Server ID",
+                    "server_ip": "Server IP",
+                    "server_location": "Server Location",
+                    "server_name": "Server Name",
+                    "serverid": "Server",
+                    "serverlocation": "Server Location"
+                  }
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "rgb(131, 135, 131)"
+                    }
+                  ]
+                },
+                "unit": "Bps"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 18,
+              "y": 23
+            },
+            "id": 134,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "text": {},
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "max(max_over_time(speedtest_download_bandwidth_bps[1w:5m]))",
+                "interval": "",
+                "legendFormat": "Best",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "min(min_over_time(speedtest_download_bandwidth_bps[1w:5m]))",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Worst",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "avg(avg_over_time(speedtest_download_bandwidth_bps[1w:5m]))",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Avg",
+                "range": true,
+                "refId": "C"
+              }
+            ],
+            "timeFrom": "1w",
+            "title": "Download",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "rgb(131, 135, 131)"
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 21,
+              "y": 23
+            },
+            "id": 136,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "text": {},
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "min(min_over_time(speedtest_ping_latency_ms[1w:5m]))",
+                "interval": "",
+                "legendFormat": "Latency - Best",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "max(max_over_time(speedtest_ping_latency_ms[1w:5m]))",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Latency - Worst",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "avg(avg_over_time(speedtest_ping_latency_ms[1w:5m]))",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Latency - Avg",
+                "range": true,
+                "refId": "C"
+              }
+            ],
+            "timeFrom": "1w",
+            "title": "Latency",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "fixedColor": "dark-orange",
+                  "mode": "fixed"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "rgb(131, 135, 131)"
+                    }
+                  ]
+                },
+                "unit": "Bps"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 18,
+              "y": 27
+            },
+            "id": 135,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "text": {},
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "max(max_over_time(speedtest_upload_bandwidth_bps[1w:5m]))",
+                "interval": "",
+                "legendFormat": "Best",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "min(min_over_time(speedtest_upload_bandwidth_bps[1w:5m]))",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Worst",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "avg(avg_over_time(speedtest_upload_bandwidth_bps[1w:5m]))",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Avg",
+                "range": true,
+                "refId": "C"
+              }
+            ],
+            "timeFrom": "1w",
+            "title": "Upload",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "rgb(131, 135, 131)"
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 21,
+              "y": 27
+            },
+            "id": 137,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "text": {},
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "min(min_over_time(speedtest_ping_jitter_ms[1w:5m]))",
+                "interval": "",
+                "legendFormat": "Best",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "max(max_over_time(speedtest_ping_jitter_ms[1w:5m]))",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Worst",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "avg(avg_over_time(speedtest_ping_jitter_ms[1w:5m]))",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Avg",
+                "range": true,
+                "refId": "C"
+              }
+            ],
+            "timeFrom": "1w",
+            "title": "Jitter",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "rgb(131, 135, 131)"
+                    }
+                  ]
+                },
+                "unit": "bytes"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Upload"
+                  },
+                  "properties": [
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "dark-orange",
+                        "mode": "fixed"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 3,
+              "w": 6,
+              "x": 18,
+              "y": 31
+            },
+            "id": 138,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "center",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "text": {},
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "sum(speedtest_download_bandwidth_bytes)",
+                "interval": "",
+                "legendFormat": "Download",
+                "range": true,
+                "refId": "Download"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": true,
+                "expr": "sum(speedtest_upload_bandwidth_bytes)",
+                "hide": false,
+                "interval": "",
+                "legendFormat": "Upload",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "timeFrom": "1w",
+            "title": "Transferred Data",
+            "type": "stat"
+          }
+        ],
+        "title": "ISP Speedtest (Proxmox Host)",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 3
+        },
+        "id": 131,
+        "panels": [
+          {
+            "datasource": {
+              "default": true,
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "fillOpacity": 70,
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineWidth": 0,
+                  "spanNulls": false
+                },
+                "decimals": 0,
+                "mappings": [],
+                "max": 1,
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 18,
+              "w": 24,
+              "x": 0,
+              "y": 4
+            },
+            "id": 140,
+            "options": {
+              "alignValue": "left",
+              "legend": {
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": false
+              },
+              "mergeValues": true,
+              "rowHeight": 0.9,
+              "showValue": "never",
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "(backups_rsync_marlin) > 0",
+                "instant": false,
+                "interval": "",
+                "legendFormat": "Marlin Rsync - {{storage}}",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "backups_snapraid{storage!=\"ALL\"}  > 0",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "Snapraid - {{storage}}",
+                "range": true,
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "backups_duplicacy > 0",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "Duplicacy - {{storage}}",
+                "range": true,
+                "refId": "D"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "backups_rsync_usb_backup > 0",
+                "hide": false,
+                "instant": false,
+                "legendFormat": "USB - {{storage}}",
+                "range": true,
+                "refId": "C"
+              }
+            ],
+            "timeFrom": "48h",
+            "title": "Backups",
+            "type": "state-timeline"
+          }
+        ],
+        "title": "Backups (Inside Backup Scripts)",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 4
+        },
+        "id": 128,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "description": "",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "center",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "inspect": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Power On Time"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "h"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 2
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Temp"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "celsius"
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "#37872D"
+                          },
+                          {
+                            "color": "#F2495C",
+                            "value": 50
+                          },
+                          {
+                            "color": "#F2495C",
+                            "value": 70
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Healthy?"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "short"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 0
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "type": "color-text"
+                      }
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "rgba(245, 54, 54, 0.9)"
+                          },
+                          {
+                            "color": "rgba(237, 129, 40, 0.89)",
+                            "value": 0
+                          },
+                          {
+                            "color": "#37872D",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Reallocated Sectors"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "short"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 0
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Pending Sector Realloc"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "short"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 0
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Uncorrectable Blocks"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "short"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 0
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Data Written"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "bytes"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 2
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Spin Up Time"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "ms"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Start/Stop Count"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "none"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Load Cycles"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "short"
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green"
+                          },
+                          {
+                            "color": "#EAB839",
+                            "value": 10000
+                          },
+                          {
+                            "color": "red",
+                            "value": 20000
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 0
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Model"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Disk"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Serial Number"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.align",
+                      "value": "left"
+                    },
+                    {
+                      "id": "unit",
+                      "value": "string"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Capacity"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "decbytes"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 2
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "RPM"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "rotrpm"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 0
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Data Read"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "bytes"
+                    },
+                    {
+                      "id": "decimals",
+                      "value": 2
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "% Life Used"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "percent"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 24,
+              "x": 0,
+              "y": 5
+            },
+            "id": 116,
+            "links": [
+              {
+                "targetBlank": true,
+                "title": "S.M.A.R.T. Attribute: 009 - Power-On Hours (POH)",
+                "url": "https://kb.acronis.com/content/9109"
+              },
+              {
+                "targetBlank": true,
+                "title": "S.M.A.R.T. Attribute: 193 - Load Cycle Count; Load/Unload Cycle Count",
+                "url": "kb.acronis.com/content/9128"
+              },
+              {
+                "targetBlank": true,
+                "title": "S.M.A.R.T. Attribute: 004 - Start/Stop Count",
+                "url": "https://kb.acronis.com/content/9104"
+              },
+              {
+                "targetBlank": true,
+                "title": "S.M.A.R.T. Attribute: 241 - Total LBAs Written",
+                "url": "https://kb.acronis.com/content/9158"
+              },
+              {
+                "targetBlank": true,
+                "title": "S.M.A.R.T. Attribute: 194 - HDA Temperature",
+                "url": "https://kb.acronis.com/content/9129"
+              },
+              {
+                "targetBlank": true,
+                "title": "S.M.A.R.T. Overall Health",
+                "url": "https://wiki.unraid.net/Understanding_SMART_Reports#SMART_overall_health_test"
+              },
+              {
+                "targetBlank": true,
+                "title": "S.M.A.R.T. Attribute: 005 - Reallocated Sectors Count",
+                "url": "https://kb.acronis.com/content/9105"
+              },
+              {
+                "targetBlank": true,
+                "title": "S.M.A.R.T. Attribute: 197 - Current Pending Sector Count",
+                "url": "https://kb.acronis.com/content/9133"
+              },
+              {
+                "targetBlank": true,
+                "title": "S.M.A.R.T. Attribute: 198 - Uncorrectable Sector Count",
+                "url": "https://kb.acronis.com/content/9134"
+              },
+              {
+                "targetBlank": true,
+                "title": "S.M.A.R.T. Attribute: 003 - Spin-Up Time",
+                "url": "https://kb.acronis.com/content/9103"
+              }
+            ],
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": true
+              },
+              "showHeader": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_device_info{host_system=~\"$host_system\"}) by(disk, type, host_system, device_model, model_family, serial_number,rpm,capacity_bytes) ",
+                "format": "table",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "Info",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_power_on_hours_raw_value{host_system=~\"$host_system\",type=~\"sat\"}) by(disk, type, host_system) ",
+                "format": "table",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "PowerOnHours",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_load_cycle_count_raw_value{host_system=~\"$host_system\",type=~\"sat\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "Load Cycles",
+                "refId": "LoadCycleCount"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_start_stop_count_raw_value{host_system=~\"$host_system\",type=~\"sat\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "Load Cycles",
+                "refId": "StartStopCount"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "avg(smartmon_temperature_celsius_raw_value{host_system=~\"$host_system\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "Temp"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_device_smart_healthy{host_system=~\"$host_system\",type!~\"scsi\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "Healthy"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_reallocated_sector_ct_raw_value{host_system=~\"$host_system\",type=~\"sat\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "ReallocSectorCount"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_current_pending_sector_raw_value{host_system=~\"$host_system\",type=~\"sat\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "PendingSectorCount"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_offline_uncorrectable_raw_value{host_system=~\"$host_system\",type=~\"sat\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "OfflineUncorrectableCount"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "(max(smartmon_total_lbas_written_raw_value{host_system=~\"$host_system\"}) by (disk, type, host_system)) * (max(smartmon_device_sector_size_logical{host_system=~\"$host_system\"}) by (disk, type, host_system) )",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "__auto",
+                "refId": "Written"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "(max(smartmon_total_lbas_read_raw_value{host_system=~\"$host_system\"}) by (disk, type, host_system)) * (max(smartmon_device_sector_size_logical{host_system=~\"$host_system\"}) by (disk, type, host_system) )",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "__auto",
+                "refId": "Read"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_spin_up_time_raw_value{host_system=~\"$host_system\",type=~\"sat\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "SpinUpTime"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_ssd_percentage_used{host_system=~\"$host_system\",type=~\"sat\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "NVMEUsed"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_unsafe_shutdowns_count_raw_value{host_system=~\"$host_system\",type=~\"sat\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "NVMEUnsafeShutdown"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "max(smartmon_integrity_errors_count_raw_value{host_system=~\"$host_system\",type=~\"sat\"}) by (disk, type, host_system)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "",
+                "refId": "NVMEIntegrityErrors"
+              }
+            ],
+            "title": "SMART Disk Overview",
+            "transformations": [
+              {
+                "id": "merge",
+                "options": {}
+              },
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true,
+                    "Value #Info": true,
+                    "device_model": true,
+                    "model_family": true
+                  },
+                  "indexByName": {
+                    "Time": 21,
+                    "Value #Healthy": 13,
+                    "Value #Info": 8,
+                    "Value #LoadCycleCount": 10,
+                    "Value #NVMEIntegrityErrors": 23,
+                    "Value #NVMEUnsafeShutdown": 22,
+                    "Value #NVMEUsed": 20,
+                    "Value #OfflineUncorrectableCount": 16,
+                    "Value #PendingSectorCount": 15,
+                    "Value #PowerOnHours": 9,
+                    "Value #Read": 18,
+                    "Value #ReallocSectorCount": 14,
+                    "Value #SpinUpTime": 19,
+                    "Value #StartStopCount": 11,
+                    "Value #Temp": 12,
+                    "Value #Written": 17,
+                    "capacity_bytes": 6,
+                    "device_model": 4,
+                    "disk": 1,
+                    "host_system": 0,
+                    "model_family": 3,
+                    "rpm": 7,
+                    "serial_number": 5,
+                    "type": 2
+                  },
+                  "renameByName": {
+                    "Value #Healthy": "Healthy?",
+                    "Value #Info": "",
+                    "Value #LoadCycleCount": "Load Cycles",
+                    "Value #NVMEIntegrityErrors": "Integrity Errors",
+                    "Value #NVMEUnsafeShutdown": "Unsafe Shutdowns",
+                    "Value #NVMEUsed": "% Life Used",
+                    "Value #OfflineUncorrectableCount": "Uncorrectable Blocks",
+                    "Value #PendingSectorCount": "Pending Sector Realloc",
+                    "Value #PowerOnHours": "Power On Time",
+                    "Value #Read": "Data Read",
+                    "Value #ReallocSectorCount": "Reallocated Sectors",
+                    "Value #SpinUpTime": "Spin Up Time",
+                    "Value #StartStopCount": "Start/Stop Count",
+                    "Value #Temp": "Temp",
+                    "Value #Written": "Data Written",
+                    "capacity_bytes": "Capacity",
+                    "device_model": "Model",
+                    "disk": "Disk",
+                    "host_system": "Host",
+                    "model_family": "Model Family",
+                    "rpm": "RPM",
+                    "serial_number": "Serial Number",
+                    "type": "Type"
+                  }
+                }
+              }
+            ],
+            "type": "table"
+          }
+        ],
+        "title": "SMART Monitor - $host_system",
+        "type": "row"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 5
+        },
+        "id": 132,
+        "panels": [],
+        "title": "Directory Sizes - $host_system",
+        "type": "row"
+      },
+      {
+        "alert": {
+          "alertRuleTags": {},
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [
+                  10
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "24h",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "percent_diff"
+              },
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "keep_state",
+          "for": "5m",
+          "frequency": "1h",
+          "handler": 1,
+          "name": "Folder Sizes > 10% Change [24 hr % diff] (Prometheus)",
+          "noDataState": "keep_state",
+          "notifications": [
+            {
+              "id": 2
+            }
+          ]
+        },
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "line+area"
+              }
+            },
+            "decimals": 3,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "transparent",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 24,
+          "x": 0,
+          "y": 6
+        },
+        "id": 41,
+        "options": {
+          "legend": {
+            "calcs": [
+              "firstNotNull",
+              "lastNotNull",
+              "min",
+              "max",
+              "mean",
+              "diff"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Name",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "9.0.5",
+        "repeat": "host_system",
+        "repeatDirection": "v",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "directory_size_bytes{host_system=~\"$host_system\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{host_system}}-{{directory}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "NAS - Folder Sizes",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": true,
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "line+area"
+              }
+            },
+            "decimals": 3,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "transparent"
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 28
+        },
+        "id": 122,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "min",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Max",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "9.0.5",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "(\r\n    (max by(directory, host_system) (delta(directory_size_bytes{host_system=~\"$host_system\"}[24h])))\r\n    / \r\n    (min by (host_system,directory) (directory_size_bytes{host_system=~\"$host_system\"}))\r\n) !=0",
+            "format": "time_series",
+            "fullMetaSearch": false,
+            "hide": true,
+            "includeNullMetadata": true,
+            "intervalFactor": 1,
+            "legendFormat": "{{host_system}}-{{directory}}",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "delta(directory_size_bytes{host_system=~\"$host_system\"}[24h]) / on(host_system,directory) min by(host_system,directory) (directory_size_bytes{host_system=~\"$host_system\"})",
+            "format": "time_series",
+            "fullMetaSearch": false,
+            "hide": false,
+            "includeNullMetadata": true,
+            "intervalFactor": 1,
+            "legendFormat": "{{host_system}}-{{directory}}",
+            "range": true,
+            "refId": "C",
+            "useBackend": false
+          }
+        ],
+        "title": "Folder Size Changes",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 38
+        },
+        "id": 130,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 17
+            },
+            "id": 119,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull",
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "P4169E866C3094E38"
+                },
+                "editorMode": "code",
+                "expr": "lmsensors{host_system=~\"$host_system\"}",
+                "instant": false,
+                "legendFormat": "{{host_system}} - {{device}} - {{sensor}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "LM Sensors Imports",
+            "type": "timeseries"
+          }
+        ],
+        "title": "lmsensors - $host_system",
+        "type": "row"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 39
+        },
+        "id": 126,
+        "panels": [],
+        "title": "Docker Info - $host_system",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 40
+        },
+        "id": 124,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "docker_custom_events",
+            "format": "table",
+            "instant": false,
+            "legendFormat": "{{action}} - {{name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Docker Events",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Value": true,
+                "__name__": true,
+                "job": true,
+                "vmimport": true
+              },
+              "indexByName": {},
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P4169E866C3094E38"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 40
+        },
+        "id": 125,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P4169E866C3094E38"
+            },
+            "editorMode": "code",
+            "expr": "docker_custom_image_count",
+            "instant": false,
+            "legendFormat": "{{host_system}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Docker Image Count",
+        "type": "stat"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 39,
+    "tags": [
+      "customimports",
+      "victoriametrics",
+      "smart",
+      "lmsensors",
+      "speedtest",
+      "directory-sizes",
+      "backup"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "selected": true,
+            "text": [
+              "crush"
+            ],
+            "value": [
+              "crush"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "definition": "label_values({__name__=~\"node_.*\"},host_system)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Host System",
+          "multi": true,
+          "name": "host_system",
+          "options": [],
+          "query": {
+            "query": "label_values({__name__=~\"node_.*\"},host_system)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-12h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "VictoriaMetrics API Imports",
+    "uid": "da7bd295-47a6-4b76-aefb-0e26fecbc1f8",
+    "weekStart": ""
+  }
+}

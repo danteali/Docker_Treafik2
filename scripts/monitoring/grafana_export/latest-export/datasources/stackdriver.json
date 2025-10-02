@@ -1,0 +1,21 @@
+{
+  "id": 12,
+  "uid": "edy3aalxzod8ge",
+  "orgId": 1,
+  "name": "stackdriver",
+  "type": "stackdriver",
+  "typeLogoUrl": "public/app/plugins/datasource/cloud-monitoring/img/cloud_monitoring_logo.svg",
+  "access": "proxy",
+  "url": "",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": false,
+  "jsonData": {},
+  "secureJsonFields": {},
+  "version": 1,
+  "readOnly": false,
+  "apiVersion": ""
+}

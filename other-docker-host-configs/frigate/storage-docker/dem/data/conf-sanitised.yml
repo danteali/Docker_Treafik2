@@ -1,0 +1,66 @@
+settings:
+  logging: info ## Log verbosity <debug, info (default), warn, error>
+  tags: ## List of tags you want to appear in notifications for identification purposes
+    - monitoring
+    #- example
+  #exclusions: ## The name of any actors (containers, networks etc) you want to exclude from alerts
+  #  - foo
+  #inclusions: ## If specified, only events from these actors will be alerted on. Any actors not in this list are implicitly excluded, therefore this is mutually exclusive with the above `exclusions` option.
+  #  - foo
+  #silence: ## Time window where alerts will be silenced
+  #  start: "02:00" ## Start of the silence window in 24 hour format
+  #  duration: 120 ## Duration in minutes for the window to last
+  #  exclusions: ## The name of any actors (containers, networks etc) you want to exclude from the silence window
+  #    - foo
+  #  inclusions: ## If specified, only events from these actors will be included in the silence window. Any actors not in this list are implicitly excluded, therefore this is mutually exclusive with the above `exclusions` option.
+  #    - foo
+
+events: ## The Docker event types that you want to trigger alerts for
+  container: 
+    - 'health_status: unhealthy'
+    - oom
+    - destroy
+    - create
+  image: 
+    - pull
+    - delete
+  plugin:
+    - install
+    - remove
+  volume: 
+    - destroy
+    - create
+  network:
+    - destroy
+    - create
+  daemon:
+    - reload
+  service:
+    - remove
+    - create
+  node:
+    - remove
+    - create
+  secret:
+    - remove
+    - create
+  config:
+    - remove
+    - create
+
+integrations: ## Available integrations  
+  slack:
+    enabled: True
+    url: <SLACK-WEBHOOK>
+  sparkpost:
+    enabled: False
+    #url: https://api.eu.sparkpost.com/api/v1/transmissions
+    #key: your_key
+    #from: dem@dkrmon.io
+    #subject: Docker Event Monitor
+    #recipients:
+    #  - john.smith@example.com
+    #  - mary.collins@example.com
+  discord:
+    enabled: True
+    url: <DISCORD-WEBHOOK>

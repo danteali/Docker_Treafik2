@@ -1,0 +1,24 @@
+{
+  "id": 3,
+  "uid": "P64382691D9610877",
+  "orgId": 1,
+  "name": "Sun and Moon",
+  "type": "fetzerch-sunandmoon-datasource",
+  "typeLogoUrl": "public/plugins/fetzerch-sunandmoon-datasource/img/logo.png",
+  "access": "proxy",
+  "url": "",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": false,
+  "jsonData": {
+    "latitude": 55.88902,
+    "longitude": -3.63468
+  },
+  "secureJsonFields": {},
+  "version": 2,
+  "readOnly": false,
+  "apiVersion": ""
+}

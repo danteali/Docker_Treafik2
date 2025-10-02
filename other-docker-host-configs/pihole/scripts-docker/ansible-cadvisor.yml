@@ -1,0 +1,131 @@
+version: "3.8"
+
+########################### SYNTAX PREFERENCES
+# For lists (environment, ports, etc) we will try to use
+# arrays instead of lists of key-value pairs i.e. 
+# DO THIS...
+#    environment:
+#      - DOCKER_MODS=$LINUXSERVER_MODS
+#      - PUID=$PUID
+# NOT THIS...
+#    environment:
+#      DOCKER_MODS: "$LINUXSERVER_MODS"
+#      PUID: "$PUID"
+#
+# To standardise our file somewhat, aim for order of keys below. 
+#  service:
+#    image
+#    cont_name
+#    restart
+#    security_opt:
+#    depends_on:
+#    privileged: true
+#    network
+#    port
+#    devices:
+#    environment
+#    volumes
+#    secrets
+#    command
+#    labels
+
+########################### NETWORKS
+networks:
+  t2_proxy:
+    name: t2_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $TRAEFIK_NET
+          gateway: $TRAEFIK_GATEWAY
+  socket_proxy:
+    name: socket_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $SOCKET_PROXY_NET
+          gateway: $SOCKET_PROXY_GATEWAY
+  # Docker will use the same default network for all compose files in
+  # the same directory. It will use the settings of the first network
+  # created even of othere compose files try to set the default to a
+  # different subnet.
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: $DEFAULT_COMPOSE_NET
+          gateway: $DEFAULT_COMPOSE_GATEWAY
+
+########################### SERVICES
+services:
+
+  # cAdvisor - Analyse containers on host
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    container_name: cadvisor
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    privileged: true
+    networks:
+      - default
+      - t2_proxy
+      - socket_proxy
+    ports:
+      - $CADVISOR_PORT:8080
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /dev/disk/:/dev/disk:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+      - $DOCKERLOG_DIR/cadvisor:/var/log/cadvisor # for logging, see log_dir below
+    command: 
+      # https://github.com/google/cadvisor/blob/master/docs/runtime_options.md
+      - -store_container_labels=false # Jan 22: Most Cadvisor metric content was container label data (set to true and copy paste /metrics from cadvisor URL to see) - disabling MASSIVELY reduces resource usage
+      - -whitelisted_container_labels=org.label-schema.group,com.docker.compose.project.config_files,traefik.enable # Jan 22: Whitelist labels we want/need for reporting
+      - -allow_dynamic_housekeeping=false # Default = true. Allow variation in how often to gathers container stats, depending on how active the container is
+      - -housekeeping_interval=10s # Frequency of cointainer data gathering (default:1s)
+      - -docker=$DOCKER_SOCKET_PROXY
+      #- -docker="unix:///var/run/docker.sock"
+      - -docker_only=true
+      - -storage_duration=1m0s # (default=2m0s) cAdvisor stores the latest historical data in memory define how long it is stored.
+      # Metric details: https://github.com/google/cadvisor/blob/master/docs/storage/prometheus.md
+      # See list in OneNote for available choices and default exclusions.
+      # Dec 21: Added all metrics except 'disk' and 'network' to see if CPU use can be reduced
+      # Jan 22: Refreshed list again aftrer fixing high CPU problem - left default disabled in list juse in case it makes any difference.
+      # Aug 23: Removed 'accelerator' as depreciated in v0.47.0
+      # Sept 23: Removed 'cpuset,perf_event' as deprecated in v0.47.2
+      - -disable_metrics=advtcp,cpu_topology,hugetlb,memory_numa,process,referenced_memory,resctrl,sched,tcp,udp
+      #- -disable_root_cgroup_stats # Disable collecting root Cgroup stats - breaks Cadvisor
+      - -referenced_reset_interval=1 # (default=0 - never cleared) Not sure if any impact but testing to reduce CPU use as may be disabled by default, possibly under disabled referenced_memory stat. Reset interval for referenced bytes (container_referenced_bytes metric), number of measurement cycles after which referenced bytes are cleared, if set to 0 referenced bytes are never cleared.
+      ### LOGGING
+      - -log_cadvisor_usage=true # Whether to log the usage of the cAdvisor container
+      - -log_dir="/var/log/cadvisor" # If non-empty, write log files in this directory
+      - -log_file_max_size=5 # Max size of log file in MB (default=1800)
+      - -v=2 # log level for V logs (default=0 - no output)
+      - -stderrthreshold=0 # logs at or above this threshold go to stderr
+      - -logtostderr=false #: log to standard error instead of files
+      - -alsologtostderr=true # log to standard error as well as files
+    labels:
+      - org.label-schema.group=monitoring
+      #------------- WATCHTOWER -------------#
+      ## Exclude from Watchtower updates
+      #- "com.centurylinklabs.watchtower.enable=false"
+      ## Exclude From Watchtower updates - Notify On New Image
+      - "com.centurylinklabs.watchtower.monitor-only=true"
+      #----------- TRAEFIK LABELS -----------#
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.cadvisor-pihole-rtr.entrypoints=https"
+      - "traefik.http.routers.cadvisor-pihole-rtr.rule=Host(`cadvisor-pihole.$DOMAINNAME0`)"
+      ## Middlewares
+      #- "traefik.http.routers.cadvisor-pihole-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.cadvisor-pihole-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.cadvisor-pihole-rtr.service=cadvisor-pihole-svc"
+      - "traefik.http.services.cadvisor-pihole-svc.loadbalancer.server.port=8080"
+

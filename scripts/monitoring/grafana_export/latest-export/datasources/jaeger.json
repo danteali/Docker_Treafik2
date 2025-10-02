@@ -1,0 +1,21 @@
+{
+  "id": 11,
+  "uid": "cdy3a8pzxlvk0c",
+  "orgId": 1,
+  "name": "jaeger",
+  "type": "jaeger",
+  "typeLogoUrl": "public/app/plugins/datasource/jaeger/img/jaeger_logo.svg",
+  "access": "proxy",
+  "url": "",
+  "user": "",
+  "database": "",
+  "basicAuth": false,
+  "basicAuthUser": "",
+  "withCredentials": false,
+  "isDefault": false,
+  "jsonData": {},
+  "secureJsonFields": {},
+  "version": 1,
+  "readOnly": false,
+  "apiVersion": ""
+}
